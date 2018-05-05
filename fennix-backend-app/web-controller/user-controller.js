@@ -6,66 +6,48 @@ var router = express.Router();
 router.post('/metadata', function(req, res) {
     var returnObj = {};
     userAccessor.getMetadata(req.body).then((doc, err) => {
-        // if (doc !== null && doc !== undefined) {
-        //     returnObj = {
-        //         status: 200,
-        //         message: 'User Metadata available',
-        //         data: doc[0].masterdata
-        //     }
-        // } else {
-        //     returnObj = {
-        //         status: 611,
-        //         message: 'User Metadata unavailable',
-        //         data: null
-        //     }
-        // }
-
         if (err) {
             console.log(err);
         } else {
-            // console.log(res.rows);
             data = JSON.parse(JSON.stringify(doc.rows));
             returnObj = data.reduce(function(init,item){
-                var obj = {
-                    widget_id:item.widget_id,
-                }
-                var obj2 = {
-                    card_id:item.cardid
-                }
-                if(init.hasOwnProperty(item.cardid)){
-                    debugger;
-                    init[item.cardid]['widgets'].push(obj);
-                }else {
-                    init[item.cardid] = obj2;
-                    init[item.cardid]['widgets'] = [obj];
+                var user = {
+                    userId:item.user_id
+                };
+                var widgetObj = {
+                    widget_id:'W_'+item.widget_id,
+                    widget_orderId:item.widget_order_id,
+                    widget_size:item.widget_size,
+                    widget_type:item.widget_type,
+                    widget_subType:item.widget_subtype,
+                    endpoint:item.endpoint
+                };
+                var cardObj = {
+                    card_id:'C_'+item.cardid,
+                    card_size:item.card_size,
+                    card_headerId:item.card_header_id,
+                    card_orderId:item.card_order
+                };
+                if(init.hasOwnProperty('userId') && init.userId !== null && init['cards'] !== null){
+                    if(init['cards'].hasOwnProperty(cardObj.card_id)){
+                        init['cards'][cardObj.card_id]['widgets'].push(widgetObj);
+                    } else {
+                        cardObj['widgets'] = [widgetObj];
+                        init['cards'][cardObj.card_id] = cardObj;
+                    }
+                } else {
+                    init = user;
+                    cardObj['widgets'] = [];
+                    init['cards'] = {};
+                    cardObj['widgets'].push(widgetObj);
+                    init['cards'][cardObj.card_id] = cardObj;
                 }
                 return init;
             },{});
-            console.log(data);
-            console.log(returnObj);
         }
-
+returnObj.cards = Object.keys(returnObj.cards).map((key)=>returnObj.cards[key]);
         res.send(returnObj);
     })
 });
 
-// router.post('/metadata', function(req, res) {
-//     var returnObj = {};
-//     userAccessor.getMetadata(req.body).then((doc) => {
-//         if (doc !== null && doc !== undefined) {
-//             returnObj = {
-//                 status: 200,
-//                 message: 'User Metadata available',
-//                 data: doc[0].masterdata
-//             }
-//         } else {
-//             returnObj = {
-//                 status: 611,
-//                 message: 'User Metadata unavailable',
-//                 data: null
-//             }
-//         }
-//         res.send(returnObj);
-//     })
-// });
 module.exports = router;
