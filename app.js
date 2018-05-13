@@ -10,6 +10,9 @@ mongoose.connect('mongodb://localhost:27017/fennixDevDb');
 var indexRouter = require('./routes/index');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
 var userRouter = require('./fennix-backend-app/web-controller/user-controller');
+var ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
+var metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
+
 
 
 var app = express();
@@ -33,6 +36,8 @@ app.use(function (req, res, next) {
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
+app.use('/metadata',metadataRouter);
+app.use('/ticket',ticketRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
