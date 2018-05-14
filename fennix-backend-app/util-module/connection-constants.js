@@ -1,7 +1,7 @@
 var postgresDBDev = {
     user: 'postgres',
     host: 'localhost',
-    database: 'fennix_dev',
+    database: 'fennix_dev_db',
     password: 'postgres',
     port: 5432,
 };

@@ -1,4 +1,4 @@
-const {selectBeneficiaryByUserIdQuery, selectBeneficiaryByOwnerIdQuery} = require('../queries/beneficiary-query');
+const {selectBeneficiaryByUserIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 var getBeneficiaryByUserId = async (req) => {
@@ -13,7 +13,15 @@ var getBenefeciaryAggregator = async (req) => {
     return returnObj;
 };
 
+var getBeneficiaryListByOwnerId = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryListByOwnerUserIdQuery);
+    return returnObj;
+};
+
+
 module.exports = {
     getBeneficiaryByUserId,
-    getBenefeciaryAggregator
+    getBenefeciaryAggregator,
+    getBeneficiaryListByOwnerId
 }
