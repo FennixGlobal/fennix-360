@@ -13,7 +13,7 @@ var deviceRouter = require('./fennix-backend-app/web-controller/device-controlle
 var userRouter = require('./fennix-backend-app/web-controller/user-controller');
 var ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
 var metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
-
+var beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary-controller');
 
 
 var app = express();
@@ -40,6 +40,7 @@ app.use('/user', userRouter);
 app.use('/metadata',metadataRouter);
 app.use('/ticket',ticketRouter);
 app.use('/device',deviceRouter);
+app.use('/beneficiary',beneficiaryRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

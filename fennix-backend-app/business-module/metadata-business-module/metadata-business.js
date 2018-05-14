@@ -72,11 +72,11 @@ var routeDataModifier = (arrayResponse) => {
     let modifiedRouteObj = {};
     if (arrayNotEmptyCheck(arrayResponse.rows)) {
         arrayResponse.rows.forEach((item) => {
-            const parentOrderId = item['sidenav_order_id'];
-            if (objectHasPropertyCheck(item, 'child_route_id') && objectHasPropertyCheck(modifiedRouteObj, parentOrderId)) {
+            const parentRouteId = item['parent_route_id'];
+            if (objectHasPropertyCheck(item, 'child_route_id') && objectHasPropertyCheck(modifiedRouteObj, parentRouteId)) {
                 const childItem = childRouteCreator(item);
-                modifiedRouteObj[parentOrderId]['childItems'] = modifiedRouteObj[parentOrderId]['childItems'] || [];
-                modifiedRouteObj[parentOrderId]['childItems'].push(childItem);
+                modifiedRouteObj[parentRouteId]['childItems'] = modifiedRouteObj[parentRouteId]['childItems'] || [];
+                modifiedRouteObj[parentRouteId]['childItems'].push(childItem);
             } else {
                 const parentItem = {
                     itemId: item['parent_route_id'],
@@ -92,7 +92,7 @@ var routeDataModifier = (arrayResponse) => {
                 if (objectHasPropertyCheck(item, 'child_route_id')) {
                     parentItem['childItems'] = [childRouteCreator(item)];
                 }
-                modifiedRouteObj[parentOrderId] = parentItem;
+                modifiedRouteObj[parentRouteId] = parentItem;
             }
         });
     }

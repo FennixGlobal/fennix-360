@@ -1,3 +1,13 @@
 var express = require('express');
-const {getBaseMetadata,getCardMetadataForRoute} = require('../business-module/metadata-business-module/metadata-business');
+const {beneficiaryAggregatorDashboard} = require('../business-module/beneficiary-business-module/beneficiary-business');
 var router = express.Router();
+
+router.get('/beneficiaryAggregator', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryAggregatorDashboard(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+module.exports = router;
