@@ -4,7 +4,7 @@ const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate([
         {
             $match : {
-                "beneficiaryId":{$in:query.beneficiaryArray}
+                "beneficiaryId":{$in:query}
             }
         },
         {

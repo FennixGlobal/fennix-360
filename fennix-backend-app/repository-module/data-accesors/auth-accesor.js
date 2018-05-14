@@ -23,7 +23,7 @@ var authenticateUserDetails = async (req) => {
 };
 
 /**
- * @description - this method is used to change password for that particualr  user email Id
+ * @description - this method is used to change password for that particular  user email Id
  * @param(req) - The request consists of user email, old password and new password
  * @returns(returnObj) - This consists of a Promise for obtained data
  * **/
