@@ -15,6 +15,16 @@ const userIdTicketAggregatorQuery = (query) => {
     ]);
 };
 
+const userIdTicketDetailsBasedOnTicketStatusQuery = (query) => {
+    return ticketAggregator.find(
+        {
+            "userId":query.userId,
+            "centerId":query.centerId,
+            "ticketStatus" : query.ticketStatus
+        });
+};
+
 module.exports = {
-    userIdTicketAggregatorQuery
+    userIdTicketAggregatorQuery,
+    userIdTicketDetailsBasedOnTicketStatusQuery
 };
