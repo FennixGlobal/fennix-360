@@ -8,11 +8,11 @@ const cardWidgetMetadataQuery = 'select u.user_id\n' +
     ', wsize.widget_size\n' +
     ', e.endpoint\n' +
     'from users u\n' +
-    'join role_cards rc on u.user_role = rc.role_id and u.user_role = $1\n' +
+    'join role_cards rc on u.user_role = rc.role_id and u.user_role = $1 and u.user_id=$4\n' +
     'join cards c on c.card_id = rc.card_size_id\n' +
     'join role_cards_widgets rcw on rcw.role_card_id = rc.role_card_id and rcw.route_id = $2\n' +
     'join widgets w on w.widget_id = rcw.widget_type_id\n' +
-    'join widget_subtype ws on ws.widget_subtype_id = rcw.widget_subtype_id\n' +
+    'left outer join widget_subtype ws on ws.widget_subtype_id = rcw.widget_subtype_id\n' +
     'join widget_size wsize on wsize.widget_size_id = rcw.widget_size_id\n' +
     'join endpoints e on e.endpoint_id = rcw.endpoint_id';
 
@@ -28,7 +28,7 @@ const headerMetadataQuery = 'select u.user_id\n' +
     ', a.action_name as parent_action\n' +
     ', ca.action_name as child_action\n' +
     ' from users u\n' +
-    'join role_headers rh on u.user_role = rh.role_id and u.user_role = $1\n' +
+    'join role_headers rh on u.user_role = rh.role_id and u.user_role = $1  and u.user_id=$3\n' +
     'join headers h on h.header_id = rh.header_id\n' +
     'join route r on r.route_id = h.route_id\n' +
     'left outer join route chr on chr.parent_id = r.route_id\n' +
@@ -47,7 +47,7 @@ const sideNavMetadataQuery = 'select u.user_id\n' +
     ', ca.action_name as child_action\n' +
     ', rs.sidenav_order_id\n' +
     'from users u\n' +
-    'join role_sidenavs rs on rs.role_id = u.user_role and u.user_role=$1\n' +
+    'join role_sidenavs rs on rs.role_id = u.user_role and u.user_role=$1  and u.user_id=$3\n' +
     'join sidenavs s on s.nav_id = rs.sidenav_id\n' +
     'join route r on r.route_id = s.route_id\n' +
     'left outer join route chr on chr.parent_id = r.route_id\n' +

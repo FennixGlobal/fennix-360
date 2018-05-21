@@ -20,4 +20,4 @@ var ticketAggregatorDashboard = async (req) => {
 
 module.exports = {
     ticketAggregatorDashboard
-}
+};

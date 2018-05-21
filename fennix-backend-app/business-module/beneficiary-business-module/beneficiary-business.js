@@ -10,11 +10,13 @@ var beneficiaryAggregatorDashboard = async (req) => {
         let beneficiaryObj = {};
         if(beneficiaryResponse.rows.length === 1){
             let propName = beneficiaryResponse.rows[0]['role_name'];
-            let propName2 = propName === 'VICTIM' ? 'OFFENDER' : "VICTIM";
+            //TODO interchange victim and offender
+            let propName2 = propName === 'VICTIM' ? 'VICTIM' : "OFFENDER";
             beneficiaryObj[propName] = beneficiaryResponse.rows[0]['count'];
             beneficiaryObj[propName2] = 0;
         } else {
             beneficiaryResponse.rows.forEach((item)=>{
+                item['role_name'] =  item['role_name'] === 'VICTIM' ? 'OFFENDER' : "VICTIM";
                 beneficiaryObj[item['role_name']] = item['count'];
             });
         }

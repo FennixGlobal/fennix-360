@@ -5,7 +5,7 @@ const {statusCodeConstants} = require('../../util-module/status-code-constants')
 
 var getBaseMetadata = async (req) => {
     let responseObj, headerResponse, sideNavResponse, composedData = {}, request;
-    request = [req.body.roleId, req.body.lang];
+    request = [req.body.roleId, req.body.lang, req.body.userId];
     headerResponse = await getHeaderMetadata(request);
     sideNavResponse = await getSideNavMetadata(request);
     if (objectHasPropertyCheck(headerResponse, 'rows') && objectHasPropertyCheck(sideNavResponse, 'rows')) {
@@ -22,7 +22,7 @@ var getBaseMetadata = async (req) => {
 
 var getCardMetadataForRoute = async (req) => {
     let responseObj, cardResponse, request;
-    request = [req.body.roleId, req.body.routeId, req.body.lang];
+    request = [req.body.roleId, req.body.routeId, req.body.lang, req.body.userId];
     cardResponse = await getCardMetadata(request);
     if (objectHasPropertyCheck(cardResponse, 'rows') && arrayNotEmptyCheck(cardResponse.rows)) {
         let returnObj;
