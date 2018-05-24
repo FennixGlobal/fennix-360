@@ -1,4 +1,5 @@
 const {checkUserEmailQuery, authenticateUser} = require('../queries/user-query');
+const {checkBeneficiaryEmailIdQuery,authenticateBeneficiaryQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 /**
@@ -33,8 +34,20 @@ var updateUserPassword = async (req) => {
     return returnObj;
 };
 
+const checkBenificiaryEmailId = async(req)=>{
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec( req, checkBeneficiaryEmailIdQuery);
+    return returnObj;
+};
+const authenticateBeneficiaryDetails = async(req)=>{
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec( req, authenticateBeneficiaryQuery);
+    return returnObj;
+}
 module.exports = {
     checkUserEmailId,
     updateUserPassword,
-    authenticateUserDetails
+    authenticateBeneficiaryDetails,
+    authenticateUserDetails,
+    checkBenificiaryEmailId
 };

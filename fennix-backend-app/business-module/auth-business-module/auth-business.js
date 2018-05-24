@@ -1,11 +1,11 @@
-var authAccesor = require('../../repository-module/data-accesors/auth-accesor');
+const authAccesor = require('../../repository-module/data-accesors/auth-accesor');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
-var crypto = require('crypto-js');
+const crypto = require('crypto-js');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
-var checkEmailId = (req) => {
+const checkEmailId = (req) => {
     let responseObj, businessResponse;
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
@@ -16,12 +16,17 @@ var checkEmailId = (req) => {
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'en', businessResponse.rows[0]);
     } else {
-        responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_NOT_PRESENT, 'en', []);
+        businessResponse = authAccesor.checkBenificiaryEmailId(request);
+        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+            responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'en', businessResponse.rows[0]);
+        } else {
+            responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_NOT_PRESENT, 'en', []);
+        }
     }
     return responseObj;
 };
 
-var authenticateUser = async (req) => {
+const authenticateUser = async (req) => {
     let responseObj, businessResponse;
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
@@ -31,17 +36,18 @@ var authenticateUser = async (req) => {
     ];
     businessResponse = await authAccesor.authenticateUserDetails(request);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
-        if ((businessResponse.rows[0]['isactive'])) {
-            responseObj = fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'en', businessResponse.rows[0]);
-        } else {
-            responseObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', businessResponse.rows[0]);
-        }
+        responseObj = retireCheck(businessResponse.rows);
     } else {
-        responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
+        businessResponse = await authAccesor.authenticateBeneficiaryDetails(request);
+        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+            responseObj = retireCheck(businessResponse.rows);
+        } else {
+            responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
+        }
     }
     return responseObj;
 };
-var decrypt = (algo, passKey, message) => {
+const decrypt = (algo, passKey, message) => {
     try {
         const decryptedBytes = crypto[algo]['decrypt'](message, passKey);
         return decryptedBytes.toString(crypto.enc.Utf8);
@@ -49,6 +55,9 @@ var decrypt = (algo, passKey, message) => {
         console.log(e);
     }
 };
+
+const retireCheck = (responseArray) => (responseArray[0]['isactive']) ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'en', responseArray[0]) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', responseArray[0]);
+
 module.exports = {
     checkEmailId,
     authenticateUser

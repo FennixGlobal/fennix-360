@@ -36,7 +36,10 @@ var getCardMetadataForRoute = async (req) => {
                 widgetSize: item.widget_size,
                 widgetType: item.widget_type,
                 widgetSubType: item.widget_subtype,
-                endpoint: item.endpoint
+                endpoint: item.endpoint,
+                requestParams: item.mandatory_request_params,
+                sort: item.initial_sort,
+                requestType: item.request_type
             };
             var cardObj = {
                 cardId: 'C_' + item.role_card_id,

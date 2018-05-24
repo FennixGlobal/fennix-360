@@ -6,7 +6,7 @@ const cardWidgetMetadataQuery = 'select u.user_id\n' +
     ', w.widget_type\n' +
     ', ws.widget_subtype\n' +
     ', wsize.widget_size\n' +
-    ', e.endpoint\n' +
+    ', e.endpoint, e.initial_sort, e.request_type, e.mandatory_request_params\n' +
     'from users u\n' +
     'join role_cards rc on u.user_role = rc.role_id and u.user_role = $1 and u.user_id=$4\n' +
     'join cards c on c.card_id = rc.card_size_id\n' +
