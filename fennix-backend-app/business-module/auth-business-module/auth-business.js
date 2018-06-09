@@ -1,9 +1,10 @@
-const authAccesor = require('../../repository-module/data-accesors/auth-accesor');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
-const crypto = require('crypto-js');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const crypto = require('crypto-js');
+const bcrypt = require('bcryptjs');
+const {checkUserEmailId,authenticateBeneficiaryDetails,authenticateUserDetails,checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
+const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 const checkEmailId = (req) => {
     let responseObj, businessResponse;
@@ -12,11 +13,11 @@ const checkEmailId = (req) => {
     const request = [
         decrypt(algo, passKey, req.body.email)
     ];
-    businessResponse = authAccesor.checkUserEmailId(request);
+    businessResponse = checkUserEmailId(request);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'en', businessResponse.rows[0]);
     } else {
-        businessResponse = authAccesor.checkBenificiaryEmailId(request);
+        businessResponse = checkBenificiaryEmailId(request);
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'en', businessResponse.rows[0]);
         } else {
@@ -27,20 +28,30 @@ const checkEmailId = (req) => {
 };
 
 const authenticateUser = async (req) => {
-    let responseObj, businessResponse;
+    let responseObj, businessResponse, authResponse;
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const request = [
-        decrypt(algo, passKey, req.body.email),
-        decrypt(algo, passKey, req.body.password)
+        decrypt(algo, passKey, req.body.email)
     ];
-    businessResponse = await authAccesor.authenticateUserDetails(request);
+    businessResponse = await authenticateUserDetails(request);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
-        responseObj = retireCheck(businessResponse.rows);
-    } else {
-        businessResponse = await authAccesor.authenticateBeneficiaryDetails(request);
-        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+        authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
+        if (authResponse) {
             responseObj = retireCheck(businessResponse.rows);
+        } else {
+            responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
+        }
+
+    } else {
+        businessResponse = await authenticateBeneficiaryDetails(request);
+        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+            authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
+            if (authResponse) {
+                responseObj = retireCheck(businessResponse.rows);
+            } else {
+                responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
+            }
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
         }

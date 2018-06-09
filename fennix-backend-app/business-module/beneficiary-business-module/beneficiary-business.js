@@ -84,7 +84,6 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = item;
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-// let beneficiaryFinalArray = [];
             const beneficiaryFinalObj = {};
         const beneficiaryDeviceFinalObj = {};
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
@@ -98,12 +97,6 @@ const beneficiaryMapDataList = async (req) => {
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Shell Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus});
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'GPS Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus});
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Speed',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed});
-            // deviceDetails['batteryPercentage'] = {text:'Battery Percentage',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage};
-            // deviceDetails['batteryVoltage'] = {text:'Battery Voltage',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage};
-            // deviceDetails['beltStatus'] = {text:'Belt Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus};
-            // deviceDetails['shellStatus'] = {text:'Shell Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus};
-            // deviceDetails['gpsStatus'] = {text:'GPS Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus};
-            // deviceDetails['speed'] = {text:'Speed',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed;
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['beneficiaryId'] = {text:item.latestBeneficiaryDeviceDetails.beneficiaryId,type:'text'};
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'] = {text:beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'],type:'text'};
@@ -113,18 +106,10 @@ const beneficiaryMapDataList = async (req) => {
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['viewDetails'] = {text:'View Details',type:'link',id:item.latestBeneficiaryDeviceDetails.beneficiaryId};
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails;
-            // beneficiaryDeviceFinalObj['beneficiaryId'] = item.latestBeneficiaryDeviceDetails.beneficiaryId;
-            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = item.latestBeneficiaryDeviceDetails.beneficiaryId;
-            // beneficiaryFinalArray.push
-            // beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['imei'] = item.latestBeneficiaryDeviceDetails.imei;
-            // beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails;
-            // Object.keys(beneficiaryIdListAndDetailObj.beneficiaryDetailObj).map(item => item);
-        // beneficiaryObj['bodyArray'] = Object.keys(beneficiaryIdListAndDetailObj.beneficiaryDetailObj).map((item) => beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item]);
         });
         beneficiaryObj['headerArray'] = [{headerName:'Beneficiary Id',key:'beneficiaryId',type:'text'},{headerName:'Name',key:'firstName',type:'text'},{headerName:'IMEI',key:'imei',type:'text'},{headerName:'Mobile No.',key:'mobileno',type:'text'},{headerName:'Updated Date',key:'updatedDate',type:'text'},{headerName:'View Details',key:'viewDetails',type:'link'}];
         beneficiaryObj['bodyArray'] = Object.keys(beneficiaryFinalObj).map((item)=>beneficiaryFinalObj[item]);
         beneficiaryObj['deviceObj'] = beneficiaryDeviceFinalObj;
-
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);

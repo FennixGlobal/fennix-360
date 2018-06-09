@@ -15,6 +15,12 @@ const getBeneficiaryLocationList = (query) => {
             latestBeneficiaryLocation: {"$first": "$$CURRENT"}
         });
 };
+
+const selectCenterIdsForGivenUserIdQuery = 'select location_id from location where parent_location_id = (select location_id from location where parent_location_id = (select location_id from users where user_id = $1))';
+
+
+
 module.exports = {
-    getBeneficiaryLocationList
+    getBeneficiaryLocationList,
+    selectCenterIdsForGivenUserIdQuery
 };

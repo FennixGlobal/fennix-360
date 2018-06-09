@@ -7,7 +7,7 @@ const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-
  * @param(req) - The request consists of user email
  * @returns(returnObj) - This consists of a Promise for obtained data
  * **/
-var checkUserEmailId = async (req) => {
+const checkUserEmailId = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec( req, checkUserEmailQuery);
     return returnObj;
@@ -17,7 +17,7 @@ var checkUserEmailId = async (req) => {
  * @param(req) - The request consists of user email and password which is decoded
  * @returns(returnObj) - This consists of a Promise for obtained data
  * **/
-var authenticateUserDetails = async (req) => {
+const authenticateUserDetails = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec( req, authenticateUser);
     return returnObj;
@@ -28,7 +28,7 @@ var authenticateUserDetails = async (req) => {
  * @param(req) - The request consists of user email, old password and new password
  * @returns(returnObj) - This consists of a Promise for obtained data
  * **/
-var updateUserPassword = async (req) => {
+const updateUserPassword = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec( req, updateUserPassword);
     return returnObj;
@@ -43,7 +43,8 @@ const authenticateBeneficiaryDetails = async(req)=>{
     let returnObj;
     returnObj = await connectionCheckAndQueryExec( req, authenticateBeneficiaryQuery);
     return returnObj;
-}
+};
+
 module.exports = {
     checkUserEmailId,
     updateUserPassword,

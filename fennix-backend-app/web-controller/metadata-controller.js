@@ -1,10 +1,10 @@
 var express = require('express');
-const {getBaseMetadata,getCardMetadataForRoute} = require('../business-module/metadata-business-module/metadata-business');
+const {getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
 router.post('/baseMetadata', function (req, res) {
     let returnObj;
-    returnObj = getBaseMetadata(req);
+    returnObj = getBaseMetadataBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -12,10 +12,35 @@ router.post('/baseMetadata', function (req, res) {
 
 router.post('/cardMetadata',(req,res)=>{
     let returnObj;
-    returnObj = getCardMetadataForRoute(req);
+    returnObj = getCardMetadataForRouteBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
+
+router.get('/simCardDetails', (req, res) => {
+    let returnObj;
+    returnObj = getSimCardDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/languageDetails', function (req, res) {
+    let returnObj;
+    returnObj = getLanguagesListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/loginMetadata', function (req, res) {
+    let returnObj;
+    returnObj = getLoginMetadataBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 
 module.exports = router;
