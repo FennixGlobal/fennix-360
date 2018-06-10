@@ -24,7 +24,18 @@ const userIdTicketDetailsBasedOnTicketStatusQuery = (query) => {
         });
 };
 
+const listTicketsQuery = (query) => {
+    return ticketAggregator.find(
+        {
+            "userId":query.userId
+        }
+    ).sort({"createdDate":-1})
+        .skip(query.skip)
+        .limit(query.limit);
+};
+
 module.exports = {
     userIdTicketAggregatorQuery,
-    userIdTicketDetailsBasedOnTicketStatusQuery
+    userIdTicketDetailsBasedOnTicketStatusQuery,
+    listTicketsQuery
 };

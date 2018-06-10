@@ -9,17 +9,20 @@ var beneficiaryAggregatorDashboard = async (req) => {
     let request = [req.query.userId], beneficiaryResponse, returnObj;
     beneficiaryResponse = await getBenefeciaryAggregator(request);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
-        let beneficiaryObj = {};
+        let beneficiaryObj = {
+            VICTIM: {key: 'victim', value: '', color: '', legend: 'VICTIM'},
+            OFFENDER: {key: 'offender', value: '', color: '', legend: 'OFFENDER'},
+        };
         if (beneficiaryResponse.rows.length === 1) {
             let propName = beneficiaryResponse.rows[0]['role_name'];
             //TODO interchange victim and offender
             let propName2 = propName === 'VICTIM' ? 'VICTIM' : "OFFENDER";
-            beneficiaryObj[propName] = beneficiaryResponse.rows[0]['count'];
-            beneficiaryObj[propName2] = 0;
+            beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
+            beneficiaryObj[propName2]['value'] = 0;
         } else {
             beneficiaryResponse.rows.forEach((item) => {
                 item['role_name'] = item['role_name'] === 'VICTIM' ? 'OFFENDER' : "VICTIM";
-                beneficiaryObj[item['role_name']] = item['count'];
+                beneficiaryObj[item['role_name']]['value'] = item['count'];
             });
         }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
@@ -84,31 +87,80 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = item;
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-            const beneficiaryFinalObj = {};
+        const beneficiaryFinalObj = {};
         const beneficiaryDeviceFinalObj = {};
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         let beneficiaryObj = {};
-        beneficiaryDeviceArray.forEach((item,index) => {
+        beneficiaryDeviceArray.forEach((item, index) => {
             const deviceDetails = {};
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId] = [];
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Battery Percentage',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage});
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Battery Voltage',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage});
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Belt Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus});
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Shell Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus});
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'GPS Status',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus});
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({text:'Speed',value:item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed});
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'Battery Percentage',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
+            });
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'Battery Voltage',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
+            });
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'Belt Status',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus
+            });
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'Shell Status',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus
+            });
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'GPS Status',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
+            });
+            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+                text: 'Speed',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
+            });
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['beneficiaryId'] = {text:item.latestBeneficiaryDeviceDetails.beneficiaryId,type:'text'};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'] = {text:beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'],type:'text'};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['imei'] = {text:item.latestBeneficiaryDeviceDetails.imei === '' ? `456723${item.latestBeneficiaryDeviceDetails.beneficiaryId}${index}` : item.latestBeneficiaryDeviceDetails.imei,type:'text'};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'] = {text:beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'],type:'text'};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['updatedDate'] = {text:beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['device_updated_date'],type:'text'};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['viewDetails'] = {text:'View Details',type:'link',id:item.latestBeneficiaryDeviceDetails.beneficiaryId};
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['beneficiaryId'] = {
+                text: item.latestBeneficiaryDeviceDetails.beneficiaryId,
+                type: 'text'
+            };
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'] = {
+                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'],
+                type: 'text'
+            };
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['imei'] = {
+                text: item.latestBeneficiaryDeviceDetails.imei === '' ? `456723${item.latestBeneficiaryDeviceDetails.beneficiaryId}${index}` : item.latestBeneficiaryDeviceDetails.imei,
+                type: 'text'
+            };
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'] = {
+                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'],
+                type: 'text'
+            };
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['updatedDate'] = {
+                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['device_updated_date'],
+                type: 'text'
+            };
+            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['viewDetails'] = {
+                text: 'View Details',
+                type: 'link',
+                id: item.latestBeneficiaryDeviceDetails.beneficiaryId
+            };
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails;
         });
-        beneficiaryObj['headerArray'] = [{headerName:'Beneficiary Id',key:'beneficiaryId',type:'text'},{headerName:'Name',key:'firstName',type:'text'},{headerName:'IMEI',key:'imei',type:'text'},{headerName:'Mobile No.',key:'mobileno',type:'text'},{headerName:'Updated Date',key:'updatedDate',type:'text'},{headerName:'View Details',key:'viewDetails',type:'link'}];
-        beneficiaryObj['bodyArray'] = Object.keys(beneficiaryFinalObj).map((item)=>beneficiaryFinalObj[item]);
+        beneficiaryObj['headerArray'] = [{
+            headerName: 'Beneficiary Id',
+            key: 'beneficiaryId',
+            type: 'text'
+        }, {headerName: 'Name', key: 'firstName', type: 'text'}, {
+            headerName: 'IMEI',
+            key: 'imei',
+            type: 'text'
+        }, {headerName: 'Mobile No.', key: 'mobileno', type: 'text'}, {
+            headerName: 'Updated Date',
+            key: 'updatedDate',
+            type: 'text'
+        }, {headerName: 'View Details', key: 'viewDetails', type: 'link'}];
+        beneficiaryObj['bodyArray'] = Object.keys(beneficiaryFinalObj).map((item) => beneficiaryFinalObj[item]);
         beneficiaryObj['deviceObj'] = beneficiaryDeviceFinalObj;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
     } else {

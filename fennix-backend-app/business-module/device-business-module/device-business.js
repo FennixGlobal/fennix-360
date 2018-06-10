@@ -16,16 +16,19 @@ var deviceAggregatorDashboard = async (req) => {
         deviceResponse = await deviceAggregator(deviceArray);
     }
     if (notNullCheck(deviceResponse) && arrayNotEmptyCheck(deviceResponse)) {
-        let deviceObj = {};
+        let deviceObj = {
+            ACTIVE: {key: 'activeDevices', value: '', color: '',legend:'ACTIVE'},
+            INACTIVE: {key: 'inActiveDevices', value: '', color: '',legend:'INACTIVE'}
+        };
         if (deviceResponse.length === 1) {
             let propertyName = deviceResponse[0]['_id'] ? 'ACTIVE' : 'INACTIVE';
             let propertyName2 = propertyName === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
-            deviceObj[propertyName] = deviceResponse[0]['count'];
-            deviceObj[propertyName2] = 0;
+            deviceObj[propertyName]['value'] = deviceResponse[0]['count'];
+            deviceObj[propertyName2]['value'] = 0;
         } else {
             deviceResponse.forEach((item) => {
                 let prop = item['_id'] ? 'ACTIVE' : 'INACTIVE';
-                deviceObj[prop] = item['count'];
+                deviceObj[prop]['value'] = item['count'];
             });
         }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceObj);

@@ -1,18 +1,26 @@
-const {userIdTicketAggregatorQuery, userIdTicketDetailsBasedOnTicketStatusQuery} = require('../queries/ticket-query');
+const {userIdTicketAggregatorQuery, userIdTicketDetailsBasedOnTicketStatusQuery,listTicketsQuery} = require('../queries/ticket-query');
 
-const ticketAggregator = async (req) => {
+const ticketAggregatorAccessor = async (req) => {
     let returnObj;
     returnObj = await userIdTicketAggregatorQuery(req);
     return returnObj;
 };
 
-const ticketDetailsBasedOnTicketStatus = async (req) => {
+const ticketListBasedOnTicketStatusAccesor = async (req) => {
     let returnObj;
     returnObj = await userIdTicketDetailsBasedOnTicketStatusQuery(req);
     return returnObj;
 };
 
+const listTicketsBasedOnUserIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await listTicketsQuery(req);
+    return returnObj;
+};
+
+
 module.exports = {
-    ticketAggregator,
-    ticketDetailsBasedOnTicketStatus
+    ticketAggregatorAccessor,
+    ticketListBasedOnTicketStatusAccesor,
+    listTicketsBasedOnUserIdAccessor
 };
