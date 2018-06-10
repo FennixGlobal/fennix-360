@@ -2,7 +2,7 @@ const {Client} = require('pg');
 const {statusCodes} = require('../status-message-constants');
 const {postgresDBDev} = require('../connection-constants');
 
-let fennixResponse = (status, language, data) => {
+const fennixResponse = (status, language, data) => {
     let returnObj = {};
     if (typeof status !== "number") {
         throw new Error('status must be a number');
@@ -26,7 +26,12 @@ const connectionCheckAndQueryExec = async (req, query) => {
     return returnObj;
 };
 
+const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
+    return {dropdownKey, dropdownValue, isDisabledFlag}
+};
+
 module.exports = {
     connectionCheckAndQueryExec,
-    fennixResponse
+    fennixResponse,
+    dropdownCreator
 };

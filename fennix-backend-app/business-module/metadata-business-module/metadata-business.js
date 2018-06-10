@@ -1,6 +1,6 @@
 const {getCardMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
 
@@ -109,17 +109,33 @@ const getSimCardDetailsBusiness = async (req) => {
 };
 
 const getLoginMetadataBusiness = async (req) => {
-    let responseObj, request;
-    request = [req.query.active];
-    responseObj = await getLoginMetadataAccessor(request);
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseObj.rows);
+    let responseObj, loginMetadtaResponse = {widgetAttributes:{}};
+    // request = [req.query.active];
+    responseObj = await getLoginMetadataAccessor();
+    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+        loginMetadtaResponse.widgetAttributes = responseObj.rows.reduce((init, item) => {
+            init = {...init, ...widgetAttributeSectionCreator(item, init)};
+            return init;
+        }, {});
+        loginMetadtaResponse.widgetAttributes['widgetSection'] = Object.keys(loginMetadtaResponse.widgetAttributes.widgetSection).map(section => loginMetadtaResponse.widgetAttributes.widgetSection[section]);
+        loginMetadtaResponse.widgetAttributes['widgetSection'].forEach(item => {
+            item['sectionRows'] = Object.keys(item.sectionRows).map(row => item.sectionRows[row]);
+        });
+        // loginMetadtaResponse = responseObj.rows;
+    }
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', loginMetadtaResponse);
 };
 
 const getLanguagesListBusiness = async (req) => {
-    let responseObj, request;
-    request = [req.query.active];
-    responseObj = await getLanguagesAccessor(request);
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseObj.rows);
+    let responseObj, request, languageListResponse = {dropdownList: []};
+    // request = [req.query.active];
+    responseObj = await getLanguagesAccessor();
+    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+        responseObj.rows.forEach((item) => {
+            languageListResponse.dropdownList.push(dropdownCreator(item.language_code, item.language_name, false));
+        });
+    }
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', languageListResponse);
 };
 
 //Private methods to modify the data for the way we need in the response

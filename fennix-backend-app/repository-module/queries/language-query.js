@@ -1,4 +1,4 @@
-const selectLanguagesQuery = 'select language_id, language_name, iso_code from languages where isactive = $1';
+const selectLanguagesQuery = 'select * from languages where isactive = true';
 
 module.exports = {
     selectLanguagesQuery

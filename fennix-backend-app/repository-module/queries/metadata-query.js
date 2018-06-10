@@ -89,12 +89,18 @@ const sideNavMetadataQuery = 'select u.user_id\n' +
     '    left outer join action ca on ca.action_id = chr.route_action;\n';
 
 const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
-    ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as localized_element_title\n' +
-    ', (select localized_text from localization where locale_key = rcwa.label and language = \'EN_US\') as localized_label\n' +
+    ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as element_title\n' +
+    ', (select localized_text from localization where locale_key = rcwa.label and language = \'EN_US\') as label\n' +
     ', se.endpoint as submit_endpoint\n' +
     ', de.endpoint as dropdown_endpoint\n' +
+    ',wis.element_type ,wis.sub_type\n' +
+    ',rcwa.request_mapping_key\n' +
+    ',rcwa.disable_flag,rcwa.default_key,rcwa.default_value,rcwa.is_editable\n' +
     ', a.action_name\n' +
+    ',rcwa.widget_section_order_id,rcwa.widget_section_title,rcwa.widget_section_type,rcwa.widget_col_count,rcwa.widget_row_count,rcwa.widget_section_order_id\n' +
     'from role_card_widget_attribute rcwa\n' +
+    'left join widget_attributes wis on\n' +
+    'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
     'join role_cards_widgets rcw\n' +
     'on rcwa.role_card_widget_id = 11\n' +
     'join role_cards rc \n' +
@@ -104,7 +110,7 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     'left join endpoints de\n' +
     'on de.endpoint_id = rcwa.dropdown_endpoint\n' +
     'left join action a \n' +
-    'on a.action_id = rcwa.on_change_action;\n';
+    'on a.action_id = rcwa.on_change_action';
 
 const modalMetadataQuery = '';
 

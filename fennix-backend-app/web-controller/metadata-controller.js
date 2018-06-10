@@ -26,7 +26,7 @@ router.get('/simCardDetails', (req, res) => {
     })
 });
 
-router.get('/languageDetails', function (req, res) {
+router.get('/listLanguages', function (req, res) {
     let returnObj;
     returnObj = getLanguagesListBusiness(req);
     returnObj.then((response) => {
