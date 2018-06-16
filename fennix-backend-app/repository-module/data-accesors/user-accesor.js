@@ -1,6 +1,5 @@
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
-
-const {userProfileQuery, updateUserProfileQuery, getUserListQuery} = require('../queries/user-query');
+const {userProfileQuery, updateUserProfileQuery, getUserListQuery,getUserNameFromUserIdQuery} = require('../queries/user-query');
 
 const fetchUserProfileAccesor = async (req) => {
     let returnObj;
@@ -20,7 +19,14 @@ const getUserListAccesor = async (req) => {
     return returnObj;
 };
 
+const getUserNameFromUserIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getUserNameFromUserIdQuery);
+    return returnObj;
+};
+
 module.exports = {
+    getUserNameFromUserIdAccessor,
     fetchUserProfileAccesor,
     updateUserProfileAccesor,
     getUserListAccesor

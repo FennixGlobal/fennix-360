@@ -6,7 +6,24 @@ const userIdDeviceAggregatorQuery = (query) => {
             count: {$sum: 1}
         });
 };
+const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
 
+    return deviceAggregator.aggregate()
+        .match({
+            "beneficiaryId":{$in:query}
+        })
+        .lookup({
+            from:"deviceTypes",
+            localField:"deviceTypeId",
+            foreignField:"_id",
+            as:"deviceType"
+        }).project({
+            "_id":1,
+            "imei":1,
+            "beneficiaryId":1,
+            "deviceType.name":1
+        });
+};
 //db.getCollection('devices').find({})
 
 // /db.getCollection('devices').find({})
@@ -48,5 +65,6 @@ const deviceDetailsByBeneficiaryId = (query) => {
 
 module.exports = {
     userIdDeviceAggregatorQuery,
-    deviceDetailsByBeneficiaryId
+    deviceDetailsByBeneficiaryId,
+    getDeviceDetailsForListOfBeneficiariesQuery
 };

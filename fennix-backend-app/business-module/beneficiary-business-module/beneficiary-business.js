@@ -1,17 +1,17 @@
-const {getBenefeciaryAggregator, getBeneficiaryListByOwnerId, getBeneifciaryIdList} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {deviceBybeneficiaryQuery} = require('../../repository-module/data-accesors/device-accesor');
 
-var beneficiaryAggregatorDashboard = async (req) => {
+const beneficiaryAggregatorBusiness = async (req) => {
     let request = [req.query.userId], beneficiaryResponse, returnObj;
     beneficiaryResponse = await getBenefeciaryAggregator(request);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let beneficiaryObj = {
-            VICTIM: {key: 'victim', value: '', color: '', legend: 'VICTIM'},
-            OFFENDER: {key: 'offender', value: '', color: '', legend: 'OFFENDER'},
+            VICTIM: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
+            OFFENDER: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
         };
         if (beneficiaryResponse.rows.length === 1) {
             let propName = beneficiaryResponse.rows[0]['role_name'];
@@ -32,21 +32,21 @@ var beneficiaryAggregatorDashboard = async (req) => {
     return returnObj;
 };
 
-var beneficiaryListByOwnerUserId = async (req) => {
-    let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.currentPage * req.body.pageSize), req.body.pageSize],
-        beneficiaryListResponse, returnObj;
-    beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
-    if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-        let beneficiaryObj = {};
-        beneficiaryObj['headerArray'] = Object.keys(beneficiaryListResponse.rows[0]).map(item => item);
-        beneficiaryObj['bodyArray'] = beneficiaryListResponse.rows;
-
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
-    } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
-    }
-    return returnObj;
-};
+// var beneficiaryListByOwnerUserId = async (req) => {
+//     let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.currentPage * req.body.pageSize), req.body.pageSize],
+//         beneficiaryListResponse, returnObj;
+//     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
+//     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+//         let beneficiaryObj = {};
+//         beneficiaryObj['headerArray'] = Object.keys(beneficiaryListResponse.rows[0]).map(item => item);
+//         beneficiaryObj['bodyArray'] = beneficiaryListResponse.rows;
+//
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
+//     } else {
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+//     }
+//     return returnObj;
+// };
 
 const beneficiaryLocationListByOwnerAndCenter = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.pagination.currentPage * req.body.pagination.pageSize), req.body.pagination.pageSize],
@@ -115,51 +115,51 @@ const beneficiaryMapDataList = async (req) => {
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
-                text: 'Speed',
+                // text: 'Speed',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
             });
             beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['beneficiaryId'] = {
-                text: item.latestBeneficiaryDeviceDetails.beneficiaryId,
-                type: 'text'
-            };
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'] = {
-                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'],
-                type: 'text'
-            };
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['imei'] = {
-                text: item.latestBeneficiaryDeviceDetails.imei === '' ? `456723${item.latestBeneficiaryDeviceDetails.beneficiaryId}${index}` : item.latestBeneficiaryDeviceDetails.imei,
-                type: 'text'
-            };
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'] = {
-                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'],
-                type: 'text'
-            };
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['updatedDate'] = {
-                text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['device_updated_date'],
-                type: 'text'
-            };
-            beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['viewDetails'] = {
-                text: 'View Details',
-                type: 'link',
-                id: item.latestBeneficiaryDeviceDetails.beneficiaryId
-            };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['beneficiaryId'] = {
+            //     text: item.latestBeneficiaryDeviceDetails.beneficiaryId,
+            //     // type: 'text'
+            // };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'] = {
+            //     text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['firstname'],
+            //     // type: 'text'
+            // };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['imei'] = {
+            //     text: item.latestBeneficiaryDeviceDetails.imei === '' ? `456723${item.latestBeneficiaryDeviceDetails.beneficiaryId}${index}` : item.latestBeneficiaryDeviceDetails.imei,
+            //     type: 'text'
+            // };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'] = {
+            //     text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['mobileno'],
+            //     type: 'text'
+            // };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['updatedDate'] = {
+            //     text: beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['device_updated_date'],
+            //     type: 'text'
+            // };
+            // beneficiaryFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['viewDetails'] = {
+            //     text: 'View Details',
+            //     type: 'link',
+            //     id: item.latestBeneficiaryDeviceDetails.beneficiaryId
+            // };
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {};
             beneficiaryDeviceFinalObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails;
         });
-        beneficiaryObj['headerArray'] = [{
-            headerName: 'Beneficiary Id',
-            key: 'beneficiaryId',
-            type: 'text'
-        }, {headerName: 'Name', key: 'firstName', type: 'text'}, {
-            headerName: 'IMEI',
-            key: 'imei',
-            type: 'text'
-        }, {headerName: 'Mobile No.', key: 'mobileno', type: 'text'}, {
-            headerName: 'Updated Date',
-            key: 'updatedDate',
-            type: 'text'
-        }, {headerName: 'View Details', key: 'viewDetails', type: 'link'}];
+        // beneficiaryObj['headerArray'] = [{
+        //     headerName: 'Beneficiary Id',
+        //     key: 'beneficiaryId',
+        //     type: 'text'
+        // }, {headerName: 'Name', key: 'firstName', type: 'text'}, {
+        //     headerName: 'IMEI',
+        //     key: 'imei',
+        //     type: 'text'
+        // }, {headerName: 'Mobile No.', key: 'mobileno', type: 'text'}, {
+        //     headerName: 'Updated Date',
+        //     key: 'updatedDate',
+        //     type: 'text'
+        // }, {headerName: 'View Details', key: 'viewDetails', type: 'link'}];
         beneficiaryObj['bodyArray'] = Object.keys(beneficiaryFinalObj).map((item) => beneficiaryFinalObj[item]);
         beneficiaryObj['deviceObj'] = beneficiaryDeviceFinalObj;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
@@ -168,8 +168,53 @@ const beneficiaryMapDataList = async (req) => {
     }
     return returnObj;
 };
+
+
+var beneficiaryListByOwnerUserId= async (req) => {
+    let request = [req.query.userId, req.query.centerId, req.query.offset, req.query.limit], beneficiaryListResponse, returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {}, finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
+    beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
+    totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
+    finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
+    if (objectHasPropertyCheck(beneficiaryListResponse,'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+        // let beneficiaryObj = {};
+        // beneficiaryObj['headerArray'] = Object.keys(beneficiaryListResponse.rows[0]).map(item => item);
+        // beneficiaryObj['bodyArray'] = beneficiaryListResponse.rows;
+
+        beneficiaryListResponse.rows.forEach(item => {
+            beneficiaryIds.push(`${item['beneficiaryid']}`);
+        });
+
+        let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
+        deviceDetailsResponse.forEach(device => {
+            var obj = {
+                deviceId: device['_id'],
+                imei: device['imei'],
+                deviceType: device['deviceType'][0]['name']
+            };
+            deviceDetailsMap[device['beneficiaryId']] = obj;
+        });
+
+        beneficiaryListResponse.rows.forEach(item => {
+            var res = {
+                beneficiaryName: createGridResponse(item['full_name'], item['role_name'], null, item['beneficiaryid'], item['beneficiary_role'], item['gender']),
+                emailId: createGridResponse(item['emailid'], null, null, item['beneficiaryid'], null, null),
+                mobileNo: createGridResponse(item['mobileno'], null, null, item['beneficiaryid'], null, null),
+                center: createGridResponse(item['center_name'], null, null, item['location_id'], null, null),
+                crimeDetails: createGridResponse(item['crime_id'], null, null, item['beneficiaryid'], null, null),
+                deviceDetails: createGridResponse(deviceDetailsMap[item['beneficiaryid']]['imei'], deviceDetailsMap[item['beneficiaryid']]['deviceType'], null, deviceDetailsMap[item['beneficiaryid']]['deviceId'], null, null)
+            };
+            modifiedResponse.push(res);
+        });
+        finalResponse['beneficiaries'] = modifiedResponse;
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+    }
+    return returnObj;
+};
+
 module.exports = {
-    beneficiaryAggregatorDashboard,
+    // beneficiaryAggregatorDashboard,
     beneficiaryListByOwnerUserId,
     beneficiaryMapDataList,
     beneficiaryLocationListByOwnerAndCenter

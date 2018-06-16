@@ -18,7 +18,7 @@ router.get('/ticketDetails', function (req, res) {
     });
 });
 
-router.post('/listTickets', function (req, res) {
+router.get('/listTickets', function (req, res) {
     let returnObj;
     returnObj = listTicketsBusiness(req);
     returnObj.then((response) => {

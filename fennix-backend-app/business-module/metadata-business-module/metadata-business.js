@@ -1,5 +1,5 @@
 const {getCardMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
@@ -55,6 +55,46 @@ const getCardMetadataForRouteBusiness = async (req) => {
                             colorMap: colorObj
                         }
                     }
+                } else if (item['widget_type'].toLowerCase() === 'grid') {
+                    if (objectHasPropertyCheck(widgetAttributesObj, 'attributeId')) {
+                        if (item['widget_section_subtype'].toLowerCase() === 'grid_header') {
+                            if (item['widget_element_parent_flag'] && !objectHasPropertyCheck(widgetAttributesObj.colMap, item['request_mapping_key'])) {
+                                widgetAttributesObj.colMap[item['request_mapping_key']] = {gridSubRows: []};
+                            }
+                            widgetAttributesObj.headerMap = {...widgetAttributesObj.headerMap, ...{[item['request_mapping_key']]: headerMapCreator(item)}};
+                        }
+                        if (item['widget_section_subtype'].toLowerCase() === 'grid_row_col') {
+                            if (objectHasPropertyCheck(widgetAttributesObj.colMap, item['widget_parent_mapping_key'])) {
+                                if (arrayNotEmptyCheck(widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows']) && objectHasPropertyCheck(widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'], item['widget_row_count'] - 1)) {
+                                    widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
+                                } else {
+                                    widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1] = [];
+                                    widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
+                                }
+                            } else {
+                                widgetAttributesObj.colMap[item['widget_parent_mapping_key']] = {gridSubRows: []};
+                                widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1] = [];
+                                widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
+                            }
+                        }
+                    } else {
+                        const headerMap = {};
+                        const colMap = {};
+                        if (item.widget_section_type.toLowerCase() === 'grid') {
+                            if (item.widget_section_subtype.toLowerCase() === 'grid_header') {
+                                headerMap[item['request_mapping_key']] = headerMapCreator(item);
+                            } else {
+                                colMap[item['request_mapping_key']] = headerMapCreator(item);
+                            }
+                        }
+                        widgetAttributesObj = {
+                            attributeId: item['role_card_widget_attribute_id'],
+                            elementType: item['element_type'],
+                            elementSubType: item['sub_type'],
+                            headerMap: headerMap,
+                            colMap: colMap
+                        };
+                    }
                 } else {
                     widgetAttributesObj = widgetAttributeSectionCreator(item, widgetAttributesObj);
                 }
@@ -65,7 +105,10 @@ const getCardMetadataForRouteBusiness = async (req) => {
                     widgetType: item['widget_type'],
                     widgetSubType: item['widget_subtype'],
                     widgetAttributes: {...widgetAttributesObj},
-                    endpoint: item['endpoint']
+                    widgetEndpoint: item['widget_endpoint'],
+                    widgetInitSort: item['widget_init_sort'],
+                    widgetReqType: item['widget_req_type'],
+                    widgetReqParams: item['widget_req_params']
                 }
             }
             return init;
@@ -74,7 +117,9 @@ const getCardMetadataForRouteBusiness = async (req) => {
         returnObj.widgetCards.forEach((item) => {
             item['widgets'] = Object.keys(item.widgets).map((child) => {
                 let returnObj = {};
-                if (item.widgets[child]['widgetType'].toLowerCase() === 'chart' || item.widgets[child]['widgetType'].toLowerCase() === 'map') {
+                if (item.widgets[child]['widgetType'].toLowerCase() === 'chart') {
+                    returnObj = item.widgets[child];
+                } else if (item.widgets[child]['widgetType'].toLowerCase() === 'grid') {
                     returnObj = item.widgets[child];
                 } else {
                     item.widgets[child]['widgetAttributes']['widgetSection'] = Object.keys(item.widgets[child]['widgetAttributes']['widgetSection']).map((section) => {
@@ -109,8 +154,7 @@ const getSimCardDetailsBusiness = async (req) => {
 };
 
 const getLoginMetadataBusiness = async (req) => {
-    let responseObj, loginMetadtaResponse = {widgetAttributes:{}};
-    // request = [req.query.active];
+    let responseObj, loginMetadtaResponse = {widgetAttributes: {}};
     responseObj = await getLoginMetadataAccessor();
     if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
         loginMetadtaResponse.widgetAttributes = responseObj.rows.reduce((init, item) => {
@@ -121,14 +165,12 @@ const getLoginMetadataBusiness = async (req) => {
         loginMetadtaResponse.widgetAttributes['widgetSection'].forEach(item => {
             item['sectionRows'] = Object.keys(item.sectionRows).map(row => item.sectionRows[row]);
         });
-        // loginMetadtaResponse = responseObj.rows;
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'en', loginMetadtaResponse);
 };
 
 const getLanguagesListBusiness = async (req) => {
     let responseObj, request, languageListResponse = {dropdownList: []};
-    // request = [req.query.active];
     responseObj = await getLanguagesAccessor();
     if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
@@ -139,6 +181,23 @@ const getLanguagesListBusiness = async (req) => {
 };
 
 //Private methods to modify the data for the way we need in the response
+const headerMapCreator = (item) => {
+    const obj = {
+        gridHeaderOrderId: item['widget_col_count'],
+        gridHeaderMappingKey: item['request_mapping_key'],
+        gridColType: item['element_type'],
+        subWidgetColId: item['widget_col_count'],
+        subWidgetRowId: item['widget_row_count'],
+        gridHeaderColName: item['element_title'],
+        gridColSubType: item['element_type_subtype'],
+        gridSubmitEndpoint: item['submit_endpoint'],
+        childColPresentFlag: item['widget_element_parent_flag'],
+        parentMappingKey: item['widget_parent_mapping_key'],
+        gridNavigationRoute: item['navigation_route']
+    };
+    return obj;
+};
+
 const widgetAttributeSectionCreator = (widgetItem, widgetAttributesObj) => {
     const widgetSectionBaseObj = {
         sectionId: widgetItem['widget_section_order_id'],
@@ -245,7 +304,22 @@ const widgetElementAttributeCreator = (widgetData) => {
             case 'chart-color':
                 widgetElementData = {
                     ...widgetElementData, ...{['colorMap'[widgetData['mapping_key']]]: widgetData['default_value']}
-                }
+                };
+                break;
+            case 'text-link':
+                widgetElementData = {
+                    ...widgetElementData, ...{
+                        elementLabel: widgetData['label']
+                    }
+                };
+                break;
+            case 'detail-text':
+                widgetElementData = {
+                    ...widgetElementData, ...{
+                        elementLabel: widgetData['label']
+                    }
+                };
+                break;
         }
     }
     return widgetElementData;

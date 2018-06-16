@@ -30,8 +30,21 @@ const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
     return {dropdownKey, dropdownValue, isDisabledFlag}
 };
 
+// const createGridResponse = (primaryValue, secondaryValue, hoverValue, key, role, gender) => {
+//     let response = {
+//         primaryValue: primaryValue,
+//         secondaryValue: secondaryValue,
+//         hoverValue: hoverValue,
+//         key: key,
+//         role: role,
+//         gender: gender
+//     };
+//     return response;
+// };
+
 module.exports = {
     connectionCheckAndQueryExec,
     fennixResponse,
-    dropdownCreator
+    dropdownCreator,
+    // createGridResponse
 };

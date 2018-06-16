@@ -1,10 +1,12 @@
-const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
 const crypto = require('crypto-js');
 const bcrypt = require('bcryptjs');
-const {checkUserEmailId,authenticateBeneficiaryDetails,authenticateUserDetails,checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
+const {fetchUserProfileBusiness} = require('../user-business-module/user-business');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
+
 
 const checkEmailId = (req) => {
     let responseObj, businessResponse;
@@ -25,6 +27,28 @@ const checkEmailId = (req) => {
         }
     }
     return responseObj;
+};
+
+const fetchLoginProfileBusiness = async (req) => {
+    let loginProfileResponse = {};
+    if (req.query.userRoleId > 2) {
+        loginProfileResponse = await fetchUserProfileBusiness(req);
+        // userController
+        // await router.get('user/fetchProfile', function (req, res) {
+        //     const returnObj = res;
+        //     returnObj.then((response) => {
+        //         loginProfileResponse = response;
+        //     });
+        // })
+    } else {
+        // await router.get('beneficiary/fetchBeneficiaryProfile', function (req, res) {
+        //     const returnObj = res;
+        //     returnObj.then((response) => {
+        //         loginProfileResponse = response;
+        //     });
+        // })
+    }
+    return loginProfileResponse;
 };
 
 const authenticateUser = async (req) => {
@@ -71,5 +95,6 @@ const retireCheck = (responseArray) => (responseArray[0]['isactive']) ? fennixRe
 
 module.exports = {
     checkEmailId,
-    authenticateUser
+    authenticateUser,
+    fetchLoginProfileBusiness
 };

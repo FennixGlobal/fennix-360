@@ -6,7 +6,19 @@ const ticketAggregatorAccessor = async (req) => {
     return returnObj;
 };
 
-const ticketListBasedOnTicketStatusAccesor = async (req) => {
+// const listTicketsBasedOnUserIdAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await listTicketsQuery(req);
+//     return returnObj;
+// };
+
+const totalNoOfTicketsBasedOnUserIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await totalNoOfTicketsBasedOnUserIdQuery(req);
+    return returnObj;
+};
+
+const ticketListBasedOnTicketStatusAccessor = async (req) => {
     let returnObj;
     returnObj = await userIdTicketDetailsBasedOnTicketStatusQuery(req);
     return returnObj;
@@ -18,9 +30,8 @@ const listTicketsBasedOnUserIdAccessor = async (req) => {
     return returnObj;
 };
 
-
 module.exports = {
     ticketAggregatorAccessor,
-    ticketListBasedOnTicketStatusAccesor,
+    ticketListBasedOnTicketStatusAccessor,
     listTicketsBasedOnUserIdAccessor
 };

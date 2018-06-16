@@ -6,10 +6,10 @@ const cardWidgetMetadataQuery = 'select u.user_id\n' +
     '    , w.widget_type\n' +
     '    , ws.widget_subtype\n' +
     '    , wsize.widget_size\n' +
-    '    , e.endpoint\n' +
-    '    , rcwa.role_card_widget_attribute_id, rcwa.request_mapping_key, rcwa.default_key, rcwa.default_value\n' +
-    '    , rcwa.element_title, rcwa.dropdown_endpoint, rcwa.submit_endpoint,rcwa.widget_section_order_id,rcwa.widget_section_type,rcwa.widget_col_count\n' +
-    '    , rcwa.label, rcwa.on_change_action, rcwa.is_editable,rcwa.disable_flag,rcwa.widget_section_title,rcwa.widget_row_count\n' +
+    '    , e.endpoint as widget_endpoint,e.endpoint_mandatory_request_params as widget_req_params,e.endpoint_initial_sort as widget_init_sort,e.endpoint_request_type as widget_req_type\n' +
+    '    , rcwa.role_card_widget_attribute_id, rcwa.request_mapping_key, rcwa.default_key, rcwa.default_value,rcwa.widget_element_parent_flag,rcwa.widget_parent_mapping_key\n' +
+    '    , (select localized_text from localization where language = $3 and locale_key = rcwa.element_title) as element_title, rcwa.dropdown_endpoint, rcwa.submit_endpoint,rcwa.widget_section_order_id,rcwa.widget_section_type,rcwa.widget_col_count,rcwa.widget_section_subtype\n' +
+    '    , (select localized_text from localization where language = $3 and locale_key = rcwa.label) as label, rcwa.on_change_action, rcwa.is_editable,rcwa.disable_flag,rcwa.widget_section_title,rcwa.widget_row_count,rcwa.navigation_route\n' +
     '    , wa.element_type, wa.sub_type\n' +
     '    from users u\n' +
     '    join roles r on r.role_id = u.user_role and u.user_id = $1\n' +
@@ -22,7 +22,7 @@ const cardWidgetMetadataQuery = 'select u.user_id\n' +
     '    left join widget_size wsize on wsize.widget_size_id = rcw.widget_size_id\n' +
     '    join endpoints e on e.endpoint_id = rcw.endpoint_id\n' +
     '    left join role_card_widget_attribute rcwa on rcwa.role_card_widget_id = rcw.role_cards_widgets_id\n' +
-    '    left join widget_attributes wa on wa.widget_attribute_id = rcwa.widget_attribute_id;\n';
+    '    left join widget_attributes wa on wa.widget_attribute_id = rcwa.widget_attribute_id';
 
 const headerMetadataQuery = 'select u.user_id\n' +
     '    , rh.header_id as route_id, rh.header_order_id as route_order_id,rh.header_route_position as route_position\n' +
@@ -91,8 +91,8 @@ const sideNavMetadataQuery = 'select u.user_id\n' +
 const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as element_title\n' +
     ', (select localized_text from localization where locale_key = rcwa.label and language = \'EN_US\') as label\n' +
-    ', se.endpoint as submit_endpoint\n' +
-    ', de.endpoint as dropdown_endpoint\n' +
+    ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_req_params,se.endpoint_initial_sort as submit_init_sort,se.endpoint_request_type as submit_req_type\n' +
+    ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_req_params,de.endpoint_request_type as dropdown_req_type\n' +
     ',wis.element_type ,wis.sub_type\n' +
     ',rcwa.request_mapping_key\n' +
     ',rcwa.disable_flag,rcwa.default_key,rcwa.default_value,rcwa.is_editable\n' +
