@@ -282,7 +282,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 hoverValue: widgetElementItem['default_value__hover_value'],
                 iconValue: widgetElementItem['element_icon_value'],
                 accentValue: widgetElementItem['default_key__accent_value'],
-                gridModalId: widgetElementItem['default_key']
+                gridModalId: widgetElementItem['element_modal_id']
             };
             break;
         case 'navigate-link':

@@ -4,7 +4,7 @@ const {getBeneficiaryByUserId} = require('../../repository-module/data-accesors/
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
-var deviceAggregatorDashboard = async (req) => {
+const deviceAggregatorDashboard = async (req) => {
     const request = [req.query.userId];
     let beneficiaryResponse, deviceResponse, returnObj;
     beneficiaryResponse = await getBeneficiaryByUserId(request);
@@ -40,4 +40,4 @@ var deviceAggregatorDashboard = async (req) => {
 
 module.exports = {
     deviceAggregatorDashboard
-}
+};

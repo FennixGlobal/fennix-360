@@ -1,6 +1,6 @@
-const {getBenefeciaryAggregator, getBeneficiaryDetailsAccessor,getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {deviceBybeneficiaryQuery} = require('../../repository-module/data-accesors/device-accesor');
@@ -77,9 +77,9 @@ const beneficiaryAggregatorBusiness = async (req) => {
 //     return returnObj;
 // };
 const beneficiaryMapDataList = async (req) => {
-    let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit],
+    let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
         beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {},
-        locBeneficiaryIdList = [], beneficiaryDevices = {},
+        locBeneficiaryIdList = [], beneficiaryDevices = {}, deviceLocDeviceList = [],
         beneficiaryListResponse, returnObj, beneficiaryLocArray;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
@@ -105,44 +105,59 @@ const beneficiaryMapDataList = async (req) => {
                 longitude: item.latestBeneficiaryLocation.longitude
             };
             locBeneficiaryIdList.push(item.latestBeneficiaryLocation.beneficiaryId);
+            beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
         });
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(locBeneficiaryIdList);
         beneficiaryDeviceArray.forEach((item) => {
+            deviceLocDeviceList.push(item.latestBeneficiaryDeviceDetails.beneficiaryId);
             const deviceDetails = {};
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId] = [];
+            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage);
+            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage);
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Battery Percentage',
-                status:,
-                statusColor:,
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
+                status: batteryPercentage['status'],
+                statusColor: batteryPercentage['color'],
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Battery Voltage',
+                status: batteryVoltage['status'],
+                statusColor: batteryVoltage['color'],
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Belt Status',
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus ? 'violation' : 'safe',
+                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Shell Status',
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus ? 'violation' : 'safe',
+                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'GPS Status',
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'violation' : 'safe',
+                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Speed',
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'still' : 'moving',
+                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'BLUE' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
             });
             beneficiaryDevices[item.latestBeneficiaryDeviceDetails.beneficiaryId] = deviceDetails;
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = {...deviceDetails};
             gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]};
         });
-        beneficiaryReturnObj['markers'] = Object.keys(beneficiaryFilter).map((marker) => {
-            if (locBeneficiaryIdList.indexOf(marker) !== -1) {
-                return beneficiaryFilter[marker];
+        beneficiaryReturnObj['markers'] = [];
+        Object.keys(beneficiaryFilter).forEach((marker) => {
+            if (deviceLocDeviceList.indexOf(marker) !== -1) {
+                beneficiaryReturnObj['markers'].push(beneficiaryFilter[marker])
             }
         });
         beneficiaryReturnObj['deviceDetails'] = beneficiaryDevices;
@@ -156,7 +171,7 @@ const beneficiaryMapDataList = async (req) => {
 };
 
 const getBeneficiaryDetailsBusiness = async (req) => {
-    let request = [req.query.beneficiaryId,req.query.languageId], response, finalResponse;
+    let request = [req.query.beneficiaryId, req.query.languageId], response, finalResponse;
     response = await getBeneficiaryDetailsAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows[0]);

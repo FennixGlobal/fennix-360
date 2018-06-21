@@ -71,7 +71,7 @@ const listTicketsBusiness = async (req) => {
                 beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['role'] : ' - ',
                 locationId: item['locationId'],
                 withAlerts: item['withAlerts'],
-                imeiNumber: arrayNotEmptyCheck(item['device']) ? item['device'][0]['imei'] : '-',
+                imeiNumber: arrayNotEmptyCheck(item['device']) ? item['device'][0]['imei'] : '999999999',
                 alertDeviceType: arrayNotEmptyCheck(item['deviceType']) ? item['deviceType'][0]['name'] : '-',
                 alertType: notNullCheck(item['alertType']) ? item['alertType'] : 'General alert',
                 readStatus: item['readStatus'],
