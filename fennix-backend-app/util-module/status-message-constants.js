@@ -13,6 +13,20 @@ const statusCodes = {
             espLA: 'no cards available for the user'
         }
     },
+    209: {
+        devMsg: 'no roles available for the given id', userMsg: {
+            en: 'no roles available for the given id',
+            espMX: 'no roles available for the given id',
+            espLA: 'no roles available for the given id'
+        }
+    },
+    210: {
+        devMsg: 'no filters available for the given id', userMsg: {
+            en: 'no filters available for the given id',
+            espMX: 'no filters available for the given id',
+            espLA: 'no filters available for the given id'
+        }
+    },
     600: {
         devMsg: 'User email and password Match', userMsg: {
             en: 'Logged in Succesfully',

@@ -147,8 +147,16 @@ const modalMetadataQuery = 'select m.modal_id, ma.modal_attribute_id, ma.modal_p
     '    on de.endpoint_id = ma.modal_data_endpoint';
 
 const getRoleQuery = 'select role_id, (select localized_text from localization where locale_key = r.role_name and language = $1) as role_name from roles r';
-
+const filterMetadataQuery = 'select fs.filter_position\n' +
+    ', fs.filter_main_location, fs.filter_sub_location\n' +
+    ', fa.filter_type, fa.filter_attribute_id, fa.filter_on_change_action\n' +
+    ', fa.filter_submit_endpoint, fa.filter_dropdown_endpoint, fa.filter_default_value\n' +
+    ', fa.filter_mapping_key\n' +
+    'from filterset fs\n' +
+    'join filters f on f.filter_id = fs.filter_id and {0} = $1\n' +
+    'join filter_attributes fa on fa.filter_id = fs.filter_id\n';
 module.exports = {
+    filterMetadataQuery,
     headerMetadataQuery,
     sideNavMetadataQuery,
     cardWidgetMetadataQuery,

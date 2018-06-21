@@ -1,5 +1,5 @@
 var express = require('express');
-const {getModelMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
+const {getModelMetadataBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
 router.post('/baseMetadata', function (req, res) {
@@ -53,6 +53,31 @@ router.get('/modalMetadata', function (req, res) {
 router.get('/roles', function (req, res) {
     let returnObj;
     returnObj = getRolesBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+
+router.get('/cardFilters', function (req, res) {
+    let returnObj;
+    returnObj = getFilterMetadataBusiness(req, 'roleCardId');
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/widgetFilters', function (req, res) {
+    let returnObj;
+    returnObj = getFilterMetadataBusiness(req, 'roleCardWidgetId');
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/pageFilters', function (req, res) {
+    let returnObj;
+    returnObj = getFilterMetadataBusiness(req, 'routeId');
     returnObj.then((response) => {
         res.send(response);
     })

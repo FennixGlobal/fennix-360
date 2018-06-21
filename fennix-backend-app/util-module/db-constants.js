@@ -1,3 +1,8 @@
+const TABLE_USERS = 'users';
+const TABLE_BENEFICIARIES = 'beneficiaries';
+const TABLE_LOCATION = 'location';
+const TABLE_ROLES = 'roles';
+
 const dbTableColMap = {
     users: {
         locationId: 'location_id',
@@ -8,13 +13,13 @@ const dbTableColMap = {
         gender: 'gender',
         image: 'image',
         role: 'user_role'
+    },
+    filterset: {
+        roleCardId: 'role_card_id',
+        routeId: 'route_id',
+        roleCardWidgetId: 'role_card_widget_id'
     }
 };
-
-const TABLE_USERS = 'users';
-const TABLE_BENEFICIARIES = 'beneficiaries';
-const TABLE_LOCATION = 'location';
-const TABLE_ROLES = 'roles';
 
 module.exports = {
     dbTableColMap,

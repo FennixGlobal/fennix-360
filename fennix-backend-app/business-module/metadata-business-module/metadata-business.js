@@ -1,5 +1,5 @@
-const {getCardMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
-const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
+const {getCardMetadataAccessor, getFilterMetadataAccessor,getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
@@ -77,6 +77,16 @@ const getCardMetadataForRouteBusiness = async (req) => {
     return responseObj;
 };
 
+const getFilterMetadataBusiness = async (req,colName) => {
+    let request = [req.query.id], filterResponse, response;
+    filterResponse = await getFilterMetadataAccessor(request,colName);
+    if (objectHasPropertyCheck(filterResponse, 'rows') && arrayNotEmptyCheck(filterResponse.rows)) {
+        response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', filterResponse);
+    } else {
+        response = fennixResponse(statusCodeConstants.STATUS_NO_FILTERS_FOR_ID, 'en', []);
+    }
+    return response;
+};
 
 const getSimCardDetailsBusiness = async (req) => {
     var request = [req.query.userId], centerIds, mongoRequest, response;
@@ -502,6 +512,7 @@ const modalCreator = (item, response) => {
     return responseMap;
 };
 module.exports = {
+    getFilterMetadataBusiness,
     getBaseMetadataBusiness,
     getCardMetadataForRouteBusiness,
     getSimCardDetailsBusiness,
@@ -510,302 +521,3 @@ module.exports = {
     getLanguagesListBusiness,
     getRolesBusiness
 };
-
-
-// let widgetAttributesObj = {...init['widgetCards'][item['role_cards_widgets_id']]['widgets'][item['role_cards_widgets_id']].widgetAttributes} || {};
-// if (!objectHasPropertyCheck(widgetSectionsObj, item['widget_section_order_id'])) {
-//     widgetSectionsObj[item['widget_section_order_id']] = {
-//         widgetSectionId: item['widget_section_order_id'],
-//         sectionOrderId: item['widget_section_order_id'],
-//         sectionTitle: item['widget_section_title'],
-//         widgetSectionType: item['widget_section_type'],
-//         widgetSectionSubType: item['widget_section_subtype']
-//     };
-// }
-// switch (item['widget_section_type']) {
-//     case 'chart':
-//         const colorObj = {};
-//         colorObj[item['request_mapping_key']] = item['default_value'];
-// }
-//
-// if (item['widget_type'].toLowerCase() === 'chart') {
-//     if (objectHasPropertyCheck(widgetAttributesObj, 'attributeId')) {
-//         widgetAttributesObj.colorMap = {...widgetAttributesObj.colorMap, ...{[item['request_mapping_key']]: item['default_value']}}
-//     } else {
-//         const colorObj = {};
-//         colorObj[item['request_mapping_key']] = item['default_value'];
-//         widgetAttributesObj = {
-//             attributeId: item['role_card_widget_attribute_id'],
-//             elementType: item['element_type'],
-//             elementSubType: item['sub_type'],
-//             colorMap: colorObj
-//         }
-//     }
-// } else if (item['widget_type'].toLowerCase() === 'grid') {
-//     if (objectHasPropertyCheck(widgetAttributesObj, 'attributeId')) {
-//         if (item['widget_section_subtype'].toLowerCase() === 'grid_header') {
-//             if (item['widget_element_parent_flag'] && !objectHasPropertyCheck(widgetAttributesObj.colMap, item['request_mapping_key'])) {
-//                 widgetAttributesObj.colMap[item['request_mapping_key']] = {gridSubRows: []};
-//             }
-//             widgetAttributesObj.headerMap = {...widgetAttributesObj.headerMap, ...{[item['request_mapping_key']]: headerMapCreator(item)}};
-//         }
-//         if (item['widget_section_subtype'].toLowerCase() === 'grid_row_col') {
-//             if (objectHasPropertyCheck(widgetAttributesObj.colMap, item['widget_parent_mapping_key'])) {
-//                 if (arrayNotEmptyCheck(widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows']) && objectHasPropertyCheck(widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'], item['widget_row_count'] - 1)) {
-//                     widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
-//                 } else {
-//                     widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1] = [];
-//                     widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
-//                 }
-//             } else {
-//                 widgetAttributesObj.colMap[item['widget_parent_mapping_key']] = {gridSubRows: []};
-//                 widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1] = [];
-//                 widgetAttributesObj.colMap[item['widget_parent_mapping_key']]['gridSubRows'][item['widget_row_count'] - 1][item['widget_col_count'] - 1] = headerMapCreator(item);
-//             }
-//         }
-//     } else {
-//         const headerMap = {};
-//         const colMap = {};
-//         if (item.widget_section_type.toLowerCase() === 'grid') {
-//             if (item.widget_section_subtype.toLowerCase() === 'grid_header') {
-//                 headerMap[item['request_mapping_key']] = headerMapCreator(item);
-//             } else {
-//                 colMap[item['request_mapping_key']] = headerMapCreator(item);
-//             }
-//         }
-//         widgetAttributesObj = {
-//             attributeId: item['role_card_widget_attribute_id'],
-//             elementType: item['element_type'],
-//             elementSubType: item['sub_type'],
-//             headerMap: headerMap,
-//             colMap: colMap
-//         };
-//     }
-// } else {
-//     widgetAttributesObj = widgetAttributeSectionCreator(item, widgetAttributesObj);
-// }
-// const headerMapCreator = (item) => {
-//     let returnObj = {
-//         gridElementAction: item['on_change_action'],
-//         gridHeaderOrderId: item['widget_col_count'],
-//         gridHeaderMappingKey: item['request_mapping_key'],
-//         childColPresentFlag: item['widget_element_parent_flag'],
-//         parentMappingKey: item['widget_parent_mapping_key'],
-//         gridColType: item['element_type'],
-//         gridColSubType: item['element_type_subtype'],
-//         subWidgetColId: item['widget_col_count'],
-//         subWidgetRowId: item['widget_row_count'],
-//         gridHeaderColName: item['element_title']
-//     };
-//     switch (item['element_type_subtype'].toLowerCase()) {
-//         case 'modal-pill':
-//             returnObj = {
-//                 ...returnObj,
-//                 primaryValue: item['element_primary_value'],
-//                 secondaryValue: item['element_secondary_value'],
-//                 hoverValue: item['element_hover_value'],
-//                 iconValue: item['element_icon_value'],
-//                 accentValue: item['element_accent_value'],
-//                 gridModalId: item['default_key']
-//             };
-//             break;
-//         case 'navigate-link':
-//             returnObj = {
-//                 ...returnObj,
-//                 gridModalId: item['default_key'],
-//                 gridNavigationRoute: item['navigation_route'],
-//             };
-//             break;
-//         case 'modal-link':
-//             returnObj = {
-//                 ...returnObj,
-//                 gridModalId: item['default_key'],
-//                 gridSubmitEndpoint: item['submit_endpoint'],
-//                 gridNavigationRoute: item['navigation_route']
-//             };
-//             break;
-//         case 'text':
-//         case 'text-number':
-//             returnObj = {
-//                 ...returnObj,
-//                 gridDefaultValue: item['default_value'],
-//                 gridDefaultKey: item['default_key']
-//             };
-//             break;
-//         case 'color-cell':
-//             returnObj = {
-//                 ...returnObj,
-//                 gridBgColor: item['default_value'],
-//                 gridTextColor: item['default_key']
-//             };
-//             break;
-//     }
-//     return returnObj;
-// };
-
-// const widgetAttributeSectionCreator = (widgetItem, widgetAttributesObj) => {
-//     const widgetSectionBaseObj = {
-//         sectionId: widgetItem['widget_section_order_id'],
-//         sectionTitle: widgetItem['widget_section_title'],
-//         sectionType: widgetItem['widget_section_type']
-//     };
-//     if (objectHasPropertyCheck(widgetAttributesObj, 'widgetSection')) {
-//         if (objectHasPropertyCheck(widgetAttributesObj['widgetSection'], widgetItem['widget_section_order_id'])) {
-//             const sectionRowsOrig = {...widgetAttributesObj['widgetSection'][widgetItem['widget_section_order_id']]['sectionRows']};
-//             widgetAttributesObj['widgetSection'][widgetItem['widget_section_order_id']] = {
-//                 ...widgetSectionBaseObj,
-//                 sectionRows: widgetAttributeSectionRowCreator(widgetItem, sectionRowsOrig)
-//             }
-//         } else {
-//             widgetAttributesObj['widgetSection'][widgetItem['widget_section_order_id']] = {
-//                 ...widgetSectionBaseObj,
-//                 sectionRows: widgetAttributeSectionRowCreator(widgetItem, {})
-//             }
-//         }
-//     } else {
-//         widgetAttributesObj['widgetSection'] = {};
-//         widgetAttributesObj['widgetSection'][widgetItem['widget_section_order_id']] = {
-//             ...widgetSectionBaseObj,
-//             sectionRows: widgetAttributeSectionRowCreator(widgetItem, {})
-//         }
-//     }
-//     return widgetAttributesObj;
-// };
-//
-// const widgetAttributeSectionRowCreator = (widgetItem, sectionRowsOrig) => {
-//     let widgetRow = {...sectionRowsOrig} || {};
-//     if (objectHasPropertyCheck(widgetRow, widgetItem['widget_row_count'])) {
-//         const originalCol = [...widgetRow[widgetItem['widget_row_count']]['sectionCols']];
-//         originalCol.push(widgetElementAttributeCreator(widgetItem));
-//         widgetRow[widgetItem['widget_row_count']] = {
-//             sectionRowId: widgetItem['widget_row_count'],
-//             sectionCols: [...originalCol]
-//         };
-//     } else {
-//         widgetRow[widgetItem['widget_row_count']] = {
-//             sectionRowId: widgetItem['widget_row_count'],
-//             sectionCols: [widgetElementAttributeCreator(widgetItem)]
-//         };
-//     }
-//     return widgetRow;
-// };
-//
-// const widgetElementAttributeCreator = (widgetData) => {
-//     let widgetElementData = {};
-//     if (objectHasPropertyCheck(widgetData, 'element_type')) {
-//         widgetElementData = {
-//             elementColumnId: widgetData['widget_col_count'],
-//             attributeId: widgetData['role_card_widget_attribute_id'],
-//             elementType: widgetData['element_type'],
-//             elementSubType: widgetData['sub_type'],
-//             elementIsEditableFlag: widgetData['is_editable'],
-//             elementIsDisabledFlag: widgetData['disable_flag'],
-//             onElementChangeAction: widgetData['on_change_action']
-//         };
-//         switch (widgetData['element_type'].toLowerCase()) {
-//             case 'input':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         defaultValue: widgetData['default_value'],
-//                         defaultKey: widgetData['default_key'],
-//                         elementTitle: widgetData['element_title'],
-//                         requestMappingKey: widgetData['request_mapping_key']
-//                     }
-//                 };
-//                 break;
-//             case 'checkbox':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         defaultValue: widgetData['default_value'],
-//                         defaultKey: widgetData['default_key'],
-//                         elementTitle: widgetData['element_title'],
-//                         requestMappingKey: widgetData['request_mapping_key'],
-//                         elementLabel: widgetData['label']
-//                     }
-//                 };
-//                 break;
-//
-//             case 'dropdown':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         defaultValue: widgetData['default_value'],
-//                         defaultKey: widgetData['default_key'],
-//                         elementTitle: widgetData['element_title'],
-//                         requestMappingKey: widgetData['request_mapping_key'],
-//                         dropdownEndpoint: widgetData['dropdown_endpoint'],
-//                         submitEndpoint: widgetData['submit_endpoint'],
-//                     }
-//                 };
-//                 break;
-//             case 'button':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         submitEndpoint: widgetData['submit_endpoint'],
-//                         elementLabel: widgetData['label']
-//                     }
-//                 };
-//                 break;
-//
-//             case 'chart-color':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{['colorMap'[widgetData['mapping_key']]]: widgetData['default_value']}
-//                 };
-//                 break;
-//             case 'text-link':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         elementLabel: widgetData['label']
-//                     }
-//                 };
-//                 break;
-//             case 'detail-text':
-//                 widgetElementData = {
-//                     ...widgetElementData, ...{
-//                         elementLabel: widgetData['label']
-//                     }
-//                 };
-//                 break;
-//         }
-//     }
-//     return widgetElementData;
-// };
-
-
-// if (notNullCheck(widgetItem['widget_sub_section_order_id']) && widgetItem['widget_sub_section_order_id'] !== 0) {
-//     if (objectHasPropertyCheck(widgetSectionBaseObj[widgetItem['widget_section_order_id']], 'widgetSubSections') && objectHasPropertyCheck(widgetSectionBaseObj[widgetItem['widget_section_order_id']]['widgetSubSections'], widgetItem['widget_sub_section_order_id'])) {
-//         widgetSectionBaseObj[widgetItem['widget_section_order_id']] = {
-//             ...widgetSectionCommonObj,
-//             widgetSubSectionPresent: true,
-// widgetSubSections: widgetSubSectionCreator(widgetItem, widgetSectionBaseObj[widgetItem['widget_section_order_id']]['widgetSubSections'])
-// };
-// } else {
-//     widgetSectionBaseObj[widgetItem['widget_section_order_id']] = {
-//         ...widgetSectionCommonObj,
-// widgetSubSectionPresent: true,
-// widgetSubSections: widgetSubSectionCreator(widgetItem, {})
-// };
-// }
-// } else {
-//     widgetSectionBaseObj[widgetItem['widget_section_order_id']] = {
-//         ...widgetSectionCommonObj,
-// widgetSubSectionPresent: false,
-// widgetSectionRows: widgetSectionRowCreator(widgetItem, {})
-// };
-// }
-// if (notNullCheck(widgetItem['widget_sub_section_order_id']) && widgetItem['widget_sub_section_order_id'] !== 0) {
-//     if (objectHasPropertyCheck(widgetSectionObj[widgetItem['widget_section_order_id']], 'widgetSubSections') && objectHasPropertyCheck(widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'], widgetItem['widget_sub_section_order_id'])) {
-//         widgetSectionObj[widgetItem['widget_section_order_id']] = {
-//             ...widgetSectionObj,
-//             widgetSubSectionPresent: true,
-//             widgetSubSections: widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'])
-//         };
-//     } else {
-//         widgetSectionObj[widgetItem['widget_section_order_id']] = {
-//             ...widgetSectionObj,
-//             widgetSubSectionPresent: true,
-//             widgetSubSections: widgetSubSectionCreator(widgetItem, {})
-//         };
-//     }
-// } else {
-// widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSectionPresent'] = false;
-// }

@@ -7,6 +7,10 @@ const mongoWhereInCreator = (data) => {
 const postgresUpdateCreator = (array) => {
 
 };
+const filterQueryCreator = (filterQuery, colName) => {
+    filterQuery = filterQuery.replace('{0}', `fs.${dbTableColMap['filterset'][colName]}`);
+    return filterQuery;
+};
 
 const insertQueryCreator = (req, tableName, insertQuery) => {
     let columns = '', values = 'values', modifiedInsertQuery, valuesArray = [], finalResponse = {};
@@ -46,6 +50,7 @@ const requestInModifier = (itemArray, query) => {
 
 
 module.exports = {
+    filterQueryCreator,
     mongoWhereInCreator,
     requestInModifier,
     insertQueryCreator
