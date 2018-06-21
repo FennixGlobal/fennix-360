@@ -1,4 +1,4 @@
-    const checkUserEmailQuery = 'select  user_id FROM users where email_id=$1';
+const checkUserEmailQuery = 'select  user_id FROM users where email_id=$1';
 const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no\n' +
     '    , concat(u.address1, \', \', u.address2) as address\n' +
     '    , (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\n' +
@@ -17,8 +17,10 @@ const updateUserProfileQuery = 'update users set first_name=$2,last_name=$3,addr
 const getUserListQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name, dob, email_id, mobile_no, isactive, (select role_name from roles where role_id = user_role) as role, (select location_name from location where location_id = u.location_id) as center, image from users u where owner_user_id = $1';
 
 const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender from users u where user_id = $2';
+const insertUserQuery = 'insert into ';
 
 module.exports = {
+    insertUserQuery,
     getUserListQuery,
     checkUserEmailQuery,
     userProfileQuery,

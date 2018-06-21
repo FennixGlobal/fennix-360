@@ -1,5 +1,5 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {fetchUserProfileAccesor, getUserListAccesor, updateUserProfileAccesor} = require('../../repository-module/data-accesors/user-accesor');
+const {fetchUserProfileAccesor,addUserAccessor, getUserListAccesor, updateUserProfileAccesor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
@@ -53,8 +53,14 @@ const getUserListBusiness = async (req) => {
     }
     return returnObj;
 };
+const addUserBusiness = async (req) => {
+    let request = req.body;
+    await addUserAccessor(request);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+};
 
 module.exports = {
+    addUserBusiness,
     fetchUserProfileBusiness,
     updateUserProfileBusiness,
     getUserListBusiness

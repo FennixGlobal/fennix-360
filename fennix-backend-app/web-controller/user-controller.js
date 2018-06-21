@@ -1,6 +1,5 @@
-const {fetchUserProfileBusiness, getUserListBusiness, updateUserProfileBusiness} = require('../business-module/user-business-module/user-business');
+const {fetchUserProfileBusiness,addUserBusiness, getUserListBusiness, updateUserProfileBusiness} = require('../business-module/user-business-module/user-business');
 const express = require('express');
-const dataValidator = require('../util-module/data-validators');
 const router = express.Router();
 
 router.get('/fetchProfile', async (req, res) => {
@@ -26,4 +25,11 @@ router.post('/listUsers', async (req, res) => {
     })
 });
 
+router.post('/addUser', async (req, res) => {
+    let returnObj;
+    returnObj = addUserBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

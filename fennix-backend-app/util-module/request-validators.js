@@ -1,9 +1,32 @@
+const {dbTableColMap} = require("../util-module/db-constants");
+
 const mongoWhereInCreator = (data) => {
     return {'$in': data}
 };
 
 const postgresUpdateCreator = (array) => {
 
+};
+
+const insertQueryCreator = (req, tableName, insertQuery) => {
+    let columns = '', values = 'values', modifiedInsertQuery, valuesArray = [], finalResponse = {};
+    Object.keys(req).forEach((key, index) => {
+        if (index === 0) {
+            columns = `(${dbTableColMap[tableName][key]}`;
+            values = `${values} ($${index + 1}`;
+        } else if (index === Object.keys(req).length - 1) {
+            columns = `${columns},${dbTableColMap[tableName][key]})`;
+            values = `${values}, $${index + 1})`;
+        } else {
+            columns = `${columns},${dbTableColMap[tableName][key]}`;
+            values = `${values}, $${index + 1}`;
+        }
+        valuesArray.push(req[key]);
+    });
+    modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
+    finalResponse['valuesArray'] = valuesArray;
+    finalResponse['modifiedInsertQuery'] = modifiedInsertQuery;
+    return finalResponse;
 };
 
 const requestInModifier = (itemArray, query) => {
@@ -24,5 +47,6 @@ const requestInModifier = (itemArray, query) => {
 
 module.exports = {
     mongoWhereInCreator,
-    requestInModifier
+    requestInModifier,
+    insertQueryCreator
 };
