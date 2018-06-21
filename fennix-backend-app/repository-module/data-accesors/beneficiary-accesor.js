@@ -1,13 +1,13 @@
-const {selectBeneficiaryByUserIdQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
+const {selectBeneficiaryByUserIdQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
-var getBeneficiaryByUserId = async (req) => {
+const getBeneficiaryByUserId = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryByUserIdQuery);
     return returnObj;
 };
 
-var getBenefeciaryAggregator = async (req) => {
+const getBenefeciaryAggregator = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryByOwnerIdQuery);
     return returnObj;
@@ -28,7 +28,7 @@ const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
 };
 
 
-var getBeneficiaryListByOwnerId = async (req) => {
+const getBeneficiaryListByOwnerId = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryListByOwnerUserIdQuery);
     return returnObj;
@@ -39,8 +39,13 @@ var getBeneficiaryListByOwnerId = async (req) => {
 //     returnObj = await connectionCheckAndQueryExec(req, getBenefeciaryIdListForOwnerAndCenterQuery);
 //     return returnObj;
 // };
+const getBeneficiaryDetailsAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getBeneficiaryDetailsQuery);
+    return returnObj;
+};
 
-var getBeneifciaryIdList = async (req) => {
+const getBeneifciaryIdList = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, getBenefeciaryIdListForOwnerAndCenterQuery);
     return returnObj;
@@ -51,6 +56,7 @@ module.exports = {
     getBenefeciaryAggregator,
     getBeneficiaryListByOwnerId,
     getBeneifciaryIdList,
+    getBeneficiaryDetailsAccessor,
     getBeneficiaryNameFromBeneficiaryIdAccessor,
     getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor
     // getBeneficiaryMapData

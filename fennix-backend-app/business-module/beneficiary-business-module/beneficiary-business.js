@@ -1,4 +1,4 @@
-const {getBenefeciaryAggregator, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, getBeneficiaryDetailsAccessor,getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -155,6 +155,16 @@ const beneficiaryMapDataList = async (req) => {
     return returnObj;
 };
 
+const getBeneficiaryDetailsBusiness = async (req) => {
+    let request = [req.query.beneficiaryId,req.query.languageId], response, finalResponse;
+    response = await getBeneficiaryDetailsAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows[0]);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+    }
+    return finalResponse;
+};
 
 var beneficiaryListByOwnerUserId = async (req) => {
     let request = [req.query.userId, req.query.centerId, req.query.offset, req.query.limit], beneficiaryListResponse,
@@ -205,5 +215,6 @@ module.exports = {
     beneficiaryAggregatorBusiness,
     beneficiaryListByOwnerUserId,
     beneficiaryMapDataList,
+    getBeneficiaryDetailsBusiness
     // beneficiaryLocationListByOwnerAndCenter
 };
