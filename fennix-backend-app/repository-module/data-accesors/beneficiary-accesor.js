@@ -60,4 +60,6 @@ module.exports = {
     getBeneficiaryNameFromBeneficiaryIdAccessor,
     getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor
     // getBeneficiaryMapData
-}
+};
+
+getDeviceDetailsForListOfBeneficiariesAccessor

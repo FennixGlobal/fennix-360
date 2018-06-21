@@ -150,7 +150,7 @@ const beneficiaryMapDataList = async (req) => {
                 statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'BLUE' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
             });
-            beneficiaryDevices[item.latestBeneficiaryDeviceDetails.beneficiaryId] = deviceDetails;
+            beneficiaryDevices = {...deviceDetails};
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = {...deviceDetails};
             gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]};
         });
@@ -181,7 +181,7 @@ const getBeneficiaryDetailsBusiness = async (req) => {
     return finalResponse;
 };
 
-var beneficiaryListByOwnerUserId = async (req) => {
+const beneficiaryListByOwnerUserId = async (req) => {
     let request = [req.query.userId, req.query.centerId, req.query.offset, req.query.limit], beneficiaryListResponse,
         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
         finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
@@ -199,7 +199,7 @@ var beneficiaryListByOwnerUserId = async (req) => {
 
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         deviceDetailsResponse.forEach(device => {
-            var obj = {
+            const obj = {
                 deviceId: device['_id'],
                 imei: device['imei'],
                 deviceType: device['deviceType'][0]['name']
@@ -208,13 +208,19 @@ var beneficiaryListByOwnerUserId = async (req) => {
         });
 
         beneficiaryListResponse.rows.forEach(item => {
-            var res = {
-                beneficiaryName: createGridResponse(item['full_name'], item['role_name'], null, item['beneficiaryid'], item['beneficiary_role'], item['gender']),
-                emailId: createGridResponse(item['emailid'], null, null, item['beneficiaryid'], null, null),
-                mobileNo: createGridResponse(item['mobileno'], null, null, item['beneficiaryid'], null, null),
-                center: createGridResponse(item['center_name'], null, null, item['location_id'], null, null),
-                crimeDetails: createGridResponse(item['crime_id'], null, null, item['beneficiaryid'], null, null),
-                deviceDetails: createGridResponse(deviceDetailsMap[item['beneficiaryid']]['imei'], deviceDetailsMap[item['beneficiaryid']]['deviceType'], null, deviceDetailsMap[item['beneficiaryid']]['deviceId'], null, null)
+            const res = {
+                beneficiaryId: item['beneficiaryid'],
+                beneficiaryRole: item['role_name'],
+                beneficiaryRoleId: item['beneficiary_role'],
+                beneficiaryGender: item['gender'],
+                beneficiaryName: item['full_name'],
+                emailId: item['emailid'],
+                mobileNo: item['mobileno'],
+                center: item['center_name'],
+                crimeDetails: item['crime_id'],
+                imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
+                deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],
+                deviceId: deviceDetailsMap[item['beneficiaryid']]['deviceId']
             };
             modifiedResponse.push(res);
         });

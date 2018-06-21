@@ -66,12 +66,16 @@ const listTicketsBusiness = async (req) => {
                 ticketName: notNullCheck(item['ticketName']) ? item['ticketName'] : 'Ticket Header',
                 userName: userDetailsResponse.rows[0]['full_name'],
                 userRole: userDetailsResponse.rows[0]['role_name'],
+                userRoleId: userDetailsResponse.rows[0]['user_role'],
+                userGender: userDetailsResponse.rows[0]['gender'],
                 beneficiaryId: item['beneficiaryId'],
+                beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['roleId'] : null,
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['fullName'] : ' - ',
                 beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['role'] : ' - ',
+                beneficiaryGender: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['gender'] : '-',
                 locationId: item['locationId'],
                 withAlerts: item['withAlerts'],
-                imeiNumber: arrayNotEmptyCheck(item['device']) ? item['device'][0]['imei'] : '999999999',
+                imeiNumber: arrayNotEmptyCheck(item['device']) && notNullCheck(item['device'][0]['imei']) ? item['device'][0]['imei'] : '999999999',
                 alertDeviceType: arrayNotEmptyCheck(item['deviceType']) ? item['deviceType'][0]['name'] : '-',
                 alertType: notNullCheck(item['alertType']) ? item['alertType'] : 'General alert',
                 readStatus: item['readStatus'],
@@ -143,12 +147,12 @@ const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
     if (objectHasPropertyCheck(ticketResponse, 'rows') && arrayNotEmptyCheck(ticketResponse.rows)) {
         let ticketDetails = ticketResponse.rows[0];
         let modifiedResponse = {
-          ticketId: ticketDetails['_id'],
-          ticketName: ticketDetails['ticketName'],
-          ticketDescription: ticketDetails['ticketDescription'],
-          messages: ticketDetails['messages'],
-          createdBy: ticketDetails['createdBy'],
-          createdDate: ticketDetails['createdDate']
+            ticketId: ticketDetails['_id'],
+            ticketName: ticketDetails['ticketName'],
+            ticketDescription: ticketDetails['ticketDescription'],
+            messages: ticketDetails['messages'],
+            createdBy: ticketDetails['createdBy'],
+            createdDate: ticketDetails['createdDate']
         };
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
     } else {
