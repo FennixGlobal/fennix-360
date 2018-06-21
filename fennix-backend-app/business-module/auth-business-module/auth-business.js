@@ -31,7 +31,7 @@ const checkEmailId = (req) => {
 
 const fetchLoginProfileBusiness = async (req) => {
     let loginProfileResponse = {};
-    if (req.query.userRoleId > 2) {
+    // if (req.query.userRoleId > 2) {
         loginProfileResponse = await fetchUserProfileBusiness(req);
         // userController
         // await router.get('user/fetchProfile', function (req, res) {
@@ -40,14 +40,14 @@ const fetchLoginProfileBusiness = async (req) => {
         //         loginProfileResponse = response;
         //     });
         // })
-    } else {
+    // } else {
         // await router.get('beneficiary/fetchBeneficiaryProfile', function (req, res) {
         //     const returnObj = res;
         //     returnObj.then((response) => {
         //         loginProfileResponse = response;
         //     });
         // })
-    }
+    // }
     return loginProfileResponse;
 };
 
@@ -56,7 +56,8 @@ const authenticateUser = async (req) => {
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const request = [
-        decrypt(algo, passKey, req.body.email)
+        decrypt(algo, passKey, req.body.email),
+        req.body.language
     ];
     businessResponse = await authenticateUserDetails(request);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {

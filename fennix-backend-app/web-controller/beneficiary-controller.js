@@ -1,10 +1,10 @@
 var express = require('express');
-const {beneficiaryMapDataList,beneficiaryAggregatorDashboard, beneficiaryListByOwnerUserId, beneficiaryLocationListByOwnerAndCenter} = require('../business-module/beneficiary-business-module/beneficiary-business');
+const {beneficiaryMapDataList,beneficiaryAggregatorBusiness, beneficiaryListByOwnerUserId, beneficiaryLocationListByOwnerAndCenter} = require('../business-module/beneficiary-business-module/beneficiary-business');
 var router = express.Router();
 
 router.get('/beneficiaryAggregator', function (req, res) {
     let returnObj;
-    returnObj = beneficiaryAggregatorDashboard(req);
+    returnObj = beneficiaryAggregatorBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

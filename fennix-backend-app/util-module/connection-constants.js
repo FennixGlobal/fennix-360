@@ -1,17 +1,17 @@
-var postgresDBDev = {
+const postgresDBDev = {
     user: 'postgres',
     host: 'localhost',
     database: 'fennix_dev',
     password: 'postgres',
-    port: 5432,
+    port: 5432
 };
 
-var postgresDBProd = {
+const postgresDBProd = {
     user: 'postgres',
     host: 'localhost',
     database: 'fennix_dev',
     password: 'postgres',
-    port: 5432,
+    port: 5432
 };
 
 module.exports = {

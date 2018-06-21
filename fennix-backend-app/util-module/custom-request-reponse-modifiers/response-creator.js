@@ -8,10 +8,10 @@ const fennixResponse = (status, language, data) => {
         throw new Error('status must be a number');
     } else {
         returnObj = {
-            status: status,
+            responseStatus: status,
             userMessage: statusCodes[status]['userMsg'][language],
             devMessage: statusCodes[status]['devMsg'],
-            data: data
+            responseData: data
         };
     }
     return returnObj;

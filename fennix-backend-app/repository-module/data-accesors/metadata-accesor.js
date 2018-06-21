@@ -1,4 +1,4 @@
-const {cardWidgetMetadataQuery,headerMetadataQuery,sideNavMetadataQuery,loginMetadataQuery} = require('../queries/metadata-query');
+const {cardWidgetMetadataQuery,modalMetadataQuery,headerMetadataQuery,sideNavMetadataQuery,loginMetadataQuery, getRoleQuery} = require('../queries/metadata-query');
 const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query');
 const {selectLanguagesQuery} = require('../queries/language-query');
 const {insertSimcardQuery, deleteSimcardQuery, getSimcardDetailsQuery, updateSimcardQuery} = require('../queries/simcard-query');
@@ -43,6 +43,19 @@ const getLoginMetadataAccessor = async(req)=>{
     returnObj = await connectionCheckAndQueryExec(req, loginMetadataQuery);
     return returnObj;
 };
+const getModalMetadataAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, modalMetadataQuery);
+    return returnObj;
+};
+
+
+const getRolesAccessor = async (req) => {
+  let returnObj;
+  returnObj = await connectionCheckAndQueryExec(req, getRoleQuery);
+  return returnObj;
+};
+
 module.exports = {
     getCardMetadataAccessor,
     getSideNavMetadataAccessor,
@@ -50,6 +63,8 @@ module.exports = {
     getLoginMetadataAccessor,
     getCenterIdsBasedOnUserIdAccessor,
     getSimcardDetailsAccessor,
-    getLanguagesAccessor
+    getLanguagesAccessor,
+    getRolesAccessor,
+    getModalMetadataAccessor
 };
 

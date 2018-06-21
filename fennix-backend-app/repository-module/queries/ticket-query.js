@@ -65,8 +65,17 @@ const listTicketsQuery = (query) => {
             }
         );
 };
+
+const ticketDetailsBasedOnTicketIdQuery = (query) => {
+    return ticketAggregator.find(
+        {
+            "_id" : query.ticketId
+        }
+    );
+};
 module.exports = {
     userIdTicketAggregatorQuery,
     userIdTicketDetailsBasedOnTicketStatusQuery,
-    listTicketsQuery
+    listTicketsQuery,
+    ticketDetailsBasedOnTicketIdQuery
 };

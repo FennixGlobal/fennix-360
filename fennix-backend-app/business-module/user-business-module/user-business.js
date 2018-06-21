@@ -4,7 +4,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const fetchUserProfileBusiness = async (req) => {
-    let request = [req.query.userId], userProfileResponse, returnObj;
+    let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
     userProfileResponse = await fetchUserProfileAccesor(request);
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
         let userProfileReturnObj = {};

@@ -26,27 +26,4 @@ router.post('/listUsers', async (req, res) => {
     })
 });
 
-
-// Exposing Functions
-
-// const userController = {
-//     fetchUserProfile: (async (req) => {
-//         let businessPromise, returnObj = {};
-//         businessPromise = fetchUserProfileBusiness(req);
-//         await businessPromise.then((response) => {
-//             returnObj = response;
-//         });
-//         return returnObj;
-//     }),
-//     updateUserProfile: (async (req) => {
-//         let businessPromise, returnObj = {};
-//         businessPromise = updateUserProfileBusiness(req);
-//         await businessPromise.then((response) => {
-//             returnObj = response;
-//         });
-//         return returnObj;
-//     }),
-// };
-
-
 module.exports = router;

@@ -1,5 +1,5 @@
 var express = require('express');
-const {getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness } = require('../business-module/metadata-business-module/metadata-business');
+const {getModelMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
 router.post('/baseMetadata', function (req, res) {
@@ -42,5 +42,20 @@ router.get('/loginMetadata', function (req, res) {
     })
 });
 
+router.get('/modalMetadata', function (req, res) {
+    let returnObj;
+    returnObj = getModelMetadataBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/roles', function (req, res) {
+    let returnObj;
+    returnObj = getRolesBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 
 module.exports = router;
