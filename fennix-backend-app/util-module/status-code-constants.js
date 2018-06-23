@@ -1,4 +1,5 @@
 const statusCodeConstants = {
+    STATUS_NO_ROLES_FOR_ID: 211,
     STATUS_OK: 200,
     STATUS_NO_CARDS_FOR_USER_ID: 207,
     STATUS_NO_TICKETS_FOR_USER_ID: 208,

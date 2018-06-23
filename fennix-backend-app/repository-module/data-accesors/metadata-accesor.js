@@ -1,4 +1,4 @@
-const {cardWidgetMetadataQuery, filterMetadataQuery, modalMetadataQuery, headerMetadataQuery, sideNavMetadataQuery, loginMetadataQuery, getRoleQuery} = require('../queries/metadata-query');
+const {cardWidgetMetadataQuery, filterMetadataQuery,getRolesForRoleIdQuery, modalMetadataQuery, headerMetadataQuery, sideNavMetadataQuery, loginMetadataQuery, getRoleQuery} = require('../queries/metadata-query');
 const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query');
 const {selectLanguagesQuery} = require('../queries/language-query');
 const {filterQueryCreator} = require('../../util-module/request-validators');
@@ -15,6 +15,12 @@ const getSideNavMetadataAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, sideNavMetadataQuery);
     return returnObj;
 };
+const getRolesForRoleIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getRolesForRoleIdQuery);
+    return returnObj;
+};
+
 const getHeaderMetadataAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, headerMetadataQuery);
@@ -72,6 +78,7 @@ module.exports = {
     getSimcardDetailsAccessor,
     getLanguagesAccessor,
     getRolesAccessor,
+    getRolesForRoleIdAccessor,
     getFilterMetadataAccessor,
     getModalMetadataAccessor
 };

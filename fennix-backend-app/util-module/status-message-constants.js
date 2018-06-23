@@ -27,6 +27,13 @@ const statusCodes = {
             espLA: 'no filters available for the given id'
         }
     },
+    211: {
+        devMsg: 'no roles available for the given id', userMsg: {
+            en: 'no roles available for the given id',
+            espMX: 'no roles available for the given id',
+            espLA: 'no roles available for the given id'
+        }
+    },
     600: {
         devMsg: 'User email and password Match', userMsg: {
             en: 'Logged in Succesfully',

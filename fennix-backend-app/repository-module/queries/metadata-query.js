@@ -155,7 +155,11 @@ const filterMetadataQuery = 'select fs.filter_position\n' +
     'from filterset fs\n' +
     'join filters f on f.filter_id = fs.filter_id and {0} = $1\n' +
     'join filter_attributes fa on fa.filter_id = fs.filter_id\n';
+
+const getRolesForRoleIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = rm.role_id) and language = $2) as role_name from role_mapping rm where admin_role = $1';
+
 module.exports = {
+    getRolesForRoleIdQuery,
     filterMetadataQuery,
     headerMetadataQuery,
     sideNavMetadataQuery,

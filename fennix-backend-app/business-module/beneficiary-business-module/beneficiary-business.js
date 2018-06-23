@@ -92,7 +92,7 @@ const beneficiaryMapDataList = async (req) => {
                 imei: item['imei'],
                 roleName: item['role'],
                 roleId: item['role_id'],
-                email: item['emailid'],
+                // email: item['emailid'],
                 gender: item['gender']
             };
             return init;
@@ -111,47 +111,73 @@ const beneficiaryMapDataList = async (req) => {
         beneficiaryDeviceArray.forEach((item) => {
             deviceLocDeviceList.push(item.latestBeneficiaryDeviceDetails.beneficiaryId);
             const deviceDetails = {};
+            let noOfViolations = 0;
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId] = [];
             const batteryVoltage = deviceStatusMapper('batteryVoltage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage);
+            if (batteryVoltage['deviceStatus'] === 'violation') {
+                noOfViolations += 1;
+            }
             const batteryPercentage = deviceStatusMapper('batteryPercentage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage);
+            if (batteryPercentage['deviceStatus'] === 'violation') {
+                noOfViolations += 1;
+            }
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus) {
+                noOfViolations += 1;
+            }
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus) {
+                noOfViolations += 1;
+            }
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus) {
+                noOfViolations += 1;
+            }
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Battery Percentage',
-                status: batteryPercentage['status'],
-                statusColor: batteryPercentage['color'],
+                status: batteryPercentage['deviceStatus'],
+                key: 'batteryPercentage',
+                icon: 'battery_charging_full',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Battery Voltage',
-                status: batteryVoltage['status'],
-                statusColor: batteryVoltage['color'],
+                key: 'batteryVoltage',
+                icon: 'battery_std',
+                status: batteryVoltage['deviceStatus'],
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Belt Status',
+                key: 'beltStatus',
+                icon: 'link',
                 status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus ? 'violation' : 'safe',
-                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Shell Status',
+                key: 'shellStatus',
+                icon: 'lock',
                 status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus ? 'violation' : 'safe',
-                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'GPS Status',
+                key: 'gpsStatus',
+                icon:  'gps_fixed',
                 status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'violation' : 'safe',
-                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'RED' : 'GREEN',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Speed',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'still' : 'moving',
-                statusColor: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'BLUE' : 'GREEN',
+                key: 'speed',
+                icon: 'directions_run',
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'moving' : 'still',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
             });
             beneficiaryDevices = {...deviceDetails};
-            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = {...deviceDetails};
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId];
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['noOfViolations'] = {
+                text: 'No of Violations',
+                value: noOfViolations
+            };
             gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]};
         });
         beneficiaryReturnObj['markers'] = [];
@@ -161,6 +187,7 @@ const beneficiaryMapDataList = async (req) => {
             }
         });
         beneficiaryReturnObj['deviceDetails'] = beneficiaryDevices;
+        beneficiaryReturnObj['deviceDetailsArray'] = Object.keys(beneficiaryDevices).map((device) => beneficiaryDevices[device]);
         beneficiaryReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
         beneficiaryReturnObj['markerDetails'] = gridData;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryReturnObj);

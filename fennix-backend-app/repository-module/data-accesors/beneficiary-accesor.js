@@ -62,4 +62,4 @@ module.exports = {
     // getBeneficiaryMapData
 };
 
-getDeviceDetailsForListOfBeneficiariesAccessor
+// getDeviceDetailsForListOfBeneficiariesAccessor

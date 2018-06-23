@@ -1,4 +1,4 @@
-const {getCardMetadataAccessor, getFilterMetadataAccessor,getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -77,9 +77,9 @@ const getCardMetadataForRouteBusiness = async (req) => {
     return responseObj;
 };
 
-const getFilterMetadataBusiness = async (req,colName) => {
+const getFilterMetadataBusiness = async (req, colName) => {
     let request = [req.query.id], filterResponse, response;
-    filterResponse = await getFilterMetadataAccessor(request,colName);
+    filterResponse = await getFilterMetadataAccessor(request, colName);
     if (objectHasPropertyCheck(filterResponse, 'rows') && arrayNotEmptyCheck(filterResponse.rows)) {
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', filterResponse);
     } else {
@@ -165,7 +165,16 @@ const getModelMetadataBusiness = async (req) => {
     }
     return response;
 };
-
+const getRolesForRoleIdBusiness = async (req) => {
+    let request = [req.query.userRoleId, req.query.languageId], response, finalResponse;
+    response = await getRolesForRoleIdAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROLES_FOR_ID, 'en', []);
+    }
+    return finalResponse;
+};
 const getRolesBusiness = async (req) => {
     let response, rolesResponse;
     rolesResponse = getRolesAccessor([req.query.languageId]);
@@ -275,6 +284,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
     };
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'modal-pill':
+        case 'device-list':
             returnObj = {
                 ...returnObj,
                 primaryValue: widgetElementItem['element_primary_value__validation'],
@@ -519,5 +529,6 @@ module.exports = {
     getLoginMetadataBusiness,
     getModelMetadataBusiness,
     getLanguagesListBusiness,
-    getRolesBusiness
+    getRolesBusiness,
+    getRolesForRoleIdBusiness
 };
