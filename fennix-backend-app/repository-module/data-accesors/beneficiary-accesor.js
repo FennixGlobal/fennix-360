@@ -1,9 +1,10 @@
-const {selectBeneficiaryByUserIdQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
+const {selectBeneficiaryByUserIdQuery, getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
-const getBeneficiaryByUserId = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryByUserIdQuery);
+const getBeneficiaryByUserIdAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req, selectBeneficiaryByUserIdQuery, false);
+    returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
     return returnObj;
 };
 
@@ -14,7 +15,7 @@ const getBenefeciaryAggregator = async (req) => {
 };
 const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     let returnObj, modifiedQuery;
-    modifiedQuery = requestInModifier(req, selectBeneficiaryNameFromBeneficiaryIdQuery);
+    modifiedQuery = requestInModifier(req, selectBeneficiaryNameFromBeneficiaryIdQuery, true);
     let modifiedParams = [language];
     modifiedParams = [...modifiedParams, ...req];
     returnObj = await connectionCheckAndQueryExec(modifiedParams, modifiedQuery);
@@ -52,7 +53,7 @@ const getBeneifciaryIdList = async (req) => {
 
 }
 module.exports = {
-    getBeneficiaryByUserId,
+    getBeneficiaryByUserIdAccessor,
     getBenefeciaryAggregator,
     getBeneficiaryListByOwnerId,
     getBeneifciaryIdList,

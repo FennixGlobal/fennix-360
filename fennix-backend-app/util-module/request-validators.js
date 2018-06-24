@@ -34,10 +34,10 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
 };
 
 
-const requestInModifier = (itemArray, query) => {
+const requestInModifier = (itemArray, query,isLanguage) => {
     let modifiedQuery = query;
     itemArray.forEach((item, index) => {
-        const paramNumber = index + 2;
+        const paramNumber = isLanguage ? index + 2:index + 1;
         if (index === 0 && itemArray.length === 1) {
             modifiedQuery = `${modifiedQuery} ($${paramNumber})`;
         } else if (index  === 0) {

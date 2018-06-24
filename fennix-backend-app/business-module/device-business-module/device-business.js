@@ -1,15 +1,42 @@
 const {deviceAggregator, listDevicesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
-const {getBeneficiaryByUserId, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
-const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const userAccessor = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const deviceAggregatorDashboard = async (req) => {
-    const request = [req.query.userId];
-    let beneficiaryResponse, deviceResponse, returnObj;
-    beneficiaryResponse = await getBeneficiaryByUserId(request);
+    const request = [req.query.languageId, req.query.userId];
+    let beneficiaryResponse, deviceResponse, returnObj, userDetailResponse, otherUserIdsForGivenUserId, userIdList = [];
+    userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor(request);
+    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+        switch (nativeUserRole) {
+            case 'ROLE_SUPERVISOR' : {
+                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+        }
+
+        // otherUserIdsForGivenUserId = getLowerLevelUserIdsForGivenUserId(userDetailResponse.rows[0]['native_user_role'], userDetailResponse.rows[0]['user_id'], req.query.languageId);
+        otherUserIdsForGivenUserId.rows.forEach(item => {
+            userIdList.push(item['user_id']);
+        });
+    }
+    beneficiaryResponse = await getBeneficiaryByUserIdAccessor(userIdList);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
         beneficiaryResponse.rows.forEach((item) => {
@@ -39,10 +66,9 @@ const deviceAggregatorDashboard = async (req) => {
     }
     return returnObj;
 };
-
 const listDevicesBusiness = async (req) => {
     let request = [req.query.userId], userDetailResponse, centerIdResponse, centerIdsReq = [], centerIdNameMap = {}, beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [], modifiedResponse = {gridData:[]}, finalResponse;
-    userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
         switch (nativeUserRole) {
