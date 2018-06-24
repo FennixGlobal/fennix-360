@@ -1,5 +1,5 @@
 var express = require('express');
-const {getModelMetadataBusiness,getRolesForRoleIdBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
+const {getModelMetadataBusiness,getLanguageListGridBusiness,getRolesForRoleIdBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
 router.post('/baseMetadata', function (req, res) {
@@ -86,6 +86,14 @@ router.get('/pageFilters', function (req, res) {
 router.get('/getRolesForRoleId', function (req, res) {
     let returnObj;
     returnObj = getRolesForRoleIdBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/listLanguagesGrid', function (req, res) {
+    let returnObj;
+    returnObj = getLanguageListGridBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

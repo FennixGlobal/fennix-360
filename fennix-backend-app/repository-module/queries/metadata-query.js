@@ -9,13 +9,15 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_section_subtype\n' +
     '    , rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
     '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
-    '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type\n' +
-    '    , rcwa.widget_sub_section_type,rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
+    '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
+    '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
+    '    , rcwa.sub_section_orientation, rcwa.section_orientation\n'+
     '    , (select localized_text from localization where locale_key = rcwa.element_title and language = $3) as element_title\n' +
     '    , (select localized_text from localization where locale_key = rcwa.element_label and language = $3) as element_label\n' +
     '    , (select localized_text from localization where locale_key = rcwa.widget_section_title and language = $3) as widget_section_title\n' +
     '    ,(select localized_text from localization where locale_key = rcwa.widget_sub_section_title and language = $3) as widget_sub_section_title\n' +
-    '    , de.endpoint as dropdown_endpoint, se.endpoint as submit_endpoint\n' +
+    '    , de.endpoint as dropdown_endpoint,de.endpoint_request_type as dropdown_request_type,de.endpoint_mandatory_request_params as dropdown_request_params\n' +
+    '    , se.endpoint as submit_endpoint, se.endpoint_request_type as submit_request_type, se.endpoint_mandatory_request_params as submit_request_params\n' +
     '    , (select action_name from action where action_id = rcwa.on_change_action) as element_action_type\n' +
     '    , wa.element_type, wa.sub_type as element_subtype\n' +
     '    , rn.route_url\n' +
@@ -100,8 +102,8 @@ const sideNavMetadataQuery = 'select u.user_id\n' +
 const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as element_title\n' +
     ', (select localized_text from localization where locale_key = rcwa.element_label and language = \'EN_US\') as element_label\n' +
-    ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_req_params,se.endpoint_request_type as submit_req_type\n' +
-    ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_req_params,de.endpoint_request_type as dropdown_req_type\n' +
+    ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_request_params,se.endpoint_request_type as submit_request_type\n' +
+    ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_request_params,de.endpoint_request_type as dropdown_request_type\n' +
     ',wis.element_type ,wis.sub_type as element_subtype\n' +
     ',rcwa.request_mapping_key\n' +
     ', (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_sub_section_type\n' +
@@ -156,7 +158,7 @@ const filterMetadataQuery = 'select fs.filter_position\n' +
     'join filters f on f.filter_id = fs.filter_id and {0} = $1\n' +
     'join filter_attributes fa on fa.filter_id = fs.filter_id\n';
 
-const getRolesForRoleIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = rm.role_id) and language = $2) as role_name from role_mapping rm where admin_role = $1';
+const getRolesForRoleIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = rm.role_id) and language = $2) as role_name,rm.role_id as role_id from role_mapping rm where admin_role = $1';
 
 module.exports = {
     getRolesForRoleIdQuery,

@@ -1,9 +1,9 @@
 const {getBenefeciaryAggregator, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
-const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck,notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {deviceBybeneficiaryQuery} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceBybeneficiaryQuery,getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 
 const beneficiaryAggregatorBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], beneficiaryResponse, returnObj;
@@ -31,22 +31,6 @@ const beneficiaryAggregatorBusiness = async (req) => {
     }
     return returnObj;
 };
-
-// var beneficiaryListByOwnerUserId = async (req) => {
-//     let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.currentPage * req.body.pageSize), req.body.pageSize],
-//         beneficiaryListResponse, returnObj;
-//     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
-//     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-//         let beneficiaryObj = {};
-//         beneficiaryObj['headerArray'] = Object.keys(beneficiaryListResponse.rows[0]).map(item => item);
-//         beneficiaryObj['bodyArray'] = beneficiaryListResponse.rows;
-//
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
-//     }
-//     return returnObj;
-// };
 
 // const beneficiaryLocationListByOwnerAndCenter = async (req) => {
 //     let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.pagination.currentPage * req.body.pagination.pageSize), req.body.pagination.pageSize],
@@ -89,9 +73,12 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
-                imei: item['imei'],
+                imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei']: 999999999,
+                documentId: item['document_id'],
+                mobileNo: item['mobileno'],
+                image: item['image'],
                 roleName: item['role'],
-                roleId: item['role_id'],
+                beneficiaryRoleId: item['role_id'],
                 // email: item['emailid'],
                 gender: item['gender']
             };
@@ -161,7 +148,7 @@ const beneficiaryMapDataList = async (req) => {
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
-                icon:  'gps_fixed',
+                icon: 'gps_fixed',
                 status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'violation' : 'safe',
                 value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
             });
@@ -179,6 +166,7 @@ const beneficiaryMapDataList = async (req) => {
                 value: noOfViolations
             };
             gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]};
+            gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
         });
         beneficiaryReturnObj['markers'] = [];
         Object.keys(beneficiaryFilter).forEach((marker) => {
@@ -216,10 +204,6 @@ const beneficiaryListByOwnerUserId = async (req) => {
     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-        // let beneficiaryObj = {};
-        // beneficiaryObj['headerArray'] = Object.keys(beneficiaryListResponse.rows[0]).map(item => item);
-        // beneficiaryObj['bodyArray'] = beneficiaryListResponse.rows;
-
         beneficiaryListResponse.rows.forEach(item => {
             beneficiaryIds.push(`${item['beneficiaryid']}`);
         });
@@ -228,7 +212,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
         deviceDetailsResponse.forEach(device => {
             const obj = {
                 deviceId: device['_id'],
-                imei: device['imei'],
+                imei: objectHasPropertyCheck(device,'imei') && notNullCheck(device['imei']) ? device['imei']: '999999999',
                 deviceType: device['deviceType'][0]['name']
             };
             deviceDetailsMap[device['beneficiaryId']] = obj;
@@ -236,6 +220,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
 
         beneficiaryListResponse.rows.forEach(item => {
             const res = {
+                documentId:objectHasPropertyCheck(item,'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 beneficiaryId: item['beneficiaryid'],
                 beneficiaryRole: item['role_name'],
                 beneficiaryRoleId: item['beneficiary_role'],
@@ -243,7 +228,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 beneficiaryName: item['full_name'],
                 emailId: item['emailid'],
                 mobileNo: item['mobileno'],
-                center: item['center_name'],
+                center: objectHasPropertyCheck(item,'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
                 crimeDetails: item['crime_id'],
                 imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
                 deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],
@@ -251,7 +236,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
             };
             modifiedResponse.push(res);
         });
-        finalResponse['beneficiaries'] = modifiedResponse;
+        finalResponse['gridData'] = modifiedResponse;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);

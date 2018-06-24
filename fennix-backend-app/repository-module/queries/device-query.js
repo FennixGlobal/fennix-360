@@ -7,26 +7,23 @@ const userIdDeviceAggregatorQuery = (query) => {
         });
 };
 const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
-
     return deviceAggregator.aggregate()
         .match({
-            "beneficiaryId":{$in:query}
+            "beneficiaryId": {$in: query}
         })
         .lookup({
-            from:"deviceTypes",
-            localField:"deviceTypeId",
-            foreignField:"_id",
-            as:"deviceType"
+            from: "deviceTypes",
+            localField: "deviceTypeId",
+            foreignField: "_id",
+            as: "deviceType"
         }).project({
-            "_id":1,
-            "imei":1,
-            "beneficiaryId":1,
-            "deviceType.name":1
+            "_id": 1,
+            "imei": 1,
+            "beneficiaryId": 1,
+            "deviceType.name": 1
         });
 };
-//db.getCollection('devices').find({})
 
-// /db.getCollection('devices').find({})
 const deviceDetailsByBeneficiaryId = (query) => {
     return deviceAggregator.aggregate([
         {
@@ -58,8 +55,48 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 _id: "$_id",
                 latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
             }
+        },
+        {
+            $lookup: {
+                from: "deviceTypes",
+                localField: "latestBeneficiaryDeviceDetails.deviceTypeId",
+                foreignField: "_id",
+                as: "deviceType"
+            }
         }
-    ])
+    ]);
+    // return deviceAggregator.aggregate([
+    //     {
+    //         $match: {
+    //             "beneficiaryId": {"$in": query}
+    //         }
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "deviceAttributes",
+    //             localField: "beneficiaryId",
+    //             foreignField: "beneficiaryId",
+    //             as: "deviceAttributes"
+    //         }
+    //     },
+    //     {
+    //         $unwind: "$deviceAttributes"
+    //     },
+    //     {
+    //         $unwind: "$deviceAttributes.locationDetails"
+    //     },
+    //     {
+    //         $sort: {
+    //             "deviceAttributes.locationDetails.deviceUpdatedDate": -1
+    //         }
+    //     },
+    //     {
+    //         $group: {
+    //             _id: "$_id",
+    //             latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
+    //         }
+    //     }
+    // ])
 
 };
 

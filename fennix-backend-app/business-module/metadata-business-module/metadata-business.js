@@ -150,14 +150,14 @@ const getModelMetadataBusiness = async (req) => {
             }
             responseMap['modal-header'] = {modalHeader: item['modal_header_name'], modalPosition: 'modal-header'};
         });
-        responseMap = Object.keys(responseMap).map((key) => {
+        Object.keys(responseMap).forEach((key) => {
             if (key.toLowerCase() !== 'modal-header') {
                 responseMap[key]['modalSection'] = Object.keys(responseMap[key]['modalSection']).map((section) => {
                     responseMap[key]['modalSection'][section]['modalRow'] = Object.keys(responseMap[key]['modalSection'][section]['modalRow']).map(row => responseMap[key]['modalSection'][section]['modalRow'][row]);
                     return responseMap[key]['modalSection'][section];
                 });
             }
-            return responseMap[key];
+            // return responseMap;
         });
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseMap);
     } else {
@@ -165,11 +165,37 @@ const getModelMetadataBusiness = async (req) => {
     }
     return response;
 };
+
+const getLanguageListGridBusiness = async (req) => {
+    let responseObj, request, languageListResponse = {gridData: []};
+    responseObj = await getLanguagesAccessor();
+    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+        responseObj.rows.forEach((item) => {
+            const languageObj = {
+                languageId: item['language_id'],
+                language: item['language_name'],
+                languageIso: item['iso_code'],
+                activeStatus: item['isactive']
+            };
+            languageListResponse['gridData'].push(languageObj);
+        });
+    }
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', languageListResponse);
+};
+
 const getRolesForRoleIdBusiness = async (req) => {
     let request = [req.query.userRoleId, req.query.languageId], response, finalResponse;
     response = await getRolesForRoleIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows);
+        if (req.query.isDropdownFlag) {
+            const dropdownObj = {dropdownList:[]};
+            response.rows.forEach((role) => {
+                dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], false));
+            });
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', dropdownObj);
+        } else {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows);
+        }
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROLES_FOR_ID, 'en', []);
     }
@@ -195,6 +221,7 @@ const widgetSectionCreator = (widgetItem, widgetSectionObj) => {
             sectionId: widgetItem['widget_section_order_id'],
             sectionTitle: widgetItem['widget_section_title'],
             sectionType: widgetItem['widget_section_type'],
+            sectionOrientation: objectHasPropertyCheck(widgetItem, 'section_orientation') ? widgetItem['section_orientation'] : 'V',
             sectionSubType: widgetItem['widget_section_subtype'],
             widgetSubSections: widgetSubSectionCreator(widgetItem, {})
         };
@@ -214,6 +241,7 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
             subSectionType: widgetSubSectionItem['widget_sub_section_type'],
             subSectionOrderId: widgetSubSectionItem['widget_sub_section_order_id'],
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
+            subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
             widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {})}
         };
         widgetSubSectionFinalObj = {...subSectionObj, ...widgetSubSectionBaseObj};
@@ -273,14 +301,15 @@ const widgetColElementCreator = (widgetColItem) => {
 
 const widgetGridElementCreator = (widgetElementItem) => {
     let returnObj = {
-        gridElementAction: widgetElementItem['element_action'],
+        gridElementAction: widgetElementItem['element_action_type'],
         gridHeaderOrderId: widgetElementItem['widget_col_count'],
         gridHeaderMappingKey: widgetElementItem['request_mapping_key'],
         gridColType: widgetElementItem['element_type'],
         gridColSubType: widgetElementItem['element_subtype'],
         subWidgetColId: widgetElementItem['widget_col_count'],
         subWidgetRowId: widgetElementItem['widget_row_count'],
-        gridHeaderColName: widgetElementItem['element_title']
+        gridHeaderColName: widgetElementItem['element_title'],
+        gridHeaderWidth: widgetElementItem['attribute_width']
     };
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'modal-pill':
@@ -290,22 +319,22 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 primaryValue: widgetElementItem['element_primary_value__validation'],
                 secondaryValue: widgetElementItem['element_secondary_value__async_validation'],
                 hoverValue: widgetElementItem['default_value__hover_value'],
-                iconValue: widgetElementItem['element_icon_value'],
                 accentValue: widgetElementItem['default_key__accent_value'],
+                iconValue: widgetElementItem['element_icon_value'],
                 gridModalId: widgetElementItem['element_modal_id']
             };
             break;
         case 'navigate-link':
             returnObj = {
                 ...returnObj,
-                gridModalId: widgetElementItem['default_key'],
+                gridModalId: widgetElementItem['element_modal_id'],
                 gridNavigationRoute: widgetElementItem['navigation_route'],
             };
             break;
         case 'modal-link':
             returnObj = {
                 ...returnObj,
-                gridModalId: widgetElementItem['default_key'],
+                gridModalId: widgetElementItem['element_modal_id'],
                 gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
                 gridNavigationRoute: widgetElementItem['navigation_route']
             };
@@ -323,6 +352,16 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 ...returnObj,
                 gridBgColor: widgetElementItem['default_value__hover_value'],
                 gridTextColor: widgetElementItem['default_key__accent_value']
+            };
+            break;
+        case 'btn-link':
+            returnObj = {
+                ...returnObj,
+                iconValue: widgetElementItem['element_icon_value'],
+                gridModalId: widgetElementItem['element_modal_id'],
+                btnName: widgetElementItem['element_label'],
+                gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
+                gridNavigationRoute: widgetElementItem['navigation_route']
             };
             break;
     }
@@ -382,13 +421,19 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         elementTitle: widgetElementItem['element_title'],
                         requestMappingKey: widgetElementItem['request_mapping_key'],
                         dropdownEndpoint: widgetElementItem['dropdown_endpoint'],
+                        dropdownReqType: widgetElementItem['dropdown_request_type'],
+                        dropdownRequestParams: widgetElementItem['dropdown_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
+                        submitReqType: widgetElementItem['submit_request_type'],
+                        submitRequestParams: widgetElementItem['submit_request_params']
                     }
                 };
                 break;
             case 'button':
                 widgetElementData = {
                     ...widgetElementData, ...{
+                        submitReqType: widgetElementItem['submit_request_type'],
+                        submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
                         elementLabel: widgetElementItem['element_label']
                     }
@@ -530,5 +575,6 @@ module.exports = {
     getModelMetadataBusiness,
     getLanguagesListBusiness,
     getRolesBusiness,
+    getLanguageListGridBusiness,
     getRolesForRoleIdBusiness
 };

@@ -5,7 +5,6 @@ const arrayNotEmptyCheck = (arrayData) => notNullCheck(arrayData) && Object.prot
 const objectHasPropertyCheck = (objectData, propertyName) => notNullCheck(objectData) && objectData.hasOwnProperty(propertyName) && notNullCheck(objectData[propertyName]);
 
 const deviceStatusMapper = (key, value) => {
-    // value = value.replace(/\D+/g, '');
     let returnValue = {deviceStatus: '', color: ''};
     Object.keys(DEVICE_BATTERY_MAP[key]).map((item) => {
         if (value < DEVICE_BATTERY_MAP[key][item]['value']) {

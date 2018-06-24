@@ -26,7 +26,7 @@ router.post('/showMap', function (req, res) {
     })
 });
 
-router.post('/beneficiaryListByOwner', function (req, res) {
+router.get('/listBeneficiary', function (req, res) {
     let returnObj;
     returnObj = beneficiaryListByOwnerUserId(req);
     returnObj.then((response) => {
