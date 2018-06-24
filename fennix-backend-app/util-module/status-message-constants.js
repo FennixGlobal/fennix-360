@@ -41,6 +41,13 @@ const statusCodes = {
             espLA: 'no simcards available for the given id'
         }
     },
+    213: {
+        devMsg: 'no devices available for the given id', userMsg: {
+            en: 'no devices available for the given id',
+            espMX: 'no devices available for the given id',
+            espLA: 'no devices available for the given id'
+        }
+    },
     600: {
         devMsg: 'User email and password Match', userMsg: {
             en: 'Logged in Succesfully',

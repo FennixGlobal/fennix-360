@@ -65,43 +65,53 @@ const deviceDetailsByBeneficiaryId = (query) => {
             }
         }
     ]);
-    // return deviceAggregator.aggregate([
-    //     {
-    //         $match: {
-    //             "beneficiaryId": {"$in": query}
-    //         }
-    //     },
-    //     {
-    //         $lookup: {
-    //             from: "deviceAttributes",
-    //             localField: "beneficiaryId",
-    //             foreignField: "beneficiaryId",
-    //             as: "deviceAttributes"
-    //         }
-    //     },
-    //     {
-    //         $unwind: "$deviceAttributes"
-    //     },
-    //     {
-    //         $unwind: "$deviceAttributes.locationDetails"
-    //     },
-    //     {
-    //         $sort: {
-    //             "deviceAttributes.locationDetails.deviceUpdatedDate": -1
-    //         }
-    //     },
-    //     {
-    //         $group: {
-    //             _id: "$_id",
-    //             latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
-    //         }
-    //     }
-    // ])
+};
 
+const listDevicesQuery = (query) => {
+    return deviceAggregator.aggregate([
+        {
+            $match: {
+                "centerId": {$in:query}
+            }
+        },
+        {
+            $lookup:{
+                from: "deviceTypes",
+                localField:"deviceTypeId",
+                foreignField: "_id",
+                as:"deviceTypes"
+            }
+        },
+        {
+            $lookup:{
+                from: "simcards",
+                localField:"simCardId",
+                foreignField:"_id",
+                as:"simcards"
+            }
+        },
+        {
+            $unwind:"$deviceTypes"
+        },
+        {
+            $unwind:"$simcards"
+        },
+        {
+            $project: {
+                "imei":1,
+                "deviceTypes.name":1,
+                "simcards.phoneNo":1,
+                "isActive":1,
+                "centerId": 1,
+                "beneficiaryId": 1
+            }
+        }
+    ])
 };
 
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
-    getDeviceDetailsForListOfBeneficiariesQuery
+    getDeviceDetailsForListOfBeneficiariesQuery,
+    listDevicesQuery
 };
