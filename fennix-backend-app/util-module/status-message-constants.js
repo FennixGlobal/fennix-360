@@ -34,6 +34,13 @@ const statusCodes = {
             espLA: 'no roles available for the given id'
         }
     },
+    212: {
+        devMsg: 'no simcards available for the given id', userMsg: {
+            en: 'no simcards available for the given id',
+            espMX: 'no simcards available for the given id',
+            espLA: 'no simcards available for the given id'
+        }
+    },
     600: {
         devMsg: 'User email and password Match', userMsg: {
             en: 'Logged in Succesfully',

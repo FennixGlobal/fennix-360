@@ -28,7 +28,7 @@ const userIdTicketDetailsBasedOnTicketStatusQuery = (query) => {
 const listTicketsQuery = (query) => {
     return ticketAggregator.aggregate().match(
         {
-            "userId":query.userId
+            "userId":{$in: query.userId}
         }
     ).sort({"createdDate":-1})
         .skip(query.skip)

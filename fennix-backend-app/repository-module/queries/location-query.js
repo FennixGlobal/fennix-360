@@ -15,6 +15,20 @@ const getBeneficiaryLocationList = (query) => {
             latestBeneficiaryLocation: {"$first": "$$CURRENT"}
         });
 };
+//OPERATOR
+const selectCenterIdsForOperatorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from users where user_id = $1)';
+
+//SUPERVISOR
+const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';
+
+//ADMIN
+const selectCenterIdsForAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1)))';
+
+//SUPER_ADMIN
+const selectCenterIdsForSuperAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))))';
+
+//MASTER_ADMIN
+const selectAllCenterIdsForMasterAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where location_level = 0';
 
 const selectCenterIdsForGivenUserIdQuery = 'select location_id from location where parent_location_id = (select location_id from location where parent_location_id = (select location_id from users where user_id = $1))';
 
@@ -22,5 +36,10 @@ const selectCenterIdsForGivenUserIdQuery = 'select location_id from location whe
 
 module.exports = {
     getBeneficiaryLocationList,
-    selectCenterIdsForGivenUserIdQuery
+    selectCenterIdsForSupervisorQuery,
+    selectCenterIdsForAdminQuery,
+    selectCenterIdsForSuperAdminQuery,
+    selectAllCenterIdsForMasterAdminQuery,
+    selectCenterIdsForGivenUserIdQuery,
+    selectCenterIdsForOperatorQuery
 };

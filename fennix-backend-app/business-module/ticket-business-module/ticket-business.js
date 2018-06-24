@@ -1,7 +1,7 @@
 const {listTicketsBasedOnUserIdAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
-const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse, createGridResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
@@ -39,12 +39,46 @@ const ticketListBasedOnStatusBusiness = async (req) => {
 const listTicketsBusiness = async (req) => {
     let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
         ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
-        userDetailsResponse, beneficiaryResponse;
+        userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+
+    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+        switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
+            case 'ROLE_SUPERVISOR' : {
+                otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForSuperAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForMasterAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+        }
+        if (objectHasPropertyCheck(otherUserDetailResponse, 'rows') && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
+            otherUserDetailResponse.rows.forEach((item) => {
+                const userDetailsObj = {
+                    fullName: item['full_name'],
+                    role: item['role_name'],
+                    roleId: item['user_role'],
+                    gender: item['gender']
+                };
+                userDetailMap[item['user_id']] = userDetailsObj;
+                userIds.push(`${item['user_id']}`);
+            });
+        }
+    };
+    request.userId = userIds;
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
-            beneficiaryIds.push(item['beneficiaryId']);
+            beneficiaryIds.push(parseInt(item['beneficiaryId']));
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
@@ -64,10 +98,16 @@ const listTicketsBusiness = async (req) => {
             const obj = {
                 ticketId: item['_id'],
                 ticketName: notNullCheck(item['ticketName']) ? item['ticketName'] : 'Ticket Header',
-                userName: userDetailsResponse.rows[0]['full_name'],
-                userRole: userDetailsResponse.rows[0]['role_name'],
-                userRoleId: userDetailsResponse.rows[0]['user_role'],
-                userGender: userDetailsResponse.rows[0]['gender'],
+
+                // userName: userDetailsResponse.rows[0]['full_name'],
+                // userRole: userDetailsResponse.rows[0]['role_name'],
+                // userRoleId: userDetailsResponse.rows[0]['user_role'],
+                // userGender: userDetailsResponse.rows[0]['gender'],
+                userName: userDetailMap[item['userId']]['fullName'],
+                userRole: userDetailMap[item['userId']]['role'],
+                userRoleId: userDetailMap[item['userId']]['roleId'],
+                userGender: userDetailMap[item['userId']]['gender'],
+
                 beneficiaryId: item['beneficiaryId'],
                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['roleId'] : null,
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['fullName'] : ' - ',

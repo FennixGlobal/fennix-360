@@ -33,11 +33,14 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
     return finalResponse;
 };
 
+
 const requestInModifier = (itemArray, query) => {
     let modifiedQuery = query;
     itemArray.forEach((item, index) => {
         const paramNumber = index + 2;
-        if (index === 0) {
+        if (index === 0 && itemArray.length === 1) {
+            modifiedQuery = `${modifiedQuery} ($${paramNumber})`;
+        } else if (index  === 0) {
             modifiedQuery = `${modifiedQuery} ($${paramNumber},`;
         } else if (index === (itemArray.length - 1)) {
             modifiedQuery = `${modifiedQuery} $${paramNumber})`;
@@ -47,7 +50,6 @@ const requestInModifier = (itemArray, query) => {
     });
     return modifiedQuery;
 };
-
 
 module.exports = {
     filterQueryCreator,

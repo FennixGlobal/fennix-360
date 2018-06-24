@@ -3,7 +3,8 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
-
+const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
+const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
 
 const getBaseMetadataBusiness = async (req) => {
     let responseObj, headerResponse, sideNavResponse, composedData = {}, request;
@@ -188,7 +189,7 @@ const getRolesForRoleIdBusiness = async (req) => {
     response = await getRolesForRoleIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         if (req.query.isDropdownFlag) {
-            const dropdownObj = {dropdownList:[]};
+            const dropdownObj = {dropdownList: []};
             response.rows.forEach((role) => {
                 dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], false));
             });
@@ -473,6 +474,65 @@ const widgetMapElementCreator = (widgetElementItem) => {
     }
     return widgetElementData;
 };
+const getSimCardListBusiness = async (req) => {
+    let request = [req.query.userId], response, userDetailResponse, centerIdResponse, centerIdsReq = [], finalResponse,
+        modifiedResponse = {gridData:[]},cardIdNameMap = {};
+
+    userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+        switch (nativeUserRole) {
+            case 'ROLE_OPERATOR' : {
+                centerIdResponse = await metadataAccessor.getCenterIdsForOperatorAccessor(request);
+                break;
+            }
+            case 'ROLE_SUPERVISOR' : {
+                centerIdResponse = await metadataAccessor.getCenterIdsForSupervisorAccessor(request);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                centerIdResponse = await metadataAccessor.getCenterIdsForAdminAccessor(request);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                centerIdResponse = await metadataAccessor.getCenterIdsForSuperAdminAccessor(request);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                centerIdResponse = await metadataAccessor.getCenterIdsForMasterAdminAccessor(request);
+                break;
+            }
+        }
+    }
+    if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+        centerIdResponse.rows.forEach(item => {
+            centerIdsReq.push(`${item['location_id']}`);
+            cardIdNameMap[item['location_id']] = item['location_name'];
+        });
+        response = await getSimcardDetailsAccessor(centerIdsReq);
+    }
+
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let simCardObj = {
+                simCardId: item['_id'],
+                deviceId: item['deviceId'],
+                simType: item['simCardType'],
+                mobileNo: item['phoneNo'],
+                serialNumber: item['serialNp'],
+                apn: item['carrierByCountryDetails']['apn'],
+                carrierName: item['carrier']['name'],
+                center: cardIdNameMap[item['centerId']]
+            };
+            modifiedResponse.gridData.push(simCardObj);
+        });
+
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'en', []);
+    }
+    return finalResponse;
+};
 
 const routeDataModifier = (arrayResponse) => {
     let modifiedRouteObj = {};
@@ -575,6 +635,7 @@ module.exports = {
     getModelMetadataBusiness,
     getLanguagesListBusiness,
     getRolesBusiness,
+    getSimCardListBusiness,
     getLanguageListGridBusiness,
     getRolesForRoleIdBusiness
 };

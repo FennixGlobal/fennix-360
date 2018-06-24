@@ -1,5 +1,5 @@
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
-const {userProfileQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery} = require('../queries/user-query');
+const {userProfileQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery, getUserIdsForAdminQuery, getUserIdsForMasterAdminQuery, getUserIdsForSuperAdminQuery, getUserIdsForSupervisorQuery} = require('../queries/user-query');
 const {insertQueryCreator} = require("../../util-module/request-validators");
 const {TABLE_USERS} = require('../../util-module/db-constants');
 const fetchUserProfileAccesor = async (req) => {
@@ -32,10 +32,38 @@ const getUserNameFromUserIdAccessor = async (req) => {
     return returnObj;
 };
 
+const getUserIdsForSupervisorAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
+    return returnObj;
+};
+
+const getUserIdsForAdminAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
+    return returnObj;
+};
+
+const getUserIdsForSuperAdminAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
+    return returnObj;
+};
+
+const getUserIdsForMasterAdminAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
+    return returnObj;
+};
+
 module.exports = {
     addUserAccessor,
     getUserNameFromUserIdAccessor,
     fetchUserProfileAccesor,
     updateUserProfileAccesor,
-    getUserListAccesor
+    getUserListAccesor,
+    getUserIdsForSupervisorAccessor,
+    getUserIdsForSuperAdminAccessor,
+    getUserIdsForMasterAdminAccessor,
+    getUserIdsForAdminAccessor
 };

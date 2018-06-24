@@ -16,8 +16,14 @@ const updateUserProfileQuery = 'update users set first_name=$2,last_name=$3,addr
 
 const getUserListQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name, dob, email_id, mobile_no, isactive, (select role_name from roles where role_id = user_role) as role, (select location_name from location where location_id = u.location_id) as center, image from users u where owner_user_id = $1';
 
-const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender, user_role from users u where user_id = $2';
+const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender, user_role, (select role_name from roles where role_id = u.user_role) as native_user_role from users u where user_id = $2';
 const insertUserQuery = 'insert into ';
+
+const getUserIdsForSupervisorQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id = $1  or user_id = $1';
+const getUserIdsForAdminQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id = (select user_id from users where owner_user_id = $1) or user_id = $1';
+const getUserIdsForSuperAdminQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id = (select user_id from users where owner_user_id = (select user_id from users where owner_user_id = $1)) or user_id = $1';
+const getUserIdsForMasterAdminQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id = (select user_id from users where owner_user_id = (select user_id from users where owner_user_id = (select user_id from users where owner_user_id = $1))) or user_id = $1';
+
 
 module.exports = {
     insertUserQuery,
@@ -26,5 +32,9 @@ module.exports = {
     userProfileQuery,
     authenticateUser,
     updateUserProfileQuery,
-    getUserNameFromUserIdQuery
+    getUserNameFromUserIdQuery,
+    getUserIdsForAdminQuery,
+    getUserIdsForMasterAdminQuery,
+    getUserIdsForSuperAdminQuery,
+    getUserIdsForSupervisorQuery
 };
