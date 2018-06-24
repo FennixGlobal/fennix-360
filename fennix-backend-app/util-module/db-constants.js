@@ -6,10 +6,13 @@ const TABLE_ROLES = 'roles';
 const dbTableColMap = {
     users: {
         locationId: 'location_id',
+        address: 'address1',
+        center:'center_id',
+        country:'location_id',
         firstName: 'first_name',
         lastName: 'last_name',
         emailId: 'email_id',
-        mobileNo: 'mobile_no',
+        phoneNo: 'mobile_no',
         gender: 'gender',
         image: 'image',
         role: 'user_role'

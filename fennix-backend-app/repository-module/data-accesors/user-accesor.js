@@ -1,6 +1,7 @@
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
 const {userProfileQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery} = require('../queries/user-query');
 const {insertQueryCreator} = require("../../util-module/request-validators");
+const {TABLE_USERS} = require('../../util-module/db-constants');
 const fetchUserProfileAccesor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userProfileQuery);
