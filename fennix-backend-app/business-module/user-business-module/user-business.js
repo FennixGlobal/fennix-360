@@ -47,6 +47,7 @@ const getUserListBusiness = async (req) => {
     let request = [req.body.userId], userProfileResponse, returnObj;
     userProfileResponse = await getUserListAccesor(request);
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
+
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', userProfileResponse.rows);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);

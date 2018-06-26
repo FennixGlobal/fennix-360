@@ -11,10 +11,12 @@ const selectBeneficiaryByOwnerIdQuery = 'select (select localized_text from loca
 //     'offset $4 limit $5';
 
 const checkBeneficiaryEmailIdQuery = 'select beneficiaryid from beneficiaries where emailid = $1';
-
-const authenticateBeneficiaryQuery = 'select r.role_name,b.user_role, first_name, last_name, beneficiaryid, owner_user_id, emailid, isactive,b.center_id from beneficiaries b\\n\' +\n' +
-    '    \'join roles r on r.role_id = u.beneficiary_role\\n\' +\n' +
-    '    \'where emailid=$1 and password=$2';
+// select ,u.user_role,password, first_name, last_name, user_id, owner_user_id, email_id, isactive,u.center_id from users u\n' +
+// 'join roles r on r.role_id = u.user_role\n' +
+// 'where email_id=$1'
+const authenticateBeneficiaryQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $2) as role_name,b.beneficiary_role, firstname, lastname, beneficiaryid, owner_user_id, emailid, isactive,b.center_id from beneficiaries b\n' +
+    '       join roles r on r.role_id = b.beneficiary_role\n' +
+    '        where emailid=$1';
 
 
 

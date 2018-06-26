@@ -67,7 +67,6 @@ const authenticateUser = async (req) => {
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'en', []);
         }
-
     } else {
         businessResponse = await authenticateBeneficiaryDetails(request);
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {

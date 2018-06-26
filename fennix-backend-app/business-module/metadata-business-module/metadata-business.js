@@ -1,8 +1,9 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
+const {getCountryListAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
 const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
 
@@ -213,6 +214,62 @@ const getRolesBusiness = async (req) => {
     }
     return response;
 };
+
+const listCentersBusiness = async (req) => {
+    let request = [req.query.userId], userDetailResponse, centerIdResponse, finalResponse,
+        centerIdList = {dropdownList: []};
+    userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+        switch (nativeUserRole) {
+            case 'ROLE_OPERATOR' : {
+                centerIdResponse = await getCenterIdsForOperatorAccessor(request);
+                break;
+            }
+            case 'ROLE_SUPERVISOR' : {
+                centerIdResponse = await getCenterIdsForSupervisorAccessor(request);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                centerIdResponse = await getCenterIdsForAdminAccessor(request);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                centerIdResponse = await getCenterIdsForSuperAdminAccessor(request);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                centerIdResponse = await getCenterIdsForMasterAdminAccessor(request);
+                break;
+            }
+        }
+    }
+    if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+        centerIdResponse.rows.forEach(item => {
+            centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', centerIdList);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CENTERS_FOR_ID, 'en', []);
+    }
+    return finalResponse;
+};
+const getCountryListBusiness = async (req) => {
+    let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
+        countryListResponse, finalResponse;
+    userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+        request.userRole = userDetailsResponse.rows[0]['native_user_role'];
+        countryListResponse = await getCountryListAccessor(request);
+    }
+    if (objectHasPropertyCheck(countryListResponse, 'rows') && arrayNotEmptyCheck(countryListResponse.rows)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', countryListResponse.rows);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COUNTRIES_FOR_ID, 'en', []);
+    }
+    return finalResponse;
+};
+
 //Private methods to modify the data for the way we need in the response
 const widgetSectionCreator = (widgetItem, widgetSectionObj) => {
     let widgetSectionFinalObj = {};
@@ -242,6 +299,7 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
             subSectionType: widgetSubSectionItem['widget_sub_section_type'],
             subSectionOrderId: widgetSubSectionItem['widget_sub_section_order_id'],
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
+            subSectionWidth: widgetSubSectionItem['sub_section_width'],
             subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
             widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {})}
         };
@@ -368,6 +426,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
     }
     return returnObj;
 };
+
 const widgetChartElementCreator = (widgetElementItem) => {
     let widgetElementData = {
         elementColumnId: widgetElementItem['widget_col_count'],
@@ -391,7 +450,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
             asyncValidations: widgetElementItem['element_secondary_value__async_validation'],
             elementIsEditableFlag: widgetElementItem['is_editable'],
             elementIsDisabledFlag: widgetElementItem['disable_flag'],
-            onElementChangeAction: widgetElementItem['element_action_type']
+            onElementChangeAction: widgetElementItem['element_action_type'],
+            formElementWidth: widgetElementItem['attribute_width']
         };
         switch (widgetElementItem['element_type'].toLowerCase()) {
             case 'input':
@@ -440,6 +500,19 @@ const widgetFormElementCreator = (widgetElementItem) => {
                     }
                 };
                 break;
+            case 'container':
+                widgetElementData = {
+                    ...widgetElementData, ...{
+                        elementTitle: widgetElementItem['element_title'],
+                        submitReqType: widgetElementItem['submit_request_type'],
+                        submitRequestParams: widgetElementItem['submit_request_params'],
+                        submitEndpoint: widgetElementItem['submit_endpoint'],
+                        elementLabel: widgetElementItem['element_label'],
+                        elementIcon: widgetElementItem['element_icon_value'],
+                        elementModalId: widgetElementItem['element_modal_id']
+                    }
+                };
+                break;
 
             case 'text-link':
             case 'detail-text':
@@ -476,7 +549,7 @@ const widgetMapElementCreator = (widgetElementItem) => {
 };
 const getSimCardListBusiness = async (req) => {
     let request = [req.query.userId], response, userDetailResponse, centerIdResponse, centerIdsReq = [], finalResponse,
-        modifiedResponse = {gridData:[]},cardIdNameMap = {};
+        modifiedResponse = {gridData: []}, cardIdNameMap = {};
 
     userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
@@ -611,16 +684,16 @@ const modalCreator = (item, response) => {
     } else {
         responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']] = {
             modalSectionType: item['modal_parent_type'],
-            modalRow: {},
+            widgetSectionRows: {},
             modalSectionId: item['modal_section']
         };
     }
-    if (objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']], 'modalRow') && objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'], item['modal_row_count'])) {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'][item['modal_row_count']] = responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'][item['modal_row_count']];
+    if (objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']], 'widgetSectionRows') && objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'], item['modal_row_count'])) {
+        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']] = responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']];
     } else {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'][item['modal_row_count']] = {
+        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']] = {
             modalRowId: item['modal_row_count'],
-            modalCols: []
+            sectionCols: []
         };
     }
     responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'][item['modal_row_count']]['modalCols'].push(modalObj);
@@ -635,7 +708,9 @@ module.exports = {
     getModelMetadataBusiness,
     getLanguagesListBusiness,
     getRolesBusiness,
+    listCentersBusiness,
     getSimCardListBusiness,
     getLanguageListGridBusiness,
-    getRolesForRoleIdBusiness
+    getRolesForRoleIdBusiness,
+    getCountryListBusiness
 };

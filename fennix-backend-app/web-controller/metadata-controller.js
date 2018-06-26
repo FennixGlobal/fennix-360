@@ -1,7 +1,21 @@
 var express = require('express');
-const {getModelMetadataBusiness,getSimCardListBusiness,getLanguageListGridBusiness,getRolesForRoleIdBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
+const {getCountryListBusiness,listCentersBusiness,getModelMetadataBusiness,getSimCardListBusiness,getLanguageListGridBusiness,getRolesForRoleIdBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
+router.get('/listCenters', function (req, res) {
+    let returnObj;
+    returnObj = listCentersBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+router.get('/listCountries', function (req, res) {
+    let returnObj;
+    returnObj = getCountryListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 router.post('/baseMetadata', function (req, res) {
     let returnObj;
     returnObj = getBaseMetadataBusiness(req);

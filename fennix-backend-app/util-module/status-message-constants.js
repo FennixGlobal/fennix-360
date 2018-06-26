@@ -97,6 +97,20 @@ const statusCodes = {
             espLA: 'no se pudo cambiar la contraseña Inténtalo de nuevo'
         }
     },
+    214: {
+        devMsg: 'no centers available for the given id', userMsg: {
+            en: 'no centers available for the given id',
+            espMX: 'no centers available for the given id',
+            espLA: 'no centers available for the given id'
+        }
+    },
+    216: {
+        devMsg: 'no countries available for the given id', userMsg: {
+            en: 'no countries available for the given id',
+            espMX: 'no countries available for the given id',
+            espLA: 'no countries available for the given id'
+        }
+    },
     700: {
         devMsg: 'Postgres DB is not getting connected', userMsg: {
             en: 'Server is down',
