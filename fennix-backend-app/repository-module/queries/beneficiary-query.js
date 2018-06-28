@@ -18,7 +18,7 @@ const authenticateBeneficiaryQuery = 'select (select localized_text from localiz
     '       join roles r on r.role_id = b.beneficiary_role\n' +
     '        where emailid=$1';
 
-
+const insertBeneficiaryQuery = 'insert into ';
 
 const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,lastname,beneficiary_role as role_id,gender,emailid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $6) as role, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
     'where owner_user_id = (select user_id from users where user_id = $1) and center_id = $2\n' +
@@ -39,6 +39,7 @@ module.exports = {
     selectBeneficiaryByOwnerIdQuery,
     selectBeneficiaryListByOwnerUserIdQuery,
     checkBeneficiaryEmailIdQuery,
+    insertBeneficiaryQuery,
     authenticateBeneficiaryQuery,
     getBenefeciaryIdListForOwnerAndCenterQuery
 };

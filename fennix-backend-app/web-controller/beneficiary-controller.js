@@ -1,5 +1,5 @@
 var express = require('express');
-const {beneficiaryMapDataList, getBeneficiaryDetailsBusiness, beneficiaryAggregatorBusiness, beneficiaryListByOwnerUserId, beneficiaryLocationListByOwnerAndCenter} = require('../business-module/beneficiary-business-module/beneficiary-business');
+const {beneficiaryMapDataList,addBeneficiaryBusiness, getBeneficiaryDetailsBusiness, beneficiaryAggregatorBusiness, beneficiaryListByOwnerUserId, beneficiaryLocationListByOwnerAndCenter} = require('../business-module/beneficiary-business-module/beneficiary-business');
 var router = express.Router();
 
 router.get('/beneficiaryAggregator', function (req, res) {
@@ -29,6 +29,14 @@ router.post('/showMap', function (req, res) {
 router.get('/listBeneficiary', function (req, res) {
     let returnObj;
     returnObj = beneficiaryListByOwnerUserId(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.post('/addBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = addBeneficiaryBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

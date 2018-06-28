@@ -1,6 +1,8 @@
-const {selectBeneficiaryByUserIdQuery, getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
+const {selectBeneficiaryByUserIdQuery, insertBeneficiaryQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
+const {TABLE_BENEFICIARIES} = require('../../util-module/db-constants');
+
 const getBeneficiaryByUserIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, selectBeneficiaryByUserIdQuery, false);
@@ -21,6 +23,15 @@ const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     returnObj = await connectionCheckAndQueryExec(modifiedParams, modifiedQuery);
     return returnObj;
 };
+
+const addBeneficiaryAccessor = async (req) => {
+    let returnObj, finalResponse;
+    finalResponse = insertQueryCreator(req, TABLE_BENEFICIARIES, insertBeneficiaryQuery);
+    returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
+    console.log(returnObj);
+    return returnObj;
+};
+
 
 const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
     let returnObj;
@@ -59,7 +70,8 @@ module.exports = {
     getBeneifciaryIdList,
     getBeneficiaryDetailsAccessor,
     getBeneficiaryNameFromBeneficiaryIdAccessor,
-    getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor
+    getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor,
+    addBeneficiaryAccessor
     // getBeneficiaryMapData
 };
 

@@ -256,17 +256,21 @@ const listCentersBusiness = async (req) => {
 };
 const getCountryListBusiness = async (req) => {
     let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
-        countryListResponse, finalResponse;
+        countryListResponse, finalResponse, countryIdList = {dropdownList: []};
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         request.userRole = userDetailsResponse.rows[0]['native_user_role'];
         countryListResponse = await getCountryListAccessor(request);
     }
     if (objectHasPropertyCheck(countryListResponse, 'rows') && arrayNotEmptyCheck(countryListResponse.rows)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', countryListResponse.rows);
+        countryListResponse.rows.forEach(item => {
+            countryIdList.dropdownList.push(dropdownCreator(item['locale_key'], item['country_name'], false));
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', countryIdList);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COUNTRIES_FOR_ID, 'en', []);
     }
+
     return finalResponse;
 };
 
@@ -381,6 +385,16 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 accentValue: widgetElementItem['default_key__accent_value'],
                 iconValue: widgetElementItem['element_icon_value'],
                 gridModalId: widgetElementItem['element_modal_id']
+            };
+            break;
+        case 'action-bar':
+            returnObj = {
+                ...returnObj,
+                primaryButton: widgetElementItem['default_key__accent_value'],
+                secondaryButton: widgetElementItem['default_value__hover_value'],
+                tertiaryButton: widgetElementItem['element_primary_value__validation'],
+                quadraButton: widgetElementItem['element_secondary_value__async_validation'],
+                mappingKey: widgetElementItem['request_mapping_key']
             };
             break;
         case 'navigate-link':

@@ -1,4 +1,4 @@
-const {getBenefeciaryAggregator, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, addBeneficiaryAccessor,getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck,notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -60,6 +60,12 @@ const beneficiaryAggregatorBusiness = async (req) => {
 //     }
 //     return returnObj;
 // };
+const addBeneficiaryBusiness = async (req) => {
+    let request = req.body;
+    await addBeneficiaryAccessor(request);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+};
+
 const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
         beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {},
@@ -248,6 +254,7 @@ module.exports = {
     beneficiaryAggregatorBusiness,
     beneficiaryListByOwnerUserId,
     beneficiaryMapDataList,
-    getBeneficiaryDetailsBusiness
+    getBeneficiaryDetailsBusiness,
+    addBeneficiaryBusiness
     // beneficiaryLocationListByOwnerAndCenter
 };
