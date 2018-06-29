@@ -19,21 +19,20 @@ const httpsIo = socketIO(httpsServer);
 
 io.on('connection', socket => {
     console.log('connected');
+    socket.on('mapView', (newData) => {
+        console.log(newData);
+    });
 });
 
 
 httpsIo.on('connection', socket => {
     console.log('connected');
+
+    socket.on('mapView', (newData) => {
+        console.log(newData);
+    });
 });
 
-httpsIo.on('mapView', (newData) => {
-    console.log(newData);
-});
-
-
-io.on('mapView', (newData) => {
-    console.log(newData);
-});
 
 server.listen(3100, () => console.log('listening'));
 httpsServer.listen(3101, () => console.log('listening on 3101'));
@@ -90,5 +89,6 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     // res.render('error');
 });
+
 
 module.exports = app;
