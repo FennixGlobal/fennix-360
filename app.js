@@ -3,9 +3,40 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var http = require('http');
+var https = require('https');
 var mongoose = require('mongoose');
+var socketIO = require('socket.io');
+
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/fennixDevDb');
+var socketExpress = express();
+var httpsSocketExpress = express();
+var server = http.createServer(socketExpress);
+var httpsServer = https.createServer(httpsSocketExpress);
+const io = socketIO(server);
+const httpsIo = socketIO(httpsServer);
+
+io.on('connection', socket => {
+    console.log('connected');
+});
+
+
+httpsIo.on('connection', socket => {
+    console.log('connected');
+});
+
+httpsIo.on('mapView', (newData) => {
+    console.log(newData);
+});
+
+
+io.on('mapView', (newData) => {
+    console.log(newData);
+});
+
+server.listen(3100, () => console.log('listening'));
+httpsServer.listen(3101, () => console.log('listening on 3101'));
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
@@ -37,10 +68,10 @@ app.use(function (req, res, next) {
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
-app.use('/metadata',metadataRouter);
-app.use('/ticket',ticketRouter);
-app.use('/device',deviceRouter);
-app.use('/beneficiary',beneficiaryRouter);
+app.use('/metadata', metadataRouter);
+app.use('/ticket', ticketRouter);
+app.use('/device', deviceRouter);
+app.use('/beneficiary', beneficiaryRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
