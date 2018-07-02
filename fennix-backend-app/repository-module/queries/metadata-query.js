@@ -129,26 +129,32 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     'left join action a \n' +
     'on a.action_id = rcwa.on_change_action';
 
-const modalMetadataQuery = 'select m.modal_id, ma.modal_attribute_id, ma.modal_parent_type\n' +
-    '    , ma.modal_attribute_position\n' +
-    '    , (select localized_text from localization where locale_key = ma.modal_element_name and language = $2) as modal_element_name\n' +
-    '    , (select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header_name\n' +
-    '    , ma.modal_section, ma.modal_row_count, ma.modal_col_count \n' +
-    '    , de.endpoint as data_endpoint\n' +
-    '    , wa.element_type, wa.sub_type\n' +
-    '    , e.endpoint as submit_endpoint\n' +
-    '    , a.action_name\n' +
-    '    from modal m\n' +
-    '    join modal_attributes ma\n' +
-    '    on m.modal_id = ma.modal_id and m.modal_id = $1\n' +
-    '    join widget_attributes wa \n' +
-    '    on wa.widget_attribute_id = ma.modal_element_type\n' +
-    '    left outer join endpoints e\n' +
-    '    on e.endpoint_id = ma.modal_submit_endpoint\n' +
-    '    left outer join action a\n' +
-    '    on a.action_id = ma.modal_element_action\n' +
-    '    left outer join endpoints de\n' +
-    '    on de.endpoint_id = ma.modal_data_endpoint';
+const modalMetadataQuery = 'select  \n' +
+    '(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
+    '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
+    ', rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
+    '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
+    '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
+    '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
+    '    , rcwa.sub_section_orientation, rcwa.section_orientation\n' +
+    '    , rcwa.sub_section_width\n' +
+    '    , wa.element_type, wa.sub_type as element_subtype\n' +
+    '    , (select localized_text from localization where locale_key = rcwa.element_title and language = $2) as element_title\n' +
+    '    , (select localized_text from localization where locale_key = rcwa.element_label and language = $2) as element_label\n' +
+    '    , (select localized_text from localization where locale_key = rcwa.widget_section_title and language  = $2) as widget_section_title\n' +
+    '    ,(select localized_text from localization where locale_key = rcwa.widget_sub_section_title and language = $2) as widget_sub_section_title\n' +
+    '    , de.endpoint as dropdown_endpoint,de.endpoint_request_type as dropdown_request_type,de.endpoint_mandatory_request_params as dropdown_request_params\n' +
+    '    , se.endpoint as submit_endpoint, se.endpoint_request_type as submit_request_type, se.endpoint_mandatory_request_params as submit_request_params\n' +
+    '    , (select action_name from action where action_id = rcwa.on_change_action) as element_action_type\n' +
+    '\n' +
+    'from modal m \n' +
+    'join role_card_widget_attribute rcwa\n' +
+    '    join widget_attributes wa on wa.widget_attribute_id = rcwa.widget_attribute_id\n' +
+    'on rcwa.modal_id = m.modal_id and m.modal_id = $1\n' +
+    'left outer join endpoints de \n' +
+    'on de.endpoint_id = rcwa.dropdown_endpoint\n' +
+    'left outer join endpoints se\n' +
+    'on se.endpoint_id = rcwa.submit_endpoint;\n';
 
 const getRoleQuery = 'select role_id, (select localized_text from localization where locale_key = r.role_name and language = $1) as role_name from roles r';
 const filterMetadataQuery = 'select fs.filter_position\n' +

@@ -13,7 +13,29 @@ const deviceSchema = new Schema({
     createdDate: {Type: String},
     updatedDate: {Type: String}
 });
+
+const deviceTypeSchema = new Schema({
+    _id: {Type:String},
+    name: {Type:String},
+    minSpeed: {Type:Number},
+    maxHdop: {Type:Number},
+    minGpsLevel: {Type:Number},
+    minDiffTrackPoints: {Type:Number},
+    timeout: {Type:Number},
+    stationaryTimeout: {Type:Number},
+    icon: {Type:String},
+    mapIcon: {Type:String},
+    tailColor: {Type:String},
+    tailPoints: {Type: Number},
+    isActive: {Type:Boolean},
+    createdDate: {Type:String},
+    updatedDate: {Type:String}
+});
+
 const deviceAggregator = mongoose.model('Device', deviceSchema, 'devices');
+const deviceTypeModel = mongoose.model('DeviceType', deviceTypeSchema, 'deviceTypes');
+
 module.exports = {
-    deviceAggregator
+    deviceAggregator,
+    deviceTypeModel
 };

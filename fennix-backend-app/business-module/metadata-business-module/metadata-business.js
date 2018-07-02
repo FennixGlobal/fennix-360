@@ -1,4 +1,4 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -135,32 +135,51 @@ const getLanguagesListBusiness = async (req) => {
 };
 
 const getModelMetadataBusiness = async (req) => {
-    let response, responseMap = {}, request;
+    let response, responseMap = {modalHeader: '', modalBody: {widgetSections: {}}}, request;
     request = [req.query.modalId, req.query.languageId];
     response = await getModalMetadataAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        response.rows.forEach(item => {
-            switch (item['modal_attribute_position']) {
-                case 'modal-body': {
-                    responseMap = modalCreator(item, responseMap);
-                    break;
-                }
-                case 'modal-footer': {
-                    responseMap = modalCreator(item, responseMap);
-                    break;
-                }
+        response.rows.forEach((item) => {
+            responseMap.modalHeader = responseMap.modalHeader || item['modal_header'];
+            responseMap.modalBody = {
+                widgetSections: widgetSectionCreator(item, responseMap.modalBody.widgetSections)
             }
-            responseMap['modal-header'] = {modalHeader: item['modal_header_name'], modalPosition: 'modal-header'};
         });
-        Object.keys(responseMap).forEach((key) => {
-            if (key.toLowerCase() !== 'modal-header') {
-                responseMap[key]['modalSection'] = Object.keys(responseMap[key]['modalSection']).map((section) => {
-                    responseMap[key]['modalSection'][section]['modalRow'] = Object.keys(responseMap[key]['modalSection'][section]['modalRow']).map(row => responseMap[key]['modalSection'][section]['modalRow'][row]);
-                    return responseMap[key]['modalSection'][section];
-                });
-            }
-            // return responseMap;
+        responseMap.modalBody.widgetSections = Object.keys(responseMap.modalBody.widgetSections).map((section) => {
+            responseMap.modalBody.widgetSections[section]['widgetSubSections'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections']).map((subsection) => {
+                responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][row]);
+                return responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection];
+            });
+            return responseMap.modalBody.widgetSections[section];
         });
+        // returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections']).map((subsection) => {
+        //     returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]);
+        //     return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]
+        // });
+        // return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section];
+        // });
+        // response.rows.forEach(item => {
+        //     switch (item['modal_attribute_position']) {
+        // case 'modal-body': {
+        // responseMap = modalCreator(item, responseMap);
+        // /break;
+        // }
+        // case 'modal-footer': {
+        // responseMap = modalCreator(item, responseMap);
+        // break;
+        // /}
+        // }
+        // responseMap['modal-header'] = {modalHeader: item['modal_header_name'], modalPosition: 'modal-header'};
+        // });
+        // Object.keys(responseMap).forEach((key) => {
+        // if (key.toLowerCase() !== 'modal-header') {
+        // responseMap[key]['modalSection'] = Object.keys(responseMap[key]['modalSection']).map((section) => {
+        // responseMap[key]['modalSection'][section]['modalRow'] = Object.keys(responseMap[key]['modalSection'][section]['modalRow']).map(row => responseMap[key]['modalSection'][section]['modalRow'][row]);
+        // return responseMap[key]['modalSection'][section];
+        // });
+        // }
+        // return responseMap;
+        // });
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseMap);
     } else {
         response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'en', []);
@@ -254,6 +273,21 @@ const listCentersBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+const dropDownBusiness = async (req) => {
+    let request = [req.query.dropdownId], dropdownResponse, returnResponse = [];
+    dropdownResponse = await getDropdownAccessor(request);
+    if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
+        dropdownResponse.rows.forEach((item) => {
+            returnResponse.push(dropdownCreator(item['dropdown_key'], item['dropdown_value'], false));
+        });
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', returnResponse);
+    } else {
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'en', []);
+    }
+    return returnResponse;
+};
+
 const getCountryListBusiness = async (req) => {
     let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
         countryListResponse, finalResponse, countryIdList = {dropdownList: []};
@@ -390,10 +424,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
         case 'action-bar':
             returnObj = {
                 ...returnObj,
-                primaryButton: widgetElementItem['default_key__accent_value'],
-                secondaryButton: widgetElementItem['default_value__hover_value'],
-                tertiaryButton: widgetElementItem['element_primary_value__validation'],
-                quadraButton: widgetElementItem['element_secondary_value__async_validation'],
+                buttonArray: [widgetElementItem['default_key__accent_value'], widgetElementItem['default_value__hover_value'], widgetElementItem['element_primary_value__validation'], widgetElementItem['element_secondary_value__async_validation']],
                 mappingKey: widgetElementItem['request_mapping_key']
             };
             break;
@@ -726,5 +757,6 @@ module.exports = {
     getSimCardListBusiness,
     getLanguageListGridBusiness,
     getRolesForRoleIdBusiness,
-    getCountryListBusiness
+    getCountryListBusiness,
+    dropDownBusiness
 };

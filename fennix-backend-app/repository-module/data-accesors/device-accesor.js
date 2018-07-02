@@ -1,4 +1,4 @@
-const {userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery, listDevicesQuery} = require('../queries/device-query');
+const {userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery,listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
 // const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 var deviceAggregator = async (req) => {
     let returnObj;
@@ -23,9 +23,15 @@ const listDevicesAccessor = async (req) => {
     returnObj = await listDevicesQuery(req);
     return returnObj;
 };
+const listDeviceTypesAccessor = async () => {
+    let returnObj;
+    returnObj = await listDeviceTypesQuery();
+    return returnObj;
+};
 
 module.exports = {
     deviceAggregator,
+    listDeviceTypesAccessor,
     deviceBybeneficiaryQuery,
     getDeviceDetailsForListOfBeneficiariesAccessor,
     listDevicesAccessor

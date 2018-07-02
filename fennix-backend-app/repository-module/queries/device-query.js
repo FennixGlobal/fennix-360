@@ -109,9 +109,21 @@ const listDevicesQuery = (query) => {
     ])
 };
 
+const listDeviceTypesQuery = () => {
+    return deviceTypeModel.find(
+        {
+            "isActive":true
+        },
+        {
+            "name":1
+        }
+    );
+};
+
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
     getDeviceDetailsForListOfBeneficiariesQuery,
-    listDevicesQuery
+    listDevicesQuery,
+    listDeviceTypesQuery
 };

@@ -1,4 +1,4 @@
-const {deviceAggregator, listDevicesAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceAggregator, listDevicesAccessor,listDeviceTypesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
@@ -66,6 +66,14 @@ const deviceAggregatorDashboard = async (req) => {
     }
     return returnObj;
 };
+
+const listDeviceTypesBusiness = async () => {
+    let deviceTypesResponse, finalResponse;
+    deviceTypesResponse = await listDeviceTypesAccessor();
+    finalResponse = arrayNotEmptyCheck(deviceTypesResponse) ? fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceTypesResponse) : fennixResponse(statusCodeConstants.STATUS_NO_DEVICE_TYPES_FOR_ID, 'en', []);
+    return finalResponse;
+};
+
 const listDevicesBusiness = async (req) => {
     let request = [req.query.userId], userDetailResponse, centerIdResponse, centerIdsReq = [], centerIdNameMap = {}, beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [], modifiedResponse = {gridData:[]}, finalResponse;
     userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
@@ -140,5 +148,6 @@ const listDevicesBusiness = async (req) => {
 
 module.exports = {
     deviceAggregatorDashboard,
-    listDevicesBusiness
+    listDevicesBusiness,
+    listDeviceTypesBusiness
 };

@@ -3,39 +3,61 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var http = require('http');
-var https = require('https');
+// var http = require('http');
+var net = require('net');
+// var https = require('https');
 var mongoose = require('mongoose');
-var socketIO = require('socket.io');
+// var socketIO = require('socket.io');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/fennixDevDb');
-var socketExpress = express();
-var httpsSocketExpress = express();
-var server = http.createServer(socketExpress);
-var httpsServer = https.createServer(httpsSocketExpress);
-const io = socketIO(server);
-const httpsIo = socketIO(httpsServer);
+// var socketExpress = express();
+// var httpsSocketExpress = express();
+// var server = http.createServer(socketExpress);
+// var httpsServer = https.createServer(httpsSocketExpress);
+// const io = socketIO(server);
+// const httpsIo = socketIO(httpsServer);
+//
+// io.on('connection', socket => {
+//     console.log('connected');
+//     socket.on('mapView', (newData) => {
+//         console.log(newData);
+//     });
+// });
 
-io.on('connection', socket => {
+var TCPServer = net.createServer();
+TCPServer.listen(3100, '18.144.71.92');
+// var TCPClient = net.s
+TCPServer.on('connection', (socket) => {
     console.log('connected');
-    socket.on('mapView', (newData) => {
-        console.log(newData);
+    console.log(socket);
+    socket.on('data', (data) => {
+        console.log('data is transmitted');
+        console.log(data);
+    });
+    socket.on('error', (err) => {
+        console.log('error occurred');
+        console.log(err);
+    });
+    socket.on('end', () => {
+        console.log('end connection');
+    });
+    socket.on('close', (flag) => {
+        console.log(flag);
     });
 });
-
-
-httpsIo.on('connection', socket => {
-    console.log('connected');
-
-    socket.on('mapView', (newData) => {
-        console.log(newData);
-    });
-});
-
-
-server.listen(3100, () => console.log('listening'));
-httpsServer.listen(3101, () => console.log('listening on 3101'));
+//
+// httpsIo.on('connection', socket => {
+//     console.log('connected');
+//
+//     socket.on('mapView', (newData) => {
+//         console.log(newData);
+//     });
+// });
+//
+//
+// server.listen(3100, () => console.log('listening'));
+// httpsServer.listen(3101, () => console.log('listening on 3101'));
 
 var indexRouter = require('./routes/index');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
@@ -44,7 +66,7 @@ var userRouter = require('./fennix-backend-app/web-controller/user-controller');
 var ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
 var metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
 var beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary-controller');
-
+var commonRouter = require('./fennix-backend-app/web-controller/common-controller');
 
 var app = express();
 
@@ -71,6 +93,7 @@ app.use('/metadata', metadataRouter);
 app.use('/ticket', ticketRouter);
 app.use('/device', deviceRouter);
 app.use('/beneficiary', beneficiaryRouter);
+app.use('/common', commonRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -89,6 +112,5 @@ app.use(function (err, req, res, next) {
     res.status(err.status || 500);
     // res.render('error');
 });
-
 
 module.exports = app;

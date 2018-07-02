@@ -111,6 +111,20 @@ const statusCodes = {
             espLA: 'no countries available for the given id'
         }
     },
+    217: {
+        devMsg: 'no device types available for the given id', userMsg: {
+            en: 'no device types available for the given id',
+            espMX: 'no device types available for the given id',
+            espLA: 'no device types available for the given id'
+        }
+    },
+    218:{
+        devMsg: 'no dropdown for this dropdown Id', userMsg: {
+            en: 'no dropdown for this dropdown Id',
+            espMX: 'no dropdown for this dropdown Id',
+            espLA: 'no dropdown for this dropdown Id'
+        }
+    },
     700: {
         devMsg: 'Postgres DB is not getting connected', userMsg: {
             en: 'Server is down',
