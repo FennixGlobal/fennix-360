@@ -1,4 +1,4 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor,getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -152,34 +152,6 @@ const getModelMetadataBusiness = async (req) => {
             });
             return responseMap.modalBody.widgetSections[section];
         });
-        // returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections']).map((subsection) => {
-        //     returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]);
-        //     return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]
-        // });
-        // return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section];
-        // });
-        // response.rows.forEach(item => {
-        //     switch (item['modal_attribute_position']) {
-        // case 'modal-body': {
-        // responseMap = modalCreator(item, responseMap);
-        // /break;
-        // }
-        // case 'modal-footer': {
-        // responseMap = modalCreator(item, responseMap);
-        // break;
-        // /}
-        // }
-        // responseMap['modal-header'] = {modalHeader: item['modal_header_name'], modalPosition: 'modal-header'};
-        // });
-        // Object.keys(responseMap).forEach((key) => {
-        // if (key.toLowerCase() !== 'modal-header') {
-        // responseMap[key]['modalSection'] = Object.keys(responseMap[key]['modalSection']).map((section) => {
-        // responseMap[key]['modalSection'][section]['modalRow'] = Object.keys(responseMap[key]['modalSection'][section]['modalRow']).map(row => responseMap[key]['modalSection'][section]['modalRow'][row]);
-        // return responseMap[key]['modalSection'][section];
-        // });
-        // }
-        // return responseMap;
-        // });
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseMap);
     } else {
         response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'en', []);
@@ -237,32 +209,33 @@ const getRolesBusiness = async (req) => {
 const listCentersBusiness = async (req) => {
     let request = [req.query.userId], userDetailResponse, centerIdResponse, finalResponse,
         centerIdList = {dropdownList: []};
-    userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-        switch (nativeUserRole) {
-            case 'ROLE_OPERATOR' : {
-                centerIdResponse = await getCenterIdsForOperatorAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPERVISOR' : {
-                centerIdResponse = await getCenterIdsForSupervisorAccessor(request);
-                break;
-            }
-            case 'ROLE_ADMIN' : {
-                centerIdResponse = await getCenterIdsForAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPER_ADMIN' : {
-                centerIdResponse = await getCenterIdsForSuperAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_MASTER_ADMIN' : {
-                centerIdResponse = await getCenterIdsForMasterAdminAccessor(request);
-                break;
-            }
-        }
-    }
+    centerIdResponse = await getCenterIdsAccessor(req);
+    // userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    // if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    //     switch (nativeUserRole) {
+    //         case 'ROLE_OPERATOR' : {
+    //             centerIdResponse = await getCenterIdsForOperatorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPERVISOR' : {
+    //             centerIdResponse = await getCenterIdsForSupervisorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_ADMIN' : {
+    //             centerIdResponse = await getCenterIdsForAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPER_ADMIN' : {
+    //             centerIdResponse = await getCenterIdsForSuperAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_MASTER_ADMIN' : {
+    //             centerIdResponse = await getCenterIdsForMasterAdminAccessor(request);
+    //             break;
+    //         }
+    //     }
+    // }
     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));

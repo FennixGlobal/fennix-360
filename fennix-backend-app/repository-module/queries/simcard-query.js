@@ -1,4 +1,4 @@
-const {simcardDetails} = require('../models/simcard-model');
+const {simcardDetails,simCardTypeModel} = require('../models/simcard-model');
 
 const listSimcardsQuery = (query) => {
     return simcardDetails.aggregate(
@@ -113,7 +113,12 @@ const getSimcardDetailsQuery = (query) => {
     ]);
 };
 
+const listSimcardTypesQuery = () => {
+    return simCardTypeModel.find();
+};
+
 module.exports = {
+    listSimcardTypesQuery,
     getSimcardDetailsQuery,
     insertSimcardQuery,
     updateSimcardQuery,

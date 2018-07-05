@@ -6,6 +6,13 @@ const statusCodes = {
             espLA: 'OK'
         }
     },
+    220: {
+        devMsg: 'no groups available for the given id', userMsg: {
+            en: 'no groups available for the given id',
+            espMX: 'no groups available for the given id',
+            espLA: 'no groups available for the given id'
+        }
+    },
     207: {
         devMsg: 'no cards available for the user', userMsg: {
             en: 'no cards available for the user',
@@ -123,6 +130,13 @@ const statusCodes = {
             en: 'no dropdown for this dropdown Id',
             espMX: 'no dropdown for this dropdown Id',
             espLA: 'no dropdown for this dropdown Id'
+        }
+    },
+    219: {
+        devMsg: 'no simcard types available for the given id', userMsg: {
+            en: 'no simcard types available for the given id',
+            espMX: 'no simcard types available for the given id',
+            espLA: 'no simcard types available for the given id'
         }
     },
     700: {

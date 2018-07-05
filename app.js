@@ -4,12 +4,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// var http = require('http');
 var net = require('net');
-// var https = require('https');
 var mongoose = require('mongoose');
-// var socketIO = require('socket.io');
-
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoDev);
 
@@ -32,8 +28,8 @@ TCPServer.on("connection", (socket) => {
         console.log(flag);
     });
 });
+var carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
 var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
-var indexRouter = require('./routes/index');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
 var deviceRouter = require('./fennix-backend-app/web-controller/device-controller');
 var userRouter = require('./fennix-backend-app/web-controller/user-controller');
@@ -41,6 +37,8 @@ var ticketRouter = require('./fennix-backend-app/web-controller/ticket-controlle
 var metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
 var beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary-controller');
 var commonRouter = require('./fennix-backend-app/web-controller/common-controller');
+var indexRouter = require('./routes/index');
+var groupRouter = require('./fennix-backend-app/web-controller/group-controller');
 
 var app = express();
 
@@ -68,12 +66,15 @@ app.use('/ticket', ticketRouter);
 app.use('/device', deviceRouter);
 app.use('/beneficiary', beneficiaryRouter);
 app.use('/common', commonRouter);
+app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
+app.use('/group', groupRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     res.render('index');
+    app.use('/group', groupRouter);
     // next(createError(404));
 });
 

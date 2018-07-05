@@ -1,4 +1,4 @@
-const {listSimcardsAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
+const {listSimcardsAccessor, listSimcardTypesAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
@@ -23,6 +23,18 @@ const listSimcardsBusiness = async (req) => {
     return finalResponse;
 };
 
+const listSimcardTypesBusiness = async () => {
+    let response, finalResponse;
+    response = await listSimcardTypesAccessor();
+    if (arrayNotEmptyCheck(response)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARD_TYPES_FOR_ID, 'en', []);
+    }
+    return finalResponse;
+};
+
 module.exports = {
-    listSimcardsBusiness
+    listSimcardsBusiness,
+    listSimcardTypesBusiness
 };

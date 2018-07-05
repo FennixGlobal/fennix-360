@@ -13,9 +13,16 @@ const simcardSchema = new Schema({
     createdDate: {Type: String},
     updatedDate: {Type: String}
 });
+const simcardTypeSchema = new Schema({
+    _id: Number,
+    simcardType: String
+});
+
+var simCardTypeModel = mongoose.model('SimcardTypes', simcardTypeSchema, 'simcardTypes');
 
 var simcardDetails = mongoose.model('Simcards', simcardSchema, 'simcards');
 
 module.exports = {
-    simcardDetails
+    simcardDetails,
+    simCardTypeModel
 };
