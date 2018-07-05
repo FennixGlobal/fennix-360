@@ -31,7 +31,7 @@ const getSimcardDetailsAccessor = async (req) => {
 
 const getDropdownAccessor = async (req) => {
     let responseObj;
-    responseObj = await getDropdownDataQuery(req);
+    responseObj = await connectionCheckAndQueryExec(req, getDropdownDataQuery);
     return responseObj;
 };
 

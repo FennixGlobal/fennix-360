@@ -8,13 +8,18 @@ const postgresDBDev = {
 
 const postgresDBProd = {
     user: 'postgres',
-    host: 'localhost',
+    host: '172.31.32.106',
     database: 'fennix_dev',
     password: 'postgres',
     port: 5432
 };
 
+const mongoLocal = 'mongodb://localhost:27017/fennixDevDb';
+const mongoDev = 'mongodb://172.31.32.79:27017/fennixDevDb';
+
 module.exports = {
     postgresDBDev,
-    postgresDBProd
+    postgresDBProd,
+    mongoDev,
+    mongoLocal
 };

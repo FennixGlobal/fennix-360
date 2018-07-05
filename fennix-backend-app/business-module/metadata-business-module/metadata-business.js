@@ -275,7 +275,7 @@ const listCentersBusiness = async (req) => {
 };
 
 const dropDownBusiness = async (req) => {
-    let request = [req.query.dropdownId], dropdownResponse, returnResponse = [];
+    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = [];
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {
