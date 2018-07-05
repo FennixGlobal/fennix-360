@@ -32,10 +32,19 @@ const deviceTypeSchema = new Schema({
     updatedDate: {Type:String}
 });
 
+const deviceCounterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    counter: Number
+});
+
 const deviceAggregator = mongoose.model('Device', deviceSchema, 'devices');
 const deviceTypeModel = mongoose.model('DeviceType', deviceTypeSchema, 'deviceTypes');
 
+const devicesModel = mongoose.model('Device');
+const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
 module.exports = {
     deviceAggregator,
-    deviceTypeModel
+    deviceTypeModel,
+    devicesModel,
+    DeviceCounter
 };

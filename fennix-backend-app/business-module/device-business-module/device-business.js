@@ -1,4 +1,4 @@
-const {deviceAggregator, listDevicesAccessor,listDeviceTypesAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceAggregator, listDevicesAccessor,listDeviceTypesAccessor,fetchNextPrimaryKeyAccessor,insertDeviceAccessor,insertNextPrimaryKeyAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
@@ -146,8 +146,28 @@ const listDevicesBusiness = async (req) => {
     return finalResponse;
 };
 
+const insertDeviceBusiness = async (req) => {
+    let primaryKeyResponse, counter;
+    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    if (arrayNotEmptyCheck(primaryKeyResponse)) {
+        counter = parseInt(primaryKeyResponse[0]['counter']);
+        let obj = {
+            _id: counter,
+            imei: req.body.imei,
+            centerId: req.body.centerId,
+            simCardId: req.body.simCardId,
+            deviceTypeId: req.body.deviceTypeId,
+            active: req.body.isActive,
+            createdDate: new Date()
+        };
+        insertDeviceAccessor(obj);
+        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    }
+};
+
 module.exports = {
     deviceAggregatorDashboard,
     listDevicesBusiness,
+    insertDeviceBusiness,
     listDeviceTypesBusiness
 };

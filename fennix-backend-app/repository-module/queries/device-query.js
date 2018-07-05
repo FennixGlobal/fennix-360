@@ -1,4 +1,4 @@
-const {deviceAggregator,deviceTypeModel} = require('../models/device-model');
+const {deviceAggregator,deviceTypeModel,DeviceCounter} = require('../models/device-model');
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
         .group({
@@ -120,10 +120,35 @@ const listDeviceTypesQuery = () => {
     );
 };
 
+const insertDeviceQuery = (req) => {
+    let deviceObj = new deviceAggregator(req);
+    deviceObj.save(function (err) {
+        if (err) return console.error(err);
+    });
+};
+
+const fetchNextPrimaryKeyQuery = () => {
+    return DeviceCounter.find();
+};
+
+//TODO: add retry logic for failure conditions
+const insertNextPrimaryKeyQuery = (req) => {
+    DeviceCounter.update({_id: req}, {$inc: {counter:1}}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
     getDeviceDetailsForListOfBeneficiariesQuery,
     listDevicesQuery,
-    listDeviceTypesQuery
+    listDeviceTypesQuery,
+    insertDeviceQuery,
+    insertNextPrimaryKeyQuery,
+    fetchNextPrimaryKeyQuery
 };
