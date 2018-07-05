@@ -1,5 +1,63 @@
 const {simcardDetails} = require('../models/simcard-model');
 
+const listSimcardsQuery = (query) => {
+    return simcardDetails.aggregate(
+        [
+            {
+                $match :{
+                    $and : [
+                        {
+                            $or : [
+                                {
+                                    "deviceId": { $eq:null }
+                                },
+                                {
+                                    "deviceId": { $eq:"" }
+                                }
+                            ]
+                        },
+                        {
+                            "isActive":true
+                        },
+                        {
+                            "centerId":query.centerId
+                        }
+                    ]}},
+            {
+                $lookup: {
+                    from: "carrierByCountry",
+                    localField: "carrierByCountryId",
+                    foreignField: "_id",
+                    as: "cCountry"
+                }
+            },
+            {
+                $unwind:"$cCountry"
+            },
+            {
+                $lookup: {
+                    from: "carrier",
+                    localField: "cCountry.carrierId",
+                    foreignField: "_id",
+                    as : "carrier"
+
+                }
+            },
+            {
+                $unwind:"$carrier"
+            },
+            {
+                $project: {
+                    "carrier.name" : 1,
+                    "phoneNo":1,
+                    "serialNp":1,
+                    "isActive":1
+                }
+            }
+        ]
+    );
+};
+
 const insertSimcardQuery = (query) => {
     return simcardDetails.insert(query);
 };
@@ -59,5 +117,6 @@ module.exports = {
     getSimcardDetailsQuery,
     insertSimcardQuery,
     updateSimcardQuery,
-    deleteSimcardQuery
+    deleteSimcardQuery,
+    listSimcardsQuery
 };

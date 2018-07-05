@@ -32,7 +32,7 @@ TCPServer.on("connection", (socket) => {
         console.log(flag);
     });
 });
-
+var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
 var indexRouter = require('./routes/index');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
 var deviceRouter = require('./fennix-backend-app/web-controller/device-controller');
@@ -68,6 +68,7 @@ app.use('/ticket', ticketRouter);
 app.use('/device', deviceRouter);
 app.use('/beneficiary', beneficiaryRouter);
 app.use('/common', commonRouter);
+app.use('/simcard', simcardRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
