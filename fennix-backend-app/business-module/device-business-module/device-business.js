@@ -1,4 +1,4 @@
-const {deviceAggregator, listDevicesAccessor,listDeviceTypesAccessor,fetchNextPrimaryKeyAccessor,insertDeviceAccessor,insertNextPrimaryKeyAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceAggregator, getDeviceByDeviceIdAccessor, listDevicesAccessor, listDeviceTypesAccessor, fetchNextPrimaryKeyAccessor, insertDeviceAccessor, insertNextPrimaryKeyAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
@@ -30,8 +30,6 @@ const deviceAggregatorDashboard = async (req) => {
                 break;
             }
         }
-
-        // otherUserIdsForGivenUserId = getLowerLevelUserIdsForGivenUserId(userDetailResponse.rows[0]['native_user_role'], userDetailResponse.rows[0]['user_id'], req.query.languageId);
         otherUserIdsForGivenUserId.rows.forEach(item => {
             userIdList.push(item['user_id']);
         });
@@ -46,8 +44,8 @@ const deviceAggregatorDashboard = async (req) => {
     }
     if (notNullCheck(deviceResponse) && arrayNotEmptyCheck(deviceResponse)) {
         let deviceObj = {
-            ACTIVE: {key: 'activeDevices', value: '', color: '',legend:'ACTIVE'},
-            INACTIVE: {key: 'inActiveDevices', value: '', color: '',legend:'INACTIVE'}
+            ACTIVE: {key: 'activeDevices', value: '', color: '', legend: 'ACTIVE'},
+            INACTIVE: {key: 'inActiveDevices', value: '', color: '', legend: 'INACTIVE'}
         };
         if (deviceResponse.length === 1) {
             let propertyName = deviceResponse[0]['_id'] ? 'ACTIVE' : 'INACTIVE';
@@ -75,7 +73,9 @@ const listDeviceTypesBusiness = async () => {
 };
 
 const listDevicesBusiness = async (req) => {
-    let request = [req.query.userId], userDetailResponse, centerIdResponse, centerIdsReq = [], centerIdNameMap = {}, beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [], modifiedResponse = {gridData:[]}, finalResponse;
+    let request = [req.query.userId], userDetailResponse, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+        beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
+        modifiedResponse = {gridData: []}, finalResponse;
     userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
@@ -118,9 +118,9 @@ const listDevicesBusiness = async (req) => {
         if (objectHasPropertyCheck(beneficiaryNameResponse, 'rows') && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
             beneficiaryNameResponse.rows.forEach((item) => {
                 let beneficiaryObj = {
-                  fullName: item['full_name'],
-                  roleName: item['role_name'],
-                  roleId: item['beneficiary_role']
+                    fullName: item['full_name'],
+                    roleName: item['role_name'],
+                    roleId: item['beneficiary_role']
                 };
                 beneficiaryIdNameMap[item['beneficiaryid']] = beneficiaryObj;
             });
@@ -165,9 +165,22 @@ const insertDeviceBusiness = async (req) => {
     }
 };
 
+const getDeviceByDeviceIdBusiness = async (req) => {
+    const request = {deviceId: req.query.deviceId};
+    let deviceResponse, returnObj;
+    deviceResponse = await getDeviceByDeviceIdAccessor(request);
+    if (notNullCheck(deviceResponse)) {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceResponse);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'en', []);
+    }
+    return returnObj;
+};
+
 module.exports = {
     deviceAggregatorDashboard,
     listDevicesBusiness,
     insertDeviceBusiness,
+    getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness
 };

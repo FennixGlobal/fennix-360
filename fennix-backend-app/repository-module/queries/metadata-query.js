@@ -130,7 +130,8 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     'on a.action_id = rcwa.on_change_action';
 
 const modalMetadataQuery = 'select  \n' +
-    '(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
+    'm.modal_width, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
+    ',(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
     ', rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
     '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
@@ -154,9 +155,12 @@ const modalMetadataQuery = 'select  \n' +
     'left outer join endpoints de \n' +
     'on de.endpoint_id = rcwa.dropdown_endpoint\n' +
     'left outer join endpoints se\n' +
-    'on se.endpoint_id = rcwa.submit_endpoint;\n';
+    'on se.endpoint_id = rcwa.submit_endpoint\n' +
+    'left outer join endpoints me\n' +
+    'on me.endpoint_id = m.modal_data_endpoint_id';
 
 const getRoleQuery = 'select role_id, (select localized_text from localization where locale_key = r.role_name and language = $1) as role_name from roles r';
+
 const filterMetadataQuery = 'select fs.filter_position\n' +
     ', fs.filter_main_location, fs.filter_sub_location\n' +
     ', fa.filter_type, fa.filter_attribute_id, fa.filter_on_change_action\n' +

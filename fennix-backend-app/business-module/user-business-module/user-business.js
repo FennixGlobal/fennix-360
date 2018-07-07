@@ -27,6 +27,31 @@ const fetchUserProfileBusiness = async (req) => {
     }
     return returnObj;
 };
+
+const fetchUserDetailsBusiness = async (req) => {
+    let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
+    userProfileResponse = await fetchUserProfileAccesor(request);
+    if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
+        let userProfileReturnObj = {};
+        userProfileResponse.rows.forEach((item) => {
+            userProfileReturnObj = {
+                userName: `${item['first_name']} ${item['last_name']}`,
+                mobileNo: item['mobile_no'],
+                userMailId: item['emailid'],
+                userCenter: item['center_name'],
+                gender: item['gender'],
+                image: item['image'],
+                userRole: item['role_name'],
+                userAddress: item['address'],
+            };
+        });
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', userProfileReturnObj);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+    }
+    return returnObj;
+};
+
 //TODO write the logic for this
 const updateUserProfileBusiness = async (req) => {
     let request = [req.body.userId], userProfileResponse, returnObj;
@@ -64,5 +89,6 @@ module.exports = {
     addUserBusiness,
     fetchUserProfileBusiness,
     updateUserProfileBusiness,
-    getUserListBusiness
+    getUserListBusiness,
+    fetchUserDetailsBusiness
 };

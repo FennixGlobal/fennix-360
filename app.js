@@ -1,4 +1,4 @@
-const {mongoDev} = require('./fennix-backend-app/util-module/connection-constants');
+const {mongoDev,mongoLocal} = require('./fennix-backend-app/util-module/connection-constants');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -7,7 +7,7 @@ var logger = require('morgan');
 var net = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoDev);
+mongoose.connect(mongoLocal);
 
 var TCPServer = net.createServer();
 TCPServer.listen(3100);

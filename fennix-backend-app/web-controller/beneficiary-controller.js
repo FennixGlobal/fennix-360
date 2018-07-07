@@ -49,7 +49,7 @@ router.post('/showMapGridData', function (req, res) {
         res.send(response);
     })
 });
-router.get('/beneficiaryDetails', function (req, res) {
+router.get('/getBeneficiaryDetails', function (req, res) {
     let returnObj;
     returnObj = getBeneficiaryDetailsBusiness(req);
     returnObj.then((response) => {

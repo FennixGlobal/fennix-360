@@ -1,6 +1,6 @@
-const {insertNextPrimaryKeyQuery,fetchNextPrimaryKeyQuery,insertDeviceQuery,userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery,listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
-// const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-var deviceAggregator = async (req) => {
+const {getDeviceDetailsByDeviceIdQuery,insertNextPrimaryKeyQuery,fetchNextPrimaryKeyQuery,insertDeviceQuery,userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery,listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
+
+const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await userIdDeviceAggregatorQuery(req);
     return returnObj;
@@ -23,6 +23,7 @@ const listDevicesAccessor = async (req) => {
     returnObj = await listDevicesQuery(req);
     return returnObj;
 };
+
 const listDeviceTypesAccessor = async () => {
     let returnObj;
     returnObj = await listDeviceTypesQuery();
@@ -43,6 +44,13 @@ const insertNextPrimaryKeyAccessor = async (req) => {
     await insertNextPrimaryKeyQuery(req);
 };
 
+const getDeviceByDeviceIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await getDeviceDetailsByDeviceIdQuery(req);
+    return returnObj;
+};
+
+
 module.exports = {
     deviceAggregator,
     listDeviceTypesAccessor,
@@ -51,5 +59,6 @@ module.exports = {
     listDevicesAccessor,
     insertDeviceAccessor,
     fetchNextPrimaryKeyAccessor,
-    insertNextPrimaryKeyAccessor
+    insertNextPrimaryKeyAccessor,
+    getDeviceByDeviceIdAccessor
 };

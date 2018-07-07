@@ -1,4 +1,4 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor,getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor, getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -142,6 +142,9 @@ const getModelMetadataBusiness = async (req) => {
         response.rows.forEach((item) => {
             responseMap.modalHeader = responseMap.modalHeader || item['modal_header'];
             responseMap.modalBody = {
+                modalDataEndpoint: item['modal_data_endpoint'],
+                modalDataReqType: item['modal_data_request_type'],
+                modalDataReqParams: item['modal_data_request_params'],
                 widgetSections: widgetSectionCreator(item, responseMap.modalBody.widgetSections)
             }
         });
@@ -359,7 +362,7 @@ const widgetColElementCreator = (widgetColItem) => {
         case 'form':
             widgetBaseColItem = {...widgetBaseColItem, ...widgetFormElementCreator(widgetColItem)};
             break;
-        case 'detail':
+        case 'details':
             widgetBaseColItem = {...widgetBaseColItem, ...widgetDetailElementCreator(widgetColItem)};
             break;
         case 'map':
@@ -391,7 +394,8 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 hoverValue: widgetElementItem['default_value__hover_value'],
                 accentValue: widgetElementItem['default_key__accent_value'],
                 iconValue: widgetElementItem['element_icon_value'],
-                gridModalId: widgetElementItem['element_modal_id']
+                gridModalId: widgetElementItem['element_modal_id'],
+                gridModalDataKey: widgetElementItem['request_mapping_key']
             };
             break;
         case 'action-bar':
@@ -545,6 +549,52 @@ const widgetFormElementCreator = (widgetElementItem) => {
     return widgetElementData;
 };
 const widgetDetailElementCreator = (widgetElementItem) => {
+    let widgetElementData = {
+        elementColumnId: widgetElementItem['widget_col_count'],
+        attributeId: widgetElementItem['role_card_widget_attribute_id'],
+        elementType: widgetElementItem['element_type'],
+        elementSubType: widgetElementItem['element_subtype'],
+        elementTitle: widgetElementItem['element_title'],
+        valueMappingKey: widgetElementItem['request_mapping_key'],
+        elementWidth: widgetElementItem['attribute_width']
+    };
+    switch (widgetElementItem['element_subtype'].toLowerCase()) {
+        case 'tile-link':
+        case 'link':
+            widgetElementData = {
+                ...widgetElementData,
+                elementChangeAction: widgetElementItem['element_action_type'],
+                navigationRoute: widgetElementItem['navigation_route']
+            };
+            break;
+        case 'image-round-tile':
+            widgetElementData = {
+                ...widgetElementData,
+                imageValue: widgetElementItem['default_value__hover_value']
+            };
+            break;
+        case 'role-pill':
+            widgetElementData = {
+                ...widgetElementData,
+                roleValue: widgetElementItem['default_value__hover_value'],
+                iconValue: widgetElementItem['element_icon_value']
+            };
+            break;
+        case 'gender-pill':
+            widgetElementData = {
+                ...widgetElementData,
+                genderValue: widgetElementItem['default_value__hover_value'],
+                iconValue: widgetElementItem['element_icon_value']
+            };
+            break;
+        case 'tile':
+            widgetElementData = {
+                ...widgetElementData,
+                colorValue: widgetElementItem['default_value__hover_value']
+            };
+            break;
+    }
+    return widgetElementData;
 };
 const widgetMapElementCreator = (widgetElementItem) => {
     let widgetElementData = {};

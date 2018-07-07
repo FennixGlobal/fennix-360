@@ -1,4 +1,4 @@
-const {deviceAggregatorDashboard, listDevicesBusiness,listDeviceTypesBusiness,insertDeviceBusiness} = require('../business-module/device-business-module/device-business');
+const {deviceAggregatorDashboard,getDeviceByDeviceIdBusiness, listDevicesBusiness,listDeviceTypesBusiness,insertDeviceBusiness} = require('../business-module/device-business-module/device-business');
 var express = require('express');
 var router = express.Router();
 
@@ -29,6 +29,14 @@ router.get('/listDevices', function (req, res) {
 router.post('/saveDevice', function (req, res) {
     let returnObj;
     returnObj = insertDeviceBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/getDeviceDetails', function (req, res) {
+    let returnObj;
+    returnObj = getDeviceByDeviceIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

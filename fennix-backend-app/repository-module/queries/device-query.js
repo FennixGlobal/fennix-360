@@ -1,4 +1,5 @@
 const {deviceAggregator,deviceTypeModel,DeviceCounter} = require('../models/device-model');
+
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
         .group({
@@ -6,6 +7,7 @@ const userIdDeviceAggregatorQuery = (query) => {
             count: {$sum: 1}
         });
 };
+
 const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
     return deviceAggregator.aggregate()
         .match({
@@ -142,6 +144,43 @@ const insertNextPrimaryKeyQuery = (req) => {
     });
 };
 
+const getDeviceDetailsByDeviceIdQuery = (req) => {
+    return deviceAggregator.aggregate([
+        {
+            $match:{
+                _id:req.deviceId
+            }
+        },
+        {
+            $lookup:{
+                from:'simcards',
+                localField:'simCardId',
+                foreignField:'_id',
+                as:'simcards'
+            }
+        },
+        {
+            $lookup:{
+                from:'deviceTypes',
+                localField:'deviceTypeId',
+                foreignField:'_id',
+                as:'deviceType'
+            }
+        },
+        {$unwind:'$simcards'},
+        {$unwind:'$deviceType'},
+        {$project:{
+                'imei':1,
+                'isActive':1,
+                'simcards.phoneNo':1,
+                'simcards.simCardType':1,
+                'firmwareVersion':1,
+                'deviceType.name':1
+            }
+        }
+    ])
+};
+
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
@@ -150,5 +189,6 @@ module.exports = {
     listDeviceTypesQuery,
     insertDeviceQuery,
     insertNextPrimaryKeyQuery,
-    fetchNextPrimaryKeyQuery
+    fetchNextPrimaryKeyQuery,
+    getDeviceDetailsByDeviceIdQuery
 };
