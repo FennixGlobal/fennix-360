@@ -1,9 +1,9 @@
-const {getBenefeciaryAggregator, addBeneficiaryAccessor,getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, addBeneficiaryAccessor, getBeneficiaryByBeneficiaryIdAccesor, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
-const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck,notNullCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {deviceBybeneficiaryQuery,getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 
 const beneficiaryAggregatorBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], beneficiaryResponse, returnObj;
@@ -79,7 +79,7 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
-                imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei']: 999999999,
+                imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei'] : 999999999,
                 documentId: item['document_id'],
                 mobileNo: item['mobileno'],
                 image: item['image'],
@@ -193,9 +193,20 @@ const beneficiaryMapDataList = async (req) => {
 
 const getBeneficiaryDetailsBusiness = async (req) => {
     let request = [req.query.beneficiaryId, req.query.languageId], response, finalResponse;
-    response = await getBeneficiaryDetailsAccessor(request);
+    response = await getBeneficiaryByBeneficiaryIdAccesor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows[0]);
+        const finalObj = {
+            image: response.rows[0]['image'],
+            beneficiaryRole: response.rows[0]['role_name'],
+            gender: response.rows[0]['gender'],
+            emailId: response.rows[0]['emailid'],
+            beneficiaryName: `${response.rows[0]['full_name']}`,
+            mobileNo: response.rows[0]['mobileno'],
+            beneficiaryAddress: response.rows[0]['address1'],
+            documentId: response.rows[0]['document_id'],
+            beneficiaryDOB: response.rows[0]['dob']
+        };
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalObj);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
     }
@@ -218,7 +229,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
         deviceDetailsResponse.forEach(device => {
             const obj = {
                 deviceId: device['_id'],
-                imei: objectHasPropertyCheck(device,'imei') && notNullCheck(device['imei']) ? device['imei']: '999999999',
+                imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
                 deviceType: device['deviceType'][0]['name']
             };
             deviceDetailsMap[device['beneficiaryId']] = obj;
@@ -226,7 +237,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
 
         beneficiaryListResponse.rows.forEach(item => {
             const res = {
-                documentId:objectHasPropertyCheck(item,'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
+                documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 beneficiaryId: item['beneficiaryid'],
                 beneficiaryRole: item['role_name'],
                 beneficiaryRoleId: item['beneficiary_role'],
@@ -234,7 +245,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 beneficiaryName: item['full_name'],
                 emailId: item['emailid'],
                 mobileNo: item['mobileno'],
-                center: objectHasPropertyCheck(item,'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
+                center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
                 crimeDetails: item['crime_id'],
                 imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
                 deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],

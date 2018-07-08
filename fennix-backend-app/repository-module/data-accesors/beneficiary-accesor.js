@@ -1,4 +1,4 @@
-const {selectBeneficiaryByUserIdQuery, insertBeneficiaryQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
+const {selectBeneficiaryByUserIdQuery, getBeneficiaryByBeneficiaryIdQuery,insertBeneficiaryQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES} = require('../../util-module/db-constants');
@@ -46,11 +46,12 @@ const getBeneficiaryListByOwnerId = async (req) => {
     return returnObj;
 };
 
-// const getBeneficiaryMapData = async(req) => {
-//     let returnObj;
-//     returnObj = await connectionCheckAndQueryExec(req, getBenefeciaryIdListForOwnerAndCenterQuery);
-//     return returnObj;
-// };
+const getBeneficiaryByBeneficiaryIdAccesor = async(req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getBeneficiaryByBeneficiaryIdQuery);
+    return returnObj;
+};
+
 const getBeneficiaryDetailsAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, getBeneficiaryDetailsQuery);
@@ -71,7 +72,8 @@ module.exports = {
     getBeneficiaryDetailsAccessor,
     getBeneficiaryNameFromBeneficiaryIdAccessor,
     getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor,
-    addBeneficiaryAccessor
+    addBeneficiaryAccessor,
+    getBeneficiaryByBeneficiaryIdAccesor
     // getBeneficiaryMapData
 };
 

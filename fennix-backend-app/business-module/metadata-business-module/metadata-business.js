@@ -145,6 +145,7 @@ const getModelMetadataBusiness = async (req) => {
                 modalDataEndpoint: item['modal_data_endpoint'],
                 modalDataReqType: item['modal_data_request_type'],
                 modalDataReqParams: item['modal_data_request_params'],
+                modalWidth: item['modal_width'],
                 widgetSections: widgetSectionCreator(item, responseMap.modalBody.widgetSections)
             }
         });
