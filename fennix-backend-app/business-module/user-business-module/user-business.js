@@ -71,12 +71,26 @@ const updateUserProfileBusiness = async (req) => {
 
 const getUserListBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId, req.query.skip, req.query.limit], userProfileResponse,
+        modifiedResponse = [],
         returnObj, totalRecordsResponse, finalResponse = {};
     userProfileResponse = await getUserListAccesor(request);
     totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.query.userId]);
+
     finalResponse['totalNoOfRecords'] = totalRecordsResponse.rows[0]['count'];
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
-        finalResponse['gridData'] = userProfileResponse.rows;
+        userProfileResponse.rows.forEach((item) => {
+            const obj = {
+                userId: item['user_id'],
+                center: objectHasPropertyCheck(item, 'center') ? item['center'] : 'Center is not assigned',
+                role: objectHasPropertyCheck(item, 'role') ? item['role'] : 'Role is not assigned',
+                mobileNo: objectHasPropertyCheck(item, 'mobile_no') ? item['mobile_no'] : '-',
+                email: objectHasPropertyCheck(item, 'email_id') ? item['email_id'] : '-',
+                fullName: objectHasPropertyCheck(item, 'full_name') ? item['full_name'] : '-',
+                image: item['image']
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse['gridData'] = modifiedResponse;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
