@@ -3,6 +3,7 @@ const {mapMarkerQuery} = require('../../repository-module/data-accesors/location
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 
 const beneficiaryAggregatorBusiness = async (req) => {
@@ -214,9 +215,16 @@ const getBeneficiaryDetailsBusiness = async (req) => {
 };
 
 const beneficiaryListByOwnerUserId = async (req) => {
-    let request = [req.query.userId, req.query.centerId, req.query.skip, req.query.limit], beneficiaryListResponse,
+    let request = {
+            userId: req.query.userId,
+            centerId: req.query.centerId,
+            offset: req.query.offset,
+            limit: req.query.limit
+        }, beneficiaryListResponse,
         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
-        finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
+        finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId], userIdList = [];
+    userIdList = await getUserIdsForAllRolesAccessor(req);
+    request.userIdList = userIdList;
     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
@@ -260,6 +268,54 @@ const beneficiaryListByOwnerUserId = async (req) => {
     }
     return returnObj;
 };
+
+// const beneficiaryListByOwnerUserId = async (req) => {
+//     let request = [req.query.userId, req.query.centerId, req.query.skip, req.query.limit], beneficiaryListResponse,
+//         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
+//         finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
+//     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
+//     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
+//     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
+//     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+//         beneficiaryListResponse.rows.forEach(item => {
+//             beneficiaryIds.push(`${item['beneficiaryid']}`);
+//         });
+//
+//         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
+//         deviceDetailsResponse.forEach(device => {
+//             const obj = {
+//                 deviceId: device['_id'],
+//                 imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
+//                 deviceType: device['deviceType'][0]['name']
+//             };
+//             deviceDetailsMap[device['beneficiaryId']] = obj;
+//         });
+//
+//         beneficiaryListResponse.rows.forEach(item => {
+//             const res = {
+//                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
+//                 beneficiaryId: item['beneficiaryid'],
+//                 beneficiaryRole: item['role_name'],
+//                 beneficiaryRoleId: item['beneficiary_role'],
+//                 beneficiaryGender: item['gender'],
+//                 beneficiaryName: item['full_name'],
+//                 emailId: item['emailid'],
+//                 mobileNo: item['mobileno'],
+//                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
+//                 crimeDetails: item['crime_id'],
+//                 imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
+//                 deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],
+//                 deviceId: deviceDetailsMap[item['beneficiaryid']]['deviceId']
+//             };
+//             modifiedResponse.push(res);
+//         });
+//         finalResponse['gridData'] = modifiedResponse;
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
+//     } else {
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+//     }
+//     return returnObj;
+// };
 
 module.exports = {
     beneficiaryAggregatorBusiness,

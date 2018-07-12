@@ -2,6 +2,8 @@ const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-
 const {userProfileQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery, getUserIdsForAdminQuery, getUserIdsForMasterAdminQuery, getUserIdsForSuperAdminQuery, getUserIdsForSupervisorQuery, getTotalNoOfUsersQuery} = require('../queries/user-query');
 const {insertQueryCreator} = require("../../util-module/request-validators");
 const {TABLE_USERS} = require('../../util-module/db-constants');
+const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+
 const fetchUserProfileAccesor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userProfileQuery);
@@ -21,9 +23,9 @@ const getUserListAccesor = async (req) => {
 };
 
 const getTotalNoOfUsersAccessor = async (req) => {
-  let returnObj;
-  returnObj = await connectionCheckAndQueryExec(req, getTotalNoOfUsersQuery);
-  return returnObj;
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getTotalNoOfUsersQuery);
+    return returnObj;
 };
 
 const addUserAccessor = async (req) => {
@@ -62,7 +64,35 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
     return returnObj;
 };
-
+const getUserIdsForAllRolesAccessor = async (req) => {
+    let userDetailResponse, otherUserIdsForGivenUserId, userIdList = [];
+    userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], getUserNameFromUserIdQuery);
+    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+        switch (nativeUserRole) {
+            case 'ROLE_SUPERVISOR' : {
+                otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                otherUserIdsForGivenUserId = await getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+        }
+        otherUserIdsForGivenUserId.rows.forEach(item => {
+            userIdList.push(item['user_id']);
+        });
+    }
+    return userIdList;
+};
 module.exports = {
     addUserAccessor,
     getUserNameFromUserIdAccessor,
@@ -73,5 +103,6 @@ module.exports = {
     getUserIdsForSuperAdminAccessor,
     getUserIdsForMasterAdminAccessor,
     getUserIdsForAdminAccessor,
-    getTotalNoOfUsersAccessor
+    getTotalNoOfUsersAccessor,
+    getUserIdsForAllRolesAccessor
 };
