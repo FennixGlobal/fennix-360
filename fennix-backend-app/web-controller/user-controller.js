@@ -1,4 +1,4 @@
-const {fetchUserProfileBusiness,fetchUserDetailsBusiness,addUserBusiness, getUserListBusiness, updateUserProfileBusiness} = require('../business-module/user-business-module/user-business');
+const {downloadUsersListBusiness,fetchUserProfileBusiness,fetchUserDetailsBusiness,addUserBusiness, getUserListBusiness, updateUserProfileBusiness} = require('../business-module/user-business-module/user-business');
 const express = require('express');
 const router = express.Router();
 
@@ -20,6 +20,14 @@ router.post('/updateProfile', async (req, res) => {
 router.get('/listUsers', async (req, res) => {
     let returnObj;
     returnObj = getUserListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/downloadUsers', async (req, res) => {
+    let returnObj;
+    returnObj = downloadUsersListBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

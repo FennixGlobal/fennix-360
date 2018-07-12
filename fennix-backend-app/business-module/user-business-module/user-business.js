@@ -2,6 +2,7 @@ const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../.
 const {fetchUserProfileAccesor,addUserAccessor, getUserListAccesor, updateUserProfileAccesor, getTotalNoOfUsersAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {excelRowsCreator,excelColCreator} = require('../../util-module/request-validators');
 
 const fetchUserProfileBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
@@ -86,11 +87,23 @@ const addUserBusiness = async (req) => {
     await addUserAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
 };
-
+const downloadUsersListBusiness = async (req) => {
+    let request = [req.query.userId, req.query.languageId], userListResponse, colsKeysResponse = {}, rowsIdsResponse, workbook = new Excel.Workbook(), modifiedResponse, downloadMapperResponse,keysArray = [], returnObj = {},sheet = workbook.addWorksheet('Beneficiary Sheet');
+    colsKeysResponse = await excelColCreator([req.query.filterId]);
+    sheet.columns = colsKeysResponse['cols'];
+    keysArray = colsKeysResponse['keysArray'];
+    userListResponse = await getUserListAccesor(request);
+    rowsIdsResponse = excelRowsCreator(userListResponse, 'users', keysArray);
+    returnObj = rowsIdsResponse['rows'];
+    modifiedResponse = Object.keys(returnObj).map(key=>returnObj[key]);
+    sheet.addRows(modifiedResponse);
+    return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/users.xlsx');
+};
 module.exports = {
     addUserBusiness,
     fetchUserProfileBusiness,
     updateUserProfileBusiness,
     getUserListBusiness,
-    fetchUserDetailsBusiness
+    fetchUserDetailsBusiness,
+    downloadUsersListBusiness
 };

@@ -66,11 +66,20 @@ const dbDownloadTableMapper = {
         deviceType: 'deviceType',
         deviceName: 'name',
         imei: 'imei'
+    },
+    users: {
+        userId: 'user_id',
+        userName: 'full_name',
+        emailId: 'email_id',
+        mobileNo: 'mobile_no',
+        role: 'role',
+        center: 'center'
     }
 };
 
 const tableKeyMap = {
-    beneficiaries : { key: 'beneficiaryid'}
+    beneficiaries : { key: 'beneficiaryid'},
+    users: {key: 'user_id'}
 };
 
 module.exports = {
