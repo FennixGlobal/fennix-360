@@ -47,7 +47,7 @@ const listTicketsBusiness = async (req) => {
         ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-
+    userIds.push(req.query.userId);
     if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
             case 'ROLE_SUPERVISOR' : {
@@ -76,7 +76,7 @@ const listTicketsBusiness = async (req) => {
                     gender: item['gender']
                 };
                 userDetailMap[item['user_id']] = userDetailsObj;
-                userIds.push(`${item['user_id']}`);
+                userIds.push(item['user_id']);
             });
         }
     }

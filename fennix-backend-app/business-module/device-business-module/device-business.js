@@ -73,38 +73,39 @@ const listDeviceTypesBusiness = async () => {
 };
 
 const listDevicesBusiness = async (req) => {
-    let request = [req.query.userId], userDetailResponse, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+    let centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
         modifiedResponse = {gridData: []}, finalResponse;
-    userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-        switch (nativeUserRole) {
-            case 'ROLE_OPERATOR' : {
-                centerIdResponse = await centerMetadataAccessors.getCenterIdsForOperatorAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPERVISOR' : {
-                centerIdResponse = await centerMetadataAccessors.getCenterIdsForSupervisorAccessor(request);
-                break;
-            }
-            case 'ROLE_ADMIN' : {
-                centerIdResponse = await centerMetadataAccessors.getCenterIdsForAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPER_ADMIN' : {
-                centerIdResponse = await centerMetadataAccessors.getCenterIdsForSuperAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_MASTER_ADMIN' : {
-                centerIdResponse = await centerMetadataAccessors.getCenterIdsForMasterAdminAccessor(request);
-                break;
-            }
-        }
-    }
+    centerIdResponse = await centerMetadataAccessors.getCenterIdsAccessor(req);
+    // userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    // if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    //     switch (nativeUserRole) {
+    //         case 'ROLE_OPERATOR' : {
+    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForOperatorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPERVISOR' : {
+    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForSupervisorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_ADMIN' : {
+    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPER_ADMIN' : {
+    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForSuperAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_MASTER_ADMIN' : {
+    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForMasterAdminAccessor(request);
+    //             break;
+    //         }
+    //     }
+    // }
     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
-            centerIdsReq.push(`${item['location_id']}`);
+            centerIdsReq.push(item['location_id']);
             centerIdNameMap[item['location_id']] = item['location_name'];
         });
         devicesResponse = await listDevicesAccessor(centerIdsReq);
