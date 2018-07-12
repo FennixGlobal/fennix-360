@@ -58,9 +58,9 @@ const deviceAggregatorDashboard = async (req) => {
                 deviceObj[prop]['value'] = item['count'];
             });
         }
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -68,7 +68,7 @@ const deviceAggregatorDashboard = async (req) => {
 const listDeviceTypesBusiness = async () => {
     let deviceTypesResponse, finalResponse;
     deviceTypesResponse = await listDeviceTypesAccessor();
-    finalResponse = arrayNotEmptyCheck(deviceTypesResponse) ? fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceTypesResponse) : fennixResponse(statusCodeConstants.STATUS_NO_DEVICE_TYPES_FOR_ID, 'en', []);
+    finalResponse = arrayNotEmptyCheck(deviceTypesResponse) ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceTypesResponse) : fennixResponse(statusCodeConstants.STATUS_NO_DEVICE_TYPES_FOR_ID, 'EN_US', []);
     return finalResponse;
 };
 
@@ -139,9 +139,9 @@ const listDevicesBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(deviceObj);
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -170,9 +170,9 @@ const getDeviceByDeviceIdBusiness = async (req) => {
     let deviceResponse, returnObj;
     deviceResponse = await getDeviceByDeviceIdAccessor(request);
     if (notNullCheck(deviceResponse)) {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', deviceResponse);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceResponse);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
     }
     return returnObj;
 };

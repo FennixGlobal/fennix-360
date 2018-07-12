@@ -22,9 +22,9 @@ const fetchUserProfileBusiness = async (req) => {
                 address: item['address'],
             };
         });
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', userProfileReturnObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', userProfileReturnObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -46,9 +46,9 @@ const fetchUserDetailsBusiness = async (req) => {
                 userAddress: item['address'],
             };
         });
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', userProfileReturnObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', userProfileReturnObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -62,9 +62,9 @@ const updateUserProfileBusiness = async (req) => {
         userProfileResponse.forEach((item) => {
             ticketObj[item['_id']] = item['count'];
         });
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', ticketObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', ticketObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -77,16 +77,16 @@ const getUserListBusiness = async (req) => {
     finalResponse['totalNoOfRecords'] = totalRecordsResponse.rows[0]['count'];
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
         finalResponse['gridData'] = userProfileResponse.rows;
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
 const addUserBusiness = async (req) => {
     let request = req.body;
     await addUserAccessor(request);
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 const downloadUsersListBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], userListResponse, colsKeysResponse = {}, rowsIdsResponse,

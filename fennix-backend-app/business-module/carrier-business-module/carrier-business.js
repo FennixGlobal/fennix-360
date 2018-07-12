@@ -7,9 +7,9 @@ const listCarrierBusiness = async () => {
     let response, finalResponse;
     response = await listCarriersAccessor();
     if (arrayNotEmptyCheck(response)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CARRIERS_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CARRIERS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };

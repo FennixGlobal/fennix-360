@@ -25,9 +25,9 @@ const listGroupsBusiness = async (req) => {
             };
             modifiedResponse.push(obj);
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_GROUPS_TYPES_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_GROUPS_TYPES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };

@@ -21,9 +21,9 @@ const ticketAggregatorBusiness = async (req) => {
         ticketResponse.forEach((item) => {
             ticketObj[item['_id']]['value'] = item['count'];
         });
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', ticketObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', ticketObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -33,9 +33,9 @@ const ticketListBasedOnStatusBusiness = async (req) => {
         ticketResponse, returnObj;
     ticketResponse = await ticketListBasedOnTicketStatusAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', ticketResponse);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', ticketResponse);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'EN_US', []);
     }
     return returnObj;
 };
@@ -129,9 +129,9 @@ const listTicketsBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(obj);
         });
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'EN_US', []);
     }
     return returnObj;
 };
@@ -180,9 +180,9 @@ const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
             createdBy: ticketDetails['createdBy'],
             createdDate: ticketDetails['createdDate']
         };
-        response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        response = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'en', []);
+        response = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'EN_US', []);
     }
     return response;
 };

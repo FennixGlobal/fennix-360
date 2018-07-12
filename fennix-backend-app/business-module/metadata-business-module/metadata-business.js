@@ -17,9 +17,9 @@ const getBaseMetadataBusiness = async (req) => {
         let sideNavObj = routeDataModifier(sideNavResponse);
         composedData['header'] = Object.keys(headerObj).map(dataItem => headerObj[dataItem]);
         composedData['sideNav'] = Object.keys(sideNavObj).map(dataItem => sideNavObj[dataItem]).sort((item, prevItem) => (item.sideNavOrder - prevItem.sideNavOrder));
-        responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', composedData);
+        responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', composedData);
     } else {
-        responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'en', composedData);
+        responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'EN_US', composedData);
     }
     return responseObj;
 };
@@ -72,9 +72,9 @@ const getCardMetadataForRouteBusiness = async (req) => {
             });
             return returnObj.widgetCards[card];
         });
-        responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', returnObj.widgetCards);
+        responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnObj.widgetCards);
     } else {
-        responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'en', []);
+        responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'EN_US', []);
     }
     return responseObj;
 };
@@ -83,9 +83,9 @@ const getFilterMetadataBusiness = async (req, colName) => {
     let request = [req.query.id], filterResponse, response;
     filterResponse = await getFilterMetadataAccessor(request, colName);
     if (objectHasPropertyCheck(filterResponse, 'rows') && arrayNotEmptyCheck(filterResponse.rows)) {
-        response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', filterResponse);
+        response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', filterResponse);
     } else {
-        response = fennixResponse(statusCodeConstants.STATUS_NO_FILTERS_FOR_ID, 'en', []);
+        response = fennixResponse(statusCodeConstants.STATUS_NO_FILTERS_FOR_ID, 'EN_US', []);
     }
     return response;
 };
@@ -120,7 +120,7 @@ const getLoginMetadataBusiness = async (req) => {
             return loginMetadtaResponse.widgetSections[section];
         });
     }
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', loginMetadtaResponse);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', loginMetadtaResponse);
 };
 
 const getLanguagesListBusiness = async (req) => {
@@ -131,7 +131,7 @@ const getLanguagesListBusiness = async (req) => {
             languageListResponse.dropdownList.push(dropdownCreator(item.language_code, item.language_name, false));
         });
     }
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', languageListResponse);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);
 };
 
 const getModelMetadataBusiness = async (req) => {
@@ -156,9 +156,9 @@ const getModelMetadataBusiness = async (req) => {
             });
             return responseMap.modalBody.widgetSections[section];
         });
-        response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseMap);
+        response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', responseMap);
     } else {
-        response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'en', []);
+        response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'EN_US', []);
     }
     return response;
 };
@@ -177,7 +177,7 @@ const getLanguageListGridBusiness = async (req) => {
             languageListResponse['gridData'].push(languageObj);
         });
     }
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', languageListResponse);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);
 };
 
 const getRolesForRoleIdBusiness = async (req) => {
@@ -189,12 +189,12 @@ const getRolesForRoleIdBusiness = async (req) => {
             response.rows.forEach((role) => {
                 dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], false));
             });
-            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', dropdownObj);
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', dropdownObj);
         } else {
-            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response.rows);
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response.rows);
         }
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROLES_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROLES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -203,9 +203,9 @@ const getRolesBusiness = async (req) => {
     rolesResponse = getRolesAccessor([req.query.languageId]);
     if (objectHasPropertyCheck(rolesResponse, 'rows') && arrayNotEmptyCheck(rolesResponse.rows)) {
         let rolesResponse = rolesResponse.rows[0];
-        response = fennixResponse(statusCodeConstants.STATUS_OK, 'en', rolesResponse);
+        response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', rolesResponse);
     } else {
-        response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'en', []);
+        response = fennixResponse(statusCodeConstants.STATUS_NO_ROLES, 'EN_US', []);
     }
     return response;
 };
@@ -244,9 +244,9 @@ const listCentersBusiness = async (req) => {
         centerIdResponse.rows.forEach(item => {
             centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', centerIdList);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', centerIdList);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CENTERS_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CENTERS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -258,9 +258,9 @@ const dropDownBusiness = async (req) => {
         dropdownResponse.rows.forEach((item) => {
             returnResponse.dropdownList.push(dropdownCreator(item['dropdown_key'], item['dropdown_value'], false));
         });
-        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', returnResponse);
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnResponse);
     } else {
-        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'en', []);
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'EN_US', []);
     }
     return returnResponse;
 };
@@ -277,9 +277,9 @@ const getCountryListBusiness = async (req) => {
         countryListResponse.rows.forEach(item => {
             countryIdList.dropdownList.push(dropdownCreator(item['locale_key'], item['country_name'], false));
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', countryIdList);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', countryIdList);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COUNTRIES_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COUNTRIES_FOR_ID, 'EN_US', []);
     }
 
     return finalResponse;
@@ -672,9 +672,9 @@ const getSimCardListBusiness = async (req) => {
             modifiedResponse.gridData.push(simCardObj);
         });
 
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };

@@ -16,9 +16,9 @@ const listSimcardsBusiness = async (req) => {
             };
             modifiedResponse.push(obj);
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', modifiedResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -27,9 +27,9 @@ const listSimcardTypesBusiness = async () => {
     let response, finalResponse;
     response = await listSimcardTypesAccessor();
     if (arrayNotEmptyCheck(response)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', response);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARD_TYPES_FOR_ID, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARD_TYPES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };

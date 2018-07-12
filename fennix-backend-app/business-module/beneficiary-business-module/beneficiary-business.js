@@ -13,59 +13,30 @@ const beneficiaryAggregatorBusiness = async (req) => {
     beneficiaryResponse = await getBenefeciaryAggregator(request);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let beneficiaryObj = {
-            VICTIM: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
-            OFFENDER: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
+            victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
+            offender: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
         };
         if (beneficiaryResponse.rows.length === 1) {
-            let propName = beneficiaryResponse.rows[0]['role_name'];
-            let propName2 = propName === 'VICTIM' ? 'VICTIM' : "OFFENDER";
+            let propName = beneficiaryResponse.rows[0]['role_name'].toLowerCase();
+            let propName2 = propName.toLowerCase() === 'victim' ? 'victim' : "offender";
             beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
             beneficiaryObj[propName2]['value'] = 0;
         } else {
             beneficiaryResponse.rows.forEach((item) => {
-                // item['role_name'] = item['role_name'] === 'VICTIM' ? 'OFFENDER' : "VICTIM";
-                beneficiaryObj[item['role_name'].toUpperCase()]['value'] = item['count'];
+                beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
             });
         }
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
 
-// const beneficiaryLocationListByOwnerAndCenter = async (req) => {
-//     let request = [req.body.userId, req.body.centerId, req.body.sort, (req.body.pagination.currentPage * req.body.pagination.pageSize), req.body.pagination.pageSize],
-//         beneficiaryIdListResponse, returnObj;
-//     beneficiaryIdListResponse = await getBeneifciaryIdList(request);
-//     if (objectHasPropertyCheck(beneficiaryIdListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryIdListResponse.rows)) {
-//         let beneficiaryIdListAndDetailObj, beneficiaryLocArray;
-//         beneficiaryIdListAndDetailObj = beneficiaryIdListResponse.rows.reduce((init, item) => {
-//             init.beneficiaryIdArray.push(`${item.beneficiaryid}`);
-//             init.beneficiaryDetailObj[item.beneficiaryid] = item;
-//             return init;
-//         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-//         beneficiaryLocArray = await  mapMarkerQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
-//         const beneficiaryFliter = {};
-//         beneficiaryLocArray.forEach((item) => {
-//             beneficiaryFliter[item.latestBeneficiaryLocation.beneficiaryId] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId];
-//             beneficiaryFliter[item.latestBeneficiaryLocation.beneficiaryId]['location'] = {
-//                 latitude: item.latestBeneficiaryLocation.latitude,
-//                 longitude: item.latestBeneficiaryLocation.longitude
-//             };
-//         });
-//         const beneficiaryMapArray = Object.keys(beneficiaryFliter)
-//             .map((marker) => beneficiaryFliter[marker]);
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryMapArray);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
-//     }
-//     return returnObj;
-// };
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
     await addBeneficiaryAccessor(request);
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
 const beneficiaryMapDataList = async (req) => {
@@ -186,9 +157,9 @@ const beneficiaryMapDataList = async (req) => {
         beneficiaryReturnObj['deviceDetailsArray'] = Object.keys(beneficiaryDevices).map((device) => beneficiaryDevices[device]);
         beneficiaryReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
         beneficiaryReturnObj['markerDetails'] = gridData;
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', beneficiaryReturnObj);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryReturnObj);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -209,9 +180,9 @@ const getBeneficiaryDetailsBusiness = async (req) => {
             documentId: response.rows[0]['document_id'],
             beneficiaryDOB: response.rows[0]['dob']
         };
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalObj);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalObj);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -222,9 +193,8 @@ const beneficiaryListByOwnerUserId = async (req) => {
             centerId: req.query.centerId,
             skip: req.query.skip,
             limit: req.query.limit
-        }, beneficiaryListResponse,
-        returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
-        finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId], userIdList = [];
+        }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
+        finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId], userIdList;
     userIdList = await getUserIdsForAllRolesAccessor(req);
     request.userIdList = userIdList;
     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
@@ -232,21 +202,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
-            beneficiaryIds.push(`${item['beneficiaryid']}`);
-        });
-
-        let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
-        deviceDetailsResponse.forEach(device => {
-            const obj = {
-                deviceId: device['_id'],
-                imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-                deviceType: device['deviceType'][0]['name']
-            };
-            deviceDetailsMap[device['beneficiaryId']] = obj;
-        });
-
-        beneficiaryListResponse.rows.forEach(item => {
-            const res = {
+            finalReturnObj[item['beneficiaryid']] = {
                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 beneficiaryId: item['beneficiaryid'],
                 beneficiaryRole: item['role_name'],
@@ -257,16 +213,23 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 mobileNo: item['mobileno'],
                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
                 crimeDetails: item['crime_id'],
-                imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
-                deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],
-                deviceId: deviceDetailsMap[item['beneficiaryid']]['deviceId']
             };
-            modifiedResponse.push(res);
+            beneficiaryIds.push(`${item['beneficiaryid']}`);
         });
-        finalResponse['gridData'] = modifiedResponse;
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
+
+        let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
+        deviceDetailsResponse.forEach(device => {
+            finalReturnObj[device['beneficiaryId']] = {
+                ...finalReturnObj[device['beneficiaryId']],
+                deviceId: device['_id'],
+                imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
+                deviceType: device['deviceType'][0]['name']
+            };
+        });
+        finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
-        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
 };
@@ -312,16 +275,16 @@ const beneficiaryListByOwnerUserId = async (req) => {
 //             modifiedResponse.push(res);
 //         });
 //         finalResponse['gridData'] = modifiedResponse;
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
 //     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
 //     }
 //     return returnObj;
 // };
 
 const downloadBeneficiariesBusiness = async (req) => {
     let request = {}, colsKeysResponse, rowsIdsResponse, workbook = new Excel.Workbook(), userIdList,
-        beneficiaryListResponse, modifiedResponse, beneficiaryIds,keysArray,
+        beneficiaryListResponse, modifiedResponse, beneficiaryIds, keysArray,
         returnObj = {}, sheet = workbook.addWorksheet('Beneficiary Sheet');
     colsKeysResponse = await excelColCreator();
     sheet.columns = colsKeysResponse['cols'];
