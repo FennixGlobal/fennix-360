@@ -3,9 +3,9 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
-const {getCountryListAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const {getCountryListAccessor, getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
-const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const {getUserNameFromUserIdAccessor, getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 
 const getBaseMetadataBusiness = async (req) => {
     let responseObj, headerResponse, sideNavResponse, composedData = {}, request;
@@ -252,7 +252,7 @@ const listCentersBusiness = async (req) => {
 };
 
 const dropDownBusiness = async (req) => {
-    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList:[]};
+    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {
@@ -620,39 +620,40 @@ const widgetMapElementCreator = (widgetElementItem) => {
     return widgetElementData;
 };
 const getSimCardListBusiness = async (req) => {
-    let request = [req.query.userId], response, userDetailResponse, centerIdResponse, centerIdsReq = [], finalResponse,
-        modifiedResponse = {gridData: []}, cardIdNameMap = {};
-
-    userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-        switch (nativeUserRole) {
-            case 'ROLE_OPERATOR' : {
-                centerIdResponse = await metadataAccessor.getCenterIdsForOperatorAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPERVISOR' : {
-                centerIdResponse = await metadataAccessor.getCenterIdsForSupervisorAccessor(request);
-                break;
-            }
-            case 'ROLE_ADMIN' : {
-                centerIdResponse = await metadataAccessor.getCenterIdsForAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_SUPER_ADMIN' : {
-                centerIdResponse = await metadataAccessor.getCenterIdsForSuperAdminAccessor(request);
-                break;
-            }
-            case 'ROLE_MASTER_ADMIN' : {
-                centerIdResponse = await metadataAccessor.getCenterIdsForMasterAdminAccessor(request);
-                break;
-            }
-        }
-    }
+    let response, centerIdResponse, centerIdsReq = [], finalResponse,
+        modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
+    userIdList = await getUserIdsForAllRolesAccessor(req);
+    centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+    // userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    // if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
+    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    //     switch (nativeUserRole) {
+    //         case 'ROLE_OPERATOR' : {
+    //             centerIdResponse = await metadataAccessor.getCenterIdsForOperatorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPERVISOR' : {
+    //             centerIdResponse = await metadataAccessor.getCenterIdsForSupervisorAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_ADMIN' : {
+    //             centerIdResponse = await metadataAccessor.getCenterIdsForAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPER_ADMIN' : {
+    //             centerIdResponse = await metadataAccessor.getCenterIdsForSuperAdminAccessor(request);
+    //             break;
+    //         }
+    //         case 'ROLE_MASTER_ADMIN' : {
+    //             centerIdResponse = await metadataAccessor.getCenterIdsForMasterAdminAccessor(request);
+    //             break;
+    //         }
+    //     }
+    // }
     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
-            centerIdsReq.push(`${item['location_id']}`);
-            cardIdNameMap[item['location_id']] = item['location_name'];
+            centerIdsReq.push(`${item['center_id']}`);
+            cardIdNameMap[item['center_id']] = item['center_name'];
         });
         response = await getSimcardDetailsAccessor(centerIdsReq);
     }
