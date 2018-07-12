@@ -15,7 +15,8 @@ const dbTableColMap = {
         phoneNo: 'mobile_no',
         gender: 'gender',
         image: 'image',
-        role: 'user_role'
+        role: 'user_role',
+        userId:'owner_user_id'
     },
     beneficiaries: {
         firstName: 'firstname',
@@ -41,7 +42,7 @@ const dbTableColMap = {
         dob: 'dob',
         hasHouseArrest: 'hashousearrest',
         address: 'address1',
-        ownerUserId: 'owner_user_id'
+        userId: 'owner_user_id'
     },
     filterset: {
         roleCardId: 'role_card_id',
