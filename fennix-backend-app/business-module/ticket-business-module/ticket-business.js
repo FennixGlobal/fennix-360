@@ -1,4 +1,4 @@
-const {listTicketsBasedOnUserIdAccessor, listTicketsBasedOnUserIdForDownloadAccessor,insertNextPrimaryKeyAccessor, addTicketAccessor, fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
+const {listTicketsBasedOnUserIdAccessor, listTicketsBasedOnUserIdForDownloadAccessor, insertNextPrimaryKeyAccessor, addTicketAccessor, fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
@@ -14,12 +14,14 @@ const ticketAggregatorBusiness = async (req) => {
     ticketResponse = await ticketAggregatorAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
         let ticketObj = {
-            RESOLVED: {key: 'resolvedTickets', value: '', color: '', legend: 'RESOLVED'},
-            PENDING: {key: 'pendingTickets', value: '', color: '', legend: 'PENDING'},
-            INPROGRESS: {key: 'activeTickets', value: '', color: '', legend: 'ACTIVE'}
+            resolved: {key: 'resolvedTickets', value: '', color: '', legend: 'RESOLVED'},
+            pending: {key: 'pendingTickets', value: '', color: '', legend: 'PENDING'},
+            active: {key: 'activeTickets', value: '', color: '', legend: 'ACTIVE'}
         };
         ticketResponse.forEach((item) => {
-            ticketObj[item['_id']]['value'] = item['count'];
+            if (objectHasPropertyCheck(ticketObj, item['_id'].toLowerCase())) {
+                ticketObj[item['_id'].toLowerCase()]['value'] = item['count'];
+            }
         });
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', ticketObj);
     } else {
