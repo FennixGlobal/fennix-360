@@ -215,7 +215,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
                 crimeDetails: item['crime_id'],
             };
-            beneficiaryIds.push(`${item['beneficiaryid']}`);
+            beneficiaryIds.push(item['beneficiaryid']);
         });
 
         console.log('fetching device details');
