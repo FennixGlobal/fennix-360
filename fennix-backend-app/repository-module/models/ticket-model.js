@@ -19,7 +19,14 @@ const ticketSchema = new Schema({
     createdDate: {Type: String},
     updatedDate: {Type: String}
 });
+const ticketCounterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    counter: Number
+});
+
+const TicketCounter = mongoose.model('TicketCounter', ticketCounterSchema, 'ticketsCounter');
 var ticketAggregator = mongoose.model('Ticket',ticketSchema,'tickets');
 module.exports = {
-    ticketAggregator
+    ticketAggregator,
+    TicketCounter
 };

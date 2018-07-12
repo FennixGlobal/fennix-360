@@ -1,5 +1,5 @@
 var express = require('express');
-const {listTicketsBusiness,ticketAggregatorBusiness,ticketListBasedOnStatusBusiness, ticketDetailsBasedOnTicketIdBusiness} = require('../business-module/ticket-business-module/ticket-business');
+const {listTicketsBusiness,ticketAggregatorBusiness,addTicketBusiness,ticketListBasedOnStatusBusiness, ticketDetailsBasedOnTicketIdBusiness} = require('../business-module/ticket-business-module/ticket-business');
 var router = express.Router();
 
 router.get('/ticketAggregator', function (req, res) {
@@ -34,4 +34,13 @@ router.get('/listTickets', function (req, res) {
         res.send(response);
     });
 });
+
+router.post('/addTicket', function (req, res) {
+    let returnObj;
+    returnObj = addTicketBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    });
+});
+
 module.exports = router;

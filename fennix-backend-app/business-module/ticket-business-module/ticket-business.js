@@ -1,4 +1,4 @@
-const {listTicketsBasedOnUserIdAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
+const {listTicketsBasedOnUserIdAccessor,insertNextPrimaryKeyAccessor,addTicketAccessor,fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
@@ -130,57 +130,38 @@ const listTicketsBusiness = async (req) => {
     }
     return returnObj;
 };
-//
-//
-// var listTicketsBusiness = async (req) => {
-//     let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
-//         ticketResponse, modifiedResponse = [], beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
-//         userDetailsResponse, beneficiaryResponse, totalNoOfTickets, finalResponse = {};
-//     totalNoOfTickets = await totalNoOfTicketsBasedOnUserIdAccessor(req.query.userId);
-//     console.log(totalNoOfTickets);
-//     finalResponse['totalNoOfTickets'] = totalNoOfTickets;
-//     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.userId]);
-//     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
-//     ticketResponse.forEach((item) => {
-//         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
-//             beneficiaryIds.push(item['beneficiaryId']);
-//         }
-//     });
-//     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds);
-//     console.log(beneficiaryResponse);
-//     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
-//         beneficiaryResponse.rows.forEach((item) => {
-//             var obj = {
-//                 fullName: item['full_name'],
-//                 role: item['role_name'],
-//                 roleId: item['beneficiary_role'],
-//                 gender: item['gender']
-//             };
-//             beneficiaryIdNameMap[item['beneficiaryid']] = obj;
-//         });
-//     }
-//     if (arrayNotEmptyCheck(ticketResponse)) {
-//         ticketResponse.forEach((item) => {
-//
-//             var res = {
-//                 ticketName: createGridResponse(item['ticketName'] === undefined ? null : item['ticketName'], item['ticketGeneratedType'], null, item['_id'], null, null),
-//                 userName: createGridResponse(userDetailsResponse.rows[0]['full_name'], userDetailsResponse.rows[0]['role_name'], null, userDetailsResponse.rows[0]['user_id'], userDetailsResponse.rows[0]['user_role'], userDetailsResponse.rows[0]['gender']),
-//                 beneficiaryName: createGridResponse(beneficiaryIdNameMap[item['beneficiaryId']]['fullName'], beneficiaryIdNameMap[item['beneficiaryId']]['role'], null, item['beneficiaryId'], beneficiaryIdNameMap[item['beneficiaryId']]['roleId'], beneficiaryIdNameMap[item['beneficiaryId']]['gender']),
-//                 withAlerts: createGridResponse(item['withAlerts'], null, null, null, null, null),
-//                 deviceDetails: createGridResponse(arrayNotEmptyCheck(item['device']) ? item['device'][0]['imei'] : null, arrayNotEmptyCheck(item['deviceType']) ? item['deviceType'][0]['name'] : null, null, arrayNotEmptyCheck(item['device']) ? item['device'][0]['_id'] : null, null, null),
-//                 updatedDate: createGridResponse(item['createdDate'], null, null, null, null, null)
-//             };
-//
-//             modifiedResponse.push(res);
-//         });
-//         finalResponse['tickets'] = modifiedResponse;
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_NO_TICKETS_FOR_USER_ID, 'en', []);
-//     }
-//     return returnObj;
-// };
+const addTicketBusiness = async (req) => {
+    let primaryKeyResponse, counter, messages = [];
+    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    if (arrayNotEmptyCheck(primaryKeyResponse)) {
+        counter = parseInt(primaryKeyResponse[0]['counter']);
+        req.body.messages.forEach(msg => {
+            let msgObj = {
+                userId: msg.userId,
+                message: msg.message,
+                timestamp: new Date()
+            };
+            messages.push(msgObj);
+        });
 
+        let obj = {
+            _id: counter,
+            userId: req.body.userId,
+            centerId: req.body.centerId,
+            beneficiaryId: req.body.beneficiaryId,
+            locationId: req.body.locationId,
+            ticketName: req.body.ticketName,
+            ticketDescription: req.body.description,
+            ticketGenerationType: req.body.ticketGenerationType,
+            withAlerts: req.body.withAlerts,
+            ticketStatus: req.body.ticketStatus,
+            messages: messages,
+            createdDate: new Date()
+        };
+        addTicketAccessor(obj);
+        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    }
+};
 const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
     let response = {}, ticketResponse;
     ticketResponse = await ticketDetailsBasedOnTicketIdAccessor(req.query.ticketId);
@@ -205,5 +186,6 @@ module.exports = {
     ticketAggregatorBusiness,
     ticketListBasedOnStatusBusiness,
     listTicketsBusiness,
+    addTicketBusiness,
     ticketDetailsBasedOnTicketIdBusiness
 };
