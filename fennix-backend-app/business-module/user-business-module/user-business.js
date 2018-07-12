@@ -81,6 +81,7 @@ const getUserListBusiness = async (req) => {
         userProfileResponse.rows.forEach((item) => {
             const obj = {
                 userId: item['user_id'],
+                roleId: item['role_id'],
                 center: objectHasPropertyCheck(item, 'center') ? item['center'] : 'Center is not assigned',
                 role: objectHasPropertyCheck(item, 'role') ? item['role'] : 'Role is not assigned',
                 mobileNo: objectHasPropertyCheck(item, 'mobile_no') ? item['mobile_no'] : '-',
