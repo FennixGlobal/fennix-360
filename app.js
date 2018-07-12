@@ -17,7 +17,7 @@ TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
-        locationBusiness
+        // locationBusiness
         console.log('data is transmitted');
         console.log(data);
     });

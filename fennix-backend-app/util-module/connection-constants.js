@@ -9,8 +9,8 @@ const postgresDBDev = {
 const postgresDBProd = {
     user: 'postgres',
     host: '172.31.32.106',
-    database: 'fennix_dev',
-    password: 'postgres',
+    database: 'postgres_dev',
+    password: 'zVCf58zMDNfF',
     port: 5432
 };
 
