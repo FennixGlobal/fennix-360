@@ -11,10 +11,13 @@ const getBeneficiaryByUserIdAccessor = async (req) => {
 };
 
 const getBenefeciaryAggregator = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryByOwnerIdQuery);
+    let returnObj, modifiedQuery, groupByQuery = 'group by beneficiary_role', request;
+    modifiedQuery = requestInModifier(req.userIdList, selectBeneficiaryByOwnerIdQuery, true);
+    request = [req.languageId, ...req.userIdList];
+    returnObj = await connectionCheckAndQueryExec(request, `${modifiedQuery} ${groupByQuery}`);
     return returnObj;
 };
+
 const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, selectBeneficiaryNameFromBeneficiaryIdQuery, true);

@@ -9,8 +9,9 @@ const {excelRowsCreator, excelColCreator} = require('../../util-module/request-v
 const Excel = require('exceljs');
 
 const beneficiaryAggregatorBusiness = async (req) => {
-    let request = [req.query.userId, req.query.languageId], beneficiaryResponse, returnObj;
-    beneficiaryResponse = await getBenefeciaryAggregator(request);
+    let beneficiaryResponse, returnObj, userIdsList;
+    userIdsList = await getUserIdsForAllRolesAccessor(req);
+    beneficiaryResponse = await getBenefeciaryAggregator({languageId: req.query.languageId, userIdList: userIdsList});
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let beneficiaryObj = {
             victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
