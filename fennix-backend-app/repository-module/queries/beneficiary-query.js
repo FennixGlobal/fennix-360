@@ -32,7 +32,7 @@ const getBeneficiaryDetailsQuery = 'select beneficiaryId,firstname,lastname, gen
 // const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id = $1 and center_id = $2';
 
 
-const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
+const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select beneficiaryid,concat(firstname, \' \', lastname) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
 
 const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', lastname) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select name from centers where center_id = b.center_id) as center_name, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = b.beneficiary_role) and language = \'EN_US\') as role_name,beneficiary_role, beneficiaryid from beneficiaries b where owner_user_id IN ';
 module.exports = {

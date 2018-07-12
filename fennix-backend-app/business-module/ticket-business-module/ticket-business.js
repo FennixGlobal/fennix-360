@@ -90,11 +90,7 @@ const listTicketsBusiness = async (req) => {
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
-        console.log('beneficiary response ticket' + beneficiaryResponse.rows.length);
         beneficiaryResponse.rows.forEach((item) => {
-            console.log('full name' + item['full_name']);
-            console.log('role name' + item['role_name']);
-            console.log('benId' + item['beneficiaryid']);
             const beneficiaryObj = {
                 fullName: item['full_name'],
                 role: item['role_name'],
