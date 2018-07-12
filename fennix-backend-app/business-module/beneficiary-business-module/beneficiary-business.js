@@ -218,7 +218,9 @@ const beneficiaryListByOwnerUserId = async (req) => {
             beneficiaryIds.push(`${item['beneficiaryid']}`);
         });
 
+        console.log('fetching device details');
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
+        console.log('fetched device details');
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
                 console.log('device Id'+device['_id']);
