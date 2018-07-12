@@ -3,7 +3,7 @@ const {CarrierModel} = require('../models/carrier-model');
 const listCarriersQuery = () => {
     return CarrierModel.find(
         {
-            isActive: true
+            active: true
         },
         {
             name: 1
