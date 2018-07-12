@@ -219,14 +219,21 @@ const beneficiaryListByOwnerUserId = async (req) => {
         });
 
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
-        deviceDetailsResponse.forEach(device => {
-            finalReturnObj[device['beneficiaryId']] = {
-                ...finalReturnObj[device['beneficiaryId']],
-                deviceId: device['_id'],
-                imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-                deviceType: device['deviceType'][0]['name']
-            };
-        });
+        if (arrayNotEmptyCheck(deviceDetailsResponse)) {
+            deviceDetailsResponse.forEach(device => {
+                console.log('device Id'+device['_id']);
+                console.log('beneficiaryId'+device['beneficiaryId']);
+                console.log('imei'+device['imei']);
+                console.log('name'+device['deviceType'][0]['name']);
+                finalReturnObj[device['beneficiaryId']] = {
+                    ...finalReturnObj[device['beneficiaryId']],
+                    deviceId: device['_id'],
+                    imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
+                    deviceType: device['deviceType'][0]['name']
+                };
+            });
+        }
+
         finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
