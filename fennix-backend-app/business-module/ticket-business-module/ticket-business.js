@@ -85,11 +85,13 @@ const listTicketsBusiness = async (req) => {
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
+            console.log(item['beneficiaryId']);
             beneficiaryIds.push(item['beneficiaryId']);
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        console.log('beneficiary response ticket' + beneficiaryResponse.rows.length);
         beneficiaryResponse.rows.forEach((item) => {
             const beneficiaryObj = {
                 fullName: item['full_name'],
@@ -114,7 +116,6 @@ const listTicketsBusiness = async (req) => {
                 userRole: userDetailMap[item['userId']]['role'],
                 userRoleId: userDetailMap[item['userId']]['roleId'],
                 userGender: userDetailMap[item['userId']]['gender'],
-
                 beneficiaryId: item['beneficiaryId'],
                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['roleId'] : null,
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : ' - ',

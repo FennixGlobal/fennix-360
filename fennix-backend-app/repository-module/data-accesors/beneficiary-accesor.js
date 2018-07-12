@@ -21,6 +21,7 @@ const getBenefeciaryAggregator = async (req) => {
 const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, selectBeneficiaryNameFromBeneficiaryIdQuery, true);
+    console.log('modified Query' + modifiedQuery);
     let modifiedParams = [language];
     modifiedParams = [...modifiedParams, ...req];
     returnObj = await connectionCheckAndQueryExec(modifiedParams, modifiedQuery);
