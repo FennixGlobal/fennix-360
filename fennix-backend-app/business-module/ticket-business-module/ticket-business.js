@@ -85,7 +85,7 @@ const listTicketsBusiness = async (req) => {
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
-            beneficiaryIds.push(parseInt(item['beneficiaryId']));
+            beneficiaryIds.push(item['beneficiaryId']);
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
@@ -116,10 +116,10 @@ const listTicketsBusiness = async (req) => {
                 userGender: userDetailMap[item['userId']]['gender'],
 
                 beneficiaryId: item['beneficiaryId'],
-                beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['roleId'] : null,
-                beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['fullName'] : ' - ',
-                beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['role'] : ' - ',
-                beneficiaryGender: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['gender'] : '-',
+                beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['roleId'] : null,
+                beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : ' - ',
+                beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['role'] : ' - ',
+                beneficiaryGender: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['gender'] : '-',
                 locationId: item['locationId'],
                 withAlerts: item['withAlerts'],
                 imeiNumber: arrayNotEmptyCheck(item['device']) && notNullCheck(item['device'][0]['imei']) ? item['device'][0]['imei'] : '999999999',

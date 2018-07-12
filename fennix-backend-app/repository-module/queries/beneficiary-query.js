@@ -1,5 +1,7 @@
 const selectBeneficiaryByUserIdQuery = 'select beneficiaryid from beneficiaries where owner_user_id IN ';
 
+const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id IN ';
+
 const selectBeneficiaryByOwnerIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $1) as role_name, count(beneficiary_role) from beneficiaries\n' +
     'where owner_user_id IN ';
 
@@ -27,7 +29,7 @@ const getBeneficiaryByBeneficiaryIdQuery = 'select concat(firstname, \' \', last
 
 const getBeneficiaryDetailsQuery = 'select beneficiaryId,firstname,lastname, gender, emailid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language=$2) as role_name, device_updated_date, mobileno from beneficiaries where beneficiaryId = $1';
 
-const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id = $1 and center_id = $2';
+// const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id = $1 and center_id = $2';
 
 
 const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
