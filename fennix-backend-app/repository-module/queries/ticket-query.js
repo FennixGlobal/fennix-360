@@ -3,7 +3,7 @@ const userIdTicketAggregatorQuery = (query) => {
     return ticketAggregator.aggregate([
         {
             $match: {
-                "userId": query.userId
+                "userId": {$in:query.userId}
             }
         },
         {
@@ -14,6 +14,7 @@ const userIdTicketAggregatorQuery = (query) => {
         }
     ]);
 };
+
 const addTicketQuery = (req) => {
     let ticketObj = new ticketAggregator(req);
     ticketObj.save(function (err) {

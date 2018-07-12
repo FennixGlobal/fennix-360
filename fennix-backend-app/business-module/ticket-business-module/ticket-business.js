@@ -2,11 +2,14 @@ const {listTicketsBasedOnUserIdAccessor,insertNextPrimaryKeyAccessor,addTicketAc
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
-const {fennixResponse, createGridResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const ticketAggregatorBusiness = async (req) => {
-    let request = {userId: req.query.userId}, ticketResponse, returnObj;
+    let request = {}, ticketResponse, returnObj, userIdList;
+    userIdList = await getUserIdsForAllRolesAccessor(req);
+    request.userIds = userIdList;
     ticketResponse = await ticketAggregatorAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
         let ticketObj = {
