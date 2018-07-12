@@ -3,7 +3,7 @@ const {deviceAggregator,deviceTypeModel,DeviceCounter} = require('../models/devi
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
         .group({
-            _id: "$isActive",
+            _id: "$active",
             count: {$sum: 1}
         });
 };
