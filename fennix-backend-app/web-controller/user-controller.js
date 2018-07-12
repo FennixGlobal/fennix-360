@@ -17,7 +17,7 @@ router.post('/updateProfile', async (req, res) => {
     })
 });
 
-router.post('/listUsers', async (req, res) => {
+router.get('/listUsers', async (req, res) => {
     let returnObj;
     returnObj = getUserListBusiness(req);
     returnObj.then((response) => {

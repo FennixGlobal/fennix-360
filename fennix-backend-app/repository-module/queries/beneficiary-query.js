@@ -24,15 +24,15 @@ const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstna
     'where owner_user_id = (select user_id from users where user_id = $1) and center_id = $2\n' +
     'order by $3 desc nulls last\n' +
     'offset $4 limit $5';
-const getBeneficiaryByBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name, emailid, document_id,crime_id, mobileno, gender, address1,dob, image, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language=$2) as role_name from beneficiaries b where b.beneficiaryid =$1';
+const getBeneficiaryByBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name,beneficiary_role, emailid, document_id,crime_id, mobileno, gender, address1,dob, image, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language=$2) as role_name from beneficiaries b where b.beneficiaryid =$1';
 
 const getBeneficiaryDetailsQuery = 'select beneficiaryId,firstname,lastname, gender, emailid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language=$2) as role_name, device_updated_date, mobileno from beneficiaries where beneficiaryId = $1';
 
 const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id = $1 and center_id = $2';
 
-const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', lastname) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select localized_text from localization where locale_key = (select locale_key from location where location_id = b.location_id)) as center_name, (select role_name from roles where role_id = b.beneficiary_role) as role_name,beneficiary_role, beneficiaryid from beneficiaries b where owner_user_id = $1 and center_id = $2 order by device_updated_date desc nulls last offset $3 limit $4';
+const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', lastname) as full_name, emailid, beneficiaryid,document_id,crime_id, mobileno, gender, location_id, (select localized_text from localization where locale_key = (select locale_key from location where location_id = b.location_id)) as center_name, (select role_name from roles where role_id = b.beneficiary_role) as role_name,beneficiary_role, beneficiaryid from beneficiaries b where owner_user_id = $1 and center_id = $2 order by device_updated_date desc nulls last offset $3 limit $4';
 
-const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name, beneficiaryid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
+const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select concat(firstname, \' \', lastname) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
 
 module.exports = {
     getBeneficiaryDetailsQuery,

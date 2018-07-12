@@ -3,7 +3,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , rc.card_order_id,rc.role_card_id\n' +
     '    , (select localized_text from localization where locale_key = rc.card_header_localization_key and language = $3) as card_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
-    '    , rcw.widget_order_id,rcw.role_cards_widgets_id\n' +
+    '    , rcw.widget_order_id,rcw.role_cards_widgets_id,rcwa.dropdown_id\n' +
     '    , we.endpoint as widget_endpoint, we.endpoint_initial_sort as widget_init_sort, we.endpoint_mandatory_request_params as widget_req_params, we.endpoint_request_type as widget_req_type\n' +
     '    , (select widget_size from widget_size where widget_size_id = rcw.widget_size_id) as widget_size\n' +
     '    , (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_section_subtype\n' +
@@ -106,7 +106,7 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_request_params,se.endpoint_request_type as submit_request_type\n' +
     ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_request_params,de.endpoint_request_type as dropdown_request_type\n' +
     ',wis.element_type ,wis.sub_type as element_subtype\n' +
-    ',rcwa.request_mapping_key\n' +
+    ',rcwa.request_mapping_key,rcwa.dropdown_id\n' +
     ',rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
     ', (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_sub_section_type\n' +
     ',rcwa.widget_sub_section_order_id\n' +
@@ -138,7 +138,7 @@ const modalMetadataQuery = 'select  \n' +
     '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
     '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
     '    , rcwa.sub_section_orientation, rcwa.section_orientation\n' +
-    '    , rcwa.sub_section_width\n' +
+    '    , rcwa.sub_section_width,rcwa.dropdown_id\n' +
     '    , wa.element_type, wa.sub_type as element_subtype\n' +
     '    , (select localized_text from localization where locale_key = rcwa.element_title and language = $2) as element_title\n' +
     '    , (select localized_text from localization where locale_key = rcwa.element_label and language = $2) as element_label\n' +

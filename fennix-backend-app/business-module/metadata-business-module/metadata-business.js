@@ -252,11 +252,11 @@ const listCentersBusiness = async (req) => {
 };
 
 const dropDownBusiness = async (req) => {
-    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = [];
+    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList:[]};
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {
-            returnResponse.push(dropdownCreator(item['dropdown_key'], item['dropdown_value'], false));
+            returnResponse.dropdownList.push(dropdownCreator(item['dropdown_key'], item['dropdown_value'], false));
         });
         returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', returnResponse);
     } else {
@@ -382,6 +382,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
         gridColSubType: widgetElementItem['element_subtype'],
         subWidgetColId: widgetElementItem['widget_col_count'],
         subWidgetRowId: widgetElementItem['widget_row_count'],
+        gridColSortableFlag: widgetElementItem['is_editable__sort'],
         gridHeaderColName: widgetElementItem['element_title'],
         gridHeaderWidth: widgetElementItem['attribute_width']
     };
@@ -471,12 +472,13 @@ const widgetFormElementCreator = (widgetElementItem) => {
             elementSubType: widgetElementItem['element_subtype'],
             syncValidations: widgetElementItem['element_primary_value__validation'],
             asyncValidations: widgetElementItem['element_secondary_value__async_validation'],
-            elementIsEditableFlag: widgetElementItem['is_editable'],
+            elementIsEditableFlag: widgetElementItem['is_editable__sort'],
             elementIsDisabledFlag: widgetElementItem['disable_flag'],
             onElementChangeAction: widgetElementItem['element_action_type'],
             formElementWidth: widgetElementItem['attribute_width']
         };
         switch (widgetElementItem['element_type'].toLowerCase()) {
+            case 'map':
             case 'input':
                 widgetElementData = {
                     ...widgetElementData, ...{
@@ -509,7 +511,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         dropdownRequestParams: widgetElementItem['dropdown_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
                         submitReqType: widgetElementItem['submit_request_type'],
-                        submitRequestParams: widgetElementItem['submit_request_params']
+                        submitRequestParams: widgetElementItem['submit_request_params'],
+                        dropdownId: widgetElementItem['dropdown_id']
                     }
                 };
                 break;

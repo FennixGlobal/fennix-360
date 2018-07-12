@@ -1,4 +1,5 @@
 const {mongoDev,mongoLocal} = require('./fennix-backend-app/util-module/connection-constants');
+const locationBusiness = require('./fennix-backend-app/business-module/location-business-module/location-business');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -14,6 +15,7 @@ TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
+        locationBusiness
         console.log('data is transmitted');
         console.log(data);
     });
@@ -74,7 +76,6 @@ app.use('/', indexRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     res.render('index');
-    app.use('/group', groupRouter);
     // next(createError(404));
 });
 

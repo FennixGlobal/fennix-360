@@ -1,5 +1,5 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {fetchUserProfileAccesor,addUserAccessor, getUserListAccesor, updateUserProfileAccesor} = require('../../repository-module/data-accesors/user-accesor');
+const {fetchUserProfileAccesor,addUserAccessor, getUserListAccesor, updateUserProfileAccesor, getTotalNoOfUsersAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
@@ -69,11 +69,13 @@ const updateUserProfileBusiness = async (req) => {
 };
 
 const getUserListBusiness = async (req) => {
-    let request = [req.body.userId], userProfileResponse, returnObj;
+    let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj, totalRecordsResponse, finalResponse = {};
+    totalRecordsResponse = await getTotalNoOfUsersAccessor([req.query.userId]);
+    finalResponse['totalNoOfRecords'] = totalRecordsResponse.rows[0]['count'];
     userProfileResponse = await getUserListAccesor(request);
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
-
-        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', userProfileResponse.rows);
+        finalResponse['gridData'] = userProfileResponse.rows;
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'en', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
     }

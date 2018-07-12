@@ -15,7 +15,6 @@ const beneficiaryAggregatorBusiness = async (req) => {
         };
         if (beneficiaryResponse.rows.length === 1) {
             let propName = beneficiaryResponse.rows[0]['role_name'];
-            //TODO interchange victim and offender
             let propName2 = propName === 'VICTIM' ? 'VICTIM' : "OFFENDER";
             beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
             beneficiaryObj[propName2]['value'] = 0;
@@ -196,6 +195,7 @@ const getBeneficiaryDetailsBusiness = async (req) => {
     response = await getBeneficiaryByBeneficiaryIdAccesor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         const finalObj = {
+            beneficiaryRoleId: response.rows[0]['beneficiary_role'],
             image: response.rows[0]['image'],
             beneficiaryRole: response.rows[0]['role_name'],
             gender: response.rows[0]['gender'],
@@ -214,7 +214,7 @@ const getBeneficiaryDetailsBusiness = async (req) => {
 };
 
 const beneficiaryListByOwnerUserId = async (req) => {
-    let request = [req.query.userId, req.query.centerId, req.query.offset, req.query.limit], beneficiaryListResponse,
+    let request = [req.query.userId, req.query.centerId, req.query.skip, req.query.limit], beneficiaryListResponse,
         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
         finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
