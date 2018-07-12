@@ -1,10 +1,11 @@
-const {listTicketsBasedOnUserIdAccessor,insertNextPrimaryKeyAccessor,addTicketAccessor,fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
+const {listTicketsBasedOnUserIdAccessor, listTicketsBasedOnUserIdForDownloadAccessor,insertNextPrimaryKeyAccessor, addTicketAccessor, fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {excelColCreator, excelRowsCreator} = require('../../util-module/request-validators');
 
 const ticketAggregatorBusiness = async (req) => {
     let request = {}, ticketResponse, returnObj, userIdList;
@@ -76,7 +77,8 @@ const listTicketsBusiness = async (req) => {
                 userIds.push(`${item['user_id']}`);
             });
         }
-    };
+    }
+    ;
     request.userId = userIds;
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
@@ -184,11 +186,114 @@ const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
     }
     return response;
 };
+const listTicketsForDownloadBusiness = async (req) => {
+    let request = [req.query.userId, req.query.languageId], ticketsListResponse, userListResponse,
+        colsKeysResponse = {}, rowsIdsResponse, workbook = new Excel.Workbook(), modifiedResponse,
+        downloadMapperResponse, keysArray = [], returnObj = {}, sheet = workbook.addWorksheet('Beneficiary Sheet');
+    colsKeysResponse = await excelColCreator([req.query.filterId]);
+    ticketsListResponse = await getTicketsList(req);
+    sheet.columns = colsKeysResponse['cols'];
+    keysArray = colsKeysResponse['keysArray'];
+    rowsIdsResponse = excelRowsCreator(ticketsListResponse, 'tickets', keysArray);
+    returnObj = rowsIdsResponse['rows'];
+    modifiedResponse = Object.keys(returnObj).map(key => returnObj[key]);
+    sheet.addRows(modifiedResponse);
+    return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/tickets.xlsx');
+};
+
+//private method
+const getTicketsList = async (req) => {
+    let request = {userId: req.query.userId},
+        ticketResponse, modifiedResponse = [], beneficiaryIds = [], beneficiaryIdNameMap = {},
+        userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
+    userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+
+    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+        switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
+            case 'ROLE_SUPERVISOR' : {
+                otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_SUPER_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForSuperAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+            case 'ROLE_MASTER_ADMIN' : {
+                otherUserDetailResponse = await getUserIdsForMasterAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+                break;
+            }
+        }
+        if (objectHasPropertyCheck(otherUserDetailResponse, 'rows') && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
+            otherUserDetailResponse.rows.forEach((item) => {
+                const userDetailsObj = {
+                    fullName: item['full_name'],
+                    role: item['role_name'],
+                    roleId: item['user_role'],
+                    gender: item['gender']
+                };
+                userDetailMap[item['user_id']] = userDetailsObj;
+                userIds.push(`${item['user_id']}`);
+            });
+        }
+    }
+    request.userId = userIds;
+    ticketResponse = await listTicketsBasedOnUserIdForDownloadAccessor(request);
+    ticketResponse.forEach((item) => {
+        if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
+            beneficiaryIds.push(parseInt(item['beneficiaryId']));
+        }
+    });
+    beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
+    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        beneficiaryResponse.rows.forEach((item) => {
+            const beneficiaryObj = {
+                fullName: item['full_name'],
+                role: item['role_name'],
+                roleId: item['beneficiary_role'],
+                gender: item['gender']
+            };
+            beneficiaryIdNameMap[item['beneficiaryid']] = beneficiaryObj;
+        });
+    }
+    if (arrayNotEmptyCheck(ticketResponse)) {
+        ticketResponse.forEach((item) => {
+            const obj = {
+                ticketId: item['_id'],
+                ticketName: notNullCheck(item['ticketName']) ? item['ticketName'] : 'Ticket Header',
+                userName: userDetailMap[item['userId']]['fullName'],
+                userRole: userDetailMap[item['userId']]['role'],
+                userRoleId: userDetailMap[item['userId']]['roleId'],
+                userGender: userDetailMap[item['userId']]['gender'],
+
+                beneficiaryId: item['beneficiaryId'],
+                beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['roleId'] : null,
+                beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['fullName'] : ' - ',
+                beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['role'] : ' - ',
+                beneficiaryGender: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['gender'] : '-',
+                locationId: item['locationId'],
+                withAlerts: item['withAlerts'],
+                imeiNumber: arrayNotEmptyCheck(item['device']) && notNullCheck(item['device'][0]['imei']) ? item['device'][0]['imei'] : '999999999',
+                alertDeviceType: arrayNotEmptyCheck(item['deviceType']) ? item['deviceType'][0]['name'] : '-',
+                alertType: notNullCheck(item['alertType']) ? item['alertType'] : 'General alert',
+                readStatus: item['readStatus'],
+                createdDate: item['createdDate'],
+                updatedDate: notNullCheck(item['updatedDate']) ? item['alertType'] : '-'
+            };
+            modifiedResponse.push(obj);
+        });
+    }
+    return modifiedResponse;
+};
 
 module.exports = {
     ticketAggregatorBusiness,
     ticketListBasedOnStatusBusiness,
     listTicketsBusiness,
     addTicketBusiness,
+    listTicketsForDownloadBusiness,
     ticketDetailsBasedOnTicketIdBusiness
 };

@@ -50,7 +50,11 @@ const fetchNextPrimaryKeyAccessor = async () => {
 const insertNextPrimaryKeyAccessor = async (req) => {
     await ticketQuery.insertNextPrimaryKeyQuery(req);
 };
-
+const listTicketsBasedOnUserIdForDownloadAccessor = async (req) => {
+    let returnObj;
+    returnObj = await ticketQuery.listTicketsForDownloadQuery(req);
+    return returnObj;
+};
 module.exports = {
     addTicketAccessor,
     ticketAggregatorAccessor,
@@ -58,5 +62,6 @@ module.exports = {
     insertNextPrimaryKeyAccessor,
     ticketListBasedOnTicketStatusAccessor,
     listTicketsBasedOnUserIdAccessor,
-    ticketDetailsBasedOnTicketIdAccessor
+    ticketDetailsBasedOnTicketIdAccessor,
+    listTicketsBasedOnUserIdForDownloadAccessor
 };

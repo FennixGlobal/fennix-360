@@ -96,6 +96,47 @@ const ticketDetailsBasedOnTicketIdQuery = (query) => {
         }
     );
 };
+
+//TODO: sort based on updatedDate later after testing
+const listTicketsForDownloadQuery = (query) => {
+    return ticketAggregator.aggregate().match(
+        {
+            "userId":{$in: query.userId}
+        }
+    ).sort({"createdDate":-1})
+        .lookup(
+            {
+                from:"devices",
+                localField:"beneficiaryId",
+                foreignField:"beneficiaryId",
+                as:"device"
+            }
+        )
+        .lookup(
+            {
+                from:"deviceTypes",
+                localField:"device.deviceTypeId",
+                foreignField:"_id",
+                as:"deviceType"
+            }
+        )
+        .project(
+            {
+                "beneficiaryId" : 1,
+                "userId" : 1,
+                "device.imei":1,
+                "locationId" : 1,
+                "withAlerts" : 1,
+                "ticketName":1,
+                "alertType":1,
+                "deviceType.name":1,
+                "readStatus":1,
+                "createdDate":1,
+                "updatedDate":1
+            }
+        );
+};
+
 module.exports = {
     userIdTicketAggregatorQuery,
     userIdTicketDetailsBasedOnTicketStatusQuery,
@@ -103,5 +144,6 @@ module.exports = {
     fetchNextPrimaryKeyQuery,
     insertNextPrimaryKeyQuery,
     addTicketQuery,
+    listTicketsForDownloadQuery,
     ticketDetailsBasedOnTicketIdQuery
 };

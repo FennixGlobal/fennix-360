@@ -7,8 +7,8 @@ const dbTableColMap = {
     users: {
         locationId: 'location_id',
         address: 'address1',
-        center:'center_id',
-        country:'location_id',
+        center: 'center_id',
+        country: 'location_id',
         firstName: 'first_name',
         lastName: 'last_name',
         emailId: 'email_id',
@@ -74,12 +74,22 @@ const dbDownloadTableMapper = {
         mobileNo: 'mobile_no',
         role: 'role',
         center: 'center'
+    },
+    tickets: {
+        ticketId: 'ticketId',
+        ticketName: 'ticketName',
+        userName: 'userName',
+        userRole: 'userRole',
+        beneficiaryName: 'beneficiaryName',
+        beneficiaryRole: 'beneficiaryRole',
+        imei: 'imeiNumber'
     }
 };
 
 const tableKeyMap = {
-    beneficiaries : { key: 'beneficiaryid'},
-    users: {key: 'user_id'}
+    beneficiaries: {key: 'beneficiaryid'},
+    users: {key: 'user_id'},
+    tickets: {key: 'ticketId'}
 };
 
 module.exports = {
