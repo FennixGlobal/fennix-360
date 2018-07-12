@@ -70,7 +70,7 @@ const updateUserProfileBusiness = async (req) => {
 };
 
 const getUserListBusiness = async (req) => {
-    let request = [req.body.userId, req.body.languageId, req.body.offset, req.body.limit], userProfileResponse,
+    let request = [req.body.userId, req.body.languageId, req.body.skip, req.body.limit], userProfileResponse,
         returnObj, totalRecordsResponse, finalResponse = {};
     userProfileResponse = await getUserListAccesor(request);
     totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.body.userId]);

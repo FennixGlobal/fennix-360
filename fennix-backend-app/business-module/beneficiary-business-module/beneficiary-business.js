@@ -220,7 +220,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
     let request = {
             userId: req.query.userId,
             centerId: req.query.centerId,
-            offset: req.query.offset,
+            skip: req.query.skip,
             limit: req.query.limit
         }, beneficiaryListResponse,
         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
