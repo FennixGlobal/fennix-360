@@ -70,10 +70,10 @@ const updateUserProfileBusiness = async (req) => {
 };
 
 const getUserListBusiness = async (req) => {
-    let request = [req.body.userId, req.body.languageId, req.body.skip, req.body.limit], userProfileResponse,
+    let request = [req.query.userId, req.query.languageId, req.query.skip, req.query.limit], userProfileResponse,
         returnObj, totalRecordsResponse, finalResponse = {};
     userProfileResponse = await getUserListAccesor(request);
-    totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.body.userId]);
+    totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.query.userId]);
     finalResponse['totalNoOfRecords'] = totalRecordsResponse.rows[0]['count'];
     if (objectHasPropertyCheck(userProfileResponse, 'rows') && arrayNotEmptyCheck(userProfileResponse.rows)) {
         finalResponse['gridData'] = userProfileResponse.rows;
