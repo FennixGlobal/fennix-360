@@ -3,7 +3,7 @@ const userIdTicketAggregatorQuery = (query) => {
     return ticketAggregator.aggregate([
         {
             $match: {
-                "userId": {$in:query.userId}
+                "userId": {$in:query.userIds}
             }
         },
         {
