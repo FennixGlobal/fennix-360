@@ -1,10 +1,12 @@
-const {getBenefeciaryAggregator, addBeneficiaryAccessor, getBeneficiaryByBeneficiaryIdAccesor, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
+const {getBenefeciaryAggregator, getBeneficiaryListByOwnerIdForDownloadAccessor, addBeneficiaryAccessor, getBeneficiaryByBeneficiaryIdAccesor, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
+const Excel = require('exceljs');
 
 const beneficiaryAggregatorBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], beneficiaryResponse, returnObj;
@@ -317,11 +319,43 @@ const beneficiaryListByOwnerUserId = async (req) => {
 //     return returnObj;
 // };
 
+const downloadBeneficiariesBusiness = async (req) => {
+    let request = {}, colsKeysResponse, rowsIdsResponse, workbook = new Excel.Workbook(), userIdList,
+        beneficiaryListResponse, modifiedResponse, beneficiaryIds,keysArray,
+        returnObj = {}, sheet = workbook.addWorksheet('Beneficiary Sheet');
+    colsKeysResponse = await excelColCreator();
+    sheet.columns = colsKeysResponse['cols'];
+    keysArray = colsKeysResponse['keysArray'];
+    userIdList = await getUserIdsForAllRolesAccessor(req);
+    request.userIdList = userIdList;
+    beneficiaryListResponse = await getBeneficiaryListByOwnerIdForDownloadAccessor(request);
+    rowsIdsResponse = excelRowsCreator(beneficiaryListResponse, 'beneficiaries', keysArray);
+    beneficiaryIds = rowsIdsResponse['ids'];
+    returnObj = rowsIdsResponse['rows'];
+    if (arrayNotEmptyCheck(beneficiaryIds)) {
+        let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
+        if (arrayNotEmptyCheck(deviceDetailsResponse)) {
+            deviceDetailsResponse.forEach(device => {
+                returnObj[device['beneficiaryId']] = {
+                    ...returnObj[device['beneficiaryId']],
+                    deviceId: device['_id'],
+                    imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
+                    deviceType: device['deviceType'][0]['name']
+                }
+            });
+        }
+    }
+    modifiedResponse = Object.keys(returnObj).map(key => returnObj[key]);
+    sheet.addRows(modifiedResponse);
+    return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/test.xlsx');
+};
+
 module.exports = {
     beneficiaryAggregatorBusiness,
     beneficiaryListByOwnerUserId,
     beneficiaryMapDataList,
     getBeneficiaryDetailsBusiness,
-    addBeneficiaryBusiness
+    addBeneficiaryBusiness,
+    downloadBeneficiariesBusiness
     // beneficiaryLocationListByOwnerAndCenter
 };

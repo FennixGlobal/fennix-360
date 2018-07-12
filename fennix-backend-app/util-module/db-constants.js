@@ -49,11 +49,36 @@ const dbTableColMap = {
         roleCardWidgetId: 'role_card_widget_id'
     }
 };
+const dbDownloadTableMapper = {
+    beneficiaries: {
+        beneficiaryId: 'beneficiaryid',
+        beneficiaryName: 'full_name',
+        emailId: 'emailid',
+        mobileNo: 'mobileno',
+        role: 'role_name',
+        gender: 'gender',
+        crimeId: 'crime_id',
+        documentId: 'document_id',
+        center: 'center_name'
+    },
+    devices: {
+        deviceId: '_id',
+        deviceType: 'deviceType',
+        deviceName: 'name',
+        imei: 'imei'
+    }
+};
+
+const tableKeyMap = {
+    beneficiaries : { key: 'beneficiaryid'}
+};
 
 module.exports = {
     dbTableColMap,
     TABLE_BENEFICIARIES,
     TABLE_LOCATION,
     TABLE_ROLES,
-    TABLE_USERS
+    TABLE_USERS,
+    tableKeyMap,
+    dbDownloadTableMapper
 };
