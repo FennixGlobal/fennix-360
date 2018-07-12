@@ -38,7 +38,7 @@ const deviceAggregatorDashboard = async (req) => {
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
         beneficiaryResponse.rows.forEach((item) => {
-            deviceArray.push(`${item.beneficiaryid}`);
+            deviceArray.push(item.beneficiaryid);
         });
         deviceResponse = await deviceAggregator(deviceArray);
     }

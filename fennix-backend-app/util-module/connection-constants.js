@@ -15,7 +15,7 @@ const postgresDBProd = {
 };
 
 const mongoLocal = 'mongodb://localhost:27017/fennixDevDb';
-const mongoDev = 'mongodb://myUserAdmin:abc123@172.31.32.79:27017/admin';
+const mongoDev = 'mongodb://fenDevUser:fenDevUser@172.31.32.79:27017/fennix_dev';
 
 module.exports = {
     postgresDBDev,
