@@ -195,11 +195,11 @@ const beneficiaryListByOwnerUserId = async (req) => {
             skip: req.query.skip,
             limit: req.query.limit
         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
-        finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId], userIdList;
+        finalResponse = {}, userIdList;
     userIdList = await getUserIdsForAllRolesAccessor(req);
     request.userIdList = userIdList;
     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
-    totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
+    totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(request);
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
@@ -218,16 +218,9 @@ const beneficiaryListByOwnerUserId = async (req) => {
             beneficiaryIds.push(item['beneficiaryid']);
         });
 
-        console.log('fetching device details');
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
-        console.log('fetched device details');
-        console.log(deviceDetailsResponse.length);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
-                console.log('device Id'+device['_id']);
-                console.log('beneficiaryId'+device['beneficiaryId']);
-                console.log('imei'+device['imei']);
-                console.log('name'+device['deviceType'][0]['name']);
                 finalReturnObj[device['beneficiaryId']] = {
                     ...finalReturnObj[device['beneficiaryId']],
                     deviceId: device['_id'],

@@ -43,7 +43,7 @@ const ticketListBasedOnStatusBusiness = async (req) => {
 };
 
 const listTicketsBusiness = async (req) => {
-    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
+    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},finalResponseObj = {},
         ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
@@ -80,7 +80,6 @@ const listTicketsBusiness = async (req) => {
             });
         }
     }
-    ;
     request.userId = userIds;
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
@@ -93,6 +92,9 @@ const listTicketsBusiness = async (req) => {
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         console.log('beneficiary response ticket' + beneficiaryResponse.rows.length);
         beneficiaryResponse.rows.forEach((item) => {
+            console.log('full name' + item['full_name']);
+            console.log('role name' + item['role_name']);
+            console.log('benId' + item['beneficiaryid']);
             const beneficiaryObj = {
                 fullName: item['full_name'],
                 role: item['role_name'],
@@ -107,11 +109,6 @@ const listTicketsBusiness = async (req) => {
             const obj = {
                 ticketId: item['_id'],
                 ticketName: notNullCheck(item['ticketName']) ? item['ticketName'] : 'Ticket Header',
-
-                // userName: userDetailsResponse.rows[0]['full_name'],
-                // userRole: userDetailsResponse.rows[0]['role_name'],
-                // userRoleId: userDetailsResponse.rows[0]['user_role'],
-                // userGender: userDetailsResponse.rows[0]['gender'],
                 userName: userDetailMap[item['userId']]['fullName'],
                 userRole: userDetailMap[item['userId']]['role'],
                 userRoleId: userDetailMap[item['userId']]['roleId'],
