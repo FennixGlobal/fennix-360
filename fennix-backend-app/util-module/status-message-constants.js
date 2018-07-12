@@ -147,6 +147,13 @@ const statusCodes = {
             espLA: 'no simcard types available for the given id'
         }
     },
+    221: {
+        devMsg: 'no carriers available for given id', userMsg: {
+            EN_US: 'no carriers available for given id',
+            espMX: 'no simcard types available for the given id',
+            espLA: 'no simcard types available for the given id'
+        }
+    },
     700: {
         devMsg: 'Postgres DB is not getting connected', userMsg: {
             EN_US: 'Server is down',

@@ -6,6 +6,7 @@ const {statusCodeConstants} = require('../../util-module/status-code-constants')
 const listCarrierBusiness = async () => {
     let response, finalResponse;
     response = await listCarriersAccessor();
+    console.log(response.length);
     if (arrayNotEmptyCheck(response)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response);
     } else {
