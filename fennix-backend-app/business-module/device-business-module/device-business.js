@@ -5,6 +5,7 @@ const userAccessor = require('../../repository-module/data-accesors/user-accesor
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 
 const deviceAggregatorDashboard = async (req) => {
     const request = [req.query.languageId, req.query.userId];
@@ -73,40 +74,15 @@ const listDeviceTypesBusiness = async () => {
 };
 
 const listDevicesBusiness = async (req) => {
-    let centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+    let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
         modifiedResponse = {gridData: []}, finalResponse;
-    centerIdResponse = await centerMetadataAccessors.getCenterIdsAccessor(req);
-    // userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    // if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-    //     switch (nativeUserRole) {
-    //         case 'ROLE_OPERATOR' : {
-    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForOperatorAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_SUPERVISOR' : {
-    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForSupervisorAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_ADMIN' : {
-    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForAdminAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_SUPER_ADMIN' : {
-    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForSuperAdminAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_MASTER_ADMIN' : {
-    //             centerIdResponse = await centerMetadataAccessors.getCenterIdsForMasterAdminAccessor(request);
-    //             break;
-    //         }
-    //     }
-    // }
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req);
+    centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
-            centerIdsReq.push(item['location_id']);
-            centerIdNameMap[item['location_id']] = item['location_name'];
+            centerIdsReq.push(item['center_id']);
+            centerIdNameMap[item['center_id']] = item['center_name'];
         });
         devicesResponse = await listDevicesAccessor(centerIdsReq);
     }
@@ -146,6 +122,56 @@ const listDevicesBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+//
+// const listDevicesBusiness = async (req) => {
+//     let centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+//         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
+//         modifiedResponse = {gridData: []}, finalResponse;
+//     centerIdResponse = await centerMetadataAccessors.getCenterIdsAccessor(req);
+//     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+//         centerIdResponse.rows.forEach(item => {
+//             centerIdsReq.push(item['location_id']);
+//             centerIdNameMap[item['location_id']] = item['location_name'];
+//         });
+//         devicesResponse = await listDevicesAccessor(centerIdsReq);
+//     }
+//
+//     if (arrayNotEmptyCheck(devicesResponse)) {
+//         devicesResponse.forEach((item) => {
+//             beneficiaryIds.push(item['beneficiaryId']);
+//         });
+//         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
+//         if (objectHasPropertyCheck(beneficiaryNameResponse, 'rows') && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
+//             beneficiaryNameResponse.rows.forEach((item) => {
+//                 let beneficiaryObj = {
+//                     fullName: item['full_name'],
+//                     roleName: item['role_name'],
+//                     roleId: item['beneficiary_role']
+//                 };
+//                 beneficiaryIdNameMap[item['beneficiaryid']] = beneficiaryObj;
+//             });
+//         }
+//         devicesResponse.forEach((item) => {
+//             deviceObj = {
+//                 deviceId: item['_id'],
+//                 deviceType: item['deviceTypes']['name'],
+//                 imei: item['imei'],
+//                 isActive: item['isActive'],
+//                 mobileNo: item['simcards']['phoneNo'],
+//                 center: centerIdNameMap[item['centerId']],
+//                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'fullName') ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : '-',
+//                 beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'roleName') ? beneficiaryIdNameMap[item['beneficiaryId']]['roleName'] : '-',
+//                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'roleId') ? beneficiaryIdNameMap[item['beneficiaryId']]['roleId'] : '-'
+//             };
+//             modifiedResponse.gridData.push(deviceObj);
+//         });
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 const insertDeviceBusiness = async (req) => {
     let primaryKeyResponse, counter;
