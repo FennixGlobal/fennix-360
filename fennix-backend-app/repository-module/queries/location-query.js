@@ -32,13 +32,23 @@ const insertNextPrimaryKeyQuery = (req) => {
 };
 
 const locationDetailsUpdateQuery = (req) => {
-    return locationDetails.insert({
+    let location = new locationDetails({
         _id: req._id,
         beneficiaryId: req.beneficiaryId,
         deviceDate: req.deviceDate,
         latitude: req.latitude,
         longitude: req.longitude
-    })
+    });
+    location.save(function (err) {
+        if (err) return console.error(err);
+    });
+    // return locationDetails.insert({
+    //     _id: req._id,
+    //     beneficiaryId: req.beneficiaryId,
+    //     deviceDate: req.deviceDate,
+    //     latitude: req.latitude,
+    //     longitude: req.longitude
+    // })
 };
 
 //SUPERVISOR & ADMIN
