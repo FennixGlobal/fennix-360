@@ -16,9 +16,10 @@ const updateLocation = async(req)=>{
     let obj = {
       _id: locationId, ...req
     };
+    console.log(req);
     locationDetailsUpdateQuery(obj);
-    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
-    console.log(counterResponse[0]['_doc']['_id']);
+    insertNextPrimaryKeyQuery(locationId);
+    // console.log(counterResponse[0]['_doc']['_id']);
 };
 
 const getCenterIdsForLoggedInUserAndSubUsersAccessor = async (req) => {

@@ -32,6 +32,7 @@ const insertNextPrimaryKeyQuery = (req) => {
 };
 
 const locationDetailsUpdateQuery = (req) => {
+console.log(req.latitude);
     let location = new locationDetails({
         _id: req._id,
         beneficiaryId: req.beneficiaryId,

@@ -47,12 +47,12 @@ const locationUpdateBusiness = (data) => {
         returnString = processData(data);
     } else if (data.indexOf(cmdLocationReport) !== -1) {
         console.log('entered location report');
-      console.log(data);
+        console.log(data);
         // let values = data.split('#')[1].split('');
         // values.forEach((item) => {
         //     console.log('this is the location data');
         //     console.log(item);
-            processLocation(data);
+        processLocation(data);
         // });
     }
     return returnString;
@@ -122,9 +122,13 @@ const processLocation = (location) => {
     let lng = location.substring(51, 11);
     let signLng = !lng.indexOf("E") !== -1 ? 1 : -1;
     longitude = signLng * getValue(lng.substring(0, 3), lng.substring(3, 2), lng.substring(6, 4));
+    console.log('longitude');
+    console.log(longitude);
+    console.log('latitude');
+    console.log(latitude);
     locationObj = {
-        longitude,
-        latitude,
+        longitude: longitude,
+        latitude: latitude,
         beneficiaryId: 78,
         deviceDate: dateTime
     };
