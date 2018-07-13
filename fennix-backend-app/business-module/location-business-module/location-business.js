@@ -61,21 +61,21 @@ const locationUpdateBusiness = (data) => {
 const processData = (data) => {
     let returnString = '';
     const checkSum = 3;
-    const dataCommand = data.substring(0, 3);
+    const dataCommand = data. substr(0, 3);
     locationObj = {
-        connectionSession: data.substring(3, 6),
-        serialNumber: data.substring(9, 5),
+        connectionSession: data. substr(3, 6),
+        serialNumber: data. substr(9, 5),
     };
-    const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + data.substring(14, 15).length;
+    const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + data. substr(14, 15).length;
     deviceObj = {
-        imei: data.substring(14, 15),
-        firmwareVersion: data.substring(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
+        imei: data. substr(14, 15),
+        firmwareVersion: data. substr(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
     };
     this.id = deviceObj.imei;
     if (!this.loginStatus) {
         this.loginStatus = processLogin();
     }
-    returnString = data.replace(data.substring(0, 2), '#SB');
+    returnString = data.replace(data. substr(0, 2), '#SB');
     return returnString;
 };
 
@@ -83,45 +83,46 @@ const processLocation = (location) => {
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
-    let command = location.substring(0, 3);
-    let connectionSession = location.substring(3, 6);
-    let day = location.substring(29, 2);
-    let month = location.substring(31, 2);
-    let year = location.substring(33, 2);
-    let hours = location.substring(35, 2);
-    let minutes = location.substring(37, 2);
-    let seconds = location.substring(39, 2);
+    let command = location. substr(0, 3);
+    let connectionSession = location. substr(3, 6);
+    let day = location. substr(29, 2);
+    let month = location. substr(31, 2);
+    let year = location. substr(33, 2);
+    let hours = location. substr(35, 2);
+    let minutes = location. substr(37, 2);
+    let seconds = location. substr(39, 2);
     let dateTime = `${day} ${month} ${year} ${hours}:${minutes}`;
     let devices = {
-        imei: location.substring(14, 15),
+        imei: location. substr(14, 15),
         deviceUpdatedDate: dateTime
     };
-    const vel = location.substring(62, 5);
+    const vel = location. substr(62, 5);
     let deviceAttribute = {
         beneficiaryId: 78,
-        serialNumber: location.substring(9, 5),
-        hdop: location.substring(99, 2),
-        cellId: location.substring(108, 4),
-        mcc: location.substring(101, 3),
-        lac: location.substring(104, 4),
+        serialNumber: location. substr(9, 5),
+        hdop: location. substr(99, 2),
+        cellId: location. substr(108, 4),
+        mcc: location. substr(101, 3),
+        lac: location. substr(104, 4),
         serverDate: new Date(),
-        speed: ((parseInt(vel.substring(0, 3), 10) + parseFloat(vel.substring(4, 1)) / 10) * NudosToKm),
-        course: parseInt(location.substring(67, 2)) * direction,
-        moveDistance: parseInt(location.substring(69, 5)),
-        gpsStatus: location.substring(74, 1),
-        alarmStatus: location.substring(75, 21),
+        speed: ((parseInt(vel. substr(0, 3), 10) + parseFloat(vel. substr(4, 1)) / 10) * NudosToKm),
+        course: parseInt(location. substr(67, 2)) * direction,
+        moveDistance: parseInt(location. substr(69, 5)),
+        gpsStatus: location. substr(74, 1),
+        alarmStatus: location. substr(75, 21),
         // location.BatteryPercentage = GetBatteryPercent(location.BatteryVoltage);
-        satellitesNumber: location.substring(96, 2),
+        satellitesNumber: location. substr(96, 2),
         deviceUpdatedDate: dateTime,
-        GPSFixedStatus: location.substring(98, 1)
+        GPSFixedStatus: location. substr(98, 1)
     };
 
-    let lat = location.substring(41, 10);
+    let lat = location. substr(41, 10);
+    console.log(lat);
     let signLat = !lat.indexOf("N") !== -1 ? 1 : -1;
-    latitude = signLat * getValue(lat.substring(0, 2), lat.substring(2, 2), lat.substring(5, 4));
-    let lng = location.substring(51, 11);
+    latitude = signLat * getValue(lat. substr(0, 2), lat. substr(2, 2), lat. substr(5, 4));
+    let lng = location. substr(51, 11);
     let signLng = !lng.indexOf("E") !== -1 ? 1 : -1;
-    longitude = signLng * getValue(lng.substring(0, 3), lng.substring(3, 2), lng.substring(6, 4));
+    longitude = signLng * getValue(lng. substr(0, 3), lng. substr(3, 2), lng. substr(6, 4));
     console.log('longitude');
     console.log(longitude);
     console.log('latitude');
