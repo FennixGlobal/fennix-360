@@ -1,4 +1,4 @@
-const {locationAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const {deviceBusiness} = require('../location-business-module/location-business');
 //Connection Commands
 //(Tracker -> Server)
