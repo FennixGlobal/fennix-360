@@ -9,7 +9,7 @@ const postgresDBDev = {
 const postgresDBProd = {
     user: 'postgres',
     host: '172.31.32.106',
-    database: 'postgres_dev',
+    database: 'dev-jul13',
     password: 'zVCf58zMDNfF',
     port: 5432
 };
