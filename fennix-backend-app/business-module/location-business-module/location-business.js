@@ -132,32 +132,7 @@ const processLocation = (location) => {
 
 processLogin = () => {
     let returnFlag = false;
-    // let personCredentials = {
-    //     imei : device.IMEI,
-    //     SessionId : location.ConnectingSession,
-    //     Firmwareversion : device.FirmwareVersion,
-    //     IpAddress : this.IP
-    // };
-
-    // using (var repository = new DbRepository())
-    // {
-    //     this.person = new Persons(repository).Login(personCredentials);
-    //
-    //     if (this.person != null)
-    //     {
-    //         if (person.DeviceId.HasValue)
-    //         {
-    //             device.Id = person.DeviceId.Value;
-    //             location.DeviceId = person.DeviceId.Value;
-    //         }
-    //
-    //         location.PersonId = person.Id;
-    //         this.name = person.FullName;
-    //     }
-    // }
-
-// }
-}
+};
 
 const getValue = (intPart, decimalPart1, decimalPart2) => {
     let ret = 0;
@@ -166,7 +141,7 @@ const getValue = (intPart, decimalPart1, decimalPart2) => {
     ret += parseFloat(decimalPart2) / (60 * 10000);
     return ret;
 };
-}
+
 module.exports = {
     locationUpdateBusiness
-}
+};
