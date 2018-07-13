@@ -8,7 +8,7 @@ var logger = require('morgan');
 var net = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoLocal).catch((err) => {
+mongoose.connect(mongoDev).catch((err) => {
     console.log(err);
 });
 
@@ -17,7 +17,10 @@ TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
+        console.log(data);
         const returnValue = locationBusiness.locationUpdateBusiness(data);
+        console.log('handshake string ');
+        console.log(returnValue);
         socket.write(returnValue);
     });
     socket.on('error', (err) => {

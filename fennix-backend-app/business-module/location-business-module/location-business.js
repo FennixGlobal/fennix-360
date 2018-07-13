@@ -1,51 +1,52 @@
 //Connection Commands
-    //(Tracker -> Server)
-    const cmdLogin = "#SA";
-    //(Server- > Tracker)
-    const cmdLoginResponse = "#SB";
-    //(Tracker -> Server)
-    const cmdLogout = "#SC";
-    //(Tracker -> Server)
-    const cmdCheckConnection = "#SE";
-    //(Tracker -> Server)
-    const cmdOperatorAndAPN = "#SI";
+//(Tracker -> Server)
+const cmdLogin = "#SA";
+//(Server- > Tracker)
+const cmdLoginResponse = "#SB";
+//(Tracker -> Server)
+const cmdLogout = "#SC";
+//(Tracker -> Server)
+const cmdCheckConnection = "#SE";
+//(Tracker -> Server)
+const cmdOperatorAndAPN = "#SI";
 
-    //Positioning Commands
-    //(Server- > Tracker)
-    const cmdIntervalTimeSetting = "#RC";
-    //(Tracker -> Server)
-    const cmdLocationReport = "#RD";
-    const cmdLocationResponse = "#RE";
+//Positioning Commands
+//(Server- > Tracker)
+const cmdIntervalTimeSetting = "#RC";
+//(Tracker -> Server)
+const cmdLocationReport = "#RD";
+const cmdLocationResponse = "#RE";
 
-    //Other Commands
-    //(Server- > Tracker)
-    const cmdSMSPasswordAndSOSPhone = "#OC";
-    //(Tracker -> Server)
-    const cmdSMSPasswordAndSOSPhoneResponse = "#OD";
-    //(Server- > Tracker)
-    const cmdChangeIPaddressAndPort = "#OY";
-    //(Tracker -> Server)
-    const cmdChangeIPaddressAndPortResponse = "#OZ";
-    //(Server- > Tracker)
-    const cmdDeviceSettingParameter = "#XA";
-    //(Tracker -> Server)
-    const cmdDeviceSettingParameterResponse = "#XB";
+//Other Commands
+//(Server- > Tracker)
+const cmdSMSPasswordAndSOSPhone = "#OC";
+//(Tracker -> Server)
+const cmdSMSPasswordAndSOSPhoneResponse = "#OD";
+//(Server- > Tracker)
+const cmdChangeIPaddressAndPort = "#OY";
+//(Tracker -> Server)
+const cmdChangeIPaddressAndPortResponse = "#OZ";
+//(Server- > Tracker)
+const cmdDeviceSettingParameter = "#XA";
+//(Tracker -> Server)
+const cmdDeviceSettingParameterResponse = "#XB";
 //0N000000000000000000
-    const deviceParameters = "00000" + "000000000000000";
-    //102338210001000000000
-    const deviceAlarms = "000000000000000000000";
-    let id,loginStatus;
-    let locationObj = {}, deviceObj = {};
+const deviceParameters = "00000" + "000000000000000";
+//102338210001000000000
+const deviceAlarms = "000000000000000000000";
+let id, loginStatus;
+let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = (data) => {
-
+    let returnString = '';
     if (data.substring(data.indexOf(cmdLogin) + 1)) {
-        processData(data);
+        returnString = processData(data);
     } else if (data.substring(data.indexOf(cmdLocationReport) + 1)) {
         let values = data.split('#')[1].split('');
         values.forEach((item) => {
             processLocation("#" + item);
         });
     }
+    return returnString;
 };
 
 const processData = (data) => {
@@ -63,10 +64,10 @@ const processData = (data) => {
         firmwareVersion: data.substring(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
     };
     this.id = deviceObj.imei;
-    if(!this.loginStatus){
+    if (!this.loginStatus) {
         this.loginStatus = processLogin();
     }
-    returnString = data.replace(data.substring(0,2),'#SB');
+    returnString = data.replace(data.substring(0, 2), '#SB');
     return returnString;
 };
 
@@ -159,7 +160,7 @@ const processLocation = () => {
 
 };
 
-processLogin = ()=> {
+processLogin = () => {
     let returnFlag = false;
     // let personCredentials = {
     //     imei : device.IMEI,
