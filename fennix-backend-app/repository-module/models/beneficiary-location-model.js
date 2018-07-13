@@ -10,7 +10,7 @@ const locationSchema = new Schema({
 });
 
 const locationCounterSchema = new Schema({counter:Number});
-const locationCounter = mongoose.model('Location',locationCounterSchema,'locationCounter');
+const locationCounter = mongoose.model('LocationCounter',locationCounterSchema,'locationCounter');
 const locationDetails = mongoose.model('Location', locationSchema, 'location');
 module.exports = {
     locationDetails,
