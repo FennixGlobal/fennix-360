@@ -8,7 +8,7 @@ var logger = require('morgan');
 var net = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoDev).catch((err) => {
+mongoose.connect(mongoLocal).catch((err) => {
     console.log(err);
 });
 
@@ -17,9 +17,8 @@ TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
-        // locationBusiness
-        console.log('data is transmitted');
-        console.log(data);
+        const returnValue = locationBusiness.locationUpdateBusiness(data);
+        socket.write(returnValue);
     });
     socket.on('error', (err) => {
         console.log('error occurred');
