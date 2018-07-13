@@ -93,7 +93,7 @@ const processLocation = (location) => {
     };
     const vel = location.substring(62, 5);
     let deviceAttribute = {
-        beneficiaryId: 67,
+        beneficiaryId: 78,
         serialNumber: location.substring(9, 5),
         hdop: location.substring(99, 2),
         cellId: location.substring(108, 4),
@@ -120,7 +120,7 @@ const processLocation = (location) => {
     locationObj = {
         longitude,
         latitude,
-        beneficiaryId: 67,
+        beneficiaryId: 78,
         deviceDate: dateTime
     };
     locationAccessor.updateLocation(locationObj).then((doc) => {
