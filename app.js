@@ -18,7 +18,7 @@ TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
         console.log(data);
-        const returnValue = locationBusiness.locationUpdateBusiness(data);
+        const returnValue = locationBusiness.locationUpdateBusiness('#RD111111482163531610726351081307182023301827.7582N06918.6306W003.24200000A0017352100000000006201230137080EA0BE1083');
         console.log('handshake string ');
         console.log(returnValue);
         socket.write(returnValue);
