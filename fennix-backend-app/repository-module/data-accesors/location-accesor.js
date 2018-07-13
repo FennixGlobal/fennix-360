@@ -11,11 +11,14 @@ const mapMarkerQuery = async (req) => {
 const updateLocation = async(req)=>{
     let counterResponse = await locationCounterQuery(), locationId;
     locationId = counterResponse[0]['_doc']['_id'];
+    console.log('location counter');
+    console.log(locationId);
     let obj = {
       _id: locationId, ...req
     };
     locationDetailsUpdateQuery(obj);
     insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
+    console.log(counterResponse[0]['_doc']['_id']);
 };
 
 const getCenterIdsForLoggedInUserAndSubUsersAccessor = async (req) => {
