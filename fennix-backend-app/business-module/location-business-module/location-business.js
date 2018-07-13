@@ -44,7 +44,7 @@ const locationUpdateBusiness = (data) => {
     let returnString = '';
     if (data.substring(data.indexOf(cmdLogin) + 1)) {
         returnString = processData(data);
-    } else if (data.substring(data.indexOf(cmdLocationReport) + 1)) {
+    } else if (data.indexOf(cmdLocationReport) !== -1) {
         console.log('entered location report');
       console.log(data);
         // let values = data.split('#')[1].split('');
