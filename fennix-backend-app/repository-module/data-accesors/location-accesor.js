@@ -1,4 +1,4 @@
-const {getBeneficiaryLocationList,selectCenterIdsForLoggedInUserAndSubUsersQuery,selectCenterIdsForGivenUserIdQuery,selectCountryForSuperAdminQuery,selectAllCountriesForMasterAdminQuery,selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
+const {getBeneficiaryLocationList,locationCounterQuery,insertNextPrimaryKeyQuery,locationDetailsUpdateQuery,selectCenterIdsForLoggedInUserAndSubUsersQuery,selectCenterIdsForGivenUserIdQuery,selectCountryForSuperAdminQuery,selectAllCountriesForMasterAdminQuery,selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 
@@ -7,6 +7,17 @@ const mapMarkerQuery = async (req) => {
     returnObj = await getBeneficiaryLocationList(req);
     return returnObj;
 };
+
+const updateLocation = async(req)=>{
+    let counterResponse = await locationCounterQuery(), locationId;
+    locationId = counterResponse[0]['_doc']['_id'];
+    let obj = {
+      _id: locationId, ...req
+    };
+    locationDetailsUpdateQuery(obj);
+    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
+};
+
 const getCenterIdsForLoggedInUserAndSubUsersAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, selectCenterIdsForLoggedInUserAndSubUsersQuery, false);
@@ -41,5 +52,6 @@ module.exports = {
     mapMarkerQuery,
     getCountryListAccessor,
     getCenterIdsAccessor,
+    updateLocation,
     getCenterIdsForLoggedInUserAndSubUsersAccessor
 };

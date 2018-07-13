@@ -1,3 +1,5 @@
+const {locationAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const {deviceBusiness} = require('../location-business-module/location-business');
 //Connection Commands
 //(Tracker -> Server)
 const cmdLogin = "#SA";
@@ -43,6 +45,8 @@ const locationUpdateBusiness = (data) => {
     } else if (data.substring(data.indexOf(cmdLocationReport) + 1)) {
         let values = data.split('#')[1].split('');
         values.forEach((item) => {
+            console.log('this is the location data');
+            console.log(item);
             processLocation("#" + item);
         });
     }
@@ -52,7 +56,6 @@ const locationUpdateBusiness = (data) => {
 const processData = (data) => {
     let returnString = '';
     const checkSum = 3;
-    console.log(data);
     const dataCommand = data.substring(0, 3);
     locationObj = {
         connectionSession: data.substring(3, 6),
@@ -71,92 +74,59 @@ const processData = (data) => {
     return returnString;
 };
 
-const processLocation = () => {
-    // string comando = locationString.Substring(0, 3);
-    //
-    // this.device = this.device ?? new Device();
-    // this.location = this.location ?? new Location();
+const processLocation = (location) => {
+    let locationObj = {}, latitude, longitude;
+    const NudosToKm = 1.852;
+    const direction = 6;
+    let command = location.substring(0, 3);
+    let connectionSession = location.substring(3, 6);
+    let day = location.substring(29, 2);
+    let month = location.substring(31, 2);
+    let year = location.substring(33, 2);
+    let hours = location.substring(35, 2);
+    let minutes = location.substring(37, 2);
+    let seconds = location.substring(39, 2);
+    let dateTime = `${day} ${month} ${year} ${hours}:${minutes}`;
+    let devices = {
+        imei: location.substring(14, 15),
+        deviceUpdatedDate: dateTime
+    };
+    const vel = location.substring(62, 5);
+    let deviceAttribute = {
+        beneficiaryId: 67,
+        serialNumber: location.substring(9, 5),
+        hdop: location.substring(99, 2),
+        cellId: location.substring(108, 4),
+        mcc: location.substring(101, 3),
+        lac: location.substring(104, 4),
+        serverDate: new Date(),
+        speed: ((parseInt(vel.substring(0, 3), 10) + parseFloat(vel.substring(4, 1)) / 10) * NudosToKm),
+        course: parseInt(location.substring(67, 2)) * direction,
+        moveDistance: parseInt(location.substring(69, 5)),
+        gpsStatus: location.substring(74, 1),
+        alarmStatus: location.substring(75, 21),
+        // location.BatteryPercentage = GetBatteryPercent(location.BatteryVoltage);
+        satellitesNumber: location.substring(96, 2),
+        deviceUpdatedDate: dateTime,
+        GPSFixedStatus: location.substring(98, 1)
+    };
 
-    // location.ConnectingSession = locationString.Substring(3, 6);
-    // location.SerialNumber = locationString.Substring(9, 5);
-    // device.IMEI = locationString.Substring(14, 15);
-    // // Este se establece desde el inicio de sesion
-    // this.Id = device.IMEI;
-    //
-    // //Determinar la fecha y hora del reporte
-    // byte dia = Convert.ToByte(locationString.Substring(29, 2));
-    // byte mes = Convert.ToByte(locationString.Substring(31, 2));
-    // int anio = Thread.CurrentThread.CurrentCulture.Calendar.ToFourDigitYear(Convert.ToInt16(locationString.Substring(33, 2)));
-    // byte horas = Convert.ToByte(locationString.Substring(35, 2));
-    // byte minutos = Convert.ToByte(locationString.Substring(37, 2));
-    // byte segundos = Convert.ToByte(locationString.Substring(39, 2));
-    //
-    // location.DeviceDate = new System.DateTime(anio, mes, dia, horas, minutos, segundos, DateTimeKind.Utc);
-    //
-    // //Determinar la latitud y longitud  (establecidad en DDMM.MMMM y DDDMM.MMMM respectivamente)
-    // Int16 signoLat = 1;
-    // string lat = locationString.Substring(41, 10);
-    // if (!lat.EndsWith("N")) signoLat = -1;
-    // location.Latitude = signoLat * getValue(lat.Substring(0, 2), lat.Substring(2, 2), lat.Substring(5, 4));
-    //
-    // Int16 signoLng = 1;
-    // string lng = locationString.Substring(51, 11);
-    // if (!lng.EndsWith("E")) signoLng = -1;
-    // location.Longitude = signoLng * getValue(lng.Substring(0, 3), lng.Substring(3, 2), lng.Substring(6, 4));
-    //
-    // //Determinar la velocidad (establecida en Nudos ->  velocidad x 1.852 = km/h)
-    // const double NudosToKm = 1.852;
-    // string vel = locationString.Substring(62, 5);
-    // location.Speed = Convert.ToDecimal((Convert.ToInt16(vel.Substring(0, 3)) + Convert.ToDouble(vel.Substring(4, 1)) / 10) * NudosToKm);
-    //
-    // //Determinar la dirección de movimiento
-    // const int DireccionToGrados = 6;
-    // location.Course = Convert.ToInt16(locationString.Substring(67, 2)) * DireccionToGrados;
-    //
-    // //Determinar la distancia del ultimo movimento
-    // location.MoveDistance = Convert.ToInt32(locationString.Substring(69, 5));
-    //
-    // //Determinar el estado del GPS
-    // location.GPSstatus = locationString.Substring(74, 1);
-    //
-    // //Determinar el estado de las alarmas
-    // location.AlarmStatus = locationString.Substring(75, 21);
-    // ProcessAlarms(ref location);
-    // location.BatteryPercentage = GetBatteryPercent(location.BatteryVoltage);
-    //
-    // //Determinar el numero de satelites
-    // location.SatellitesNumber = Convert.ToByte(locationString.Substring(96, 2));
-    //
-    // //Determinar el estado de conexión del GPS
-    // location.GPSFixedStatus = Convert.ToByte(locationString.Substring(98, 1));
-    //
-    // //Determinar la precisión del GPS
-    // location.HDOP = Convert.ToInt32(locationString.Substring(99, 2));
-    //
-    // //Determinar datos de la conexión celular
-    // location.MCC = locationString.Substring(101, 3);
-    // location.LAC = locationString.Substring(104, 4);
-    // location.CellID = locationString.Substring(108, 4);
-    //
-    // if (logFile == null) logFile = new Log(this.Id);
-    // try
-    // {
-    //     if (!DebugMode)
-    //     {
-    //         if (SendPosition())
-    //         {
-    //             logFile.WriteToFile(Log.Type.Info, "Receive Position - " + this.trama);
-    //         }
-    //     }
-    // }
-    // catch (Exception ex)
-    // {
-    //     logFile.WriteToFile(Log.Type.Error, "Receive dPosition - " + this.trama + " => " + ex.Message + ex.InnerException ?? ex.InnerException.Message);
-    // }
-    //
-    // //#RE + this.IdSesion + this.NumeroSerial + device.IMEI + 000015 +0 06
-    // var rdRsponse = cmdLocationResponse + location.ConnectingSession + location.SerialNumber + device.IMEI + "100000" + "006";
-    // return rdRsponse;
+    let lat = location.substring(41, 10);
+    let signLat = !lat.indexOf("N") !== -1 ? 1 : -1;
+    latitude = signLat * getValue(lat.substring(0, 2), lat.substring(2, 2), lat.substring(5, 4));
+    let lng = location.substring(51, 11);
+    let signLng = !lng.indexOf("E") !== -1 ? 1 : -1;
+    longitude = signLng * getValue(lng.substring(0, 3), lng.substring(3, 2), lng.substring(6, 4));
+    locationObj = {
+        longitude,
+        latitude,
+        beneficiaryId: 67,
+        deviceDate: dateTime
+    };
+    locationAccessor.updateLocation(locationObj).then((doc) => {
+        console.log(doc)
+    });
+    // deviceBusiness.updateDeviceDetails({device: devices, deviceAttr: deviceAttribute});
 
 };
 
@@ -187,6 +157,15 @@ processLogin = () => {
     // }
 
 // }
+}
+
+const getValue = (intPart, decimalPart1, decimalPart2) => {
+    let ret = 0;
+    ret = parseFloat(intPart);
+    ret += parseFloat(decimalPart1) / 60;
+    ret += parseFloat(decimalPart2) / (60 * 10000);
+    return ret;
+};
 }
 module.exports = {
     locationUpdateBusiness

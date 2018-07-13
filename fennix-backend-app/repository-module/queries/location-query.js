@@ -1,4 +1,4 @@
-const {locationDetails} = require('../models/beneficiary-location-model');
+const {locationDetails, locationCounter} = require('../models/beneficiary-location-model');
 const selectCenterIdsForLoggedInUserAndSubUsersQuery = 'select distinct center_id, (select name from centers where center_id = u.center_id) as center_name from users u where user_id IN ';
 
 const getBeneficiaryLocationList = (query) => {
@@ -16,6 +16,31 @@ const getBeneficiaryLocationList = (query) => {
             latestBeneficiaryLocation: {"$first": "$$CURRENT"}
         });
 };
+
+const locationCounterQuery = () => {
+    return locationCounter.find({})
+};
+
+const insertNextPrimaryKeyQuery = (req) => {
+    locationCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+const locationDetailsUpdateQuery = (req) => {
+    return locationDetails.insert({
+        _id: req._id,
+        beneficiaryId: req.beneficiaryId,
+        deviceDate: req.deviceDate,
+        latitude: req.latitude,
+        longitude: req.longitude
+    })
+};
+
 //SUPERVISOR & ADMIN
 const selectCountryForSupervisorAndAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $2) as country_name, loc.locale_key from location loc where location_id = (select location_id from users where user_id = $1) and location_level = 3';
 
@@ -43,7 +68,6 @@ const selectAllCenterIdsForMasterAdminQuery = 'select c.location_id, (select nam
 const selectCenterIdsForGivenUserIdQuery = 'select location_id from location where parent_location_id = (select location_id from location where parent_location_id = (select location_id from users where user_id = $1))';
 
 
-
 module.exports = {
     getBeneficiaryLocationList,
     selectCenterIdsForSupervisorQuery,
@@ -54,6 +78,8 @@ module.exports = {
     selectCenterIdsForOperatorQuery,
     selectCountryForSupervisorAndAdminQuery,
     selectCountryForSuperAdminQuery,
+    locationDetailsUpdateQuery,
+    locationCounterQuery, insertNextPrimaryKeyQuery,
     selectAllCountriesForMasterAdminQuery,
     selectCenterIdsForLoggedInUserAndSubUsersQuery
 };
