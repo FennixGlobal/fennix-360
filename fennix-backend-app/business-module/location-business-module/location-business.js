@@ -39,16 +39,20 @@ const deviceAlarms = "000000000000000000000";
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = (data) => {
+    console.log('entering method');
+    console.log(data);
     let returnString = '';
     if (data.substring(data.indexOf(cmdLogin) + 1)) {
         returnString = processData(data);
     } else if (data.substring(data.indexOf(cmdLocationReport) + 1)) {
-        let values = data.split('#')[1].split('');
-        values.forEach((item) => {
-            console.log('this is the location data');
-            console.log(item);
-            processLocation("#" + item);
-        });
+        console.log('entered location report');
+      console.log(data);
+        // let values = data.split('#')[1].split('');
+        // values.forEach((item) => {
+        //     console.log('this is the location data');
+        //     console.log(item);
+            processLocation(data);
+        // });
     }
     return returnString;
 };
