@@ -43,7 +43,8 @@ const ticketListBasedOnStatusBusiness = async (req) => {
 };
 
 const listTicketsBusiness = async (req) => {
-    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},finalResponseObj = {},
+    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
+        finalResponseObj = {},
         ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
@@ -73,7 +74,8 @@ const listTicketsBusiness = async (req) => {
                     fullName: item['full_name'],
                     role: item['role_name'],
                     roleId: item['user_role'],
-                    gender: item['gender']
+                    gender: item['gender'],
+                    userId: item['user_id']
                 };
                 userDetailMap[item['user_id']] = userDetailsObj;
                 userIds.push(item['user_id']);
