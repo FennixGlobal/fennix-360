@@ -18,7 +18,7 @@ const updateLocation = async(req)=>{
     };
     console.log(req);
     locationDetailsUpdateQuery(obj);
-    insertNextPrimaryKeyQuery(locationId);
+    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
     // console.log(counterResponse[0]['_doc']['_id']);
 };
 
