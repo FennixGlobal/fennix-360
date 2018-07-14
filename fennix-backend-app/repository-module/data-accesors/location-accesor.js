@@ -14,7 +14,7 @@ const updateLocation = async(req)=>{
     console.log('location counter');
     console.log(locationId);
     let obj = {
-      _id: locationId, ...req
+      _id: parseInt(locationId, 10), ...req
     };
     console.log(req);
     locationDetailsUpdateQuery(obj);
