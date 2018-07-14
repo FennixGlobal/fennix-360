@@ -42,7 +42,7 @@ const addBeneficiaryBusiness = async (req) => {
 
 const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
-        beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {},
+        beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {},locationObj = {};
         locBeneficiaryIdList = [], beneficiaryDevices = {}, deviceLocDeviceList = [],
         beneficiaryListResponse, returnObj, beneficiaryLocArray;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
@@ -64,96 +64,102 @@ const beneficiaryMapDataList = async (req) => {
             };
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-        beneficiaryLocArray = await  mapMarkerQuery([...beneficiaryIdListAndDetailObj.beneficiaryIdArray]);
-        beneficiaryLocArray.forEach((item) => {
-            beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]};
-            beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['location'] = {
-                latitude: item.latestBeneficiaryLocation.latitude,
-                longitude: item.latestBeneficiaryLocation.longitude
-            };
-            locBeneficiaryIdList.push(item.latestBeneficiaryLocation.beneficiaryId);
-            beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
-        });
+        // beneficiaryLocArray = await  mapMarkerQuery([...beneficiaryIdListAndDetailObj.beneficiaryIdArray]);
+        // beneficiaryLocArray.forEach((item) => {
+        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]};
+        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['location'] = {
+        //         latitude: item.latestBeneficiaryLocation.latitude,
+        //         longitude: item.latestBeneficiaryLocation.longitude
+        //     };
+        //     locBeneficiaryIdList.push(item.latestBeneficiaryLocation.beneficiaryId);
+        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
+        // });
+            // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(locBeneficiaryIdList);
         beneficiaryDeviceArray.forEach((item) => {
-            deviceLocDeviceList.push(item.latestBeneficiaryDeviceDetails.beneficiaryId);
+            locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
+            locationObj[item.beneficiaryId]['location'] = {
+                longitude:item.location.longitude,
+                latitude:item.location.latitude
+            };
+            locationObj[item.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['roleId'];
             const deviceDetails = {};
             let noOfViolations = 0;
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId] = [];
-            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryVoltage);
+            deviceDetails[item.beneficiaryId] = [];
+            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
             if (batteryVoltage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
             }
-            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryPercentage);
+            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
             if (batteryPercentage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus) {
+            if (item.deviceAttributes.beltStatus) {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus) {
+            if (item.deviceAttributes.shellStatus) {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus) {
+            if (item.deviceAttributes.gpsStatus) {
                 noOfViolations += 1;
             }
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'Battery Percentage',
                 status: batteryPercentage['deviceStatus'],
                 key: 'batteryPercentage',
                 icon: 'battery_charging_full',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryPercentage
+                value: item.deviceAttributes.batteryPercentage
             });
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'Battery Voltage',
                 key: 'batteryVoltage',
                 icon: 'battery_std',
                 status: batteryVoltage['deviceStatus'],
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryVoltage
+                value: item.deviceAttributes.batteryVoltage
             });
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'Belt Status',
                 key: 'beltStatus',
                 icon: 'link',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus
+                status: item.deviceAttributes.beltStatus ? 'violation' : 'safe',
+                value: item.deviceAttributes.beltStatus
             });
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'Shell Status',
                 key: 'shellStatus',
                 icon: 'lock',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus
+                status: item.deviceAttributes.shellStatus ? 'violation' : 'safe',
+                value: item.deviceAttributes.shellStatus
             });
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus
+                status: item.deviceAttributes.gpsStatus ? 'violation' : 'safe',
+                value: item.deviceAttributes.gpsStatus
             });
-            deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
+            deviceDetails[item.beneficiaryId].push({
                 text: 'Speed',
                 key: 'speed',
                 icon: 'directions_run',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.speed > 0 ? 'moving' : 'still',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.speed
+                status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
+                value: item.deviceAttributes.speed
             });
             beneficiaryDevices = {...deviceDetails};
-            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId];
-            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['noOfViolations'] = {
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                 text: 'No of Violations',
                 value: noOfViolations
             };
-            gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]};
-            gridData[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
+            gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
+            gridData[item.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
         });
-        beneficiaryReturnObj['markers'] = [];
-        Object.keys(beneficiaryFilter).forEach((marker) => {
-            if (deviceLocDeviceList.indexOf(marker) !== -1) {
-                beneficiaryReturnObj['markers'].push(beneficiaryFilter[marker])
-            }
-        });
+        beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key=>locationObj[key]);
+        // Object.keys(beneficiaryFilter).forEach((marker) => {
+        //     if (deviceLocDeviceList.indexOf(marker) !== -1) {
+        //         beneficiaryReturnObj['markers'].push(beneficiaryFilter[marker])
+        //     }
+        // });
         beneficiaryReturnObj['deviceDetails'] = beneficiaryDevices;
         beneficiaryReturnObj['deviceDetailsArray'] = Object.keys(beneficiaryDevices).map((device) => beneficiaryDevices[device]);
         beneficiaryReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
