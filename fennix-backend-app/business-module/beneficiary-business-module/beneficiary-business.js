@@ -51,7 +51,7 @@ const beneficiaryMapDataList = async (req) => {
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
             console.log('beneficiaryIds for request');
             console.log(item.beneficiaryid);
-            init.beneficiaryIdArray.push(item.beneficiaryid);
+            init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
@@ -77,7 +77,7 @@ const beneficiaryMapDataList = async (req) => {
         //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
         // });
         // deviceLocDeviceList.push(item.beneficiaryId);
-        beneficiaryDeviceArray = await deviceBybeneficiaryQuery(locBeneficiaryIdList);
+        beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         console.log('beneficiaryDeviceArray');
         console.log(beneficiaryDeviceArray.length);
         beneficiaryDeviceArray.forEach((item) => {
