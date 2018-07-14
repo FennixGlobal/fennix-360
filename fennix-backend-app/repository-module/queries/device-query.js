@@ -87,6 +87,11 @@ const deviceDetailsByBeneficiaryId = (query) => {
             $unwind: "$deviceAttributes"
         },
         {
+            $sort: {
+                "deviceAttributes.deviceUpdatedDate" : -1
+            }
+        },
+        {
             $group: {
                 _id: "$_id",
                 latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
@@ -102,6 +107,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
         }
     ]);
 };
+
 const listDevicesQuery = (query) => {
     return deviceAggregator.aggregate([
         {
