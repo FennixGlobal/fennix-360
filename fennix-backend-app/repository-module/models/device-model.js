@@ -7,7 +7,7 @@ const deviceSchema = new Schema({
     _id:  String,
     beneficiaryId:  String,
     deviceTypeId:  String,
-    imei:  String,
+    imei:  Number,
     simCardId:  String,
     isActive:  Boolean,
     online: String,
