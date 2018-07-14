@@ -109,7 +109,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
 };
 
 const getBeneficiaryIdByImeiQuery = (query) => {
-    return deviceAggregator.find({imei:query}).project({"deviceId":"$_id","beneficiaryId":1})
+    return deviceAggregator.find({imei:query}, {"_id":1,"beneficiaryId":1});
 };
 
 const listDevicesQuery = (query) => {
