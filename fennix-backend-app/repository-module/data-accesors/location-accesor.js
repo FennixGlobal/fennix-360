@@ -1,4 +1,4 @@
-const {getBeneficiaryLocationList,locationCounterQuery,insertNextPrimaryKeyQuery,locationDetailsUpdateQuery,selectCenterIdsForLoggedInUserAndSubUsersQuery,selectCenterIdsForGivenUserIdQuery,selectCountryForSuperAdminQuery,selectAllCountriesForMasterAdminQuery,selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
+const {getBeneficiaryLocationList, locationCounterQuery, insertNextPrimaryKeyQuery, locationDetailsUpdateQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 
@@ -8,19 +8,15 @@ const mapMarkerQuery = async (req) => {
     return returnObj;
 };
 
-const updateLocation = async(req)=>{
+const updateLocation = async (req) => {
     let counterResponse = await locationCounterQuery(), locationId;
     locationId = counterResponse[0]['counter'];
-    console.log('location counter');
-    console.log(locationId);
-    console.log(typeof locationId);
     let obj = {
-      _id: locationId, ...req
+        _id: locationId, ...req
     };
-    console.log(req);
     locationDetailsUpdateQuery(obj);
     insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
-    // console.log(counterResponse[0]['_doc']['_id']);
+    return counterResponse;
 };
 
 const getCenterIdsForLoggedInUserAndSubUsersAccessor = async (req) => {
