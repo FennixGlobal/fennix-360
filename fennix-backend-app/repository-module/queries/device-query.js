@@ -78,10 +78,10 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 from: "deviceAttributes",
                 localField: "deviceAttributeId",
                 foreignField: "_id",
-                as: "deviceAttribute"
+                as: "deviceAttributes"
             }
         },
-        {$unwind: "$deviceAttribute"},
+        {$unwind: "$deviceAttributes"},
         {
             $lookup: {
                 from: "location",
