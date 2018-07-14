@@ -1,4 +1,4 @@
-const {getDeviceAttributeCounterQuery, getBeneficiaryIdByImeiQuery,updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
+const {getDeviceAttributeCounterQuery,updateLocationDeviceAttributeMasterQuery, getBeneficiaryIdByImeiQuery,updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
 const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await userIdDeviceAggregatorQuery(req);
@@ -22,6 +22,12 @@ const updateDeviceAttributesAccessor = async (req) => {
 const getBeneficiaryIdByImeiAccessor = async(req)=>{
     let returnObj;
     returnObj = await getBeneficiaryIdByImeiQuery(req);
+    return returnObj;
+};
+
+const updateLocationDeviceAttributeMasterAccessor = async (req) => {
+    let returnObj;
+    returnObj = await updateLocationDeviceAttributeMasterQuery(req);
     return returnObj;
 };
 
@@ -75,5 +81,6 @@ module.exports = {
     fetchNextPrimaryKeyAccessor,
     insertNextPrimaryKeyAccessor,
     getDeviceByDeviceIdAccessor,
-    getBeneficiaryIdByImeiAccessor
+    getBeneficiaryIdByImeiAccessor,
+    updateLocationDeviceAttributeMasterAccessor
 };

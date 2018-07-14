@@ -39,7 +39,7 @@ const deviceAggregatorDashboard = async (req) => {
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
         beneficiaryResponse.rows.forEach((item) => {
-            deviceArray.push(item.beneficiaryid);
+            deviceArray.push(`${item.beneficiaryid}`);
         });
         deviceResponse = await deviceAggregator(deviceArray);
     }
@@ -89,7 +89,7 @@ const listDevicesBusiness = async (req) => {
 
     if (arrayNotEmptyCheck(devicesResponse)) {
         devicesResponse.forEach((item) => {
-            beneficiaryIds.push(item['beneficiaryId']);
+            beneficiaryIds.push(`${item['beneficiaryId']}`);
         });
         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
         if (objectHasPropertyCheck(beneficiaryNameResponse, 'rows') && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {

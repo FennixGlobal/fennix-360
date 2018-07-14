@@ -3,6 +3,15 @@ require('mongoose-double')(mongoose);
 const Schema = mongoose.Schema;
 let SchemaType = mongoose.Schema.Types;
 
+const locationDeviceAttributeMasterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    beneficiaryId: Number,
+    locationId: Number,
+    deviceAttributeId: Number,
+    deviceId: Number
+});
+
+
 const deviceSchema = new Schema({
     _id:  String,
     beneficiaryId:  String,
@@ -90,6 +99,7 @@ const DeviceAttributesModelCounter = mongoose.model('DeviceAttributeCounter', de
 const devicesModel = mongoose.model('Device');
 
 const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
+const LocationDeviceAttributeMasterModel = mongoose.model('LocationDeviceAttribute', locationDeviceAttributeMasterSchema, 'locationDeviceAttributeMaster');
 
 module.exports = {
     deviceAggregator,
@@ -97,5 +107,6 @@ module.exports = {
     devicesModel,
     DeviceCounter,
     DeviceAttributesModelCounter,
-    DeviceAttributeModel
+    DeviceAttributeModel,
+    LocationDeviceAttributeMasterModel
 };

@@ -1,4 +1,4 @@
-const {deviceAggregator, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
+const {deviceAggregator,LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
 
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
@@ -107,6 +107,17 @@ const deviceDetailsByBeneficiaryId = (query) => {
         }
     ]);
 };
+
+const updateLocationDeviceAttributeMasterQuery = (req) => {
+    return LocationDeviceAttributeMasterModel.update({beneficiaryId: req.beneficiaryId}, {$set: {locationId:req.locationId, deviceAttributeId: req.deviceAttributeId, deviceId: req.deviceId}}, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
 
 const getBeneficiaryIdByImeiQuery = (query) => {
     return deviceAggregator.find({imei:query}, {"_id":1,"beneficiaryId":1});
@@ -261,5 +272,6 @@ module.exports = {
     updateDeviceAttributeQuery,
     updateDeviceCounterQuery,
     getBeneficiaryIdByImeiQuery,
-    getDeviceDetailsByDeviceIdQuery
+    getDeviceDetailsByDeviceIdQuery,
+    updateLocationDeviceAttributeMasterQuery
 };
