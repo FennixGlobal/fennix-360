@@ -49,6 +49,8 @@ const beneficiaryMapDataList = async (req) => {
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
+            console.log('beneficiaryIds for request');
+            console.log(item.beneficiaryid);
             init.beneficiaryIdArray.push(item.beneficiaryid);
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
@@ -76,6 +78,8 @@ const beneficiaryMapDataList = async (req) => {
         // });
         // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(locBeneficiaryIdList);
+        console.log('beneficiaryDeviceArray');
+        console.log(beneficiaryDeviceArray.length);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
             locationObj[item.beneficiaryId]['location'] = {
