@@ -1,4 +1,4 @@
-const {getDeviceAttributeCounterQuery,updateLocationDeviceAttributeMasterQuery, getBeneficiaryIdByImeiQuery,updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
+const {getDeviceAttributeCounterQuery, updateLocationDeviceAttributeMasterQuery, getBeneficiaryIdByImeiQuery, updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
 const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await userIdDeviceAggregatorQuery(req);
@@ -14,12 +14,12 @@ const deviceBybeneficiaryQuery = async (req) => {
 const updateDeviceAttributesAccessor = async (req) => {
     let counterResponse = await getDeviceAttributeCounterQuery();
     req = {...req, _id: counterResponse[0]['counter']};
-    console.log(req);
     updateDeviceAttributeQuery(req);
     updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
+    return counterResponse;
 };
 
-const getBeneficiaryIdByImeiAccessor = async(req)=>{
+const getBeneficiaryIdByImeiAccessor = async (req) => {
     let returnObj;
     returnObj = await getBeneficiaryIdByImeiQuery(req);
     return returnObj;
