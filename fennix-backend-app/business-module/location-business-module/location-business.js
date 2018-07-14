@@ -2,6 +2,7 @@ const locationAccessor = require('../../repository-module/data-accesors/location
 const {deviceBusiness} = require('../location-business-module/location-business');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const deviceCommandConstants = require('../../util-module/device-command-constants');
+
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = (data) => {
@@ -61,6 +62,9 @@ const processLocation = async (location) => {
         imei: location.substr(14, 15),
         deviceUpdatedDate: dateTime
     };
+    let beneficiaryResponse = deviceAccessor.getBeneficiaryIdByImeiAccessor(location.substr(14, 15));
+    console.log('beneficiary response from devices table');
+    console.log(beneficiaryResponse);
     const vel = location.substr(62, 5);
     let deviceAttribute = {
         beneficiaryId: 78,
