@@ -1,4 +1,4 @@
-const {deviceAggregator,LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
+const {deviceAggregator, LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
 
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
@@ -69,37 +69,40 @@ const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
 //     ]);
 // };
 const deviceDetailsByBeneficiaryId = (query) => {
-return LocationDeviceAttributeMasterModel.aggregate([
-    {
-        $match: {"beneficiaryId" :{$in:query}}
-    },
-    {
-        $lookup: {
-            from: "deviceAttributes",
-            localField:"deviceAttributeId",
-            foreignField:"_id",
-            as: "deviceAttribute"
-        }
-    },
-    {$unwind:"$deviceAttribute"},
-    {
-        $lookup: {
-            from: "location",
-            localField:"locationId",
-            foreignField:"_id",
-            as: "location"
-        }
-    },
-    {$unwind:"$location"},
-    {
-        $lookup:{ from: "devices",
-            localField:"deviceId",
-            foreignField:"_id",
-            as: "device"}
-    },
-    {$unwind:"$device"}
-]);
-    //     return deviceAggregator.aggregate([
+    return LocationDeviceAttributeMasterModel.aggregate([
+        {
+            $match: {"beneficiaryId": {$in: query}}
+        },
+        {
+            $lookup: {
+                from: "deviceAttributes",
+                localField: "deviceAttributeId",
+                foreignField: "_id",
+                as: "deviceAttribute"
+            }
+        },
+        {$unwind: "$deviceAttribute"},
+        {
+            $lookup: {
+                from: "location",
+                localField: "locationId",
+                foreignField: "_id",
+                as: "location"
+            }
+        },
+        {$unwind: "$location"},
+        {
+            $lookup: {
+                from: "devices",
+                localField: "deviceId",
+                foreignField: "_id",
+                as: "device"
+            }
+        },
+        {$unwind: "$device"}
+    ]);
+};
+//     return deviceAggregator.aggregate([
 //         {
 //             $match: {
 //                 "beneficiaryId": {"$in": query}
@@ -139,7 +142,13 @@ return LocationDeviceAttributeMasterModel.aggregate([
 // };
 
 const updateLocationDeviceAttributeMasterQuery = (req) => {
-    return LocationDeviceAttributeMasterModel.update({beneficiaryId: req.beneficiaryId}, {$set: {locationId:req.locationId, deviceAttributeId: req.deviceAttributeId, deviceId: req.deviceId}}, {upsert: true}).then(doc => {
+    return LocationDeviceAttributeMasterModel.update({beneficiaryId: req.beneficiaryId}, {
+        $set: {
+            locationId: req.locationId,
+            deviceAttributeId: req.deviceAttributeId,
+            deviceId: req.deviceId
+        }
+    }, {upsert: true}).then(doc => {
         if (!doc) {
             console.log('error');
         } else {
@@ -150,7 +159,7 @@ const updateLocationDeviceAttributeMasterQuery = (req) => {
 
 
 const getBeneficiaryIdByImeiQuery = (query) => {
-    return deviceAggregator.find({imei:query}, {"_id":1,"beneficiaryId":1});
+    return deviceAggregator.find({imei: query}, {"_id": 1, "beneficiaryId": 1});
 };
 
 const listDevicesQuery = (query) => {
