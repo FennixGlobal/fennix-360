@@ -59,7 +59,7 @@ const locationUpdateBusiness = (data) => {
 };
 
 const processData = (data) => {
-    let returnString = '';
+    let returnString;
     const checkSum = 3;
     const dataCommand = data. substr(0, 3);
     locationObj = {
@@ -75,7 +75,7 @@ const processData = (data) => {
     if (!this.loginStatus) {
         this.loginStatus = processLogin();
     }
-    returnString = data.replace(data. substr(0, 2), '#SB');
+    returnString = data.replace(data. substr(0, 3), '#SB');
     return returnString;
 };
 
