@@ -44,7 +44,7 @@ const processData = (data) => {
     return returnString;
 };
 
-const processLocation = (location) => {
+const processLocation = async (location) => {
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
@@ -95,16 +95,14 @@ const processLocation = (location) => {
     };
     console.log('location Object');
     console.log(locationObj);
-    locationAccessor.updateLocation(locationObj).then((data) => {
-        const locationId = data;
-        console.log('location Id from mongo');
-        console.log(locationId);
-        deviceAttribute = {...deviceAttribute, locationId: locationId};
-        console.log('device attributes');
-        console.log(deviceAttribute);
-        deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
-            console.log(doc);
-        });
+    const locationId = await locationAccessor.updateLocation(locationObj);
+    console.log('location Id from mongo');
+    console.log(locationId);
+    deviceAttribute = {...deviceAttribute, locationId: locationId};
+    console.log('device attributes');
+    console.log(deviceAttribute);
+    deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
+        console.log(doc);
     });
 };
 
