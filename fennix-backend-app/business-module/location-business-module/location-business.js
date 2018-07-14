@@ -117,11 +117,11 @@ const processLocation = (location) => {
     };
 
     let lat = location. substr(41, 10);
-    let signLat = !lat.indexOf("N") !== -1 ? 1 : -1;
-    latitude = signLat * getValue(lat. substr(0, 2), lat. substr(2, 2), lat. substr(5, 4));
+    let signLat = lat.indexOf('N') !== -1 ? 1 : -1;
+    latitude = signLat * getValue(lat.substr(0, 2), lat.substr(2, 2), lat.substr(5, 4));
     let lng = location. substr(51, 11);
-    let signLng = !lng.indexOf("E") !== -1 ? 1 : -1;
-    longitude = signLng * getValue(lng. substr(0, 3), lng. substr(3, 2), lng. substr(6, 4));
+    let signLng = lng.indexOf('E') !== -1 ? 1 : -1;
+    longitude = signLng * getValue(lng.substr(0, 3), lng.substr(3, 2), lng.substr(6, 4));
     locationObj = {
         longitude: longitude,
         latitude: latitude,
