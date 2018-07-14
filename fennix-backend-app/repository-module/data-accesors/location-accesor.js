@@ -14,10 +14,8 @@ const updateLocation = async(req)=>{
     console.log('location counter');
     console.log(locationId);
     console.log(typeof locationId);
-    console.log(BigInt(locationId));
-    console.log(typeof BigInt(locationId));
     let obj = {
-      _id: parseFloat(locationId), ...req
+      _id: locationId, ...req
     };
     console.log(req);
     locationDetailsUpdateQuery(obj);
