@@ -78,8 +78,8 @@ const beneficiaryMapDataList = async (req) => {
         // });
         // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
-        console.log('beneficiaryDeviceArray');
-        console.log(beneficiaryDeviceArray.length);
+        // console.log('beneficiaryDeviceArray');
+        // console.log(beneficiaryDeviceArray.length);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
             locationObj[item.beneficiaryId]['location'] = {

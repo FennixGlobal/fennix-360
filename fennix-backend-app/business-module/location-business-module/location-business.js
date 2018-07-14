@@ -2,6 +2,14 @@ const locationAccessor = require('../../repository-module/data-accesors/location
 const {deviceBusiness} = require('../location-business-module/location-business');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const deviceCommandConstants = require('../../util-module/device-command-constants');
+const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
+// const beneficiaryAccesor = require('../../')
+const express = require('express');
+const http = require('http');
+const io = require('socket.io');
+const socketExpress = express();
+const server = http.createServer(socketExpress);
+const socketIO = io(server);
 
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
@@ -111,10 +119,18 @@ const processLocation = async (location) => {
         locationId: parseInt(locationId[0]['counter']),
         deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
     };
-    console.log(masterRequest);
+    // console.log(masterRequest);
     deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
         console.log(doc)
     });
+    socketIO.on('connection', (sock) => {
+        sock.on('requestDetails', async (data) => {
+            let returnObj;
+            returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
+            sock.emit('mapData', returnObj);
+        })
+    })
+
 };
 
 processLogin = () => {
