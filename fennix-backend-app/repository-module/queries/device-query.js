@@ -105,9 +105,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 as: "deviceType"
             }
         }
-    ]).option({allowDiskUse: true}).exec((data) => {
-        console.log(data);
-    });
+    ],{'allowDiskUse': true});
 };
 
 const listDevicesQuery = (query) => {
