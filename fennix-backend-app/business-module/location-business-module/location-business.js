@@ -98,7 +98,7 @@ const processLocation = async (location) => {
     const locationId = await locationAccessor.updateLocation(locationObj);
     console.log('location Id from mongo');
     console.log(locationId);
-    deviceAttribute = {...deviceAttribute, locationId: locationId};
+    deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
     console.log('device attributes');
     console.log(deviceAttribute);
     deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
