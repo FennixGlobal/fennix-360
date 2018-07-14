@@ -88,7 +88,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
         },
         {
             $sort: {
-                "deviceAttributes.deviceUpdatedDate" : -1
+                "deviceAttributes.deviceUpdatedDate": -1
             }
         },
         {
@@ -162,6 +162,8 @@ const listDeviceTypesQuery = () => {
 };
 
 const updateDeviceAttributeQuery = (req) => {
+    console.log('update device attribute query');
+    console.log(req);
     let deviceAttribute = new DeviceAttributeModel(req);
     deviceAttribute.save(function (err) {
         if (err) return console.error(err);

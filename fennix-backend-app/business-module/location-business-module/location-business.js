@@ -37,6 +37,8 @@ const processData = (data) => {
         this.loginStatus = processLogin();
     }
     returnString = data.replace(data.substr(0, 3), '#SB');
+    console.log('handshake string in processData');
+    console.log(returnString);
     return returnString;
 };
 
@@ -89,8 +91,14 @@ const processLocation = (location) => {
         beneficiaryId: 78,
         deviceDate: dateTime
     };
+    console.log('location Object');
+    console.log(locationObj);
     const locationId = locationAccessor.updateLocation(locationObj);
+    console.log('location Id from mongo');
+    console.log(locationId);
     deviceAttribute = {...deviceAttribute, locationId: locationId};
+    console.log('device attributes');
+    console.log(deviceAttribute);
     deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
         console.log(doc);
     });
@@ -150,6 +158,8 @@ const batteryPercentCalculator = (batteryVoltage) => {
     else if (vSelected === (volts.length - 1)) {
         ret = 100;
     }
+    console.log('battery Percentage');
+    console.log(ret);
     return ret;
 };
 
@@ -168,6 +178,8 @@ const getGSMLevel = (gsmStatus) => {
     } else if (28 < gsmStatus) {
         gsmLevel = 5;
     }
+    console.log('gsm level');
+    console.log(gsmLevel);
     return gsmLevel;
 };
 
