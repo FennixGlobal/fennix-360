@@ -1,5 +1,4 @@
-const {getDeviceDetailsByDeviceIdQuery,insertNextPrimaryKeyQuery,fetchNextPrimaryKeyQuery,insertDeviceQuery,userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery,listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
-
+const {getDeviceAttributeCounterQuery,updateDeviceAttributeQuery,updateDeviceCounterQuery,getDeviceDetailsByDeviceIdQuery,insertNextPrimaryKeyQuery,fetchNextPrimaryKeyQuery,insertDeviceQuery,userIdDeviceAggregatorQuery,deviceDetailsByBeneficiaryId,getDeviceDetailsForListOfBeneficiariesQuery,listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
 const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await userIdDeviceAggregatorQuery(req);
@@ -10,6 +9,12 @@ const deviceBybeneficiaryQuery = async (req) => {
     let returnObj;
     returnObj = await deviceDetailsByBeneficiaryId(req);
     return returnObj;
+};
+
+const updateDeviceAttributesAccessor = async(req) => {
+    let counterResponse = await getDeviceAttributeCounterQuery();
+    updateDeviceAttributeQuery(req);
+    updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
 };
 
 const getDeviceDetailsForListOfBeneficiariesAccessor = async (req) => {
@@ -58,6 +63,7 @@ module.exports = {
     getDeviceDetailsForListOfBeneficiariesAccessor,
     listDevicesAccessor,
     insertDeviceAccessor,
+    updateDeviceAttributesAccessor,
     fetchNextPrimaryKeyAccessor,
     insertNextPrimaryKeyAccessor,
     getDeviceByDeviceIdAccessor

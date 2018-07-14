@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+require('mongoose-double')(mongoose);
 const locationSchema = new Schema({
     _id: Number,
     beneficiaryId: String,
     deviceId: String,
     deviceDate: String,
-    latitude: Number,
-    longitude: Number
+    latitude: Double,
+    longitude: Double
 });
 
 const locationCounterSchema = new Schema({counter:Number});

@@ -1,4 +1,4 @@
-const {deviceAggregator, deviceTypeModel, DeviceCounter} = require('../models/device-model');
+const {deviceAggregator, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
 
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
@@ -102,127 +102,151 @@ const deviceDetailsByBeneficiaryId = (query) => {
         }
     ]);
 };
-    const listDevicesQuery = (query) => {
-        return deviceAggregator.aggregate([
-            {
-                $match: {
-                    "centerId": {$in: query}
-                }
-            },
-            {
-                $lookup: {
-                    from: "deviceTypes",
-                    localField: "deviceTypeId",
-                    foreignField: "_id",
-                    as: "deviceTypes"
-                }
-            },
-            {
-                $lookup: {
-                    from: "simcards",
-                    localField: "simCardId",
-                    foreignField: "_id",
-                    as: "simcards"
-                }
-            },
-            {
-                $unwind: "$deviceTypes"
-            },
-            {
-                $unwind: "$simcards"
-            },
-            {
-                $project: {
-                    "imei": 1,
-                    "deviceTypes.name": 1,
-                    "simcards.phoneNo": 1,
-                    "isActive": 1,
-                    "centerId": 1,
-                    "beneficiaryId": 1
-                }
+const listDevicesQuery = (query) => {
+    return deviceAggregator.aggregate([
+        {
+            $match: {
+                "centerId": {$in: query}
             }
-        ])
-    };
-
-    const listDeviceTypesQuery = () => {
-        return deviceTypeModel.find(
-            {
-                "isActive": true
-            },
-            {
-                "name": 1
+        },
+        {
+            $lookup: {
+                from: "deviceTypes",
+                localField: "deviceTypeId",
+                foreignField: "_id",
+                as: "deviceTypes"
             }
-        );
-    };
+        },
+        {
+            $lookup: {
+                from: "simcards",
+                localField: "simCardId",
+                foreignField: "_id",
+                as: "simcards"
+            }
+        },
+        {
+            $unwind: "$deviceTypes"
+        },
+        {
+            $unwind: "$simcards"
+        },
+        {
+            $project: {
+                "imei": 1,
+                "deviceTypes.name": 1,
+                "simcards.phoneNo": 1,
+                "isActive": 1,
+                "centerId": 1,
+                "beneficiaryId": 1
+            }
+        }
+    ])
+};
 
-    const insertDeviceQuery = (req) => {
-        let deviceObj = new deviceAggregator(req);
-        deviceObj.save(function (err) {
-            if (err) return console.error(err);
-        });
-    };
+const listDeviceTypesQuery = () => {
+    return deviceTypeModel.find(
+        {
+            "isActive": true
+        },
+        {
+            "name": 1
+        }
+    );
+};
 
-    const fetchNextPrimaryKeyQuery = () => {
-        return DeviceCounter.find();
-    };
+const updateDeviceAttributeQuery = (req) => {
+    let deviceAttribute = new DeviceAttributeModel(req);
+    deviceAttribute.save(function (err) {
+        if (err) return console.error(err);
+    });
+};
+
+const getDeviceAttributeCounterQuery = () => {
+    return DeviceAttributesModelCounter.find({});
+};
+
+const updateDeviceCounterQuery = (req) => {
+    DeviceAttributesModelCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+const insertDeviceQuery = (req) => {
+    let deviceObj = new deviceAggregator(req);
+    deviceObj.save(function (err) {
+        if (err) return console.error(err);
+    });
+};
+
+const fetchNextPrimaryKeyQuery = () => {
+    return DeviceCounter.find();
+};
 
 //TODO: add retry logic for failure conditions
-    const insertNextPrimaryKeyQuery = (req) => {
-        DeviceCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-            if (!doc) {
-                console.log('error');
-            } else {
-                console.log('success');
-            }
-        });
-    };
+const insertNextPrimaryKeyQuery = (req) => {
+    DeviceCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
-    const getDeviceDetailsByDeviceIdQuery = (req) => {
-        return deviceAggregator.aggregate([
-            {
-                $match: {
-                    _id: req.deviceId
-                }
-            },
-            {
-                $lookup: {
-                    from: 'simcards',
-                    localField: 'simCardId',
-                    foreignField: '_id',
-                    as: 'simcards'
-                }
-            },
-            {
-                $lookup: {
-                    from: 'deviceTypes',
-                    localField: 'deviceTypeId',
-                    foreignField: '_id',
-                    as: 'deviceType'
-                }
-            },
-            {$unwind: '$simcards'},
-            {$unwind: '$deviceType'},
-            {
-                $project: {
-                    'imei': 1,
-                    'isActive': 1,
-                    'simcards.phoneNo': 1,
-                    'simcards.simCardType': 1,
-                    'firmwareVersion': 1,
-                    'deviceType.name': 1
-                }
+const getDeviceDetailsByDeviceIdQuery = (req) => {
+    return deviceAggregator.aggregate([
+        {
+            $match: {
+                _id: req.deviceId
             }
-        ])
-    };
+        },
+        {
+            $lookup: {
+                from: 'simcards',
+                localField: 'simCardId',
+                foreignField: '_id',
+                as: 'simcards'
+            }
+        },
+        {
+            $lookup: {
+                from: 'deviceTypes',
+                localField: 'deviceTypeId',
+                foreignField: '_id',
+                as: 'deviceType'
+            }
+        },
+        {$unwind: '$simcards'},
+        {$unwind: '$deviceType'},
+        {
+            $project: {
+                'imei': 1,
+                'isActive': 1,
+                'simcards.phoneNo': 1,
+                'simcards.simCardType': 1,
+                'firmwareVersion': 1,
+                'deviceType.name': 1
+            }
+        }
+    ])
+};
 
-    module.exports = {
-        userIdDeviceAggregatorQuery,
-        deviceDetailsByBeneficiaryId,
-        getDeviceDetailsForListOfBeneficiariesQuery,
-        listDevicesQuery,
-        listDeviceTypesQuery,
-        insertDeviceQuery,
-        insertNextPrimaryKeyQuery,
-        fetchNextPrimaryKeyQuery,
-        getDeviceDetailsByDeviceIdQuery
-    };
+module.exports = {
+    userIdDeviceAggregatorQuery,
+    deviceDetailsByBeneficiaryId,
+    getDeviceDetailsForListOfBeneficiariesQuery,
+    listDevicesQuery,
+    listDeviceTypesQuery,
+    insertDeviceQuery,
+    insertNextPrimaryKeyQuery,
+    fetchNextPrimaryKeyQuery,
+    getDeviceAttributeCounterQuery,
+    updateDeviceAttributeQuery,
+    updateDeviceCounterQuery,
+    getDeviceDetailsByDeviceIdQuery
+};
