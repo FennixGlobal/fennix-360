@@ -49,7 +49,7 @@ const beneficiaryMapDataList = async (req) => {
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
-            init.beneficiaryIdArray.push(`${item.beneficiaryid}`);
+            init.beneficiaryIdArray.push(item.beneficiaryid);
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
@@ -80,21 +80,21 @@ const beneficiaryMapDataList = async (req) => {
             const deviceDetails = {};
             let noOfViolations = 0;
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId] = [];
-            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage);
+            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryVoltage);
             if (batteryVoltage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
             }
-            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage);
+            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryPercentage);
             if (batteryPercentage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus) {
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus) {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus) {
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus) {
                 noOfViolations += 1;
             }
-            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus) {
+            if (item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus) {
                 noOfViolations += 1;
             }
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
@@ -102,42 +102,42 @@ const beneficiaryMapDataList = async (req) => {
                 status: batteryPercentage['deviceStatus'],
                 key: 'batteryPercentage',
                 icon: 'battery_charging_full',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryPercentage
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryPercentage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Battery Voltage',
                 key: 'batteryVoltage',
                 icon: 'battery_std',
                 status: batteryVoltage['deviceStatus'],
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.batteryVoltage
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.batteryVoltage
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Belt Status',
                 key: 'beltStatus',
                 icon: 'link',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.beltStatus
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus ? 'violation' : 'safe',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.beltStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Shell Status',
                 key: 'shellStatus',
                 icon: 'lock',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.shellStatus
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus ? 'violation' : 'safe',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.shellStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus ? 'violation' : 'safe',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.gpsStatus
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus ? 'violation' : 'safe',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.gpsStatus
             });
             deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId].push({
                 text: 'Speed',
                 key: 'speed',
                 icon: 'directions_run',
-                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed > 0 ? 'moving' : 'still',
-                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.locationDetails.speed
+                status: item.latestBeneficiaryDeviceDetails.deviceAttributes.speed > 0 ? 'moving' : 'still',
+                value: item.latestBeneficiaryDeviceDetails.deviceAttributes.speed
             });
             beneficiaryDevices = {...deviceDetails};
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.latestBeneficiaryDeviceDetails.beneficiaryId]['deviceDetails'] = deviceDetails[item.latestBeneficiaryDeviceDetails.beneficiaryId];
