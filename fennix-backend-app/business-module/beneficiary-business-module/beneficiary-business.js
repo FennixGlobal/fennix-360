@@ -55,7 +55,7 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
-                imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei'] : 999999999,
+                // imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei'] : 999999999,
                 documentId: item['document_id'],
                 mobileNo: item['mobileno'],
                 image: item['image'],
@@ -86,6 +86,7 @@ const beneficiaryMapDataList = async (req) => {
                 longitude: item.location.longitude,
                 latitude: item.location.latitude
             };
+            beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['imei'] = item['device']['imei'];
             locationObj[item.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['roleId'];
             const deviceDetails = {};
             let noOfViolations = 0;
