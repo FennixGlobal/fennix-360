@@ -63,11 +63,13 @@ const processLocation = async (location) => {
         deviceUpdatedDate: dateTime
     };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    console.log('beneficiary response from devices table');
-    console.log(beneficiaryResponse);
+    let masterRequest = {
+        deviceId: parseInt(beneficiaryResponse[0]['_id']),
+        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
+    };
     const vel = location.substr(62, 5);
     let deviceAttribute = {
-        beneficiaryId: 78,
+        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
         serialNumber: location.substr(9, 5),
         hdop: location.substr(99, 2),
         cellId: location.substr(108, 4),
@@ -94,19 +96,22 @@ const processLocation = async (location) => {
     locationObj = {
         longitude: longitude,
         latitude: latitude,
-        beneficiaryId: 78,
+        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
         deviceDate: dateTime
     };
     console.log('location Object');
     console.log(locationObj);
     const locationId = await locationAccessor.updateLocation(locationObj);
-    console.log('location Id from mongo');
-    console.log(locationId);
     deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
-    console.log('device attributes');
-    console.log(deviceAttribute);
-    deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
-        console.log(doc);
+    const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
+    masterRequest = {
+        ...masterRequest,
+        locationId: parseInt(locationId[0]['counter']),
+        deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
+    };
+    console.log(masterRequest);
+    deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
+        console.log(doc)
     });
 };
 
