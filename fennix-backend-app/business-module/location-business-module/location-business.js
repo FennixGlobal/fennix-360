@@ -8,10 +8,12 @@ const locationUpdateBusiness = (data) => {
     console.log('entering method');
     console.log(data);
     let returnString = '';
-    if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {
+    console.log(deviceCommandConstants.cmdLogin);
+    console.log(deviceCommandConstants.cmdLocationReport);
+    if (data.indexOf('#SA') !== -1) {
         console.log('entered login part');
         returnString = processData(data);
-    } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {
+    } else if (data.indexOf('#RD') !== -1) {
         console.log('entered location report');
         console.log(data);
         processLocation(data);
