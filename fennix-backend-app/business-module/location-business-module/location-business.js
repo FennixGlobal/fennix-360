@@ -87,11 +87,11 @@ const processLocation = (location) => {
     let connectionSession = location. substr(3, 6);
     let day = location. substr(29, 2);
     let month = location. substr(31, 2);
-    let year = location. substr(33, 2);
+    let year = `20${location. substr(33, 2)}`;
     let hours = location. substr(35, 2);
     let minutes = location. substr(37, 2);
     let seconds = location. substr(39, 2);
-    let dateTime = `${day} ${month} ${year} ${hours}:${minutes}`;
+    let dateTime = new Date(year,month,day,hours,minutes,seconds);
     let devices = {
         imei: location. substr(14, 15),
         deviceUpdatedDate: dateTime
@@ -117,16 +117,11 @@ const processLocation = (location) => {
     };
 
     let lat = location. substr(41, 10);
-    console.log(lat);
     let signLat = !lat.indexOf("N") !== -1 ? 1 : -1;
     latitude = signLat * getValue(lat. substr(0, 2), lat. substr(2, 2), lat. substr(5, 4));
     let lng = location. substr(51, 11);
     let signLng = !lng.indexOf("E") !== -1 ? 1 : -1;
     longitude = signLng * getValue(lng. substr(0, 3), lng. substr(3, 2), lng. substr(6, 4));
-    console.log('longitude');
-    console.log(longitude);
-    console.log('latitude');
-    console.log(latitude);
     locationObj = {
         longitude: longitude,
         latitude: latitude,
