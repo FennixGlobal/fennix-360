@@ -42,7 +42,7 @@ const addBeneficiaryBusiness = async (req) => {
 
 const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
-        beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {},locationObj = {};
+        beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         locBeneficiaryIdList = [], beneficiaryDevices = {}, deviceLocDeviceList = [],
         beneficiaryListResponse, returnObj, beneficiaryLocArray;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
@@ -74,13 +74,13 @@ const beneficiaryMapDataList = async (req) => {
         //     locBeneficiaryIdList.push(item.latestBeneficiaryLocation.beneficiaryId);
         //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
         // });
-            // deviceLocDeviceList.push(item.beneficiaryId);
+        // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(locBeneficiaryIdList);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
             locationObj[item.beneficiaryId]['location'] = {
-                longitude:item.location.longitude,
-                latitude:item.location.latitude
+                longitude: item.location.longitude,
+                latitude: item.location.latitude
             };
             locationObj[item.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['roleId'];
             const deviceDetails = {};
@@ -154,7 +154,7 @@ const beneficiaryMapDataList = async (req) => {
             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
             gridData[item.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
         });
-        beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key=>locationObj[key]);
+        beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
         // Object.keys(beneficiaryFilter).forEach((marker) => {
         //     if (deviceLocDeviceList.indexOf(marker) !== -1) {
         //         beneficiaryReturnObj['markers'].push(beneficiaryFilter[marker])
