@@ -10,7 +10,7 @@ const mapMarkerQuery = async (req) => {
 
 const updateLocation = async(req)=>{
     let counterResponse = await locationCounterQuery(), locationId;
-    locationId = counterResponse[0]['_doc']['_id'];
+    locationId = counterResponse[0]['counter'];
     console.log('location counter');
     console.log(locationId);
     let obj = {
