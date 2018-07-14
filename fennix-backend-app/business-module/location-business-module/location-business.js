@@ -62,7 +62,7 @@ const processLocation = async (location) => {
         imei: location.substr(14, 15),
         deviceUpdatedDate: dateTime
     };
-    let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(location.substr(14, 15));
+    let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
     console.log('beneficiary response from devices table');
     console.log(beneficiaryResponse);
     const vel = location.substr(62, 5);
