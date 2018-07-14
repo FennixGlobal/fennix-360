@@ -156,7 +156,7 @@ const beneficiaryMapDataList = async (req) => {
                 value: noOfViolations
             };
             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
-            gridData[item.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
+            // gridData[item.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
         });
         beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
         // Object.keys(beneficiaryFilter).forEach((marker) => {
