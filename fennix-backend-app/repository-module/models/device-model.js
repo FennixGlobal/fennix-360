@@ -4,17 +4,17 @@ const Schema = mongoose.Schema;
 let SchemaType = mongoose.Schema.Types;
 
 const deviceSchema = new Schema({
-    _id: {Type: String},
-    beneficiaryId: {Type: String},
-    deviceTypeId: {Type: String},
-    imei: {Type: String},
-    simCardId: {Type: String},
-    isActive: {Type: Boolean},
-    online: {Type: String},
-    centerId: {Type: String},
-    firmwareVersion: {Type: String},
-    createdDate: {Type: String},
-    updatedDate: {Type: String}
+    _id:  String,
+    beneficiaryId:  String,
+    deviceTypeId:  String,
+    imei:  String,
+    simCardId:  String,
+    isActive:  Boolean,
+    online: String,
+    centerId:  String,
+    firmwareVersion:  String,
+    createdDate:  String,
+    updatedDate:  String
 });
 
 const deviceTypeSchema = new Schema({
@@ -80,12 +80,15 @@ const deviceCounterSchema = new Schema({
 });
 
 const deviceAggregator = mongoose.model('Device', deviceSchema, 'devices');
+
 const deviceTypeModel = mongoose.model('DeviceType', deviceTypeSchema, 'deviceTypes');
 
 const DeviceAttributeModel = mongoose.model('DeviceAttribute', deviceAttributesSchema, 'deviceAttributes');
+
 const DeviceAttributesModelCounter = mongoose.model('DeviceAttributeCounter', deviceCounterSchema, 'deviceAttributesCounter');
 
 const devicesModel = mongoose.model('Device');
+
 const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
 
 module.exports = {

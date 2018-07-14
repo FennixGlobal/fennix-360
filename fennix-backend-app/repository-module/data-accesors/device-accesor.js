@@ -1,4 +1,4 @@
-const {getDeviceAttributeCounterQuery, updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
+const {getDeviceAttributeCounterQuery, getBeneficiaryIdByImeiQuery,updateDeviceAttributeQuery, updateDeviceCounterQuery, getDeviceDetailsByDeviceIdQuery, insertNextPrimaryKeyQuery, fetchNextPrimaryKeyQuery, insertDeviceQuery, userIdDeviceAggregatorQuery, deviceDetailsByBeneficiaryId, getDeviceDetailsForListOfBeneficiariesQuery, listDeviceTypesQuery, listDevicesQuery} = require('../queries/device-query');
 const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await userIdDeviceAggregatorQuery(req);
@@ -17,6 +17,12 @@ const updateDeviceAttributesAccessor = async (req) => {
     console.log(req);
     updateDeviceAttributeQuery(req);
     updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
+};
+
+const getBeneficiaryIdByImeiAccessor = async(req)=>{
+    let returnObj;
+    returnObj = await getBeneficiaryIdByImeiQuery(req);
+    return returnObj;
 };
 
 const getDeviceDetailsForListOfBeneficiariesAccessor = async (req) => {
@@ -68,5 +74,6 @@ module.exports = {
     updateDeviceAttributesAccessor,
     fetchNextPrimaryKeyAccessor,
     insertNextPrimaryKeyAccessor,
-    getDeviceByDeviceIdAccessor
+    getDeviceByDeviceIdAccessor,
+    getBeneficiaryIdByImeiAccessor
 };

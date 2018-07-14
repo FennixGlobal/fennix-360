@@ -105,7 +105,11 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 as: "deviceType"
             }
         }
-    ],{'allowDiskUse': true});
+    ]);
+};
+
+const getBeneficiaryIdByImeiQuery = (query) => {
+    return deviceAggregator.find({imei:query}).project({"deviceId":"$_id","beneficiaryId":1})
 };
 
 const listDevicesQuery = (query) => {
@@ -256,5 +260,6 @@ module.exports = {
     getDeviceAttributeCounterQuery,
     updateDeviceAttributeQuery,
     updateDeviceCounterQuery,
+    getBeneficiaryIdByImeiQuery,
     getDeviceDetailsByDeviceIdQuery
 };
