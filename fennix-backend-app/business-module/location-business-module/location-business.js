@@ -95,14 +95,16 @@ const processLocation = (location) => {
     };
     console.log('location Object');
     console.log(locationObj);
-    const locationId = locationAccessor.updateLocation(locationObj);
-    console.log('location Id from mongo');
-    console.log(locationId);
-    deviceAttribute = {...deviceAttribute, locationId: locationId};
-    console.log('device attributes');
-    console.log(deviceAttribute);
-    deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
-        console.log(doc);
+    locationAccessor.updateLocation(locationObj).then((data) => {
+        const locationId = data;
+        console.log('location Id from mongo');
+        console.log(locationId);
+        deviceAttribute = {...deviceAttribute, locationId: locationId};
+        console.log('device attributes');
+        console.log(deviceAttribute);
+        deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute).then((doc) => {
+            console.log(doc);
+        });
     });
 };
 
