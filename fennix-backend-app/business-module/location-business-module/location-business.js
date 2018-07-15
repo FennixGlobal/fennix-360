@@ -14,7 +14,7 @@ const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
-const locationUpdateBusiness = async (data) => {
+const locationUpdateBusiness = (data) => {
     // console.log('entering method');
     // console.log(data);
     let returnString = '';
@@ -26,7 +26,7 @@ const locationUpdateBusiness = async (data) => {
     } else if (data.indexOf('#RD') !== -1) {
         // console.log('entered location report');
         // console.log(data);
-        await processLocation(data);
+        processLocation(data);
     }
     return returnString;
 };
@@ -189,8 +189,8 @@ const batteryPercentCalculator = (batteryVoltage) => {
     else if (vSelected === (volts.length - 1)) {
         ret = 100;
     }
-    console.log('battery Percentage');
-    console.log(ret);
+    // console.log('battery Percentage');
+    // console.log(ret);
     return ret;
 };
 
@@ -209,8 +209,8 @@ const getGSMLevel = (gsmStatus) => {
     } else if (28 < gsmStatus) {
         gsmLevel = 5;
     }
-    console.log('gsm level');
-    console.log(gsmLevel);
+    // console.log('gsm level');
+    // console.log(gsmLevel);
     return gsmLevel;
 };
 
