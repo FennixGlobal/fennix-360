@@ -171,7 +171,7 @@ const filterMetadataQuery = 'select fs.filter_position\n' +
     'join filter_attributes fa on fa.filter_id = fs.filter_id\n';
 
 //TODO: need to fetch is_admin_user from the request
-const getRolesForRoleIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = rm.role_id) and language = $2) as role_name,rm.role_id as role_id from role_mapping rm where admin_role = $1 and is_admin_role = true';
+const getRolesForRoleIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = rm.role_id) and language = $2) as role_name,rm.role_id as role_id from role_mapping rm where admin_role = $1 and is_admin_role = $3';
 
 module.exports = {
     getRolesForRoleIdQuery,
