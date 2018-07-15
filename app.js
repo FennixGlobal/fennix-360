@@ -80,7 +80,8 @@ var corsOptions = {
 //     origin: ,
 //     credentials: true
 // };
-app.use(cors(corsOptions));
+// corsOptions
+app.use(cors());
 app.options('*', cors());
 // app.use(function (req, res, next) {
 //     const origin = req.headers.origin;
