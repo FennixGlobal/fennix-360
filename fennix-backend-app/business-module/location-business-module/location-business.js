@@ -120,10 +120,14 @@ const processLocation = async (location) => {
     deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
         console.log(doc)
     });
+    socketIO.listen(3150);
     socketIO.on('connection', (sock) => {
+        console.log('on connection');
         sock.on('requestDetails', async (data) => {
             let returnObj;
             returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
+            console.log('map data');
+            console.log(returnObj);
             sock.emit('mapData', returnObj);
         })
     })
