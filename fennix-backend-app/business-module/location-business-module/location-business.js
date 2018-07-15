@@ -116,11 +116,11 @@ const processLocation = async (location) => {
         locationId: parseInt(locationId[0]['counter']),
         deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
     };
-    // console.log(masterRequest);
+    console.log(masterRequest);
     deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
         console.log(doc)
     });
-    // socketIO.listen(3150);
+    socketIO.listen(3110);
     socketIO.on('connection', (sock) => {
         console.log('on connection');
         sock.on('requestDetails', async (data) => {
