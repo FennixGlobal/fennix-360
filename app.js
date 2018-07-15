@@ -67,6 +67,7 @@ var corsOptions = {
     credentials: true
 };
 app.use(cors(corsOptions));
+app.options('*',cors());
 // app.use(function (req, res, next) {
 //     const origin = req.headers.origin;
 //     if (whiteList.indexOf(origin) > -1) {
