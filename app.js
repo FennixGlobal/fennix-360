@@ -56,16 +56,29 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-const whiteList = [
-    'http://localhost:4200', 'http://sofiadev.fennix360.com:4200', '13.57.50.187:4200'
-];
+var whiteList = ['http://localhost:4200', 'http://sofiadev.fennix360.com:4200', '13.57.50.187:4200'];
+// var checkOrigin = function(req.headers.origin){
+//     // function (origin, callback) {
+//         whiteList.indexOf(origin) !== -1
+//         // callback(null, isWhitelisted);
+//     // }
+// };
+// var whitelist = ['http://example1.com', 'http://example2.com']
 var corsOptions = {
     origin: function (origin, callback) {
-        var isWhitelisted = whiteList.indexOf(origin) !== -1;
-        callback(null, isWhitelisted);
+        if (whiteList.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error('Not allowed by CORS'))
+        }
     },
     credentials: true
 };
+
+// var corsOptions = {
+//     origin: ,
+//     credentials: true
+// };
 app.use(cors(corsOptions));
 app.options('*',cors());
 // app.use(function (req, res, next) {
