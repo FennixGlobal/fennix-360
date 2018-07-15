@@ -57,29 +57,26 @@ app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 const whiteList = [
-    'http://localhost:4200','http://sofiadev.fennix360.com:4200','13.57.50.187:4200'
+    'http://localhost:4200', 'http://sofiadev.fennix360.com:4200', '13.57.50.187:4200'
 ];
-// };
-// var originsWhitelist = [
-//     'http://localhost:4200',      //this is my front-end url for development
-//     'http://www.myproductionurl.com'
-// ];
 var corsOptions = {
-    origin: function(origin, callback){
+    origin: function (origin, callback) {
         var isWhitelisted = whiteList.indexOf(origin) !== -1;
         callback(null, isWhitelisted);
     },
-    credentials:true
+    credentials: true
 };
-//here is the magic
 app.use(cors(corsOptions));
-app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200,http://sofiadev.fennix360.com:4200,13.57.50.187:4200');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
-    res.setHeader("Access-Control-Allow-Credentials", 'true');
-    next();
-});
+// app.use(function (req, res, next) {
+//     const origin = req.headers.origin;
+//     if (whiteList.indexOf(origin) > -1) {
+//         res.setHeader('Access-Control-Allow-Origin', origin);
+//     }
+//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
+//     res.setHeader("Access-Control-Allow-Credentials", 'true');
+//     next();
+// });
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
