@@ -41,7 +41,7 @@ const addBeneficiaryBusiness = async (req) => {
 };
 
 const beneficiaryMapDataList = async (req) => {
-    let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
+    let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
