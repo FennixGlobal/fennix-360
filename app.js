@@ -83,16 +83,16 @@ var corsOptions = {
 // corsOptions
 app.use(cors());
 app.options('*', cors());
-// app.use(function (req, res, next) {
-//     const origin = req.headers.origin;
-//     if (whiteList.indexOf(origin) > -1) {
-//         res.setHeader('Access-Control-Allow-Origin', origin);
-//     }
-//     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-//     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
-//     res.setHeader("Access-Control-Allow-Credentials", 'true');
-//     next();
-// });
+app.use(function (req, res, next) {
+    const origin = req.headers.origin;
+    if (whiteList.indexOf(origin) > -1) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
+    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
+    res.setHeader("Access-Control-Allow-Credentials", 'true');
+    next();
+});
 
 app.use('/auth', authRouter);
 app.use('/user', userRouter);
