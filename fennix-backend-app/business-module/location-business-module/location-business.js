@@ -3,13 +3,14 @@ const {deviceBusiness} = require('../location-business-module/location-business'
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const deviceCommandConstants = require('../../util-module/device-command-constants');
 const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
+const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 // const beneficiaryAccesor = require('../../')
-const express = require('express');
-const http = require('http');
-const io = require('socket.io');
-const socketExpress = express();
-const server = http.createServer(socketExpress);
-const socketIO = io(server);
+// const express = require('express');
+// const http = require('http');
+// const io = require('socket.io');
+// const socketExpress = express();
+// const server = http.createServer(socketExpress);
+// const socketIO = io(server);
 
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
@@ -48,8 +49,8 @@ const processData = (data) => {
         this.loginStatus = processLogin();
     }
     returnString = data.replace(data.substr(0, 3), '#SB');
-    console.log('handshake string in processData');
-    console.log(returnString);
+    // console.log('handshake string in processData');
+    // console.log(returnString);
     return returnString;
 };
 
@@ -71,55 +72,55 @@ const processLocation = async (location) => {
         deviceUpdatedDate: dateTime
     };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    console.log(beneficiaryResponse);
-    let masterRequest = {
-        deviceId: parseInt(beneficiaryResponse[0]['_id']),
-        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
-    };
-    const vel = location.substr(62, 5);
-    let deviceAttribute = {
-        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
-        serialNumber: location.substr(9, 5),
-        hdop: location.substr(99, 2),
-        cellId: location.substr(108, 4),
-        mcc: location.substr(101, 3),
-        lac: location.substr(104, 4),
-        serverDate: new Date(),
-        speed: ((parseInt(vel.substr(0, 3), 10) + parseFloat(vel.substr(4, 1)) / 10) * NudosToKm).toFixed(2),
-        course: parseInt(location.substr(67, 2)) * direction,
-        moveDistance: parseInt(location.substr(69, 5)),
-        gpsStatus: location.substr(74, 1),
-        alarmStatus: location.substr(75, 21),
-        ...alarmStatusDeCompiler(location.substr(75, 21)),
-        satellitesNumber: location.substr(96, 2),
-        deviceUpdatedDate: dateTime,
-        gpsFixedStatus: location.substr(98, 1)
-    };
-
-    let lat = location.substr(41, 10);
-    let signLat = lat.indexOf('N') !== -1 ? 1 : -1;
-    latitude = signLat * getValue(lat.substr(0, 2), lat.substr(2, 2), lat.substr(5, 4));
-    let lng = location.substr(51, 11);
-    let signLng = lng.indexOf('E') !== -1 ? 1 : -1;
-    longitude = signLng * getValue(lng.substr(0, 3), lng.substr(3, 2), lng.substr(6, 4));
-    locationObj = {
-        longitude: longitude,
-        latitude: latitude,
-        beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
-        deviceDate: dateTime
-    };
-    const locationId = await locationAccessor.updateLocation(locationObj);
-    deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
-    const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
-    masterRequest = {
-        ...masterRequest,
-        locationId: parseInt(locationId[0]['counter']),
-        deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
-    };
-    console.log(masterRequest);
-    deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
-        console.log(doc)
-    });
+    // console.log(beneficiaryResponse);
+    if (arrayNotEmptyCheck(beneficiaryResponse)) {
+        let masterRequest = {
+            deviceId: parseInt(beneficiaryResponse[0]['_id']),
+            beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
+        };
+        const vel = location.substr(62, 5);
+        let deviceAttribute = {
+            beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
+            serialNumber: location.substr(9, 5),
+            hdop: location.substr(99, 2),
+            cellId: location.substr(108, 4),
+            mcc: location.substr(101, 3),
+            lac: location.substr(104, 4),
+            serverDate: new Date(),
+            speed: ((parseInt(vel.substr(0, 3), 10) + parseFloat(vel.substr(4, 1)) / 10) * NudosToKm).toFixed(2),
+            course: parseInt(location.substr(67, 2)) * direction,
+            moveDistance: parseInt(location.substr(69, 5)),
+            gpsStatus: location.substr(74, 1),
+            alarmStatus: location.substr(75, 21),
+            ...alarmStatusDeCompiler(location.substr(75, 21)),
+            satellitesNumber: location.substr(96, 2),
+            deviceUpdatedDate: dateTime,
+            gpsFixedStatus: location.substr(98, 1)
+        };
+        let lat = location.substr(41, 10);
+        let signLat = lat.indexOf('N') !== -1 ? 1 : -1;
+        latitude = signLat * getValue(lat.substr(0, 2), lat.substr(2, 2), lat.substr(5, 4));
+        let lng = location.substr(51, 11);
+        let signLng = lng.indexOf('E') !== -1 ? 1 : -1;
+        longitude = signLng * getValue(lng.substr(0, 3), lng.substr(3, 2), lng.substr(6, 4));
+        locationObj = {
+            longitude: longitude,
+            latitude: latitude,
+            beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
+            deviceDate: dateTime
+        };
+        const locationId = await locationAccessor.updateLocation(locationObj);
+        deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
+        const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
+        masterRequest = {
+            ...masterRequest,
+            locationId: parseInt(locationId[0]['counter']),
+            deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
+        };
+        deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
+            console.log(doc)
+        });
+    }
     // socketIO.listen(3110);
     // socketIO.on('connection', (sock) => {
     //     console.log('on connection');
