@@ -5,6 +5,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+
 var net = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -17,10 +18,7 @@ TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     socket.on('data', (data) => {
-        console.log(data);
         const returnValue = locationBusiness.locationUpdateBusiness(data);
-        console.log('handshake string ');
-        console.log(returnValue);
         socket.write(returnValue);
     });
     socket.on('error', (err) => {
@@ -59,7 +57,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
     next();

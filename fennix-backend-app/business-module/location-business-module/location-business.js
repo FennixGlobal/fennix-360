@@ -71,6 +71,7 @@ const processLocation = async (location) => {
         deviceUpdatedDate: dateTime
     };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
+    console.log(beneficiaryResponse);
     let masterRequest = {
         deviceId: parseInt(beneficiaryResponse[0]['_id']),
         beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
