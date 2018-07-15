@@ -57,8 +57,8 @@ const selectAllCountriesForMasterAdminQuery = 'select (select localized_text fro
 const selectCenterIdsForOperatorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from users where user_id = $1)';
 
 //SUPERVISOR
-const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';
-
+// const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';
+const selectCenterIdsForSupervisorQuery = 'select name from centers where center_id = (select center_id from users where user_id = $1)';
 //ADMIN
 const selectCenterIdsForAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1)))';
 
