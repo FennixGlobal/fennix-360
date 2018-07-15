@@ -108,13 +108,9 @@ const processLocation = async (location) => {
         beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
         deviceDate: dateTime
     };
-    console.log('location Object');
-    console.log(locationObj);
     const locationId = await locationAccessor.updateLocation(locationObj);
     deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
     const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
-    console.log('deviceAttrId');
-    console.log(deviceAttributeId);
     masterRequest = {
         ...masterRequest,
         locationId: parseInt(locationId[0]['counter']),
