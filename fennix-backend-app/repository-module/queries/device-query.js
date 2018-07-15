@@ -159,6 +159,8 @@ const updateLocationDeviceAttributeMasterQuery = (req) => {
 
 
 const getBeneficiaryIdByImeiQuery = (query) => {
+    console.log('imei');
+    console.log(query);
     return deviceAggregator.find({imei: query}, {"_id": 1, "beneficiaryId": 1});
 };
 
