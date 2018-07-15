@@ -3,6 +3,7 @@ const locationBusiness = require('./fennix-backend-app/business-module/location-
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
+const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
@@ -55,9 +56,25 @@ app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+const whiteList = [
+    'http://localhost:4200','http://sofiadev.fennix360.com:4200','13.57.50.187:4200'
+];
+// };
+// var originsWhitelist = [
+//     'http://localhost:4200',      //this is my front-end url for development
+//     'http://www.myproductionurl.com'
+// ];
+var corsOptions = {
+    origin: function(origin, callback){
+        var isWhitelisted = whiteList.indexOf(origin) !== -1;
+        callback(null, isWhitelisted);
+    },
+    credentials:true
+};
+//here is the magic
+app.use(cors(corsOptions));
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200');
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:4200,http://sofiadev.fennix360.com:4200,13.57.50.187:4200');
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
     res.setHeader("Access-Control-Allow-Credentials", 'true');
