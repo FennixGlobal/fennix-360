@@ -85,7 +85,7 @@ const processLocation = async (location) => {
         mcc: location.substr(101, 3),
         lac: location.substr(104, 4),
         serverDate: new Date(),
-        speed: ((parseInt(vel.substr(0, 3), 10) + parseFloat(vel.substr(4, 1)) / 10) * NudosToKm),
+        speed: ((parseInt(vel.substr(0, 3), 10) + parseFloat(vel.substr(4, 1)) / 10) * NudosToKm).toFixed(2),
         course: parseInt(location.substr(67, 2)) * direction,
         moveDistance: parseInt(location.substr(69, 5)),
         gpsStatus: location.substr(74, 1),
@@ -120,17 +120,17 @@ const processLocation = async (location) => {
     deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
         console.log(doc)
     });
-    socketIO.listen(3110);
-    socketIO.on('connection', (sock) => {
-        console.log('on connection');
-        sock.on('requestDetails', async (data) => {
-            let returnObj;
-            returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
-            console.log('map data');
-            console.log(returnObj);
-            sock.emit('mapData', returnObj);
-        })
-    })
+    // socketIO.listen(3110);
+    // socketIO.on('connection', (sock) => {
+    //     console.log('on connection');
+    //     sock.on('requestDetails', async (data) => {
+    //         let returnObj;
+    //         returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
+    //         console.log('map data');
+    //         console.log(returnObj);
+    //         sock.emit('mapData', returnObj);
+    //     })
+    // })
 
 };
 
@@ -151,8 +151,8 @@ const alarmStatusDeCompiler = (alarmStatus) => {
         beltStatus: alarmStatus.substr(0, 1),
         shellStatus: alarmStatus.substr(1, 1),
         gsmSignal: getGSMLevel(parseInt(alarmStatus.substr(2, 2))),
-        batteryVoltage: (parseInt(alarmStatus.substr(4, 1)) + (parseInt(alarmStatus.substr(5, 2)) / 100)),
-        batteryPercentage: batteryPercentCalculator(parseInt(alarmStatus.substr(4, 1)) + (parseInt(alarmStatus.substr(5, 2)) / 100)),
+        batteryVoltage: (parseInt(alarmStatus.substr(4, 1)) + (parseInt(alarmStatus.substr(5, 2)) / 100)).toFixed(2),
+        batteryPercentage: batteryPercentCalculator(parseInt(alarmStatus.substr(4, 1)) + (parseInt(alarmStatus.substr(5, 2)) / 100)).toFixed(2),
         chargeStatus: alarmStatus.substr(7, 1),
         lowPowerStatus: alarmStatus.substr(8, 1),
         dataLoggerStatus: alarmStatus.substr(9, 1),
