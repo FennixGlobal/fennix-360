@@ -180,7 +180,26 @@ const getLanguageListGridBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);
 };
 
-const getRolesForRoleIdBusiness = async (req) => {
+const getRolesForAdminBusiness = async (req) => {
+    let request = [req.query.userRoleId, req.query.languageId], response, finalResponse;
+    response = await getRolesForRoleIdAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        if (req.query.isDropdownFlag) {
+            const dropdownObj = {dropdownList: []};
+            response.rows.forEach((role) => {
+                dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], true));
+            });
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', dropdownObj);
+        } else {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response.rows);
+        }
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROLES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
+const getRolesForNonAdminsBusiness = async (req) => {
     let request = [req.query.userRoleId, req.query.languageId], response, finalResponse;
     response = await getRolesForRoleIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
@@ -198,6 +217,8 @@ const getRolesForRoleIdBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+
 const getRolesBusiness = async (req) => {
     let response, rolesResponse;
     rolesResponse = getRolesAccessor([req.query.languageId]);
@@ -784,7 +805,8 @@ module.exports = {
     listCentersBusiness,
     getSimCardListBusiness,
     getLanguageListGridBusiness,
-    getRolesForRoleIdBusiness,
+    getRolesForAdminBusiness,
     getCountryListBusiness,
-    dropDownBusiness
+    dropDownBusiness,
+    getRolesForNonAdminsBusiness
 };

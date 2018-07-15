@@ -1,5 +1,5 @@
 var express = require('express');
-const {getCountryListBusiness,listCentersBusiness,getModelMetadataBusiness,getSimCardListBusiness,getLanguageListGridBusiness,getRolesForRoleIdBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
+const {getCountryListBusiness,listCentersBusiness,getModelMetadataBusiness,getSimCardListBusiness,getLanguageListGridBusiness,getRolesForAdminBusiness, getRolesForNonAdminsBusiness,getFilterMetadataBusiness,getBaseMetadataBusiness,getCardMetadataForRouteBusiness,getLanguagesListBusiness,getSimCardDetailsBusiness,getLoginMetadataBusiness, getRolesBusiness } = require('../business-module/metadata-business-module/metadata-business');
 var router = express.Router();
 
 router.get('/listCenters', function (req, res) {
@@ -97,9 +97,17 @@ router.get('/pageFilters', function (req, res) {
     })
 });
 
-router.get('/getRolesForRoleId', function (req, res) {
+router.get('/getRolesForAdmin', function (req, res) {
     let returnObj;
-    returnObj = getRolesForRoleIdBusiness(req);
+    returnObj = getRolesForAdminBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/getRolesForNonAdmin', function (req, res) {
+    let returnObj;
+    returnObj = getRolesForNonAdminsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
