@@ -65,22 +65,23 @@ var whiteList = ['http://localhost:4200', 'http://sofiadev.fennix360.com:4200', 
 // };
 // var whitelist = ['http://example1.com', 'http://example2.com']
 var corsOptions = {
-    origin: function (origin, callback) {
-        if (whiteList.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error('Not allowed by CORS'))
-        }
-    },
+    origin: 'http://sofiadev.fennix360.com:4200',
     credentials: true
 };
+    //     function (origin, callback) {
+    //     if (whiteList.indexOf(origin) !== -1) {
+    //         callback(null, true)
+    //     } else {
+    //         callback(new Error('Not allowed by CORS'))
+    //     }
+    // }
 
 // var corsOptions = {
 //     origin: ,
 //     credentials: true
 // };
 app.use(cors(corsOptions));
-app.options('*',cors());
+app.options('*', cors());
 // app.use(function (req, res, next) {
 //     const origin = req.headers.origin;
 //     if (whiteList.indexOf(origin) > -1) {
