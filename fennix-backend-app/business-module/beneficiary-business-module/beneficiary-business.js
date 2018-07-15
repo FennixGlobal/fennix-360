@@ -42,9 +42,8 @@ const addBeneficiaryBusiness = async (req) => {
 
 const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.query.languageId],
-        beneficiaryFilter = {}, beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
-        locBeneficiaryIdList = [], beneficiaryDevices = {}, deviceLocDeviceList = [],
-        beneficiaryListResponse, returnObj, beneficiaryLocArray;
+        beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
+        beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
@@ -55,13 +54,11 @@ const beneficiaryMapDataList = async (req) => {
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
                 firstName: item['firstname'],
-                // imei: objectHasPropertyCheck(item['imei']) && notNullCheck(item['imei']) ? item['imei'] : 999999999,
                 documentId: item['document_id'],
                 mobileNo: item['mobileno'],
                 image: item['image'],
                 roleName: item['role'],
                 beneficiaryRoleId: item['role_id'],
-                // email: item['emailid'],
                 gender: item['gender']
             };
             return init;

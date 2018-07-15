@@ -14,19 +14,19 @@ const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 let id, loginStatus;
 let locationObj = {}, deviceObj = {};
-const locationUpdateBusiness = (data) => {
-    console.log('entering method');
-    console.log(data);
+const locationUpdateBusiness = async (data) => {
+    // console.log('entering method');
+    // console.log(data);
     let returnString = '';
-    console.log(deviceCommandConstants.cmdLogin);
-    console.log(deviceCommandConstants.cmdLocationReport);
+    // console.log(deviceCommandConstants.cmdLogin);
+    // console.log(deviceCommandConstants.cmdLocationReport);
     if (data.indexOf('#SA') !== -1) {
-        console.log('entered login part');
+        // console.log('entered login part');
         returnString = processData(data);
     } else if (data.indexOf('#RD') !== -1) {
-        console.log('entered location report');
-        console.log(data);
-        processLocation(data);
+        // console.log('entered location report');
+        // console.log(data);
+        await processLocation(data);
     }
     return returnString;
 };
