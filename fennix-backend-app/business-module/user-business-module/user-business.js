@@ -38,12 +38,13 @@ const fetchUserDetailsBusiness = async (req) => {
             userProfileReturnObj = {
                 userName: `${item['first_name']} ${item['last_name']}`,
                 mobileNo: item['mobile_no'],
-                userMailId: item['emailid'],
-                userCenter: item['center_name'],
+                emailId: item['emailid'],
+                center: item['center_name'],
                 gender: item['gender'],
                 image: item['image'],
+                role: item['role'],
                 userRole: item['role_name'],
-                userAddress: item['address'],
+                address: item['address'],
             };
         });
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', userProfileReturnObj);

@@ -1,6 +1,7 @@
 const checkUserEmailQuery = 'select  user_id FROM users where email_id=$1';
 const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no\n' +
     '    , u.address1\n' +
+    '    , u.user_role as role\n' +
     '    , (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\n' +
     '    , u.email_id as emailid\n' +
     '    , u.image, u.gender\n' +

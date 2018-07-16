@@ -44,7 +44,7 @@ const ticketListBasedOnStatusBusiness = async (req) => {
 
 const listTicketsBusiness = async (req) => {
     let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
-        finalResponseObj = {},
+        // finalResponseObj = {},
         ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
@@ -111,6 +111,7 @@ const listTicketsBusiness = async (req) => {
                 userRoleId: userDetailMap[item['userId']]['roleId'],
                 userGender: userDetailMap[item['userId']]['gender'],
                 beneficiaryId: item['beneficiaryId'],
+                userId: item['userId'],
                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['roleId'] : null,
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : ' - ',
                 beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap, item['beneficiaryId']) ? beneficiaryIdNameMap[item['beneficiaryId']]['role'] : ' - ',
