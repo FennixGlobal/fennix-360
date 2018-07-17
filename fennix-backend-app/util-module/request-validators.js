@@ -1,5 +1,5 @@
 const {dbTableColMap, dbDownloadTableMapper, tableKeyMap} = require("../util-module/db-constants");
-const {objectHasPropertyCheck,notNullCheck} = require('../util-module/data-validators');
+const {objectHasPropertyCheck, notNullCheck} = require('../util-module/data-validators');
 const {getDownloadMapperAccessor} = require('../repository-module/data-accesors/common-accessor');
 const mongoWhereInCreator = (data) => {
     return {'$in': data}
@@ -32,27 +32,34 @@ const excelColCreator = async () => {
 };
 
 const insertQueryCreator = (req, tableName, insertQuery) => {
-    let columns = '', values = 'values', modifiedInsertQuery, valuesArray = [], finalResponse = {};
+    let columns = '', values = 'values', modifiedInsertQuery, valuesArray = [], finalResponse = {}, counter = 0;
     Object.keys(req).forEach((key, index) => {
         console.log(key);
         console.log(dbTableColMap[tableName][key]);
         if (notNullCheck(dbTableColMap[tableName][key])) {
             if (index === 0) {
                 columns = `(${dbTableColMap[tableName][key]}`;
-                values = `${values} ($${index + 1}`;
+                values = `${values} ($${counter + 1}`;
+                counter++;
             } else if (index === Object.keys(req).length - 1) {
                 columns = `${columns},${dbTableColMap[tableName][key]})`;
-                values = `${values}, $${index + 1})`;
+                values = `${values}, $${counter + 1})`;
+                counter++;
             } else {
                 columns = `${columns},${dbTableColMap[tableName][key]}`;
-                values = `${values}, $${index + 1}`;
+                values = `${values}, $${counter + 1}`;
+                counter++;
             }
             valuesArray.push(req[key]);
         }
     });
     modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
+    console.log(modifiedInsertQuery);
+
     finalResponse['valuesArray'] = valuesArray;
+    console.log(valuesArray);
     finalResponse['modifiedInsertQuery'] = modifiedInsertQuery;
+    console.log(finalResponse);
     return finalResponse;
 };
 

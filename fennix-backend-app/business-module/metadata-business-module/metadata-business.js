@@ -277,7 +277,7 @@ const dropDownBusiness = async (req) => {
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {
-            returnResponse.dropdownList.push(dropdownCreator(item['dropdown_key'], item['dropdown_value'], false));
+            returnResponse.dropdownList.push(dropdownCreator(item['dropdown_id'], item['dropdown_value'], false));
         });
         returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnResponse);
     } else {
