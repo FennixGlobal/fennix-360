@@ -1,6 +1,6 @@
 const {selectBeneficiaryByUserIdQuery, getBeneficiaryByBeneficiaryIdQuery,insertBeneficiaryQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {requestInModifier} = require('../../util-module/request-validators');
+const {requestInModifier,insertQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES} = require('../../util-module/db-constants');
 
 const getBeneficiaryByUserIdAccessor = async (req) => {

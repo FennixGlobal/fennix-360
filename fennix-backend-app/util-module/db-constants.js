@@ -16,8 +16,9 @@ const dbTableColMap = {
         gender: 'gender',
         image: 'image',
         role: 'user_role',
-        userId:'owner_user_id'
+        userId: 'owner_user_id'
     },
+
     beneficiaries: {
         firstName: 'firstname',
         lastName: 'lastname',
@@ -38,11 +39,14 @@ const dbTableColMap = {
         centerId: 'center_id',
         languageId: 'language_id',
         riskId: 'risk_id',
-        scarsMarksTatoos: 'scars_marks_tatoos',
+        scar: 'scars_marks_tatoos',
         dob: 'dob',
         hasHouseArrest: 'hashousearrest',
         address: 'address1',
-        userId: 'owner_user_id'
+        timeZone: 'time_zone',
+        zipCode: 'postal_code',
+        userId: 'owner_user_id',
+        center: 'center_id'
     },
     filterset: {
         roleCardId: 'role_card_id',
