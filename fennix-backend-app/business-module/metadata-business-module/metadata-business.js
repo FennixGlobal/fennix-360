@@ -185,6 +185,7 @@ const getRolesForAdminBusiness = async (req) => {
     response = await getRolesForRoleIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         if (req.query.isDropdownFlag) {
+
             const dropdownObj = {dropdownList: []};
             response.rows.forEach((role) => {
                 dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], true));
