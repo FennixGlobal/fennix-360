@@ -3,7 +3,7 @@ const userIdTicketAggregatorQuery = (query) => {
     return ticketAggregator.aggregate([
         {
             $match: {
-                "userId": {$in:query.userIds}
+                "userId": {$in: query.userIds}
             }
         },
         {
@@ -84,7 +84,8 @@ const listTicketsQuery = (query) => {
                 "deviceType.name": 1,
                 "readStatus": 1,
                 "createdDate": 1,
-                "updatedDate": 1
+                "updatedDate": 1,
+                "device._id": 1
             }
         );
 };
@@ -101,38 +102,38 @@ const ticketDetailsBasedOnTicketIdQuery = (query) => {
 const listTicketsForDownloadQuery = (query) => {
     return ticketAggregator.aggregate().match(
         {
-            "userId":{$in: query.userId}
+            "userId": {$in: query.userId}
         }
-    ).sort({"createdDate":-1})
+    ).sort({"createdDate": -1})
         .lookup(
             {
-                from:"devices",
-                localField:"beneficiaryId",
-                foreignField:"beneficiaryId",
-                as:"device"
+                from: "devices",
+                localField: "beneficiaryId",
+                foreignField: "beneficiaryId",
+                as: "device"
             }
         )
         .lookup(
             {
-                from:"deviceTypes",
-                localField:"device.deviceTypeId",
-                foreignField:"_id",
-                as:"deviceType"
+                from: "deviceTypes",
+                localField: "device.deviceTypeId",
+                foreignField: "_id",
+                as: "deviceType"
             }
         )
         .project(
             {
-                "beneficiaryId" : 1,
-                "userId" : 1,
-                "device.imei":1,
-                "locationId" : 1,
-                "withAlerts" : 1,
-                "ticketName":1,
-                "alertType":1,
-                "deviceType.name":1,
-                "readStatus":1,
-                "createdDate":1,
-                "updatedDate":1
+                "beneficiaryId": 1,
+                "userId": 1,
+                "device.imei": 1,
+                "locationId": 1,
+                "withAlerts": 1,
+                "ticketName": 1,
+                "alertType": 1,
+                "deviceType.name": 1,
+                "readStatus": 1,
+                "createdDate": 1,
+                "updatedDate": 1
             }
         );
 };

@@ -556,7 +556,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         submitEndpoint: widgetElementItem['submit_endpoint'],
                         elementLabel: widgetElementItem['element_label'],
                         elementIcon: widgetElementItem['element_icon_value'],
-                        elementModalId: widgetElementItem['element_modal_id']
+                        elementModalId: widgetElementItem['element_modal_id'],
+                        requestMappingKey: widgetElementItem['request_mapping_key']
                     }
                 };
                 break;

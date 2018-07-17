@@ -44,15 +44,15 @@ const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
-    console.log('before query');
-    console.log(request);
+    // console.log('before query');
+    // console.log(request);
     beneficiaryListResponse = await getBeneifciaryIdList(request);
-    console.log('after query');
+    // console.log('after query');
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
-            console.log('beneficiaryIds for request');
-            console.log(item.beneficiaryid);
+            // console.log('beneficiaryIds for request');
+            // console.log(item.beneficiaryid);
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
