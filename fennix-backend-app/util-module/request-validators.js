@@ -1,5 +1,5 @@
 const {dbTableColMap, dbDownloadTableMapper, tableKeyMap} = require("../util-module/db-constants");
-const {objectHasPropertyCheck} = require('../util-module/data-validators');
+const {objectHasPropertyCheck,notNullCheck} = require('../util-module/data-validators');
 const {getDownloadMapperAccessor} = require('../repository-module/data-accesors/common-accessor');
 const mongoWhereInCreator = (data) => {
     return {'$in': data}
@@ -34,17 +34,21 @@ const excelColCreator = async () => {
 const insertQueryCreator = (req, tableName, insertQuery) => {
     let columns = '', values = 'values', modifiedInsertQuery, valuesArray = [], finalResponse = {};
     Object.keys(req).forEach((key, index) => {
-        if (index === 0) {
-            columns = `(${dbTableColMap[tableName][key]}`;
-            values = `${values} ($${index + 1}`;
-        } else if (index === Object.keys(req).length - 1) {
-            columns = `${columns},${dbTableColMap[tableName][key]})`;
-            values = `${values}, $${index + 1})`;
-        } else {
-            columns = `${columns},${dbTableColMap[tableName][key]}`;
-            values = `${values}, $${index + 1}`;
+        console.log(key);
+        console.log(dbTableColMap[tableName][key]);
+        if (notNullCheck(dbTableColMap[tableName][key])) {
+            if (index === 0) {
+                columns = `(${dbTableColMap[tableName][key]}`;
+                values = `${values} ($${index + 1}`;
+            } else if (index === Object.keys(req).length - 1) {
+                columns = `${columns},${dbTableColMap[tableName][key]})`;
+                values = `${values}, $${index + 1})`;
+            } else {
+                columns = `${columns},${dbTableColMap[tableName][key]}`;
+                values = `${values}, $${index + 1}`;
+            }
+            valuesArray.push(req[key]);
         }
-        valuesArray.push(req[key]);
     });
     modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
     finalResponse['valuesArray'] = valuesArray;
