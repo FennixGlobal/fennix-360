@@ -1,11 +1,11 @@
-const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
 const crypto = require('crypto-js');
 const bcrypt = require('bcryptjs');
-const {fetchUserProfileBusiness} = require('../user-business-module/user-business');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
+const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
+const {fetchUserDetailsBusiness} = require('../user-business-module/user-business');
 
 
 const checkEmailId = (req) => {
@@ -30,9 +30,9 @@ const checkEmailId = (req) => {
 };
 
 const fetchLoginProfileBusiness = async (req) => {
-    let loginProfileResponse = {};
+    let loginProfileResponse;
     // if (req.query.userRoleId > 2) {
-        loginProfileResponse = await fetchUserProfileBusiness(req);
+        loginProfileResponse = await fetchUserDetailsBusiness(req);
         // userController
         // await router.get('user/fetchProfile', function (req, res) {
         //     const returnObj = res;

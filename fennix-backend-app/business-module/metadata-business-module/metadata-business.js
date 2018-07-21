@@ -273,20 +273,6 @@ const listCentersBusiness = async (req) => {
     return finalResponse;
 };
 
-const dropDownBusiness = async (req) => {
-    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
-    dropdownResponse = await getDropdownAccessor(request);
-    if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
-        dropdownResponse.rows.forEach((item) => {
-            returnResponse.dropdownList.push(dropdownCreator(item['dropdown_id'], item['dropdown_value'], false));
-        });
-        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnResponse);
-    } else {
-        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'EN_US', []);
-    }
-    return returnResponse;
-};
-
 const getCountryListBusiness = async (req) => {
     let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
         countryListResponse, finalResponse, countryIdList = {dropdownList: []};
@@ -809,6 +795,6 @@ module.exports = {
     getLanguageListGridBusiness,
     getRolesForAdminBusiness,
     getCountryListBusiness,
-    dropDownBusiness,
+    // dropDownBusiness,
     getRolesForNonAdminsBusiness
 };

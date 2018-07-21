@@ -6,6 +6,7 @@ var path = require('path');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var bodyParser = require('body-parser');
 
 var net = require('net');
 var mongoose = require('mongoose');
@@ -46,7 +47,7 @@ var indexRouter = require('./routes/index');
 var groupRouter = require('./fennix-backend-app/web-controller/group-controller');
 
 var app = express();
-
+app.use(bodyParser.json());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -68,13 +69,13 @@ var corsOptions = {
     origin: 'http://sofiadev.fennix360.com:4200',
     credentials: true
 };
-    //     function (origin, callback) {
-    //     if (whiteList.indexOf(origin) !== -1) {
-    //         callback(null, true)
-    //     } else {
-    //         callback(new Error('Not allowed by CORS'))
-    //     }
-    // }
+//     function (origin, callback) {
+//     if (whiteList.indexOf(origin) !== -1) {
+//         callback(null, true)
+//     } else {
+//         callback(new Error('Not allowed by CORS'))
+//     }
+// }
 
 // var corsOptions = {
 //     origin: ,

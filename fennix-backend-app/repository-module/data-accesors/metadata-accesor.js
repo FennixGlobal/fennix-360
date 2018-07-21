@@ -3,7 +3,6 @@ const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query'
 const {selectLanguagesQuery} = require('../queries/language-query');
 const {getUserNameFromUserIdAccessor} = require('../data-accesors/user-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require("../../util-module/data-validators");
-const {getDropdownDataQuery} = require('../queries/common-query');
 const {filterQueryCreator} = require('../../util-module/request-validators');
 const {insertSimcardQuery, deleteSimcardQuery, getSimcardDetailsQuery, updateSimcardQuery} = require('../queries/simcard-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -28,12 +27,6 @@ const getRolesForRoleIdAccessor = async (req) => {
 const getSimcardDetailsAccessor = async (req) => {
     let responseObj;
     responseObj = await getSimcardDetailsQuery(req);
-    return responseObj;
-};
-
-const getDropdownAccessor = async (req) => {
-    let responseObj;
-    responseObj = await connectionCheckAndQueryExec(req, getDropdownDataQuery);
     return responseObj;
 };
 
@@ -153,8 +146,8 @@ module.exports = {
     getRolesForRoleIdAccessor,
     getFilterMetadataAccessor,
     getModalMetadataAccessor,
-    getDropdownAccessor,
     getCenterIdsAccessor
+    // getDropdownAccessor,
     // getCenterIdsForAdminAccessor,
     // getCenterIdsForSupervisorAccessor,
     // getCenterIdsForOperatorAccessor,

@@ -1,35 +1,30 @@
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
-const {userProfileQuery,getTotalRecordsForListUsersQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery, getUserIdsForAdminQuery, getUserIdsForMasterAdminQuery, getUserIdsForSuperAdminQuery, getUserIdsForSupervisorQuery, getTotalNoOfUsersQuery} = require('../queries/user-query');
+const {userProfileQuery, getTotalRecordsForListUsersQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery, getUserIdsForSupervisorQuery} = require('../queries/user-query');
 const {insertQueryCreator} = require("../../util-module/request-validators");
 const {TABLE_USERS} = require('../../util-module/db-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
-const fetchUserProfileAccesor = async (req) => {
+const fetchUserProfileAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userProfileQuery);
     return returnObj;
 };
 
-const updateUserProfileAccesor = async (req) => {
+const updateUserProfileAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, updateUserProfileQuery);
     return returnObj;
 };
 
-const getUserListAccesor = async (req) => {
+const getUserListAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, getUserListQuery);
     return returnObj;
 };
+
 const getTotalRecordsForListUsersAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, getTotalRecordsForListUsersQuery);
-    return returnObj;
-};
-
-const getTotalNoOfUsersAccessor = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getTotalNoOfUsersQuery);
     return returnObj;
 };
 
@@ -101,14 +96,13 @@ const getUserIdsForAllRolesAccessor = async (req) => {
 module.exports = {
     addUserAccessor,
     getUserNameFromUserIdAccessor,
-    fetchUserProfileAccesor,
-    updateUserProfileAccesor,
-    getUserListAccesor,
+    fetchUserProfileAccessor,
+    updateUserProfileAccessor,
+    getTotalRecordsForListUsersAccessor,
+    getUserListAccessor,
     getUserIdsForSupervisorAccessor,
     getUserIdsForSuperAdminAccessor,
     getUserIdsForMasterAdminAccessor,
     getUserIdsForAdminAccessor,
-    getTotalNoOfUsersAccessor,
-    getUserIdsForAllRolesAccessor,
-    getTotalRecordsForListUsersAccessor
+    getUserIdsForAllRolesAccessor
 };

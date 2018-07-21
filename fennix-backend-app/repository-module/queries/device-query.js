@@ -102,44 +102,6 @@ const deviceDetailsByBeneficiaryId = (query) => {
         {$unwind: "$device"}
     ]);
 };
-//     return deviceAggregator.aggregate([
-//         {
-//             $match: {
-//                 "beneficiaryId": {"$in": query}
-//             }
-//         },
-//         {
-//             $lookup: {
-//                 from: "deviceAttributes",
-//                 localField: "beneficiaryId",
-//                 foreignField: "beneficiaryId",
-//                 as: "deviceAttributes"
-//             }
-//         },
-//         {
-//             $unwind: "$deviceAttributes"
-//         },
-//         {
-//             $sort: {
-//                 "deviceAttributes.deviceUpdatedDate": -1
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: "$_id",
-//                 latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
-//             }
-//         },
-//         {
-//             $lookup: {
-//                 from: "deviceTypes",
-//                 localField: "latestBeneficiaryDeviceDetails.deviceTypeId",
-//                 foreignField: "_id",
-//                 as: "deviceType"
-//             }
-//         }
-//     ]);
-// };
 
 const updateLocationDeviceAttributeMasterQuery = (req) => {
     return LocationDeviceAttributeMasterModel.update({beneficiaryId: req.beneficiaryId}, {

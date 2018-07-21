@@ -1,4 +1,5 @@
-const {getDownloadMapperQuery} = require('../queries/common-query');
+const {getDownloadMapperQuery,getDropdownDataQuery} = require('../queries/common-query');
+const {imageCounterUpdateQuery,fetchImageCounterQuery} = require('../queries/common-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const getDownloadMapperAccessor = async (req) => {
@@ -7,6 +8,27 @@ const getDownloadMapperAccessor = async (req) => {
     return returnObj;
 };
 
+const getDropdownAccessor = async (req) => {
+    let responseObj;
+    responseObj = await connectionCheckAndQueryExec(req, getDropdownDataQuery);
+    return responseObj;
+};
+
+const getImageCounterAccessor = async ()=>{
+    let responseObj;
+    responseObj = await fetchImageCounterQuery();
+    return responseObj;
+};
+
+const updateImageCounterAccessor = async ()=>{
+    let responseObj;
+    responseObj = await imageCounterUpdateQuery();
+    return responseObj;
+};
+
 module.exports = {
-    getDownloadMapperAccessor
+    getDownloadMapperAccessor,
+    getDropdownAccessor,
+    getImageCounterAccessor,
+    updateImageCounterAccessor
 };

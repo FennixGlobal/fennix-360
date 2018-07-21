@@ -1,9 +1,9 @@
-const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
-const {deviceBusiness} = require('../location-business-module/location-business');
-const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
-const deviceCommandConstants = require('../../util-module/device-command-constants');
-const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {deviceCommandConstants} = require('../../util-module/device-command-constants');
+const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
+const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
+const {deviceBusiness} = require('../location-business-module/location-business');
+const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
 // const beneficiaryAccesor = require('../../')
 // const express = require('express');
 // const http = require('http');
@@ -12,45 +12,37 @@ const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 // const server = http.createServer(socketExpress);
 // const socketIO = io(server);
 
-let id, loginStatus;
+// let id, loginStatus;
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = (data) => {
-    // console.log('entering method');
-    // console.log(data);
+    // console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
-    // console.log(deviceCommandConstants.cmdLogin);
-    // console.log(deviceCommandConstants.cmdLocationReport);
     if (data.indexOf('#SA') !== -1) {
-        // console.log('entered login part');
         returnString = processData(data);
     } else if (data.indexOf('#RD') !== -1) {
-        // console.log('entered location report');
-        // console.log(data);
         processLocation(data);
     }
     return returnString;
 };
 
-const processData = (data) => {
-    let returnString;
+const processData = (loginString) => {
+    let returnString, loginFlag;
     const checkSum = 3;
-    const dataCommand = data.substr(0, 3);
+    const dataCommand = loginString.substr(0, 3);
     locationObj = {
-        connectionSession: data.substr(3, 6),
-        serialNumber: data.substr(9, 5),
+        connectionSession: loginString.substr(3, 6),
+        serialNumber: loginString.substr(9, 5),
     };
     const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + data.substr(14, 15).length;
     deviceObj = {
-        imei: data.substr(14, 15),
-        firmwareVersion: data.substr(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
+        imei: loginString.substr(14, 15),
+        firmwareVersion: loginString.substr(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
     };
-    this.id = deviceObj.imei;
-    if (!this.loginStatus) {
-        this.loginStatus = processLogin();
-    }
-    returnString = data.replace(data.substr(0, 3), '#SB');
-    // console.log('handshake string in processData');
-    // console.log(returnString);
+    // this.id = deviceObj.imei;
+    // // if (!this.loginStatus) {
+    // // }
+    loginFlag = processLogin();
+    returnString = loginFlag ? loginString.replace(data.substr(0, 3), '#SB') : loginString;
     return returnString;
 };
 
@@ -72,7 +64,6 @@ const processLocation = async (location) => {
         deviceUpdatedDate: dateTime
     };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    // console.log(beneficiaryResponse);
     if (arrayNotEmptyCheck(beneficiaryResponse)) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
@@ -189,8 +180,6 @@ const batteryPercentCalculator = (batteryVoltage) => {
     else if (vSelected === (volts.length - 1)) {
         ret = 100;
     }
-    // console.log('battery Percentage');
-    // console.log(ret);
     return ret;
 };
 
@@ -209,8 +198,6 @@ const getGSMLevel = (gsmStatus) => {
     } else if (28 < gsmStatus) {
         gsmLevel = 5;
     }
-    // console.log('gsm level');
-    // console.log(gsmLevel);
     return gsmLevel;
 };
 

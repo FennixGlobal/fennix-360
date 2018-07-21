@@ -1,4 +1,4 @@
-const {dropDownBusiness} = require('../business-module/metadata-business-module/metadata-business');
+const {dropDownBusiness} = require('../business-module/common-business-module/common-business');
 var express = require('express');
 var router = express.Router();
 
