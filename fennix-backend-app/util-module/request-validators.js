@@ -63,6 +63,17 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
     return finalResponse;
 };
 
+const updateQueryCreator = (table, fields, whereCondition) => {
+    let query = `update ${table} set `;
+    fields.forEach((field, index) => {
+        if (index === fields.length - 1) {
+            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} where ${dbDownloadTableMapper[table][whereCondition]} = $${index + 2}`;
+        } else {
+            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} ,`;
+        }
+    });
+    return query;
+};
 
 const requestInModifier = (itemArray, query, isLanguage) => {
     let modifiedQuery = query;
@@ -103,5 +114,6 @@ module.exports = {
     requestInModifier,
     insertQueryCreator,
     excelColCreator,
-    excelRowsCreator
+    excelRowsCreator,
+    updateQueryCreator
 };

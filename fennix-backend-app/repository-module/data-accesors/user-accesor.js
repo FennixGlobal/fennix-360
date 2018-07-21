@@ -1,7 +1,8 @@
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
 const {userProfileQuery, getTotalRecordsForListUsersQuery, insertUserQuery, updateUserProfileQuery, getUserListQuery, getUserNameFromUserIdQuery, getUserIdsForSupervisorQuery} = require('../queries/user-query');
-const {insertQueryCreator} = require("../../util-module/request-validators");
+const {insertQueryCreator, updateQueryCreator} = require("../../util-module/request-validators");
 const {TABLE_USERS} = require('../../util-module/db-constants');
+const FENNIX_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 const fetchUserProfileAccessor = async (req) => {
@@ -67,22 +68,22 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
 const getUserIdsForAllRolesAccessor = async (req) => {
     let userDetailResponse, otherUserIdsForGivenUserId, userIdList = [];
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], getUserNameFromUserIdQuery);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    if (objectHasPropertyCheck(userDetailResponse, FENNIX_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0][FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE];
         switch (nativeUserRole) {
-            case 'ROLE_SUPERVISOR' : {
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR : {
                 otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
                 break;
             }
-            case 'ROLE_ADMIN' : {
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN : {
                 otherUserIdsForGivenUserId = await getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
                 break;
             }
-            case 'ROLE_SUPER_ADMIN' : {
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN : {
                 otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
                 break;
             }
-            case 'ROLE_MASTER_ADMIN' : {
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
                 otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
                 break;
             }
@@ -93,6 +94,18 @@ const getUserIdsForAllRolesAccessor = async (req) => {
     }
     return userIdList;
 };
+
+const updateUserAccessor = async (req) => {
+    let returnObj, updatedQuery, fields = Object.keys(req.body), request = [];
+    fields.sort();
+    fields.splice(fields.indexOf('userId'), 1);
+    updatedQuery = updateQueryCreator('users', fields, 'userId');
+    fields.forEach((f) => request.push(req.body[f]));
+    request.push(req.body.userId);
+    returnObj = await connectionCheckAndQueryExec(request, updatedQuery);
+    return returnObj;
+};
+
 module.exports = {
     addUserAccessor,
     getUserNameFromUserIdAccessor,
@@ -104,5 +117,6 @@ module.exports = {
     getUserIdsForSuperAdminAccessor,
     getUserIdsForMasterAdminAccessor,
     getUserIdsForAdminAccessor,
-    getUserIdsForAllRolesAccessor
+    getUserIdsForAllRolesAccessor,
+    updateUserAccessor
 };

@@ -1,49 +1,66 @@
-const {downloadUsersListBusiness, fetchUserDetailsBusiness, addUserBusiness, getUserListBusiness, updateUserProfileBusiness} = require('../business-module/user-business-module/user-business');
+const userBusiness = require('../business-module/user-business-module/user-business');
 const express = require('express');
+const {USER_CONTROLLER} = require('../util-module/util-constants/fennix-controller-constants');
 const router = express.Router();
 
-router.get('/fetchProfile', async (req, res) => {
+router.get(USER_CONTROLLER.USER_FETCH_USER_PROFILE, async (req, res) => {
     let returnObj;
-    returnObj = fetchUserDetailsBusiness(req);
+    returnObj = userBusiness.fetchUserDetailsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
-router.post('/updateProfile', async (req, res) => {
+router.post(USER_CONTROLLER.USER_UPDATE_USER_PROFILE, async (req, res) => {
     let returnObj;
-    returnObj = updateUserProfileBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
-
-router.get('/listUsers', async (req, res) => {
-    let returnObj;
-    returnObj = getUserListBusiness(req);
+    returnObj = userBusiness.updateUserProfileBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.get('/downloadUsers', async (req, res) => {
+router.get(USER_CONTROLLER.USER_GET_USER_LIST, async (req, res) => {
     let returnObj;
-    returnObj = downloadUsersListBusiness(req);
+    returnObj = userBusiness.getUserListBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.post('/addUser', async (req, res) => {
+router.get(USER_CONTROLLER.USER_DOWNLOAD_USER, async (req, res) => {
     let returnObj;
-    returnObj = addUserBusiness(req);
+    returnObj = userBusiness.downloadUsersListBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.get('/getUserDetails', async (req, res) => {
+router.post(USER_CONTROLLER.USER_ADD_USER, async (req, res) => {
     let returnObj;
-    returnObj = fetchUserDetailsBusiness(req);
+    returnObj = userBusiness.addUserBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get(USER_CONTROLLER.USER_GET_USER_DETAILS, async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.fetchUserDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.post(USER_CONTROLLER.USER_UPDATE_USER, async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.updateUserBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.post(USER_CONTROLLER.USER_DELETE_USER, async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.deleteUserBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

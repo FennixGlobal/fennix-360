@@ -5,6 +5,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const {imageStorageBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 
@@ -36,6 +37,9 @@ const beneficiaryAggregatorBusiness = async (req) => {
 
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
+    request.image = imageStorageBusiness(request.image);
+    request.updated_date = new Date();
+    request.created_date = new Date();
     await addBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
@@ -44,15 +48,10 @@ const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
-    // console.log('before query');
-    // console.log(request);
     beneficiaryListResponse = await getBeneifciaryIdList(request);
-    // console.log('after query');
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
-            // console.log('beneficiaryIds for request');
-            // console.log(item.beneficiaryid);
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
             init.beneficiaryDetailObj[item.beneficiaryid] = {
                 beneficiaryId: item['beneficiaryid'],
@@ -78,8 +77,6 @@ const beneficiaryMapDataList = async (req) => {
         // });
         // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
-        // console.log('beneficiaryDeviceArray');
-        // console.log(beneficiaryDeviceArray.length);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
             locationObj[item.beneficiaryId]['location'] = {
@@ -157,14 +154,8 @@ const beneficiaryMapDataList = async (req) => {
                 value: noOfViolations
             };
             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
-            // gridData[item.beneficiaryId]['deviceTypeName'] = item.deviceType[0]['name'];
         });
         beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
-        // Object.keys(beneficiaryFilter).forEach((marker) => {
-        //     if (deviceLocDeviceList.indexOf(marker) !== -1) {
-        //         beneficiaryReturnObj['markers'].push(beneficiaryFilter[marker])
-        //     }
-        // });
         beneficiaryReturnObj['deviceDetails'] = beneficiaryDevices;
         beneficiaryReturnObj['deviceDetailsArray'] = Object.keys(beneficiaryDevices).map((device) => beneficiaryDevices[device]);
         beneficiaryReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
