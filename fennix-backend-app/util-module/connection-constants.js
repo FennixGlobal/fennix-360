@@ -14,6 +14,10 @@ const postgresDBDev = {
     port: 5432
 };
 
+const imageLocalLocation = 'E:/DB/';
+
+const imageDBLocation = 'home/ubuntu/code-packs/fennix-images/';
+
 const mongoLocal = 'mongodb://localhost:27017/fennixDevDb';
 
 const mongoDev = 'mongodb://fenDevUser:fenDevUser@172.31.32.79:27017/fennix_dev';
@@ -22,5 +26,7 @@ module.exports = {
     postgresDBLocal,
     postgresDBDev,
     mongoDev,
-    mongoLocal
+    mongoLocal,
+    imageLocalLocation,
+    imageDBLocation
 };

@@ -1,5 +1,5 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, updateUserAccessor,getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, updateUserAccessor, getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {imageStorageBusiness} = require('../common-business-module/common-business');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
@@ -77,7 +77,7 @@ const getUserListBusiness = async (req) => {
 };
 const addUserBusiness = async (req) => {
     let request = req.body;
-    request.image = imageStorageBusiness(request.image);
+    request.image = await imageStorageBusiness(request.image, 'USER');
     request.updated_date = new Date();
     request.created_date = new Date();
     await addUserAccessor(request);

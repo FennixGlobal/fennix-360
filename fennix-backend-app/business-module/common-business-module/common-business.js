@@ -1,7 +1,9 @@
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
 const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const fs = require('fs');
 
 const dropDownBusiness = async (req) => {
     let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
@@ -18,15 +20,16 @@ const dropDownBusiness = async (req) => {
 };
 
 const imageStorageBusiness = async (image, role) => {
-    let returnLocation = '', imageCount, imageName, writeLocation = 'E:/DB/',
+    let returnLocation = '', imageCount, imageName, writeLocation = imageDBLocation,
         mimeType = image.split(',')[0].split('/')[1].split(';')[0];
     image = image.split(',')[1];
     imageCount = await getImageCounterAccessor();
     await updateImageCounterAccessor();
     imageName = `${role}_${imageCount}.${mimeType}`;
-    writeLocation = `${writeLocation}/${imageName}`;
+    writeLocation = `${writeLocation}${imageName}`;
     let bufferArray = new Buffer(image, 'base64');
     console.log(bufferArray);
+    console.log(writeLocation);
     await fs.writeFile(writeLocation, bufferArray, (err, log) => {
         console.log(err);
         if (!err) {

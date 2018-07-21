@@ -37,7 +37,7 @@ const beneficiaryAggregatorBusiness = async (req) => {
 
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
-    request.image = imageStorageBusiness(request.image);
+    request.image = imageStorageBusiness(request.image,'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     await addBeneficiaryAccessor(request);
