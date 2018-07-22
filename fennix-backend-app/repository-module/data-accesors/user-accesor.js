@@ -65,6 +65,41 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, getUserIdsForSupervisorQuery);
     return returnObj;
 };
+//TODO: modify below method later
+const getUserIdNamesForAllRolesAccessor = async (req) => {
+    let userDetailResponse, otherUserIdsForGivenUserId, userIdNameList = [];
+    userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], getUserNameFromUserIdQuery);
+    if (objectHasPropertyCheck(userDetailResponse, FENNIX_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0][FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE];
+        switch (nativeUserRole) {
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR : {
+                otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN : {
+                otherUserIdsForGivenUserId = await getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN : {
+                otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+            case FENNIX_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
+                otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
+                break;
+            }
+        }
+        otherUserIdsForGivenUserId.rows.forEach(item => {
+            let obj = {
+                userId: item['user_id'],
+                name: item['full_name']
+            };
+            userIdNameList.push(obj);
+        });
+    }
+    return userIdNameList;
+};
+
 const getUserIdsForAllRolesAccessor = async (req) => {
     let userDetailResponse, otherUserIdsForGivenUserId, userIdList = [];
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], getUserNameFromUserIdQuery);
@@ -118,5 +153,6 @@ module.exports = {
     getUserIdsForMasterAdminAccessor,
     getUserIdsForAdminAccessor,
     getUserIdsForAllRolesAccessor,
-    updateUserAccessor
+    updateUserAccessor,
+    getUserIdNamesForAllRolesAccessor
 };

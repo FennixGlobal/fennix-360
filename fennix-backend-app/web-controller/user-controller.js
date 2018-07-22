@@ -34,6 +34,14 @@ router.get(USER_CONTROLLER.USER_DOWNLOAD_USER, async (req, res) => {
     })
 });
 
+router.get(USER_CONTROLLER.USER_LIST_OPERATORS,async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.listOperatorsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.post(USER_CONTROLLER.USER_ADD_USER, async (req, res) => {
     let returnObj;
     returnObj = userBusiness.addUserBusiness(req);

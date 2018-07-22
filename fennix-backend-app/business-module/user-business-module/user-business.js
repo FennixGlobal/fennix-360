@@ -1,7 +1,7 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, updateUserAccessor, getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, getUserIdNamesForAllRolesAccessor,updateUserAccessor, getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse,dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
 const FENNIX_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
@@ -75,6 +75,17 @@ const getUserListBusiness = async (req) => {
     }
     return returnObj;
 };
+const listOperatorsBusiness = async (req) => {
+    let response, finalResponse = {dropdownList: []};
+    response = await getUserIdNamesForAllRolesAccessor(req);
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            finalResponse.dropdownList.push(dropdownCreator(item['userId'], item['name'], false));
+        });
+    }
+    return finalResponse;
+};
+
 const addUserBusiness = async (req) => {
     let request = req.body;
     request.image = await imageStorageBusiness(request.image, 'USER');
@@ -128,5 +139,6 @@ module.exports = {
     fetchUserDetailsBusiness,
     downloadUsersListBusiness,
     updateUserBusiness,
-    deleteUserBusiness
+    deleteUserBusiness,
+    listOperatorsBusiness
 };
