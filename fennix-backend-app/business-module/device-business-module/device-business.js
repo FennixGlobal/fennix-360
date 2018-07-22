@@ -2,7 +2,7 @@ const {deviceAggregator, getDeviceByDeviceIdAccessor, listDevicesAccessor, listD
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -68,10 +68,16 @@ const deviceAggregatorDashboard = async (req) => {
     return returnObj;
 };
 
+//TODO: change response logic
 const listDeviceTypesBusiness = async () => {
-    let deviceTypesResponse, finalResponse;
+    let deviceTypesResponse, finalResponse,  deviceTypesListResponse = {dropdownList: []};
     deviceTypesResponse = await listDeviceTypesAccessor();
-    finalResponse = arrayNotEmptyCheck(deviceTypesResponse) ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceTypesResponse) : fennixResponse(statusCodeConstants.STATUS_NO_DEVICE_TYPES_FOR_ID, 'EN_US', []);
+    if (arrayNotEmptyCheck(deviceTypesResponse)) {
+        deviceTypesResponse.forEach((item) => {
+            deviceTypesListResponse.dropdownList.push(dropdownCreator(item['_id'], item['name'], false));
+        });
+    }
+    finalResponse = arrayNotEmptyCheck(deviceTypesResponse) ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceTypesListResponse) : fennixResponse(statusCodeConstants.STATUS_NO_DEVICE_TYPES_FOR_ID, 'EN_US', deviceTypesListResponse);
     return finalResponse;
 };
 
