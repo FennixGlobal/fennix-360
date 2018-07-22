@@ -21,7 +21,9 @@ const dbTableColMap = {
 
     beneficiaries: {
         firstName: 'firstname',
-        lastName: 'lastname',
+        middleName: 'middle_name',
+        lastName2: 'second_last_name',
+        lastName: 'first_last_name',
         emailId: 'emailid',
         mobileNo: 'mobileno',
         gender: 'gender',
@@ -45,7 +47,7 @@ const dbTableColMap = {
         address: 'address1',
         timeZone: 'time_zone',
         zipCode: 'postal_code',
-        userId: 'owner_user_id',
+        operatorId: 'owner_user_id',
         center: 'center_id'
     },
     filterset: {
