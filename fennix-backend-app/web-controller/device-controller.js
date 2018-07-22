@@ -26,7 +26,7 @@ router.get('/listDevices', function (req, res) {
     })
 });
 
-router.post('/saveDevice', function (req, res) {
+router.post('/addDevice', function (req, res) {
     let returnObj;
     returnObj = insertDeviceBusiness(req);
     returnObj.then((response) => {
