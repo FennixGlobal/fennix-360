@@ -42,7 +42,7 @@ const processData = (loginString) => {
     // // if (!this.loginStatus) {
     // // }
     loginFlag = processLogin();
-    returnString = loginFlag ? loginString.replace(data.substr(0, 3), '#SB') : loginString;
+    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
     return returnString;
 };
 
