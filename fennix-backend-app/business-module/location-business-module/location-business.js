@@ -128,6 +128,7 @@ const processLocation = async (location) => {
 
 processLogin = () => {
     let returnFlag = false;
+    return true;
 };
 
 const getValue = (intPart, decimalPart1, decimalPart2) => {
