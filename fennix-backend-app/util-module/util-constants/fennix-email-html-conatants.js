@@ -1,4 +1,5 @@
-const roleHTML = `<div style="height:300px;width:100%;display:flex;align-items:center;justify-content:center;">
+const roleHTMLCreator = (header, body, urlName, url) => {
+    return `<div style="height:300px;width:100%;display:flex;align-items:center;justify-content:center;">
 <div style="background: #f2f2f2;width: 80%;box-shadow:0px 4px 12px -4px rgb(23, 22, 22);border-radius:4px;">
 <div style="background: linear-gradient(to right, #FFC107, #E91E63);height:150px;width:100%;font-weight:bolder;font-size:4em;padding:20px;box-sizing:border-box;">${header}</div>
 <div style="background: #ededed;height:100px;width:100%">
@@ -10,6 +11,7 @@ const roleHTML = `<div style="height:300px;width:100%;display:flex;align-items:c
 </div>
 </div>
 </div>`;
+};
 
 const roleMailBody = {
     user: {
@@ -30,6 +32,6 @@ const roleMailBody = {
     },
 };
 module.exports = {
-    roleHTML,
+    roleHTMLCreator,
     roleMailBody
 };

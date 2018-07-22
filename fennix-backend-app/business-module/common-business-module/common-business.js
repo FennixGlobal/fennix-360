@@ -5,7 +5,7 @@ const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor}
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const fs = require('fs');
 const nodeMailer = require('nodemailer');
-const {roleHTML, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
+const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 
 const dropDownBusiness = async (req) => {
     let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
@@ -78,7 +78,7 @@ const mailModifier = (email, roleName) => {
     body = roleMailBody[roleName.toLowerCase()].body;
     urlName = roleMailBody[roleName.toLowerCase()].urlName;
     header = roleMailBody[roleName.toLowerCase()].header;
-    returnMailBody = roleHTML;
+    returnMailBody = roleHTMLCreator(header,body,urlName,url);
     console.log(returnMailBody);
     return returnMailBody;
 };
