@@ -1,6 +1,6 @@
 const {simcardDetails,simCardTypeModel} = require('../models/simcard-model');
 
-const listSimcardsQuery = (query) => {
+const listUnAssignedSimcardsQuery = (query) => {
     return simcardDetails.aggregate(
         [
             {
@@ -123,5 +123,5 @@ module.exports = {
     insertSimcardQuery,
     updateSimcardQuery,
     deleteSimcardQuery,
-    listSimcardsQuery
+    listUnAssignedSimcardsQuery
 };

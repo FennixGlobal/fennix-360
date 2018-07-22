@@ -633,32 +633,6 @@ const getSimCardListBusiness = async (req) => {
         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
     userIdList = await getUserIdsForAllRolesAccessor(req);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
-    // userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    // if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-    //     switch (nativeUserRole) {
-    //         case 'ROLE_OPERATOR' : {
-    //             centerIdResponse = await metadataAccessor.getCenterIdsForOperatorAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_SUPERVISOR' : {
-    //             centerIdResponse = await metadataAccessor.getCenterIdsForSupervisorAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_ADMIN' : {
-    //             centerIdResponse = await metadataAccessor.getCenterIdsForAdminAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_SUPER_ADMIN' : {
-    //             centerIdResponse = await metadataAccessor.getCenterIdsForSuperAdminAccessor(request);
-    //             break;
-    //         }
-    //         case 'ROLE_MASTER_ADMIN' : {
-    //             centerIdResponse = await metadataAccessor.getCenterIdsForMasterAdminAccessor(request);
-    //             break;
-    //         }
-    //     }
-    // }
     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdsReq.push(`${item['center_id']}`);

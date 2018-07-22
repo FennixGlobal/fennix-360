@@ -1,4 +1,5 @@
 const {locationDetails, locationCounter} = require('../models/beneficiary-location-model');
+
 const selectCenterIdsForLoggedInUserAndSubUsersQuery = 'select distinct center_id, (select name from centers where center_id = u.center_id) as center_name from users u where user_id IN ';
 
 const getBeneficiaryLocationList = (query) => {

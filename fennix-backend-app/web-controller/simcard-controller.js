@@ -1,10 +1,10 @@
-const {listSimcardsBusiness, listSimcardTypesBusiness} = require('../business-module/simcard-business-module/simcard-business');
+const {listUnAssignedSimcardsBusiness, listSimcardTypesBusiness} = require('../business-module/simcard-business-module/simcard-business');
 var express = require('express');
 var router = express.Router();
 
-router.get('/listSimcards', function (req, res) {
+router.get('/listUnAssignedSimcards', function (req, res) {
     let returnObj;
-    returnObj = listSimcardsBusiness(req);
+    returnObj = listUnAssignedSimcardsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

@@ -1,8 +1,8 @@
-const {listSimcardsQuery,listSimcardTypesQuery} = require('../queries/simcard-query');
+const {listUnAssignedSimcardsQuery, listSimcardTypesQuery} = require('../queries/simcard-query');
 
-const listSimcardsAccessor = async (req) => {
+const listUnAssignedSimcardsAccessor = async (req) => {
     let returnObj;
-    returnObj = await listSimcardsQuery(req);
+    returnObj = await listUnAssignedSimcardsQuery(req);
     return returnObj;
 };
 const listSimcardTypesAccessor = async () => {
@@ -11,6 +11,6 @@ const listSimcardTypesAccessor = async () => {
     return returnObj;
 };
 module.exports =  {
-    listSimcardsAccessor,
+    listUnAssignedSimcardsAccessor,
     listSimcardTypesAccessor
 };
