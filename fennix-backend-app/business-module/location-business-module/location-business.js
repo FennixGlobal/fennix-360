@@ -33,7 +33,7 @@ const processData = (loginString) => {
         connectionSession: loginString.substr(3, 6),
         serialNumber: loginString.substr(9, 5),
     };
-    const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + data.substr(14, 15).length;
+    const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + loginString.substr(14, 15).length;
     deviceObj = {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
