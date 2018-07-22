@@ -27,7 +27,7 @@ const imageStorageBusiness = async (image, role) => {
     image = image.split(',')[1];
     imageCount = await getImageCounterAccessor();
     await updateImageCounterAccessor();
-    imageName = `${role}_${imageCount}.${mimeType}`;
+    imageName = `${role}_${imageCount.counter}.${mimeType}`;
     writeLocation = `${writeLocation}${imageName}`;
     let bufferArray = new Buffer(image, 'base64');
     console.log(bufferArray);
