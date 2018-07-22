@@ -24,11 +24,15 @@ const listUnAssignedSimcardsBusiness = async (req) => {
     return finalResponse;
 };
 
+//TODO change response type login
 const listSimcardTypesBusiness = async () => {
-    let response, finalResponse;
+    let response, finalResponse, simcardTypeResponse = {dropdownList: []};
     response = await listSimcardTypesAccessor();
     if (arrayNotEmptyCheck(response)) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response);
+        response.forEach((item) => {
+            simcardTypeResponse.dropdownList.push(dropdownCreator(item['_id'], item['simcardType'], false));
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', simcardTypeResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARD_TYPES_FOR_ID, 'EN_US', []);
     }
