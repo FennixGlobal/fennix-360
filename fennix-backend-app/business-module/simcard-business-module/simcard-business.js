@@ -1,5 +1,5 @@
 const {listUnAssignedSimcardsAccessor, listSimcardTypesAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
