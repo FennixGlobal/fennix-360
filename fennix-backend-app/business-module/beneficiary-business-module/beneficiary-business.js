@@ -228,7 +228,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                     ...finalReturnObj[device['beneficiaryId']],
                     deviceId: device['_id'],
                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-                    deviceType: device['deviceType'][0]['name']
+                    // deviceType: device['deviceType'][0]['name']
                 };
             });
         }
