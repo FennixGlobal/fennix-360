@@ -2,7 +2,7 @@ const {fennixResponse, dropdownCreator} = require('../../util-module/custom-requ
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
 const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const fs = require('fs');
 const nodeMailer = require('nodemailer');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
@@ -23,22 +23,25 @@ const dropDownBusiness = async (req) => {
 
 const imageStorageBusiness = async (image, role) => {
     let returnLocation = '', imageCount, imageName, writeLocation = imageDBLocation,
+        mimeType;
+    if (notNullCheck(image)) {
         mimeType = image.split(',')[0].split('/')[1].split(';')[0];
-    image = image.split(',')[1];
-    imageCount = await getImageCounterAccessor();
-    await updateImageCounterAccessor();
-    imageName = `${role}_${imageCount.counter}.${mimeType}`;
-    writeLocation = `${writeLocation}${imageName}`;
-    let bufferArray = new Buffer(image, 'base64');
-    console.log(bufferArray);
-    console.log(writeLocation);
-    await fs.writeFile(writeLocation, bufferArray, (err, log) => {
-        console.log(err);
-        if (!err) {
-            returnLocation = writeLocation;
-        }
-        console.log(log);
-    });
+        image = image.split(',')[1];
+        imageCount = await getImageCounterAccessor();
+        await updateImageCounterAccessor();
+        imageName = `${role}_${imageCount.counter}.${mimeType}`;
+        writeLocation = `${writeLocation}${imageName}`;
+        let bufferArray = new Buffer(image, 'base64');
+        console.log(bufferArray);
+        console.log(writeLocation);
+        await fs.writeFile(writeLocation, bufferArray, (err, log) => {
+            console.log(err);
+            if (!err) {
+                returnLocation = writeLocation;
+            }
+            console.log(log);
+        });
+    }
     return returnLocation;
 };
 
@@ -78,7 +81,7 @@ const mailModifier = (email, roleName) => {
     body = roleMailBody[roleName.toLowerCase()].body;
     urlName = roleMailBody[roleName.toLowerCase()].urlName;
     header = roleMailBody[roleName.toLowerCase()].header;
-    returnMailBody = roleHTMLCreator(header,body,urlName,url);
+    returnMailBody = roleHTMLCreator(header, body, urlName, url);
     console.log(returnMailBody);
     return returnMailBody;
 };
