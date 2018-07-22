@@ -13,7 +13,7 @@ const locationDeviceAttributeMasterSchema = new Schema({
 
 
 const deviceSchema = new Schema({
-    _id:  String,
+    _id:  Number,
     beneficiaryId:  Number,
     deviceTypeId:  String,
     imei:  Number,
@@ -27,21 +27,21 @@ const deviceSchema = new Schema({
 });
 
 const deviceTypeSchema = new Schema({
-    _id: {Type:String},
-    name: {Type:String},
-    minSpeed: {Type:Number},
-    maxHdop: {Type:Number},
-    minGpsLevel: {Type:Number},
-    minDiffTrackPoints: {Type:Number},
-    timeout: {Type:Number},
-    stationaryTimeout: {Type:Number},
-    icon: {Type:String},
-    mapIcon: {Type:String},
-    tailColor: {Type:String},
-    tailPoints: {Type: Number},
-    isActive: {Type:Boolean},
-    createdDate: {Type:String},
-    updatedDate: {Type:String}
+    _id: Number,
+    name: String,
+    minSpeed: Number,
+    maxHdop: Number,
+    minGpsLevel: Number,
+    minDiffTrackPoints: Number,
+    timeout: Number,
+    stationaryTimeout: Number,
+    icon: String,
+    mapIcon: String,
+    tailColor: String,
+    tailPoints: Number,
+    isActive: Boolean,
+    createdDate: Date,
+    updatedDate: Date
 });
 
 const deviceAttributesSchema = new Schema({

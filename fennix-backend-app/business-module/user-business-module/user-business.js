@@ -80,7 +80,7 @@ const addUserBusiness = async (req) => {
     request.image = await imageStorageBusiness(request.image, 'USER');
     request.updated_date = new Date();
     request.created_date = new Date();
-    // await addUserAccessor(request);
+    await addUserAccessor(request);
     emailSendBusiness(request.emailId, 'USER');
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
