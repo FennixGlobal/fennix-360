@@ -171,7 +171,7 @@ const listDevicesQuery = (query) => {
 const listDeviceTypesQuery = () => {
     return deviceTypeModel.find(
         {
-            "isActive": true
+            "active": true
         },
         {
             "name": 1
