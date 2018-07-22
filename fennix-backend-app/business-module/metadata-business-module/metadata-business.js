@@ -256,7 +256,7 @@ const getCountryListBusiness = async (req) => {
     }
     if (objectHasPropertyCheck(countryListResponse, 'rows') && arrayNotEmptyCheck(countryListResponse.rows)) {
         countryListResponse.rows.forEach(item => {
-            countryIdList.dropdownList.push(dropdownCreator(item['locale_key'], item['country_name'], false));
+            countryIdList.dropdownList.push(dropdownCreator(item['location_id'], item['country_name'], false));
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', countryIdList);
     } else {

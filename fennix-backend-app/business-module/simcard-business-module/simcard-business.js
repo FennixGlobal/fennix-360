@@ -1,4 +1,4 @@
-const {listUnAssignedSimcardsAccessor, listSimcardTypesAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
+const {listUnAssignedSimcardsAccessor, listSimcardTypesAccessor, fetchNextPrimaryKeyAccessor, insertNextPrimaryKeyAccessor, addSimcardAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
@@ -39,7 +39,25 @@ const listSimcardTypesBusiness = async () => {
     return finalResponse;
 };
 
+const addSimcardBusiness = async (req) => {
+    let request, primaryKeyResponse;
+    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    request = {
+        _id: parseInt(primaryKeyResponse[0]['counter']),
+        centerId: req.body.centerId,
+        carrierByCountryId: req.body.carrierByCountryId,
+        phoneNo: req.body.phoneNo,
+        simCardType: req.body.simCardType,
+        active: req.body.isActive,
+        serial: req.body.serialNo
+    };
+    addSimcardAccessor(request);
+    insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+};
+
+
 module.exports = {
     listUnAssignedSimcardsBusiness,
-    listSimcardTypesBusiness
+    listSimcardTypesBusiness,
+    addSimcardBusiness
 };
