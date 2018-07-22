@@ -31,9 +31,11 @@ const deviceAggregatorDashboard = async (req) => {
                 break;
             }
         }
-        otherUserIdsForGivenUserId.rows.forEach(item => {
-            userIdList.push(item['user_id']);
-        });
+        if (objectHasPropertyCheck(otherUserIdsForGivenUserId, 'rows') && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
+            otherUserIdsForGivenUserId.rows.forEach(item => {
+                userIdList.push(item['user_id']);
+            });
+        }
     }
     beneficiaryResponse = await getBeneficiaryByUserIdAccessor(userIdList);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {

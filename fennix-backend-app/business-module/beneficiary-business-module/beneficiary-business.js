@@ -40,6 +40,7 @@ const addBeneficiaryBusiness = async (req) => {
     request.image = imageStorageBusiness(request.image,'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
+
     await addBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
@@ -326,5 +327,4 @@ module.exports = {
     getBeneficiaryDetailsBusiness,
     addBeneficiaryBusiness,
     downloadBeneficiariesBusiness
-    // beneficiaryLocationListByOwnerAndCenter
 };
