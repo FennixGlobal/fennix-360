@@ -1,4 +1,4 @@
-const {simcardDetails,simCardTypeModel} = require('../models/simcard-model');
+const {simcardDetails,simCardTypeModel, simcardCounterModel} = require('../models/simcard-model');
 
 const listUnAssignedSimcardsQuery = (query) => {
     return simcardDetails.aggregate(
@@ -58,9 +58,9 @@ const listUnAssignedSimcardsQuery = (query) => {
     );
 };
 
-const insertSimcardQuery = (query) => {
-    return simcardDetails.insert(query);
-};
+// const insertSimcardQuery = (query) => {
+//     return simcardDetails.insert(query);
+// };
 
 const updateSimcardQuery = (query) => {
     return simcardDetails.update(query.where, query.update, query.upsert, query.multi);
@@ -117,11 +117,37 @@ const listSimcardTypesQuery = () => {
     return simCardTypeModel.find();
 };
 
+const insertSimcardQuery = (query) => {
+    let simcardObj = new simcardDetails(query);
+    simcardObj.save(function (err) {
+        if (err) return console.error(err);
+    });
+};
+
+const fetchNextPrimaryKeyQuery = () => {
+    return simcardCounterModel.find();
+};
+
+
+//TODO: add retry logic for failure conditions
+const insertNextPrimaryKeyQuery = (req) => {
+    simcardCounterModel.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+
 module.exports = {
     listSimcardTypesQuery,
     getSimcardDetailsQuery,
     insertSimcardQuery,
     updateSimcardQuery,
     deleteSimcardQuery,
-    listUnAssignedSimcardsQuery
+    listUnAssignedSimcardsQuery,
+    insertNextPrimaryKeyQuery,
+    fetchNextPrimaryKeyQuery
 };
