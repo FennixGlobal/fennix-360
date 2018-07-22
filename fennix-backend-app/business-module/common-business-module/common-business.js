@@ -4,6 +4,8 @@ const {imageDBLocation, imageLocalLocation} = require('../../util-module/connect
 const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const fs = require('fs');
+const nodeMailer = require('nodemailer');
+const {roleHTML, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 
 const dropDownBusiness = async (req) => {
     let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
@@ -41,7 +43,44 @@ const imageStorageBusiness = async (image, role) => {
 };
 
 const emailSendBusiness = async (emailId, roleId) => {
+    const subject = 'Welcome to Fennix 360';
+    let body;
+    body = mailModifier(emailId, roleId);
+    const transporter = nodeMailer.createTransport({
+        port: 465,
+        host: 'smtp.gmail.com',
+        service: 'gmail',
+        auth: {
+            user: 'fennixtest@gmail.com',
+            pass: 'Fennix@gmail'
+        },
+    });
 
+    const mailOptions = {
+        from: 'fennixtest@gmail.com',
+        to: emailId,
+        subject: subject,
+        html: body
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log(info);
+        }
+    });
+};
+
+const mailModifier = (email, roleName) => {
+    let body, url, urlName, header, returnMailBody;
+    url = `${roleMailBody[roleName.toLowerCase()].url}?emailId=${email}`;
+    body = roleMailBody[roleName.toLowerCase()].body;
+    urlName = roleMailBody[roleName.toLowerCase()].urlName;
+    header = roleMailBody[roleName.toLowerCase()].header;
+    returnMailBody = roleHTML;
+    console.log(returnMailBody);
+    return returnMailBody;
 };
 
 module.exports = {

@@ -1,6 +1,6 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
 const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, updateUserAccessor, getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
-const {imageStorageBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
 const FENNIX_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
@@ -81,6 +81,7 @@ const addUserBusiness = async (req) => {
     request.updated_date = new Date();
     request.created_date = new Date();
     await addUserAccessor(request);
+    emailSendBusiness(request.emailId, 'USER');
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 

@@ -5,7 +5,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness,emailSendBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 
@@ -40,7 +40,7 @@ const addBeneficiaryBusiness = async (req) => {
     request.image = imageStorageBusiness(request.image,'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
-
+    emailSendBusiness(request.emailId,'BENEFICIARY');
     await addBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
