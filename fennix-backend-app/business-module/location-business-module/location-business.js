@@ -36,7 +36,7 @@ const processData = (loginString) => {
     const loginHome = dataCommand.length + locationObj.connectionSession.length + locationObj.serialNumber.length + loginString.substr(14, 15).length;
     deviceObj = {
         imei: loginString.substr(14, 15),
-        firmwareVersion: loginString.substr(loginHome, (data.length - 1) - (loginHome - 1) - checkSum)
+        firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
     // this.id = deviceObj.imei;
     // // if (!this.loginStatus) {
