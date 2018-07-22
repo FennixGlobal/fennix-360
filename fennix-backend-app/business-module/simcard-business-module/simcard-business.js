@@ -2,6 +2,7 @@ const {listUnAssignedSimcardsAccessor, listSimcardTypesAccessor} = require('../.
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
+
 const listUnAssignedSimcardsBusiness = async (req) => {
     let response, request = {centerId: `${req.query.centerId}`}, finalResponse, modifiedResponse = [];
     response = await listUnAssignedSimcardsAccessor(request);

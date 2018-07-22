@@ -544,7 +544,10 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         elementLabel: widgetElementItem['element_label'],
                         elementIcon: widgetElementItem['element_icon_value'],
                         elementModalId: widgetElementItem['element_modal_id'],
-                        requestMappingKey: widgetElementItem['request_mapping_key']
+                        requestMappingKey: widgetElementItem['request_mapping_key'],
+                        dataEndpoint: widgetElementItem['dropdown_endpoint'],
+                        dataReqType: widgetElementItem['dropdown_request_type'],
+                        dataRequestParams: widgetElementItem['dropdown_request_params']
                     }
                 };
                 break;
