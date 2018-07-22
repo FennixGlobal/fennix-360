@@ -17,7 +17,7 @@ const listUnAssignedSimcardsQuery = (query) => {
                             ]
                         },
                         {
-                            "isActive":true
+                            "active":true
                         },
                         {
                             "centerId":query.centerId
@@ -51,7 +51,7 @@ const listUnAssignedSimcardsQuery = (query) => {
                     "carrier.name" : 1,
                     "phoneNo":1,
                     "serialNp":1,
-                    "isActive":1
+                    "active":1
                 }
             }
         ]
