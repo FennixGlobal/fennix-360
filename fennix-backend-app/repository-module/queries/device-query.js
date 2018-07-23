@@ -121,8 +121,6 @@ const updateLocationDeviceAttributeMasterQuery = (req) => {
 
 
 const getBeneficiaryIdByImeiQuery = (query) => {
-    console.log('imei');
-    console.log(query);
     return deviceAggregator.find({imei: query}, {"_id": 1, "beneficiaryId": 1});
 };
 
@@ -160,7 +158,7 @@ const listDevicesQuery = (query) => {
                 "imei": 1,
                 "deviceTypes.name": 1,
                 "simcards.phoneNo": 1,
-                "isActive": 1,
+                "active": 1,
                 "centerId": 1,
                 "beneficiaryId": 1
             }
@@ -250,7 +248,7 @@ const getDeviceDetailsByDeviceIdQuery = (req) => {
         {
             $project: {
                 'imei': 1,
-                'isActive': 1,
+                'active': 1,
                 'simcards.phoneNo': 1,
                 'simcards.simCardType': 1,
                 'firmwareVersion': 1,

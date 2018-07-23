@@ -76,14 +76,17 @@ const getUserListBusiness = async (req) => {
     return returnObj;
 };
 const listOperatorsBusiness = async (req) => {
-    let response, finalResponse = {dropdownList: []};
+    let response, returnObj,finalResponse = {dropdownList: []};
     response = await getUserIdNamesForAllRolesAccessor(req);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             finalResponse.dropdownList.push(dropdownCreator(item['userId'], item['name'], false));
         });
+        returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
+    } else  {
+        returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
-    return finalResponse;
+    return returnObj;
 };
 
 const addUserBusiness = async (req) => {

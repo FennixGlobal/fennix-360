@@ -18,12 +18,12 @@ const deviceSchema = new Schema({
     deviceTypeId:  String,
     imei:  Number,
     simCardId:  String,
-    isActive:  Boolean,
+    active:  Boolean,
     online: String,
     centerId:  String,
     firmwareVersion:  String,
-    createdDate:  String,
-    updatedDate:  String
+    createdDate:  Date,
+    updatedDate:  Date
 });
 
 const deviceTypeSchema = new Schema({
@@ -39,7 +39,7 @@ const deviceTypeSchema = new Schema({
     mapIcon: String,
     tailColor: String,
     tailPoints: Number,
-    isActive: Boolean,
+    active: Boolean,
     createdDate: Date,
     updatedDate: Date
 });

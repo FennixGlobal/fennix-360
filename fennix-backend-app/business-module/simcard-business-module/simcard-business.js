@@ -4,15 +4,15 @@ const {statusCodeConstants} = require('../../util-module/status-code-constants')
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 const listUnAssignedSimcardsBusiness = async (req) => {
-    let response, request = {centerId: `${req.query.centerId}`}, finalResponse, modifiedResponse = [];
+    let response, request = {centerId: req.query.centerId}, finalResponse, modifiedResponse = [];
     response = await listUnAssignedSimcardsAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
                 simCardId: item['_id'],
                 number: item['phoneNo'],
-                serialNo: item['serialNp'],
-                isActive: item['isActive'],
+                serialNo: item['serial'],
+                isActive: item['active'],
                 carrier: item['carrier']['name']
             };
             modifiedResponse.push(obj);
@@ -40,7 +40,7 @@ const listSimcardTypesBusiness = async () => {
 };
 
 const addSimcardBusiness = async (req) => {
-    let request, primaryKeyResponse;
+    let request, primaryKeyResponse, finalResponse, simcardResponse;
     primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
     request = {
         _id: parseInt(primaryKeyResponse[0]['counter']),
@@ -51,8 +51,14 @@ const addSimcardBusiness = async (req) => {
         active: req.body.isActive,
         serial: req.body.serialNo
     };
-    addSimcardAccessor(request);
+    simcardResponse = addSimcardAccessor(request);
     insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    if (simcardResponse) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', simcardResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
 };
 
 

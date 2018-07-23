@@ -2,8 +2,8 @@ const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
-const {deviceBusiness} = require('../location-business-module/location-business');
-const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
+// const {deviceBusiness} = require('../location-business-module/location-business');
+// const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
 // const beneficiaryAccesor = require('../../')
 // const express = require('express');
 // const http = require('http');
@@ -14,13 +14,13 @@ const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-
 
 // let id, loginStatus;
 let locationObj = {}, deviceObj = {};
-const locationUpdateBusiness = (data) => {
-    // console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
+const locationUpdateBusiness = async(data) => {
+    console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
     if (data.indexOf('#SA') !== -1) {
         returnString = processData(data);
     } else if (data.indexOf('#RD') !== -1) {
-        processLocation(data);
+        await processLocation(data);
     }
     return returnString;
 };
@@ -38,10 +38,7 @@ const processData = (loginString) => {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
-    // this.id = deviceObj.imei;
-    // // if (!this.loginStatus) {
-    // // }
-    loginFlag = processLogin();
+    loginFlag = processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
     return returnString;
 };
@@ -50,8 +47,8 @@ const processLocation = async (location) => {
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
-    let command = location.substr(0, 3);
-    let connectionSession = location.substr(3, 6);
+    // let command = location.substr(0, 3);
+    // let connectionSession = location.substr(3, 6);
     let day = location.substr(29, 2);
     let month = parseInt(location.substr(31, 2)) - 1;
     let year = `20${location.substr(33, 2)}`;
@@ -59,10 +56,10 @@ const processLocation = async (location) => {
     let minutes = location.substr(37, 2);
     let seconds = location.substr(39, 2);
     let dateTime = new Date(year, month, day, hours, minutes, seconds);
-    let devices = {
-        imei: location.substr(14, 15),
-        deviceUpdatedDate: dateTime
-    };
+    // let devices = {
+    //     imei: location.substr(14, 15),
+    //     deviceUpdatedDate: dateTime
+    // };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
     if (arrayNotEmptyCheck(beneficiaryResponse)) {
         let masterRequest = {
@@ -126,9 +123,10 @@ const processLocation = async (location) => {
 
 };
 
-processLogin = () => {
-    let returnFlag = false;
-    return true;
+processLogin = async(imei) => {
+    let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
+    returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
+    return returnFlag;
 };
 
 const getValue = (intPart, decimalPart1, decimalPart2) => {

@@ -115,7 +115,7 @@ const listDevicesBusiness = async (req) => {
                 deviceId: item['_id'],
                 deviceType: item['deviceTypes']['name'],
                 imei: item['imei'],
-                isActive: item['isActive'],
+                isActive: item['active'],
                 mobileNo: item['simcards']['phoneNo'],
                 center: centerIdNameMap[item['centerId']],
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'fullName') ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : '-',

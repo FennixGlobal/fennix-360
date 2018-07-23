@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const carrierSchema = new Schema({
     _id: Number,
     name: String,
-    isActive: Boolean,
+    active: Boolean,
     createdDate: Date,
     updatedDate: Date
 });
