@@ -44,6 +44,7 @@ const processData = (loginString) => {
     console.log(loginString.substr(14, 15));
     loginFlag = processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
+    console.log(returnString);
     return returnString;
 };
 
@@ -133,7 +134,10 @@ const processLocation = async (location) => {
 };
 
 processLogin = async (imei) => {
+    console.log('in process login');
+    console.log(imei);
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
+    console.log(beneficiaryResponse);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
 };
