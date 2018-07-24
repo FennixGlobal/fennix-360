@@ -23,6 +23,7 @@ TCPServer.on("connection", (socket) => {
     console.log('connected');
     socket.on('data', (data) => {
         const returnValue = locationBusiness.locationUpdateBusiness(data);
+        console.log(returnValue);
         socket.write(returnValue);
     });
     socket.on('error', (err) => {

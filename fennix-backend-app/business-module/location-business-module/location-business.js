@@ -17,6 +17,7 @@ const {addAutomatedTicketBusiness} = require('../ticket-business-module/ticket-b
 // let id, loginStatus;
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
+    console.log(data);
     console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
     if (data.indexOf('#SA') !== -1) {
