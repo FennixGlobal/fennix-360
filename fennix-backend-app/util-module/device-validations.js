@@ -1,6 +1,7 @@
 const {DEVICE_ATTRIBUTE_CONSTANTS} = require('./device-attribute-constants');
+const {notNullCheck, objectHasPropertyCheck} = require('../util-module/data-validators');
 const deviceValidator = (deviceAttributes, beneficiaryId, location) => {
-    let validationObj, validationCounter;
+    let validationObj = {}, validationResponse;
     Object.keys((deviceAttributes) => {
         switch (key) {
             case DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_VOLTAGE: {
@@ -24,12 +25,35 @@ const deviceValidator = (deviceAttributes, beneficiaryId, location) => {
             //     break;
             // }
         }
-    })
+    });
+    if (notNullCheck(validationObj) && validationObj !== {}) {
+        if (objectHasPropertyCheck(validationObj, DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_VOLTAGE)) {
+            validationResponse = {
+                alertType: 'battery-alert',
+                ticketName: 'AUTOMATED ALERT:LOW BATTERY',
+                ticketDescription: 'Battery is below 10%'
+            };
+        } else if (objectHasPropertyCheck(validationObj, DEVICE_ATTRIBUTE_CONSTANTS.SHELL_ALARM)) {
+            validationResponse = {
+                alertType: 'shell-alert',
+                ticketName: 'AUTOMATED ALERT:SHELL BREAK',
+                ticketDescription: 'Shell has been broken'
+            };
+        } else if (objectHasPropertyCheck(validationObj, DEVICE_ATTRIBUTE_CONSTANTS.BELT_ALARM)) {
+            validationResponse = {
+                alertType: 'belt-alert',
+                ticketName: 'AUTOMATED ALERT:BELT CUT',
+                ticketDescription: 'Belt has been cut'
+            };
+        }
+    }
+    return validationResponse;
 };
 
 const batteryValidator = (batteryVoltage) => {
-return batteryVoltage < 10;
+    return batteryVoltage < 10;
 };
+
 const gsmValidator = (gsmLevel) => {
     return gsmLevel <= 1;
 };
@@ -37,7 +61,6 @@ const gsmValidator = (gsmLevel) => {
 const geofenceValidator = () => {
 
 };
-
 
 const alarmValidator = (alarmStatus) => {
     return alarmStatus === 1;

@@ -1,7 +1,9 @@
-const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {arrayNotEmptyCheck,notNullCheck} = require('../../util-module/data-validators');
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
+const {deviceValidator} = require('../../util-module/device-validations');
+const {addAutomatedTicketBusiness} = require('../ticket-business-module/ticket-business');
 // const {deviceBusiness} = require('../location-business-module/location-business');
 // const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
 // const beneficiaryAccesor = require('../../')
@@ -14,7 +16,7 @@ const deviceAccessor = require('../../repository-module/data-accesors/device-acc
 
 // let id, loginStatus;
 let locationObj = {}, deviceObj = {};
-const locationUpdateBusiness = async(data) => {
+const locationUpdateBusiness = async (data) => {
     console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
     if (data.indexOf('#SA') !== -1) {
@@ -44,6 +46,7 @@ const processData = (loginString) => {
 };
 
 const processLocation = async (location) => {
+        let ticketResponse;
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
@@ -98,6 +101,10 @@ const processLocation = async (location) => {
             deviceDate: dateTime
         };
         const locationId = await locationAccessor.updateLocation(locationObj);
+        ticketResponse = deviceValidator(deviceAttribute, masterRequest.beneficiaryId, locationObj);
+        if(notNullCheck(ticketResponse)){
+            addAutomatedTicketBusiness(ticketResponse,masterRequest.beneficiaryId);
+        }
         deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
         const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
         masterRequest = {
@@ -123,7 +130,7 @@ const processLocation = async (location) => {
 
 };
 
-processLogin = async(imei) => {
+processLogin = async (imei) => {
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;

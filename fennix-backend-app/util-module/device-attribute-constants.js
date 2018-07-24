@@ -8,4 +8,4 @@ const DEVICE_ATTRIBUTE_CONSTANTS = {
 
 module.exports = {
     DEVICE_ATTRIBUTE_CONSTANTS
-}
+};

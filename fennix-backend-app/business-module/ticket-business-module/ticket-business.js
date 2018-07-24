@@ -155,10 +155,34 @@ const addTicketBusiness = async (req) => {
             locationId: req.body.locationId,
             ticketName: req.body.ticketName,
             ticketDescription: req.body.description,
-            ticketGenerationType: req.body.ticketGenerationType,
+            ticketGenerationType: 'USER',
             withAlerts: req.body.withAlerts,
             ticketStatus: req.body.ticketStatus,
             messages: messages,
+            createdDate: new Date()
+        };
+        addTicketAccessor(obj);
+        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    }
+};
+
+const addAutomatedTicketBusiness = async(ticketValidation,beneficiaryId)=>{
+    let primaryKeyResponse, counter, messages = [];
+    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    if (arrayNotEmptyCheck(primaryKeyResponse)) {
+        counter = parseInt(primaryKeyResponse[0]['counter']);
+        let obj = {
+            _id: counter,
+            // userId: req.body.userId,
+            // centerId: req.body.centerId,
+            beneficiaryId: beneficiaryId,
+            // locationId: req.body.locationId,
+            ticketName: ticketValidation.ticketName,
+            ticketDescription: ticketValidation.ticketDescription,
+            ticketGenerationType: 'DEVICE',
+            withAlerts: req.body.withAlerts,
+            ticketStatus: 'ACTIVE',
+            // messages: messages,
             createdDate: new Date()
         };
         addTicketAccessor(obj);
@@ -293,5 +317,6 @@ module.exports = {
     listTicketsBusiness,
     addTicketBusiness,
     listTicketsForDownloadBusiness,
-    ticketDetailsBasedOnTicketIdBusiness
+    ticketDetailsBasedOnTicketIdBusiness,
+    addAutomatedTicketBusiness
 };
