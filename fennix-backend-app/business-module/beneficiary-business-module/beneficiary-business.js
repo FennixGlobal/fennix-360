@@ -5,7 +5,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness,emailSendBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 
@@ -25,7 +25,9 @@ const beneficiaryAggregatorBusiness = async (req) => {
             beneficiaryObj[propName2]['value'] = 0;
         } else {
             beneficiaryResponse.rows.forEach((item) => {
-                beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
+                if (notNullCheck(item['role_name'])) {
+                    beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
+                }
             });
         }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryObj);
@@ -37,10 +39,10 @@ const beneficiaryAggregatorBusiness = async (req) => {
 
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
-    request.image = imageStorageBusiness(request.image,'BENEFICIARY');
+    request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
-    emailSendBusiness(request.emailId,'BENEFICIARY');
+    emailSendBusiness(request.emailId, 'BENEFICIARY');
     await addBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };

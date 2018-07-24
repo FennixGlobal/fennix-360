@@ -1,4 +1,4 @@
-const {arrayNotEmptyCheck,notNullCheck} = require('../../util-module/data-validators');
+const {arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
@@ -40,13 +40,15 @@ const processData = (loginString) => {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
+    console.log('IMEI');
+    console.log(loginString.substr(14, 15));
     loginFlag = processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
     return returnString;
 };
 
 const processLocation = async (location) => {
-        let ticketResponse;
+    let ticketResponse;
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
@@ -102,8 +104,8 @@ const processLocation = async (location) => {
         };
         const locationId = await locationAccessor.updateLocation(locationObj);
         ticketResponse = deviceValidator(deviceAttribute, masterRequest.beneficiaryId, locationObj);
-        if(notNullCheck(ticketResponse)){
-            addAutomatedTicketBusiness(ticketResponse,masterRequest.beneficiaryId);
+        if (notNullCheck(ticketResponse)) {
+            addAutomatedTicketBusiness(ticketResponse, masterRequest.beneficiaryId);
         }
         deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
         const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);

@@ -157,7 +157,7 @@ const addTicketBusiness = async (req) => {
             ticketDescription: req.body.description,
             ticketGenerationType: 'USER',
             withAlerts: req.body.withAlerts,
-            ticketStatus: req.body.ticketStatus,
+            ticketStatus: 'ACTIVE',
             messages: messages,
             createdDate: new Date()
         };
