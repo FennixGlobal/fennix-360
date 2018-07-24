@@ -21,8 +21,8 @@ TCPServer.on("connection", (socket) => {
     console.log('IN TCP');
     socket.setEncoding('utf8');
     console.log('connected');
-    socket.on('data', (data) => {
-        const returnValue = locationBusiness.locationUpdateBusiness(data);
+    socket.on('data', async (data) => {
+        const returnValue = await locationBusiness.locationUpdateBusiness(data);
         console.log(returnValue);
         socket.write(returnValue);
     });
