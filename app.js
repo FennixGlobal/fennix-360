@@ -18,7 +18,9 @@ mongoose.connect(mongoDev).catch((err) => {
 var TCPServer = net.createServer();
 TCPServer.listen(3100);
 TCPServer.on("connection", (socket) => {
+    console.log('IN TCP');
     socket.setEncoding('utf8');
+    console.log('connected');
     socket.on('data', (data) => {
         const returnValue = locationBusiness.locationUpdateBusiness(data);
         socket.write(returnValue);
