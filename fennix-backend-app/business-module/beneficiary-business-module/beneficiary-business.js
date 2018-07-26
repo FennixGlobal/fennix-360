@@ -143,7 +143,7 @@ const beneficiaryMapDataList = async (req) => {
             beneficiaryDevices = {...deviceDetails};
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
-                text: 'No of Violations',
+                text: 'Number of Violations',
                 value: noOfViolations
             };
             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
