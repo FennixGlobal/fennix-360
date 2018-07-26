@@ -180,7 +180,7 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
             ticketName: ticketValidation.ticketName,
             ticketDescription: ticketValidation.ticketDescription,
             ticketGenerationType: 'DEVICE',
-            withAlerts: req.body.withAlerts,
+            // withAlerts: req.body.withAlerts,
             ticketStatus: 'ACTIVE',
             // messages: messages,
             createdDate: new Date()
