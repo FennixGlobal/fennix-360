@@ -166,7 +166,7 @@ const addTicketBusiness = async (req) => {
     }
 };
 
-const addAutomatedTicketBusiness = async(ticketValidation,beneficiaryId)=>{
+const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     let primaryKeyResponse, counter, messages = [];
     primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
     if (arrayNotEmptyCheck(primaryKeyResponse)) {
@@ -185,6 +185,7 @@ const addAutomatedTicketBusiness = async(ticketValidation,beneficiaryId)=>{
             // messages: messages,
             createdDate: new Date()
         };
+        console.log('In Add ticket');
         addTicketAccessor(obj);
         insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }

@@ -26,9 +26,10 @@ const insertNextPrimaryKeyQuery = (req) => {
     locationCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
         if (!doc) {
             console.log('error');
-        } else {
-            console.log('success');
         }
+        // else {
+        //     console.log('success');
+        // }
     });
 };
 
