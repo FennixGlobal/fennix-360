@@ -68,17 +68,6 @@ const beneficiaryMapDataList = async (req) => {
             };
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-        // beneficiaryLocArray = await  mapMarkerQuery([...beneficiaryIdListAndDetailObj.beneficiaryIdArray]);
-        // beneficiaryLocArray.forEach((item) => {
-        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]};
-        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['location'] = {
-        //         latitude: item.latestBeneficiaryLocation.latitude,
-        //         longitude: item.latestBeneficiaryLocation.longitude
-        //     };
-        //     locBeneficiaryIdList.push(item.latestBeneficiaryLocation.beneficiaryId);
-        //     beneficiaryFilter[item.latestBeneficiaryLocation.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.latestBeneficiaryLocation.beneficiaryId]['roleId'];
-        // });
-        // deviceLocDeviceList.push(item.beneficiaryId);
         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
@@ -91,6 +80,7 @@ const beneficiaryMapDataList = async (req) => {
             const deviceDetails = {};
             let noOfViolations = 0;
             deviceDetails[item.beneficiaryId] = [];
+            const GPS = {A: 'Valid', V: 'Invalid'};
             const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
             if (batteryVoltage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
@@ -126,22 +116,22 @@ const beneficiaryMapDataList = async (req) => {
                 text: 'Belt Status',
                 key: 'beltStatus',
                 icon: 'link',
-                status: item.deviceAttributes.beltStatus ? 'violation' : 'safe',
-                value: item.deviceAttributes.beltStatus
+                status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
+                value: item.deviceAttributes.beltStatus === 1 ? 'OK' : 'belt cut'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'Shell Status',
                 key: 'shellStatus',
                 icon: 'lock',
-                status: item.deviceAttributes.shellStatus ? 'violation' : 'safe',
-                value: item.deviceAttributes.shellStatus
+                status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
+                value: item.deviceAttributes.shellStatus === 1 ? 'OK' : 'shell break'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
-                status: item.deviceAttributes.gpsStatus ? 'violation' : 'safe',
-                value: item.deviceAttributes.gpsStatus
+                status: item.deviceAttributes.gpsStatus === 'A' ? 'violation' : 'safe',
+                value: GPS[item.deviceAttributes.gpsStatus]
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'Speed',

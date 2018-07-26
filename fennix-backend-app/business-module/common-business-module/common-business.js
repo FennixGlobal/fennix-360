@@ -82,7 +82,7 @@ const mailModifier = (email, roleName) => {
     urlName = roleMailBody[roleName.toLowerCase()].urlName;
     header = roleMailBody[roleName.toLowerCase()].header;
     returnMailBody = roleHTMLCreator(header, body, urlName, url);
-    console.log(returnMailBody);
+    // console.log(returnMailBody);
     return returnMailBody;
 };
 

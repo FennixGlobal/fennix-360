@@ -41,8 +41,8 @@ const processData = (loginString) => {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
-    console.log('IMEI');
-    console.log(loginString.substr(14, 15));
+    // console.log('IMEI');
+    // console.log(loginString.substr(14, 15));
     loginFlag = processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
     console.log(returnString);
@@ -117,7 +117,7 @@ const processLocation = async (location) => {
             deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
         };
         deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
-            console.log(doc)
+            // console.log(doc)
         });
     }
     // socketIO.listen(3110);
@@ -135,10 +135,11 @@ const processLocation = async (location) => {
 };
 
 processLogin = async (imei) => {
-    console.log('in process login');
-    console.log(imei);
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
+    console.log('Beneficiary details:');
     console.log(beneficiaryResponse);
+    console.log('IMEI Number:');
+    console.log(imei);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
 };
