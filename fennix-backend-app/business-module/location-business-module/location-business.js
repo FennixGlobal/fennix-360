@@ -17,7 +17,7 @@ const {addAutomatedTicketBusiness} = require('../ticket-business-module/ticket-b
 // let id, loginStatus;
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
-    console.log(data);
+    // console.log(data);
     // console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
     if (data.indexOf('#SA') !== -1) {
@@ -45,7 +45,7 @@ const processData = (loginString) => {
     // console.log(loginString.substr(14, 15));
     loginFlag = processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
-    console.log(returnString);
+    // console.log(returnString);
     return returnString;
 };
 

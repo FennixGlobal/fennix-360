@@ -117,20 +117,20 @@ const beneficiaryMapDataList = async (req) => {
                 key: 'beltStatus',
                 icon: 'link',
                 status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
-                value: item.deviceAttributes.beltStatus === 1 ? 'OK' : 'belt cut'
+                value: item.deviceAttributes.beltStatus === 1 ? 'belt cut' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'Shell Status',
                 key: 'shellStatus',
                 icon: 'lock',
                 status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
-                value: item.deviceAttributes.shellStatus === 1 ? 'OK' : 'shell break'
+                value: item.deviceAttributes.shellStatus === 1 ? 'shell break' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
-                status: item.deviceAttributes.gpsStatus === 'A' ? 'violation' : 'safe',
+                status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
                 value: GPS[item.deviceAttributes.gpsStatus]
             });
             deviceDetails[item.beneficiaryId].push({
