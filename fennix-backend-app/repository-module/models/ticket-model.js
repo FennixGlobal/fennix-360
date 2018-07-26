@@ -1,23 +1,23 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 const ticketSchema = new Schema({
-    _id: {Type: String},
-    userId: {Type: String},
-    centerId: {Type: String},
-    beneficiaryId: {Type: String},
-    locationId: {Type: String},
+    _id: Number,
+    userId: Number,
+    centerId: Number,
+    beneficiaryId: Number,
+    locationId: Number,
     messages: [
         {
-            userId: {Type: String},
-            message: {Type: String},
-            timestamp: {Type: String}
+            userId: Number,
+            message: String,
+            timestamp: Date
         }
     ],
-    ticketStatus: {Type: String},
-    withAlerts: {Type: Boolean},
-    previousOwner: {Type: String},
-    createdDate: {Type: String},
-    updatedDate: {Type: String}
+    ticketStatus: String,
+    withAlerts:Boolean,
+    previousOwner: Number,
+    createdDate: Date,
+    updatedDate: Date
 });
 const ticketCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,

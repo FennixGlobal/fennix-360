@@ -7,7 +7,7 @@ const objectHasPropertyCheck = (objectData, propertyName) => notNullCheck(object
 const deviceStatusMapper = (key, value) => {
     let returnValue = {deviceStatus: '', color: ''};
     Object.keys(DEVICE_BATTERY_MAP[key]).map((item) => {
-        if (value < DEVICE_BATTERY_MAP[key][item]['value']) {
+        if (value > DEVICE_BATTERY_MAP[key][item]['startValue'] && value < DEVICE_BATTERY_MAP[key][item]['endValue']) {
             returnValue.deviceStatus = item;
             returnValue.color = DEVICE_BATTERY_MAP[key][item]['color']
         }
