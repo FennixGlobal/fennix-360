@@ -95,9 +95,9 @@ const beneficiaryMapDataList = async (req) => {
             if (item.deviceAttributes.shellStatus) {
                 noOfViolations += 1;
             }
-            if (item.deviceAttributes.gpsStatus) {
-                noOfViolations += 1;
-            }
+            // if (item.deviceAttributes.gpsStatus) {
+            //     noOfViolations += 1;
+            // }
             deviceDetails[item.beneficiaryId].push({
                 text: 'Battery Percentage',
                 status: batteryPercentage['deviceStatus'],
