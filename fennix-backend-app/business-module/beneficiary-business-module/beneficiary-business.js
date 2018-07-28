@@ -138,7 +138,7 @@ const beneficiaryMapDataList = async (req) => {
                 key: 'rfConnectionStatus',
                 icon: 'home',
                 status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
-                value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Out' : 'Home'
+                value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'RF Plug',
@@ -169,7 +169,9 @@ const beneficiaryMapDataList = async (req) => {
                 value: Math.floor(item.deviceAttributes.speed)
             });
             beneficiaryDevices = {...deviceDetails};
-            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = item.deviceAttributes.deviceUpdatedDate;
+            const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
+            const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = modifiedDate;
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                 text: 'Number of Violations',
