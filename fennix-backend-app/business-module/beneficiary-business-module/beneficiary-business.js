@@ -82,9 +82,9 @@ const beneficiaryMapDataList = async (req) => {
             deviceDetails[item.beneficiaryId] = [];
             const GPS = {A: 'Valid', V: 'Invalid'};
             const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
-            if (batteryVoltage['deviceStatus'] === 'violation') {
-                noOfViolations += 1;
-            }
+            // if (batteryVoltage['deviceStatus'] === 'violation') {
+            //     noOfViolations += 1;
+            // }
             const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
             if (batteryPercentage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
@@ -105,13 +105,13 @@ const beneficiaryMapDataList = async (req) => {
                 icon: 'battery_charging_full',
                 value: item.deviceAttributes.batteryPercentage
             });
-            deviceDetails[item.beneficiaryId].push({
-                text: 'Battery Voltage',
-                key: 'batteryVoltage',
-                icon: 'battery_std',
-                status: batteryVoltage['deviceStatus'],
-                value: item.deviceAttributes.batteryVoltage
-            });
+            // deviceDetails[item.beneficiaryId].push({
+            //     text: 'Battery Voltage',
+            //     key: 'batteryVoltage',
+            //     icon: 'battery_std',
+            //     status: batteryVoltage['deviceStatus'],
+            //     value: item.deviceAttributes.batteryVoltage
+            // });
             deviceDetails[item.beneficiaryId].push({
                 text: 'Belt Status',
                 key: 'beltStatus',
@@ -127,6 +127,34 @@ const beneficiaryMapDataList = async (req) => {
                 value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
+                text: 'GSM Status',
+                key: 'gmsStatus',
+                icon: 'signal_cellular_4_bar',
+                status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
+                value: item.deviceAttributes.gsmSignal < 2 ? 'low' : 'OK'
+            });
+            deviceDetails[item.beneficiaryId].push({
+                text: 'RF Home',
+                key: 'rfConnectionStatus',
+                icon: 'home',
+                status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
+                value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Out' : 'Home'
+            });
+            deviceDetails[item.beneficiaryId].push({
+                text: 'RF Plug',
+                key: 'rfPlugStatus',
+                icon: 'rss_feed',
+                status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
+                value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
+            });
+            deviceDetails[item.beneficiaryId].push({
+                text: 'Low Power Status',
+                key: 'lowPowerStatus',
+                icon: 'battery_alert',
+                status: item.deviceAttributes.lowPowerStatus === 1 ? 'violation' : 'safe',
+                value: item.deviceAttributes.lowPowerStatus === 1 ? 'low' : 'OK'
+            });
+            deviceDetails[item.beneficiaryId].push({
                 text: 'GPS Status',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
@@ -138,9 +166,10 @@ const beneficiaryMapDataList = async (req) => {
                 key: 'speed',
                 icon: 'directions_run',
                 status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
-                value: item.deviceAttributes.speed
+                value: Math.floor(item.deviceAttributes.speed)
             });
             beneficiaryDevices = {...deviceDetails};
+            beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = item.deviceAttributes.deviceUpdatedDate;
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                 text: 'Number of Violations',

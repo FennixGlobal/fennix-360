@@ -63,10 +63,6 @@ const processLocation = async (location) => {
     let minutes = location.substr(37, 2);
     let seconds = location.substr(39, 2);
     let dateTime = new Date(year, month, day, hours, minutes, seconds);
-    // let devices = {
-    //     imei: location.substr(14, 15),
-    //     deviceUpdatedDate: dateTime
-    // };
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
     if (arrayNotEmptyCheck(beneficiaryResponse)) {
         let masterRequest = {
