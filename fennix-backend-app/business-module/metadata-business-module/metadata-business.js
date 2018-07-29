@@ -381,11 +381,18 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 gridModalDataKey: widgetElementItem['request_mapping_key']
             };
             break;
-        case 'action-bar':
+        case 'action-button':
             returnObj = {
                 ...returnObj,
-                buttonArray: [widgetElementItem['default_key__accent_value'], widgetElementItem['default_value__hover_value'], widgetElementItem['element_primary_value__validation'], widgetElementItem['element_secondary_value__async_validation']],
-                mappingKey: widgetElementItem['request_mapping_key']
+                onElementChangeAction: widgetElementItem['element_action_type'],
+                defaultValue: widgetElementItem['default_value__hover_value'],
+                defaultKey: widgetElementItem['default_key__accent_value'],
+                elementTitle: widgetElementItem['element_title'],
+                requestMappingKey: widgetElementItem['request_mapping_key'],
+                dropdownEndpoint: widgetElementItem['dropdown_endpoint'],
+                dropdownReqType: widgetElementItem['dropdown_request_type'],
+                dropdownRequestParams: widgetElementItem['dropdown_request_params'],
+                dropdownId: widgetElementItem['dropdown_id']
             };
             break;
         case 'navigate-link':
@@ -479,7 +486,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
                     }
                 };
                 break;
-            case 'action-button':
+            // case 'action-button':
             case 'dropdown':
                 widgetElementData = {
                     ...widgetElementData, ...{
