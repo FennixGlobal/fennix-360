@@ -1,4 +1,4 @@
-const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
 const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
@@ -12,7 +12,7 @@ const dropDownBusiness = async (req) => {
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {
-            returnResponse.dropdownList.push(dropdownCreator(item['dropdown_id'], item['dropdown_value'], false));
+            returnResponse.dropdownList.push(dropdownActionButtonCreator(item));
         });
         returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnResponse);
     } else {

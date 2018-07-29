@@ -479,7 +479,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
                     }
                 };
                 break;
-
+            case 'action-button':
             case 'dropdown':
                 widgetElementData = {
                     ...widgetElementData, ...{

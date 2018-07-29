@@ -81,7 +81,7 @@ const beneficiaryMapDataList = async (req) => {
             let noOfViolations = 0;
             deviceDetails[item.beneficiaryId] = [];
             const GPS = {A: 'Valid', V: 'Invalid'};
-            const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
+            // const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
             // if (batteryVoltage['deviceStatus'] === 'violation') {
             //     noOfViolations += 1;
             // }
