@@ -32,7 +32,8 @@ const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
 
 const dropdownActionButtonCreator = (dropdownActionButton) => {
     let dropdownAction = {
-        dropdownKey: dropdownActionButton['dropdown_id'],
+        dropdownKey: dropdownActionButton['dropdown_key'],
+        dropdownId: dropdownActionButton['dropdown_id'],
         dropdownValue: dropdownActionButton['dropdown_value'],
         isDisabledFlag: dropdownActionButton['is_disable'],
         dropdownIconKey: dropdownActionButton['dropdown_action_button_icon_key'],
