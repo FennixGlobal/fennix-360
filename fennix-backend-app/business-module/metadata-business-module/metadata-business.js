@@ -386,7 +386,9 @@ const widgetGridElementCreator = async (widgetElementItem, languageId) => {
             const req = {
                 query: {languageId, dropdownId: widgetElementItem['dropdown_id']}
             };
+            console.log(req);
             const dropdownList = await dropDownBusiness(req);
+            console.log(dropdownList);
             returnObj = {
                 ...returnObj,
                 onElementChangeAction: widgetElementItem['element_action_type'],
@@ -400,6 +402,7 @@ const widgetGridElementCreator = async (widgetElementItem, languageId) => {
                 dropdownId: widgetElementItem['dropdown_id'],
                 dropdownList
             };
+            console.log(returnObj);
             break;
         case 'navigate-link':
             returnObj = {
