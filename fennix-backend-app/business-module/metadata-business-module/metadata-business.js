@@ -45,8 +45,7 @@ const getCardMetadataForRouteBusiness = async (req) => {
             }
             if (objectHasPropertyCheck(init['widgetCards'][item['role_cards_widgets_id']], 'widgets') && !objectHasPropertyCheck(init['widgetCards']['widgets'], item['role_cards_widgets_id'])) {
                 let widgetSectionsObj = {...init['widgetCards'][item['role_cards_widgets_id']]['widgets'][item['role_cards_widgets_id']].widgetSections} || {};
-                widgetSectionsObj = widgetSectionCreator(item, widgetSectionsObj, {languageId: req.body.lang});
-
+                widgetSectionsObj = widgetSectionCreator(item, widgetSectionsObj);
                 init['widgetCards'][item['role_cards_widgets_id']]['widgets'][item['role_cards_widgets_id']] = {
                     widgetId: 'W_' + item['role_cards_widgets_id'],
                     widgetOrderId: item['widget_order_id'],
@@ -268,7 +267,7 @@ const getCountryListBusiness = async (req) => {
 };
 
 //Private methods to modify the data for the way we need in the response
-const widgetSectionCreator = (widgetItem, widgetSectionObj, languageId) => {
+const widgetSectionCreator = (widgetItem, widgetSectionObj) => {
     let widgetSectionFinalObj = {};
     if (!objectHasPropertyCheck(widgetSectionObj, widgetItem['widget_section_order_id'])) {
         let widgetSectionBaseObj = {[widgetItem['widget_section_order_id']]: {}};
@@ -278,17 +277,17 @@ const widgetSectionCreator = (widgetItem, widgetSectionObj, languageId) => {
             sectionType: widgetItem['widget_section_type'],
             sectionOrientation: objectHasPropertyCheck(widgetItem, 'section_orientation') ? widgetItem['section_orientation'] : 'V',
             sectionSubType: widgetItem['widget_section_subtype'],
-            widgetSubSections: widgetSubSectionCreator(widgetItem, {}, languageId)
+            widgetSubSections: widgetSubSectionCreator(widgetItem, {})
         };
         widgetSectionFinalObj = {...widgetSectionObj, ...widgetSectionBaseObj};
     } else {
-        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'], languageId);
+        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections']);
         widgetSectionFinalObj = widgetSectionObj;
     }
     return widgetSectionFinalObj;
 };
 
-const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj, languageId) => {
+const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
     let widgetSubSectionFinalObj = {};
     if (!objectHasPropertyCheck(subSectionObj, widgetSubSectionItem['widget_sub_section_order_id'])) {
         let widgetSubSectionBaseObj = {[widgetSubSectionItem['widget_sub_section_order_id']]: {}};
@@ -298,7 +297,7 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj, languageId
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
             subSectionWidth: widgetSubSectionItem['sub_section_width'],
             subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
-            widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {}, languageId)}
+            widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {})}
         };
         widgetSubSectionFinalObj = {...subSectionObj, ...widgetSubSectionBaseObj};
     } else {
@@ -308,18 +307,18 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj, languageId
     return widgetSubSectionFinalObj;
 };
 
-const widgetSectionRowCreator = (widgetRowItem, sectionRowObj, languageId) => {
+const widgetSectionRowCreator = (widgetRowItem, sectionRowObj) => {
     let widgetSectionRowFinalObj = {};
     if (!objectHasPropertyCheck(sectionRowObj, widgetRowItem['widget_row_count'])) {
         let widgetSectionRowBaseObj = {[widgetRowItem['widget_row_count']]: {}};
         widgetSectionRowBaseObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
-            sectionCols: [widgetColElementCreator(widgetRowItem, languageId)]
+            sectionCols: [widgetColElementCreator(widgetRowItem)]
         };
         widgetSectionRowFinalObj = {...sectionRowObj, ...widgetSectionRowBaseObj};
     } else {
         const originalCol = [...sectionRowObj[widgetRowItem['widget_row_count']]['sectionCols']];
-        originalCol.push(widgetColElementCreator(widgetRowItem, languageId));
+        originalCol.push(widgetColElementCreator(widgetRowItem));
         sectionRowObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
             sectionCols: [...originalCol]
@@ -329,7 +328,7 @@ const widgetSectionRowCreator = (widgetRowItem, sectionRowObj, languageId) => {
     return widgetSectionRowFinalObj;
 };
 
-const widgetColElementCreator = (widgetColItem, languageId) => {
+const widgetColElementCreator = (widgetColItem) => {
     let widgetBaseColItem = {
         widgetColId: widgetColItem['widget_col_count'],
         widgetColType: widgetColItem['widget_element_type'],
@@ -337,7 +336,7 @@ const widgetColElementCreator = (widgetColItem, languageId) => {
     };
     switch (widgetColItem['widget_section_type'].toLowerCase()) {
         case 'grid':
-            widgetBaseColItem = {...widgetBaseColItem, ...widgetGridElementCreator(widgetColItem, languageId)};
+            widgetBaseColItem = {...widgetBaseColItem, ...widgetGridElementCreator(widgetColItem)};
             break;
         case 'chart':
             widgetBaseColItem = {...widgetBaseColItem, ...widgetChartElementCreator(widgetColItem)};
@@ -355,7 +354,7 @@ const widgetColElementCreator = (widgetColItem, languageId) => {
     return widgetBaseColItem;
 };
 
-const widgetGridElementCreator = async (widgetElementItem, languageId) => {
+const widgetGridElementCreator = (widgetElementItem) => {
     let returnObj = {
         gridElementAction: widgetElementItem['element_action_type'],
         gridHeaderOrderId: widgetElementItem['widget_col_count'],
@@ -383,12 +382,12 @@ const widgetGridElementCreator = async (widgetElementItem, languageId) => {
             };
             break;
         case 'action-button':
-            const req = {
-                query: {languageId, dropdownId: widgetElementItem['dropdown_id']}
-            };
-            console.log(req);
-            const dropdownList = await dropDownBusiness(req);
-            console.log(dropdownList);
+            // const req = {
+            //     query: {languageId, dropdownId: widgetElementItem['dropdown_id']}
+            // };
+            // console.log(req);
+            // const dropdownList = await dropDownBusiness(req);
+            // console.log(dropdownList);
             returnObj = {
                 ...returnObj,
                 onElementChangeAction: widgetElementItem['element_action_type'],
@@ -400,9 +399,9 @@ const widgetGridElementCreator = async (widgetElementItem, languageId) => {
                 dropdownReqType: widgetElementItem['dropdown_request_type'],
                 dropdownRequestParams: widgetElementItem['dropdown_request_params'],
                 dropdownId: widgetElementItem['dropdown_id'],
-                dropdownList
+                // dropdownList
             };
-            console.log(returnObj);
+            // console.log(returnObj);
             break;
         case 'navigate-link':
             returnObj = {
