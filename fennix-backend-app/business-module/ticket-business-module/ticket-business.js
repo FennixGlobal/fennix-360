@@ -78,7 +78,7 @@ const listTicketsBusiness = async (req) => {
                     userId: item['user_id']
                 };
                 userDetailMap[item['user_id']] = userDetailsObj;
-                userIds.push(`${item['user_id']}`);
+                userIds.push(item['user_id']);
             });
         }
     }
@@ -86,7 +86,7 @@ const listTicketsBusiness = async (req) => {
     ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
-            beneficiaryIds.push(`${item['beneficiaryId']}`);
+            beneficiaryIds.push(item['beneficiaryId']);
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
