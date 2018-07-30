@@ -15,7 +15,7 @@ const locationDeviceAttributeMasterSchema = new Schema({
 const deviceSchema = new Schema({
     _id:  Number,
     beneficiaryId:  Number,
-    deviceTypeId:  String,
+    deviceTypeId:  Number,
     imei:  Number,
     simCardId:  String,
     active:  Boolean,
