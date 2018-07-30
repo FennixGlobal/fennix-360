@@ -38,8 +38,19 @@ const METADATA_CONTROLLER = {
     METADATA_ALL_ROLES_FOR_NON_ADMIN: '/getRolesForNonAdmin'
 };
 
+const TICKET_CONTROLLER = {
+    TICKET_TICKET_AGGREGATOR: '/ticketAggregator',
+    TICKET_TICKET_DETAILS: '/ticketDetails',
+    TICKET_LIST_TICKETS: '/listTickets',
+    TICKET_ADD_TICKET: '/addTicket',
+    TICKET_UPDATE_TICKET: '/updateTicket',
+    TICKET_DOWNLOAD_LIST_TICKETS: '/downloadTickets',
+
+
+}
 module.exports = {
     USER_CONTROLLER,
     SIMCARD_CONTROLLER,
-    METADATA_CONTROLLER
+    METADATA_CONTROLLER,
+    TICKET_CONTROLLER
 };

@@ -137,6 +137,22 @@ const listTicketsForDownloadQuery = (query) => {
             }
         );
 };
+const updateTicketQuery = (query) => {
+    ticketAggregator.update({_id: query.ticketId},
+        {
+            $set: {
+                ticketStatus: query.obj.ticketStatus,
+                updatedDate: query.obj.updatedDate
+            },
+            $push: {messages: query.obj.messages}
+        }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 module.exports = {
     userIdTicketAggregatorQuery,
@@ -145,6 +161,7 @@ module.exports = {
     fetchNextPrimaryKeyQuery,
     insertNextPrimaryKeyQuery,
     addTicketQuery,
+    updateTicketQuery,
     listTicketsForDownloadQuery,
     ticketDetailsBasedOnTicketIdQuery
 };

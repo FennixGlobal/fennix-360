@@ -1,17 +1,18 @@
-const {listTicketsBasedOnUserIdAccessor, listTicketsBasedOnUserIdForDownloadAccessor, insertNextPrimaryKeyAccessor, addTicketAccessor, fetchNextPrimaryKeyAccessor, totalNoOfTicketsBasedOnUserIdAccessor, ticketAggregatorAccessor, ticketListBasedOnTicketStatusAccessor, ticketDetailsBasedOnTicketIdAccessor} = require('../../repository-module/data-accesors/ticket-accesor');
+const ticketAccessor = require('../../repository-module/data-accesors/ticket-accesor');
 const {getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {excelColCreator, excelRowsCreator} = require('../../util-module/request-validators');
 
 const ticketAggregatorBusiness = async (req) => {
     let request = {}, ticketResponse, returnObj, userIdList;
     userIdList = await getUserIdsForAllRolesAccessor(req);
     request.userIds = userIdList;
-    ticketResponse = await ticketAggregatorAccessor(request);
+    ticketResponse = await ticketAccessor.ticketAggregatorAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
         let ticketObj = {
             resolved: {key: 'resolvedTickets', value: '', color: '', legend: 'RESOLVED'},
@@ -33,7 +34,7 @@ const ticketAggregatorBusiness = async (req) => {
 const ticketListBasedOnStatusBusiness = async (req) => {
     let request = {userId: req.query.userId, ticketStatus: req.query.ticketStatus, centerId: req.query.centerId},
         ticketResponse, returnObj;
-    ticketResponse = await ticketListBasedOnTicketStatusAccessor(request);
+    ticketResponse = await ticketAccessor.ticketListBasedOnTicketStatusAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', ticketResponse);
     } else {
@@ -43,13 +44,11 @@ const ticketListBasedOnStatusBusiness = async (req) => {
 };
 
 const listTicketsBusiness = async (req) => {
-    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
-        // finalResponseObj = {},
-        ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
+    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     userIds.push(req.query.userId);
-    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+    if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
             case 'ROLE_SUPERVISOR' : {
                 otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
@@ -68,7 +67,7 @@ const listTicketsBusiness = async (req) => {
                 break;
             }
         }
-        if (objectHasPropertyCheck(otherUserDetailResponse, 'rows') && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
+        if (objectHasPropertyCheck(otherUserDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
             otherUserDetailResponse.rows.forEach((item) => {
                 const userDetailsObj = {
                     fullName: item['full_name'],
@@ -83,14 +82,14 @@ const listTicketsBusiness = async (req) => {
         }
     }
     request.userId = userIds;
-    ticketResponse = await listTicketsBasedOnUserIdAccessor(request);
+    ticketResponse = await ticketAccessor.listTicketsBasedOnUserIdAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
             beneficiaryIds.push(item['beneficiaryId']);
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
-    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         beneficiaryResponse.rows.forEach((item) => {
             const beneficiaryObj = {
                 fullName: item['full_name'],
@@ -135,7 +134,7 @@ const listTicketsBusiness = async (req) => {
 };
 const addTicketBusiness = async (req) => {
     let primaryKeyResponse, counter, messages = [];
-    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
     if (arrayNotEmptyCheck(primaryKeyResponse)) {
         counter = parseInt(primaryKeyResponse[0]['counter']);
         req.body.messages.forEach(msg => {
@@ -162,14 +161,14 @@ const addTicketBusiness = async (req) => {
             createdDate: new Date(),
             updatedDate: new Date()
         };
-        addTicketAccessor(obj);
-        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        await ticketAccessor.addTicketAccessor(obj);
+        await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
 
 const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     let primaryKeyResponse, counter;
-    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
     if (arrayNotEmptyCheck(primaryKeyResponse)) {
         counter = parseInt(primaryKeyResponse[0]['counter']);
         let obj = {
@@ -182,14 +181,14 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
             createdDate: new Date(),
             updatedDate: new Date()
         };
-        addTicketAccessor(obj);
-        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        await ticketAccessor.addTicketAccessor(obj);
+        await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
 const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
     let response = {}, ticketResponse;
-    ticketResponse = await ticketDetailsBasedOnTicketIdAccessor(req.query.ticketId);
-    if (objectHasPropertyCheck(ticketResponse, 'rows') && arrayNotEmptyCheck(ticketResponse.rows)) {
+    ticketResponse = await ticketAccessor.ticketDetailsBasedOnTicketIdAccessor(req.query.ticketId);
+    if (objectHasPropertyCheck(ticketResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(ticketResponse.rows)) {
         let ticketDetails = ticketResponse.rows[0];
         let modifiedResponse = {
             ticketId: ticketDetails['_id'],
@@ -214,7 +213,7 @@ const listTicketsForDownloadBusiness = async (req) => {
     sheet.columns = colsKeysResponse['cols'];
     keysArray = colsKeysResponse['keysArray'];
     rowsIdsResponse = excelRowsCreator(ticketsListResponse, 'tickets', keysArray);
-    returnObj = rowsIdsResponse['rows'];
+    returnObj = rowsIdsResponse[COMMON_CONSTANTS.FENNIX_ROWS];
     modifiedResponse = Object.keys(returnObj).map(key => returnObj[key]);
     sheet.addRows(modifiedResponse);
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/tickets.xlsx');
@@ -227,7 +226,7 @@ const getTicketsList = async (req) => {
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
 
-    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+    if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
             case 'ROLE_SUPERVISOR' : {
                 otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
@@ -246,7 +245,7 @@ const getTicketsList = async (req) => {
                 break;
             }
         }
-        if (objectHasPropertyCheck(otherUserDetailResponse, 'rows') && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
+        if (objectHasPropertyCheck(otherUserDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
             otherUserDetailResponse.rows.forEach((item) => {
                 const userDetailsObj = {
                     fullName: item['full_name'],
@@ -260,14 +259,14 @@ const getTicketsList = async (req) => {
         }
     }
     request.userId = userIds;
-    ticketResponse = await listTicketsBasedOnUserIdForDownloadAccessor(request);
+    ticketResponse = await ticketAccessor.listTicketsBasedOnUserIdForDownloadAccessor(request);
     ticketResponse.forEach((item) => {
         if (beneficiaryIds.indexOf(item['beneficiaryId']) === -1) {
             beneficiaryIds.push(parseInt(item['beneficiaryId']));
         }
     });
     beneficiaryResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
-    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         beneficiaryResponse.rows.forEach((item) => {
             const beneficiaryObj = {
                 fullName: item['full_name'],
@@ -308,6 +307,19 @@ const getTicketsList = async (req) => {
     return modifiedResponse;
 };
 
+const updateTicketBusiness = async (req) => {
+    let obj = {
+        ticketStatus: req.body.ticketStatus,
+        messages: {
+            userId: req.body.userId,
+            message: req.body.message,
+            timestamp: new Date()
+        },
+        updatedDate: new Date()
+    }, request = {ticketId: req.body.ticketId, obj: obj};
+    await ticketAccessor.updateTicketAccessor(request);
+};
+
 module.exports = {
     ticketAggregatorBusiness,
     ticketListBasedOnStatusBusiness,
@@ -315,5 +327,6 @@ module.exports = {
     addTicketBusiness,
     listTicketsForDownloadBusiness,
     ticketDetailsBasedOnTicketIdBusiness,
-    addAutomatedTicketBusiness
+    addAutomatedTicketBusiness,
+    updateTicketBusiness
 };

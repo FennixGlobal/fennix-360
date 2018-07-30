@@ -35,6 +35,13 @@ const listTicketsBasedOnUserIdAccessor = async (req) => {
     returnObj = await ticketQuery.listTicketsQuery(req);
     return returnObj;
 };
+
+const updateTicketAccessor = async (req) => {
+    let returnObj;
+    returnObj = await ticketQuery.updateTicketQuery(req);
+    return returnObj;
+};
+
 const addTicketAccessor = async (req) => {
     let returnObj;
     returnObj = await ticketQuery.addTicketQuery(req);
@@ -63,5 +70,6 @@ module.exports = {
     ticketListBasedOnTicketStatusAccessor,
     listTicketsBasedOnUserIdAccessor,
     ticketDetailsBasedOnTicketIdAccessor,
+    updateTicketAccessor,
     listTicketsBasedOnUserIdForDownloadAccessor
 };

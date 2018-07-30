@@ -1,10 +1,11 @@
 var express = require('express');
-const {listTicketsBusiness,ticketAggregatorBusiness,listTicketsForDownloadBusiness,addTicketBusiness,ticketListBasedOnStatusBusiness, ticketDetailsBasedOnTicketIdBusiness} = require('../business-module/ticket-business-module/ticket-business');
+const ticketBusiness = require('../business-module/ticket-business-module/ticket-business');
+const {TICKET_CONTROLLER} = require('../util-module/util-constants/fennix-controller-constants');
 var router = express.Router();
 
-router.get('/ticketAggregator', function (req, res) {
+router.get(TICKET_CONTROLLER.TICKET_TICKET_AGGREGATOR, function (req, res) {
     let returnObj;
-    returnObj = ticketAggregatorBusiness(req);
+    returnObj = ticketBusiness.ticketAggregatorBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -19,33 +20,41 @@ router.get('/ticketAggregator', function (req, res) {
 //     });
 // });
 
-router.get('/ticketDetails', function (req, res) {
+router.get(TICKET_CONTROLLER.TICKET_TICKET_DETAILS, function (req, res) {
    let returnObj;
-   returnObj = ticketDetailsBasedOnTicketIdBusiness(req);
+   returnObj = ticketBusiness.ticketDetailsBasedOnTicketIdBusiness(req);
    returnObj.then((response) => {
       res.send(response);
    });
 });
 
-router.get('/listTickets', function (req, res) {
+router.get(TICKET_CONTROLLER.TICKET_LIST_TICKETS, function (req, res) {
     let returnObj;
-    returnObj = listTicketsBusiness(req);
+    returnObj = ticketBusiness.listTicketsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     });
 });
 
-router.post('/addTicket', function (req, res) {
+router.post(TICKET_CONTROLLER.TICKET_ADD_TICKET, function (req, res) {
     let returnObj;
-    returnObj = addTicketBusiness(req);
+    returnObj = ticketBusiness.addTicketBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     });
 });
 
-router.get('/downloadTickets', function (req, res) {
+router.get(TICKET_CONTROLLER.TICKET_DOWNLOAD_LIST_TICKETS, function (req, res) {
     let returnObj;
-    returnObj = listTicketsForDownloadBusiness(req);
+    returnObj = ticketBusiness.listTicketsForDownloadBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    });
+});
+
+router.post(TICKET_CONTROLLER.TICKET_UPDATE_TICKET, function (req, res) {
+    let returnObj;
+    returnObj = ticketBusiness.updateTicketBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     });
