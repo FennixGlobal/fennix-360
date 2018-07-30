@@ -3,15 +3,15 @@ const Schema = mongoose.Schema;
 
 const simcardSchema = new Schema({
     _id: Number,
-    centerId: String,
-    deviceId: String,
-    carrierByCountryId: String,
-    simCardType: String,
+    centerId: Number,
+    deviceId: Number,
+    carrierByCountryId: Number,
+    simCardType: Number,
     active: Boolean,
-    phoneNo: String,
+    phoneNo: Number,
     serial: String,
-    createdDate: String,
-    updatedDate: String
+    createdDate: Date,
+    updatedDate: Date
 });
 const simcardTypeSchema = new Schema({
     _id: Number,

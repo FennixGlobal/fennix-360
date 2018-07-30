@@ -1,26 +1,43 @@
-const {listUnAssignedSimcardsBusiness, listSimcardTypesBusiness, addSimcardBusiness} = require('../business-module/simcard-business-module/simcard-business');
+const simcardBusiness = require('../business-module/simcard-business-module/simcard-business');
+const {SIMCARD_CONTROLLER}=require('../util-module/util-constants/fennix-controller-constants');
 var express = require('express');
 var router = express.Router();
 
-router.get('/listUnAssignedSimcards', function (req, res) {
+router.get(SIMCARD_CONTROLLER.SIMCARD_GET_SIMCARD_DETAILS, (req, res) => {
     let returnObj;
-    returnObj = listUnAssignedSimcardsBusiness(req);
+    returnObj = simcardBusiness.getSimCardDetailsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.get('/listSimcardTypes', function (req, res) {
+router.get(SIMCARD_CONTROLLER.SIMCARD_LIST_UNASSIGNED_SIMCARDS, function (req, res) {
     let returnObj;
-    returnObj = listSimcardTypesBusiness(req);
+    returnObj = simcardBusiness.listUnAssignedSimcardsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.post('/addSimcard', function (req, res) {
+router.get(SIMCARD_CONTROLLER.SIMCARD_LIST_SIMCARD_TYPES, function (req, res) {
     let returnObj;
-    returnObj = addSimcardBusiness(req);
+    returnObj = simcardBusiness.listSimcardTypesBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.post(SIMCARD_CONTROLLER.SIMCARD_ADD_SIMCARD, function (req, res) {
+    let returnObj;
+    returnObj = simcardBusiness.addSimcardBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get(SIMCARD_CONTROLLER.SIMCARD_LIST_SIMCARDS_FOR_USER, (req, res) => {
+    let returnObj;
+    returnObj = simcardBusiness.getSimCardListBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
