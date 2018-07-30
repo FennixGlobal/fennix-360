@@ -1,38 +1,33 @@
-const {cardWidgetMetadataQuery, filterMetadataQuery, getRolesForRoleIdQuery, modalMetadataQuery, headerMetadataQuery, sideNavMetadataQuery, loginMetadataQuery, getRoleQuery} = require('../queries/metadata-query');
-const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query');
-const {selectLanguagesQuery} = require('../queries/language-query');
-const {getUserNameFromUserIdAccessor} = require('../data-accesors/user-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require("../../util-module/data-validators");
 const {filterQueryCreator} = require('../../util-module/request-validators');
-const {insertSimcardQuery, deleteSimcardQuery, getSimcardDetailsQuery, updateSimcardQuery} = require('../queries/simcard-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const metadataQueries = require('../queries/metadata-query');
 const locationQueries = require('../queries/location-query');
+const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query');
+const {selectLanguagesQuery} = require('../queries/language-query');
+
+const {getUserNameFromUserIdAccessor} = require('../data-accesors/user-accesor');
 
 const getCardMetadataAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, cardWidgetMetadataQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.cardWidgetMetadataQuery);
     return returnObj;
 };
 const getSideNavMetadataAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, sideNavMetadataQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.sideNavMetadataQuery);
     return returnObj;
 };
 const getRolesForRoleIdAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getRolesForRoleIdQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.getRolesForRoleIdQuery);
     return returnObj;
-};
-
-const getSimcardDetailsAccessor = async (req) => {
-    let responseObj;
-    responseObj = await getSimcardDetailsQuery(req);
-    return responseObj;
 };
 
 const getHeaderMetadataAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, headerMetadataQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.headerMetadataQuery);
     return returnObj;
 };
 
@@ -44,7 +39,7 @@ const getCenterIdsBasedOnUserIdAccessor = async (req) => {
 
 const getFilterMetadataAccessor = async (req, colName) => {
     let returnObj, modifiedFilterQuery;
-    modifiedFilterQuery = filterQueryCreator(filterMetadataQuery, colName);
+    modifiedFilterQuery = filterQueryCreator(metadataQueries.filterMetadataQuery, colName);
     returnObj = await connectionCheckAndQueryExec(req, modifiedFilterQuery);
     return returnObj;
 };
@@ -57,45 +52,45 @@ const getLanguagesAccessor = async (req) => {
 
 const getLoginMetadataAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, loginMetadataQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.loginMetadataQuery);
     return returnObj;
 };
 const getModalMetadataAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, modalMetadataQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.modalMetadataQuery);
     return returnObj;
 };
 
 
 const getRolesAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getRoleQuery);
+    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.getRoleQuery);
     return returnObj;
 };
 
 const getCenterIdsAccessor = async (req) => {
     let userDetailResponse, centerIdResponse, request = [req.query.userId];
     userDetailResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
+        let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
         switch (nativeUserRole) {
-            case 'ROLE_OPERATOR' : {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR : {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectCenterIdsForOperatorQuery);
                 break;
             }
-            case 'ROLE_SUPERVISOR' : {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR : {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectCenterIdsForSupervisorQuery);
                 break;
             }
-            case 'ROLE_ADMIN' : {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN : {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectCenterIdsForAdminQuery);
                 break;
             }
-            case 'ROLE_SUPER_ADMIN' : {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN : {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectCenterIdsForSuperAdminQuery);
                 break;
             }
-            case 'ROLE_MASTER_ADMIN' : {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectAllCenterIdsForMasterAdminQuery);
                 break;
             }
@@ -104,54 +99,17 @@ const getCenterIdsAccessor = async (req) => {
     return centerIdResponse;
 };
 
-// const getCenterIdsForOperatorAccessor = async (req) => {
-//     let centerIdResponse;
-//     centerIdResponse = await connectionCheckAndQueryExec(req, locationQueries.selectCenterIdsForOperatorQuery);
-//     return centerIdResponse;
-// };
-//
-// const getCenterIdsForSupervisorAccessor = async (req) => {
-//     let centerIdResponse;
-//     centerIdResponse = await connectionCheckAndQueryExec(req, locationQueries.selectCenterIdsForSupervisorQuery);
-//     return centerIdResponse;
-// };
-//
-// const getCenterIdsForAdminAccessor = async (req) => {
-//     let centerIdResponse;
-//     centerIdResponse = await connectionCheckAndQueryExec(req, locationQueries.selectCenterIdsForAdminQuery);
-//     return centerIdResponse;
-// };
-//
-// const getCenterIdsForSuperAdminAccessor = async (req) => {
-//     let centerIdResponse;
-//     centerIdResponse = await connectionCheckAndQueryExec(req, locationQueries.selectCenterIdsForSuperAdminQuery);
-//     return centerIdResponse;
-// };
-//
-// const getCenterIdsForMasterAdminAccessor = async (req) => {
-//     let centerIdResponse;
-//     centerIdResponse = await connectionCheckAndQueryExec(req, locationQueries.selectAllCenterIdsForMasterAdminQuery);
-//     return centerIdResponse;
-// };
-
 module.exports = {
     getCardMetadataAccessor,
     getSideNavMetadataAccessor,
     getHeaderMetadataAccessor,
     getLoginMetadataAccessor,
     getCenterIdsBasedOnUserIdAccessor,
-    getSimcardDetailsAccessor,
     getLanguagesAccessor,
     getRolesAccessor,
     getRolesForRoleIdAccessor,
     getFilterMetadataAccessor,
     getModalMetadataAccessor,
     getCenterIdsAccessor
-    // getDropdownAccessor,
-    // getCenterIdsForAdminAccessor,
-    // getCenterIdsForSupervisorAccessor,
-    // getCenterIdsForOperatorAccessor,
-    // getCenterIdsForSuperAdminAccessor,
-    // getCenterIdsForMasterAdminAccessor,
 };
 

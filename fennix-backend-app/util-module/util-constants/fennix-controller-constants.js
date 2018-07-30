@@ -1,26 +1,45 @@
 const USER_CONTROLLER = {
-    USER_UPDATE_USER_PROFILE:'/updateProfile',
+    USER_UPDATE_USER_PROFILE: '/updateProfile',
     USER_LIST_OPERATORS: '/listOperators',
-    USER_GET_USER_LIST:'/listUsers',
-    USER_DELETE_USER:'/deleteUser',
-    USER_UPDATE_USER:'/updateUser',
-    USER_GET_USER_DETAILS:'/getUserDetails',
-    USER_ADD_USER:'/addUser',
-    USER_DOWNLOAD_USER:'/downloadUsers',
-    USER_FETCH_USER_PROFILE:'/fetchProfile'
+    USER_GET_USER_LIST: '/listUsers',
+    USER_DELETE_USER: '/deleteUser',
+    USER_UPDATE_USER: '/updateUser',
+    USER_GET_USER_DETAILS: '/getUserDetails',
+    USER_ADD_USER: '/addUser',
+    USER_DOWNLOAD_USER: '/downloadUsers',
+    USER_FETCH_USER_PROFILE: '/fetchProfile'
 };
 
 const SIMCARD_CONTROLLER = {
-    SIMCARD_LIST_UNASSIGNED_SIMCARDS:'/listUnAssignedSimcards',
-    SIMCARD_LIST_SIMCARDS_FOR_USER:'/listSimCards',
-    SIMCARD_ADD_SIMCARD:'/addSimcard',
-    SIMCARD_GET_SIMCARD_DETAILS:'/simCardDetails',
+    SIMCARD_LIST_UNASSIGNED_SIMCARDS: '/listUnAssignedSimcards',
+    SIMCARD_LIST_SIMCARDS_FOR_USER: '/listSimCards',
+    SIMCARD_ADD_SIMCARD: '/addSimcard',
+    SIMCARD_GET_SIMCARD_DETAILS: '/simCardDetails',
     // SIMCARD_UPDATE_SIMCARD:,
     // SIMCARD_DELETE_SIMCARD:,
-    SIMCARD_LIST_SIMCARD_TYPES:'/listSimcardTypes'
+    SIMCARD_LIST_SIMCARD_TYPES: '/listSimcardTypes'
+};
+
+
+const METADATA_CONTROLLER = {
+    METADATA_BASE_METADATA: '/baseMetadata',
+    METADATA_CARD_METADTA: '/cardMetadata',
+    METADATA_MODAL_METADATA: '/modalMetadata',
+    METADATA_LOGIN_METADATA: '/loginMetadata',
+    METADATA_CARD_FILTER: '/cardFilters',
+    METADATA_PAGE_FILTER: '/pageFilters',
+    METADATA_WIDGET_FILTER: '/widgetFilters',
+    METADATA_LIST_LANGUAGES: '/listLanguages',
+    METADATA_LIST_LANGUAGES_FOR_GRID: '/listLanguagesGrid',
+    METADATA_LIST_COUNTRIES: '/listCountries',
+    METADATA_LIST_CENTERS: '/listCenters',
+    METADATA_ALL_ROLES: '/roles',
+    METADATA_ALL_ROLES_FOR_ADMIN: '/getRolesForAdmin',
+    METADATA_ALL_ROLES_FOR_NON_ADMIN: '/getRolesForNonAdmin'
 };
 
 module.exports = {
     USER_CONTROLLER,
-    SIMCARD_CONTROLLER
+    SIMCARD_CONTROLLER,
+    METADATA_CONTROLLER
 };

@@ -1,19 +1,17 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {mongoWhereInCreator} = require('../../util-module/request-validators');
-const {dropDownBusiness} = require('../common-business-module/common-business');
-const {getCountryListAccessor, getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
-// const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
-const {getUserNameFromUserIdAccessor, getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCountryListAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const getBaseMetadataBusiness = async (req) => {
     let responseObj, headerResponse, sideNavResponse, composedData = {}, request;
     request = [req.body.userId, req.body.lang];
-    headerResponse = await getHeaderMetadataAccessor(request);
-    sideNavResponse = await getSideNavMetadataAccessor(request);
-    if (objectHasPropertyCheck(headerResponse, 'rows') && objectHasPropertyCheck(sideNavResponse, 'rows')) {
+    headerResponse = await metadataAccessor.getHeaderMetadataAccessor(request);
+    sideNavResponse = await metadataAccessor.getSideNavMetadataAccessor(request);
+    if (objectHasPropertyCheck(headerResponse, COMMON_CONSTANTS.FENNIX_ROWS) && objectHasPropertyCheck(sideNavResponse, COMMON_CONSTANTS.FENNIX_ROWS)) {
         let headerObj = routeDataModifier(headerResponse);
         let sideNavObj = routeDataModifier(sideNavResponse);
         composedData['header'] = Object.keys(headerObj).map(dataItem => headerObj[dataItem]);
@@ -28,8 +26,8 @@ const getBaseMetadataBusiness = async (req) => {
 const getCardMetadataForRouteBusiness = async (req) => {
     let responseObj, cardResponse, request;
     request = [req.body.userId, req.body.routeId, req.body.lang];
-    cardResponse = await getCardMetadataAccessor(request);
-    if (objectHasPropertyCheck(cardResponse, 'rows') && arrayNotEmptyCheck(cardResponse.rows)) {
+    cardResponse = await metadataAccessor.getCardMetadataAccessor(request);
+    if (objectHasPropertyCheck(cardResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(cardResponse.rows)) {
         let returnObj;
         returnObj = cardResponse.rows.reduce(function (init, item) {
             if (objectHasPropertyCheck(init, 'widgetCards') && !objectHasPropertyCheck(init.widgetCards, item['role_cards_widgets_id'])) {
@@ -81,8 +79,8 @@ const getCardMetadataForRouteBusiness = async (req) => {
 
 const getFilterMetadataBusiness = async (req, colName) => {
     let request = [req.query.id], filterResponse, response;
-    filterResponse = await getFilterMetadataAccessor(request, colName);
-    if (objectHasPropertyCheck(filterResponse, 'rows') && arrayNotEmptyCheck(filterResponse.rows)) {
+    filterResponse = await metadataAccessor.getFilterMetadataAccessor(request, colName);
+    if (objectHasPropertyCheck(filterResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(filterResponse.rows)) {
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', filterResponse);
     } else {
         response = fennixResponse(statusCodeConstants.STATUS_NO_FILTERS_FOR_ID, 'EN_US', []);
@@ -90,24 +88,10 @@ const getFilterMetadataBusiness = async (req, colName) => {
     return response;
 };
 
-const getSimCardDetailsBusiness = async (req) => {
-    var request = [req.query.userId], centerIds, mongoRequest, response;
-    centerIds = await getCenterIdsBasedOnUserIdAccessor(request);
-    if (objectHasPropertyCheck(centerIds, 'rows') && arrayNotEmptyCheck(centerIds.rows)) {
-        let centerIdsReq = [];
-        centerIds.rows.forEach(item => {
-            centerIdsReq.push(`${item['location_id']}`);
-        });
-        mongoRequest = {centerId: mongoWhereInCreator(centerIdsReq)};
-        response = await getSimcardDetailsAccessor(mongoRequest);
-    }
-    return response;
-};
-
-const getLoginMetadataBusiness = async (req) => {
+const getLoginMetadataBusiness = async () => {
     let responseObj, loginMetadtaResponse = {widgetSections: {}};
-    responseObj = await getLoginMetadataAccessor();
-    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+    responseObj = await metadataAccessor.getLoginMetadataAccessor();
+    if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         loginMetadtaResponse.widgetSections = responseObj.rows.reduce((init, item) => {
             init = {...init, ...widgetSectionCreator(item, init)};
             return init;
@@ -125,8 +109,8 @@ const getLoginMetadataBusiness = async (req) => {
 
 const getLanguagesListBusiness = async (req) => {
     let responseObj, request, languageListResponse = {dropdownList: []};
-    responseObj = await getLanguagesAccessor();
-    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+    responseObj = await metadataAccessor.getLanguagesAccessor();
+    if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
             languageListResponse.dropdownList.push(dropdownCreator(item.language_code, item.language_name, false));
         });
@@ -137,8 +121,8 @@ const getLanguagesListBusiness = async (req) => {
 const getModelMetadataBusiness = async (req) => {
     let response, responseMap = {modalHeader: '', modalBody: {widgetSections: {}}}, request;
     request = [req.query.modalId, req.query.languageId];
-    response = await getModalMetadataAccessor(request);
-    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+    response = await metadataAccessor.getModalMetadataAccessor(request);
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             responseMap.modalHeader = responseMap.modalHeader || item['modal_header'];
             responseMap.modalBody = {
@@ -165,8 +149,8 @@ const getModelMetadataBusiness = async (req) => {
 
 const getLanguageListGridBusiness = async (req) => {
     let responseObj, languageListResponse = {gridData: []};
-    responseObj = await getLanguagesAccessor();
-    if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
+    responseObj = await metadataAccessor.getLanguagesAccessor();
+    if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
             const languageObj = {
                 languageId: item['language_id'],
@@ -182,8 +166,8 @@ const getLanguageListGridBusiness = async (req) => {
 
 const getRolesForAdminBusiness = async (req) => {
     let request = [req.query.userRoleId, req.query.languageId, true], response, finalResponse;
-    response = await getRolesForRoleIdAccessor(request);
-    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+    response = await metadataAccessor.getRolesForRoleIdAccessor(request);
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         if (req.query.isDropdownFlag) {
 
             const dropdownObj = {dropdownList: []};
@@ -202,8 +186,8 @@ const getRolesForAdminBusiness = async (req) => {
 
 const getRolesForNonAdminsBusiness = async (req) => {
     let request = [req.query.userRoleId, req.query.languageId, false], response, finalResponse;
-    response = await getRolesForRoleIdAccessor(request);
-    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+    response = await metadataAccessor.getRolesForRoleIdAccessor(request);
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         if (req.query.isDropdownFlag) {
             const dropdownObj = {dropdownList: []};
             response.rows.forEach((role) => {
@@ -222,8 +206,8 @@ const getRolesForNonAdminsBusiness = async (req) => {
 
 const getRolesBusiness = async (req) => {
     let response, rolesResponse;
-    rolesResponse = getRolesAccessor([req.query.languageId]);
-    if (objectHasPropertyCheck(rolesResponse, 'rows') && arrayNotEmptyCheck(rolesResponse.rows)) {
+    rolesResponse = metadataAccessor.getRolesAccessor([req.query.languageId]);
+    if (objectHasPropertyCheck(rolesResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(rolesResponse.rows)) {
         let rolesResponse = rolesResponse.rows[0];
         response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', rolesResponse);
     } else {
@@ -234,8 +218,8 @@ const getRolesBusiness = async (req) => {
 
 const listCentersBusiness = async (req) => {
     let centerIdResponse, finalResponse, centerIdList = {dropdownList: []};
-    centerIdResponse = await getCenterIdsAccessor(req);
-    if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+    centerIdResponse = await metadataAccessor.getCenterIdsAccessor(req);
+    if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));
         });
@@ -250,11 +234,11 @@ const getCountryListBusiness = async (req) => {
     let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
         countryListResponse, finalResponse, countryIdList = {dropdownList: []};
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-    if (objectHasPropertyCheck(userDetailsResponse, 'rows') && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+    if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         request.userRole = userDetailsResponse.rows[0]['native_user_role'];
         countryListResponse = await getCountryListAccessor(request);
     }
-    if (objectHasPropertyCheck(countryListResponse, 'rows') && arrayNotEmptyCheck(countryListResponse.rows)) {
+    if (objectHasPropertyCheck(countryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryListResponse.rows)) {
         countryListResponse.rows.forEach(item => {
             countryIdList.dropdownList.push(dropdownCreator(item['location_id'], item['country_name'], false));
         });
@@ -382,12 +366,6 @@ const widgetGridElementCreator = (widgetElementItem) => {
             };
             break;
         case 'action-button':
-            // const req = {
-            //     query: {languageId, dropdownId: widgetElementItem['dropdown_id']}
-            // };
-            // console.log(req);
-            // const dropdownList = await dropDownBusiness(req);
-            // console.log(dropdownList);
             returnObj = {
                 ...returnObj,
                 onElementChangeAction: widgetElementItem['element_action_type'],
@@ -399,9 +377,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 dropdownReqType: widgetElementItem['dropdown_request_type'],
                 dropdownRequestParams: widgetElementItem['dropdown_request_params'],
                 dropdownId: widgetElementItem['dropdown_id'],
-                // dropdownList
             };
-            // console.log(returnObj);
             break;
         case 'navigate-link':
             returnObj = {
@@ -619,40 +595,6 @@ const widgetMapElementCreator = (widgetElementItem) => {
     }
     return widgetElementData;
 };
-const getSimCardListBusiness = async (req) => {
-    let response, centerIdResponse, centerIdsReq = [], finalResponse,
-        modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
-    userIdList = await getUserIdsForAllRolesAccessor(req);
-    centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
-    if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
-        centerIdResponse.rows.forEach(item => {
-            centerIdsReq.push(`${item['center_id']}`);
-            cardIdNameMap[item['center_id']] = item['center_name'];
-        });
-        response = await getSimcardDetailsAccessor(centerIdsReq);
-    }
-
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
-            let simCardObj = {
-                simCardId: item['_id'],
-                deviceId: item['deviceId'],
-                simType: item['simCardType'],
-                mobileNo: item['phoneNo'],
-                serialNumber: item['serialNp'],
-                apn: item['carrierByCountryDetails']['apn'],
-                carrierName: item['carrier']['name'],
-                center: cardIdNameMap[item['centerId']]
-            };
-            modifiedResponse.gridData.push(simCardObj);
-        });
-
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
-    }
-    return finalResponse;
-};
 
 const routeDataModifier = (arrayResponse) => {
     let modifiedRouteObj = {};
@@ -701,65 +643,17 @@ const childRouteCreator = (item) => {
     return childItem;
 };
 
-const modalCreator = (item, response) => {
-    let responseMap = response || {};
-    const modalObj = {
-        modalElementName: item['modal_element_name'],
-        modalId: item['modal_id'],
-        modalDataEndpoint: item['data_element'],
-        modalSubmitEndpoint: item['submit_endpoint'],
-        modalElementAction: item['action_name'],
-        modalElementType: item['element_type'],
-        modalElementSubType: item['sub_type'],
-        modalColId: item['modal_col_count']
-    };
-    if (objectHasPropertyCheck(responseMap, item['modal_attribute_position'])) {
-        responseMap[item['modal_attribute_position']] = responseMap[item['modal_attribute_position']];
-    } else {
-        responseMap[item['modal_attribute_position']] = {};
-    }
-    if (objectHasPropertyCheck(responseMap[item['modal_attribute_position']], 'modalSection')) {
-        responseMap[item['modal_attribute_position']] = responseMap[item['modal_attribute_position']];
-    } else {
-        responseMap[item['modal_attribute_position']] = {
-            modalPosition: item['modal_attribute_position'],
-            modalSection: {}
-        };
-    }
-    if (objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'], item['modal_section'])) {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']] = responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']];
-    } else {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']] = {
-            modalSectionType: item['modal_parent_type'],
-            widgetSectionRows: {},
-            modalSectionId: item['modal_section']
-        };
-    }
-    if (objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']], 'widgetSectionRows') && objectHasPropertyCheck(responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'], item['modal_row_count'])) {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']] = responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']];
-    } else {
-        responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['widgetSectionRows'][item['modal_row_count']] = {
-            modalRowId: item['modal_row_count'],
-            sectionCols: []
-        };
-    }
-    responseMap[item['modal_attribute_position']]['modalSection'][item['modal_section']]['modalRow'][item['modal_row_count']]['modalCols'].push(modalObj);
-    return responseMap;
-};
 module.exports = {
     getFilterMetadataBusiness,
     getBaseMetadataBusiness,
     getCardMetadataForRouteBusiness,
-    getSimCardDetailsBusiness,
     getLoginMetadataBusiness,
     getModelMetadataBusiness,
     getLanguagesListBusiness,
     getRolesBusiness,
     listCentersBusiness,
-    getSimCardListBusiness,
     getLanguageListGridBusiness,
     getRolesForAdminBusiness,
     getCountryListBusiness,
-    // dropDownBusiness,
     getRolesForNonAdminsBusiness
 };
