@@ -1,7 +1,7 @@
 const simCardAccessor = require('../../repository-module/data-accesors/sim-card-accessor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
