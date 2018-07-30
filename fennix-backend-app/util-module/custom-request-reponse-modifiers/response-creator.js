@@ -43,6 +43,7 @@ const dropdownActionButtonCreator = (dropdownActionButton) => {
     if (dropdownActionButton['is_action_button']) {
         dropdownAction = {
             ...dropdownAction,
+            modalId:dropdownActionButton['dropdown_action_button_modal_id'],
             actionType: dropdownActionButton['action_name'],
             submitEndpoint: dropdownActionButton['endpoint'],
             subReqType: dropdownActionButton['endpoint_request_type'],
