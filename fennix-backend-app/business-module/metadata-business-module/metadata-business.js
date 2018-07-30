@@ -355,7 +355,7 @@ const widgetColElementCreator = (widgetColItem, languageId) => {
     return widgetBaseColItem;
 };
 
-const widgetGridElementCreator = async (widgetElementItem) => {
+const widgetGridElementCreator = async (widgetElementItem, languageId) => {
     let returnObj = {
         gridElementAction: widgetElementItem['element_action_type'],
         gridHeaderOrderId: widgetElementItem['widget_col_count'],
