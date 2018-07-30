@@ -268,7 +268,7 @@ const getCountryListBusiness = async (req) => {
 };
 
 //Private methods to modify the data for the way we need in the response
-const widgetSectionCreator = (widgetItem, widgetSectionObj,languageId) => {
+const widgetSectionCreator = async(widgetItem, widgetSectionObj,languageId) => {
     let widgetSectionFinalObj = {};
     if (!objectHasPropertyCheck(widgetSectionObj, widgetItem['widget_section_order_id'])) {
         let widgetSectionBaseObj = {[widgetItem['widget_section_order_id']]: {}};
@@ -278,17 +278,17 @@ const widgetSectionCreator = (widgetItem, widgetSectionObj,languageId) => {
             sectionType: widgetItem['widget_section_type'],
             sectionOrientation: objectHasPropertyCheck(widgetItem, 'section_orientation') ? widgetItem['section_orientation'] : 'V',
             sectionSubType: widgetItem['widget_section_subtype'],
-            widgetSubSections: widgetSubSectionCreator(widgetItem, {},languageId)
+            widgetSubSections: await widgetSubSectionCreator(widgetItem, {},languageId)
         };
         widgetSectionFinalObj = {...widgetSectionObj, ...widgetSectionBaseObj};
     } else {
-        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'],languageId);
+        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = await widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'],languageId);
         widgetSectionFinalObj = widgetSectionObj;
     }
     return widgetSectionFinalObj;
 };
 
-const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj,languageId) => {
+const widgetSubSectionCreator = async (widgetSubSectionItem, subSectionObj,languageId) => {
     let widgetSubSectionFinalObj = {};
     if (!objectHasPropertyCheck(subSectionObj, widgetSubSectionItem['widget_sub_section_order_id'])) {
         let widgetSubSectionBaseObj = {[widgetSubSectionItem['widget_sub_section_order_id']]: {}};
@@ -298,28 +298,28 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj,languageId)
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
             subSectionWidth: widgetSubSectionItem['sub_section_width'],
             subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
-            widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {},languageId)}
+            widgetSectionRows: {...await widgetSectionRowCreator(widgetSubSectionItem, {},languageId)}
         };
         widgetSubSectionFinalObj = {...subSectionObj, ...widgetSubSectionBaseObj};
     } else {
-        subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'] = {...subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'], ...widgetSectionRowCreator(widgetSubSectionItem, subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'],languageId)};
+        subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'] = {...subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'], ...await widgetSectionRowCreator(widgetSubSectionItem, subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'],languageId)};
         widgetSubSectionFinalObj = subSectionObj;
     }
     return widgetSubSectionFinalObj;
 };
 
-const widgetSectionRowCreator = (widgetRowItem, sectionRowObj,languageId) => {
+const widgetSectionRowCreator = async (widgetRowItem, sectionRowObj,languageId) => {
     let widgetSectionRowFinalObj = {};
     if (!objectHasPropertyCheck(sectionRowObj, widgetRowItem['widget_row_count'])) {
         let widgetSectionRowBaseObj = {[widgetRowItem['widget_row_count']]: {}};
         widgetSectionRowBaseObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
-            sectionCols: [widgetColElementCreator(widgetRowItem,languageId)]
+            sectionCols: [await widgetColElementCreator(widgetRowItem,languageId)]
         };
         widgetSectionRowFinalObj = {...sectionRowObj, ...widgetSectionRowBaseObj};
     } else {
         const originalCol = [...sectionRowObj[widgetRowItem['widget_row_count']]['sectionCols']];
-        originalCol.push(widgetColElementCreator(widgetRowItem,languageId));
+        originalCol.push(await widgetColElementCreator(widgetRowItem,languageId));
         sectionRowObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
             sectionCols: [...originalCol]
@@ -329,7 +329,7 @@ const widgetSectionRowCreator = (widgetRowItem, sectionRowObj,languageId) => {
     return widgetSectionRowFinalObj;
 };
 
-const widgetColElementCreator = (widgetColItem,languageId) => {
+const widgetColElementCreator = async (widgetColItem,languageId) => {
     let widgetBaseColItem = {
         widgetColId: widgetColItem['widget_col_count'],
         widgetColType: widgetColItem['widget_element_type'],
@@ -337,7 +337,7 @@ const widgetColElementCreator = (widgetColItem,languageId) => {
     };
     switch (widgetColItem['widget_section_type'].toLowerCase()) {
         case 'grid':
-            widgetBaseColItem = {...widgetBaseColItem, ...widgetGridElementCreator(widgetColItem,languageId)};
+            widgetBaseColItem = {...widgetBaseColItem, ...await widgetGridElementCreator(widgetColItem,languageId)};
             break;
         case 'chart':
             widgetBaseColItem = {...widgetBaseColItem, ...widgetChartElementCreator(widgetColItem)};
