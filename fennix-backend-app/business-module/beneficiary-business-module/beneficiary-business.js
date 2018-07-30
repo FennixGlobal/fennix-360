@@ -62,6 +62,7 @@ const beneficiaryMapDataList = async (req) => {
                 documentId: item['document_id'],
                 mobileNo: item['mobileno'],
                 image: item['image'],
+                emailId: item['emailid'],
                 roleName: item['role'],
                 beneficiaryRoleId: item['role_id'],
                 gender: item['gender']
@@ -81,10 +82,6 @@ const beneficiaryMapDataList = async (req) => {
             let noOfViolations = 0;
             deviceDetails[item.beneficiaryId] = [];
             const GPS = {A: 'Valid', V: 'Invalid'};
-            // const batteryVoltage = deviceStatusMapper('batteryVoltage', item.deviceAttributes.batteryVoltage);
-            // if (batteryVoltage['deviceStatus'] === 'violation') {
-            //     noOfViolations += 1;
-            // }
             const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
             if (batteryPercentage['deviceStatus'] === 'violation') {
                 noOfViolations += 1;
@@ -95,9 +92,6 @@ const beneficiaryMapDataList = async (req) => {
             if (item.deviceAttributes.shellStatus) {
                 noOfViolations += 1;
             }
-            // if (item.deviceAttributes.gpsStatus) {
-            //     noOfViolations += 1;
-            // }
             deviceDetails[item.beneficiaryId].push({
                 text: 'Battery Percentage',
                 status: batteryPercentage['deviceStatus'],
@@ -105,13 +99,6 @@ const beneficiaryMapDataList = async (req) => {
                 icon: 'battery_charging_full',
                 value: item.deviceAttributes.batteryPercentage
             });
-            // deviceDetails[item.beneficiaryId].push({
-            //     text: 'Battery Voltage',
-            //     key: 'batteryVoltage',
-            //     icon: 'battery_std',
-            //     status: batteryVoltage['deviceStatus'],
-            //     value: item.deviceAttributes.batteryVoltage
-            // });
             deviceDetails[item.beneficiaryId].push({
                 text: 'Belt Status',
                 key: 'beltStatus',
@@ -177,6 +164,7 @@ const beneficiaryMapDataList = async (req) => {
                 text: 'Number of Violations',
                 value: noOfViolations
             };
+            locationObj[item.beneficiaryId]['noOfViolations'] = noOfViolations;
             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
         });
         beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
