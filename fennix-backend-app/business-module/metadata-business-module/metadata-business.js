@@ -1,8 +1,9 @@
-const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor, getDropdownAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
+const {getCardMetadataAccessor, getRolesForRoleIdAccessor, getCenterIdsForAdminAccessor, getCenterIdsAccessor, getCenterIdsForMasterAdminAccessor, getCenterIdsForOperatorAccessor, getCenterIdsForSuperAdminAccessor, getCenterIdsForSupervisorAccessor, getFilterMetadataAccessor, getModalMetadataAccessor, getHeaderMetadataAccessor, getLoginMetadataAccessor, getLanguagesAccessor, getSideNavMetadataAccessor, getCenterIdsBasedOnUserIdAccessor, getSimcardDetailsAccessor, getRolesAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
+const {dropDownBusiness} = require('../common-business-module/common-business');
 const {getCountryListAccessor, getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
 const {getUserNameFromUserIdAccessor, getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
@@ -44,7 +45,7 @@ const getCardMetadataForRouteBusiness = async (req) => {
             }
             if (objectHasPropertyCheck(init['widgetCards'][item['role_cards_widgets_id']], 'widgets') && !objectHasPropertyCheck(init['widgetCards']['widgets'], item['role_cards_widgets_id'])) {
                 let widgetSectionsObj = {...init['widgetCards'][item['role_cards_widgets_id']]['widgets'][item['role_cards_widgets_id']].widgetSections} || {};
-                widgetSectionsObj = widgetSectionCreator(item, widgetSectionsObj);
+                widgetSectionsObj = widgetSectionCreator(item, widgetSectionsObj,{languageId:req.body.lang});
 
                 init['widgetCards'][item['role_cards_widgets_id']]['widgets'][item['role_cards_widgets_id']] = {
                     widgetId: 'W_' + item['role_cards_widgets_id'],
@@ -164,7 +165,7 @@ const getModelMetadataBusiness = async (req) => {
 };
 
 const getLanguageListGridBusiness = async (req) => {
-    let responseObj, request, languageListResponse = {gridData: []};
+    let responseObj, languageListResponse = {gridData: []};
     responseObj = await getLanguagesAccessor();
     if (objectHasPropertyCheck(responseObj, 'rows') && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
@@ -267,7 +268,7 @@ const getCountryListBusiness = async (req) => {
 };
 
 //Private methods to modify the data for the way we need in the response
-const widgetSectionCreator = (widgetItem, widgetSectionObj) => {
+const widgetSectionCreator = (widgetItem, widgetSectionObj,languageId) => {
     let widgetSectionFinalObj = {};
     if (!objectHasPropertyCheck(widgetSectionObj, widgetItem['widget_section_order_id'])) {
         let widgetSectionBaseObj = {[widgetItem['widget_section_order_id']]: {}};
@@ -277,17 +278,17 @@ const widgetSectionCreator = (widgetItem, widgetSectionObj) => {
             sectionType: widgetItem['widget_section_type'],
             sectionOrientation: objectHasPropertyCheck(widgetItem, 'section_orientation') ? widgetItem['section_orientation'] : 'V',
             sectionSubType: widgetItem['widget_section_subtype'],
-            widgetSubSections: widgetSubSectionCreator(widgetItem, {})
+            widgetSubSections: widgetSubSectionCreator(widgetItem, {},languageId)
         };
         widgetSectionFinalObj = {...widgetSectionObj, ...widgetSectionBaseObj};
     } else {
-        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections']);
+        widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'] = widgetSubSectionCreator(widgetItem, widgetSectionObj[widgetItem['widget_section_order_id']]['widgetSubSections'],languageId);
         widgetSectionFinalObj = widgetSectionObj;
     }
     return widgetSectionFinalObj;
 };
 
-const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
+const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj,languageId) => {
     let widgetSubSectionFinalObj = {};
     if (!objectHasPropertyCheck(subSectionObj, widgetSubSectionItem['widget_sub_section_order_id'])) {
         let widgetSubSectionBaseObj = {[widgetSubSectionItem['widget_sub_section_order_id']]: {}};
@@ -297,28 +298,28 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
             subSectionWidth: widgetSubSectionItem['sub_section_width'],
             subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
-            widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {})}
+            widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {},languageId)}
         };
         widgetSubSectionFinalObj = {...subSectionObj, ...widgetSubSectionBaseObj};
     } else {
-        subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'] = {...subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'], ...widgetSectionRowCreator(widgetSubSectionItem, subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'])};
+        subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'] = {...subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'], ...widgetSectionRowCreator(widgetSubSectionItem, subSectionObj[widgetSubSectionItem['widget_sub_section_order_id']]['widgetSectionRows'],languageId)};
         widgetSubSectionFinalObj = subSectionObj;
     }
     return widgetSubSectionFinalObj;
 };
 
-const widgetSectionRowCreator = (widgetRowItem, sectionRowObj) => {
+const widgetSectionRowCreator = (widgetRowItem, sectionRowObj,languageId) => {
     let widgetSectionRowFinalObj = {};
     if (!objectHasPropertyCheck(sectionRowObj, widgetRowItem['widget_row_count'])) {
         let widgetSectionRowBaseObj = {[widgetRowItem['widget_row_count']]: {}};
         widgetSectionRowBaseObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
-            sectionCols: [widgetColElementCreator(widgetRowItem)]
+            sectionCols: [widgetColElementCreator(widgetRowItem,languageId)]
         };
         widgetSectionRowFinalObj = {...sectionRowObj, ...widgetSectionRowBaseObj};
     } else {
         const originalCol = [...sectionRowObj[widgetRowItem['widget_row_count']]['sectionCols']];
-        originalCol.push(widgetColElementCreator(widgetRowItem));
+        originalCol.push(widgetColElementCreator(widgetRowItem,languageId));
         sectionRowObj[widgetRowItem['widget_row_count']] = {
             sectionRowId: widgetRowItem['widget_row_count'],
             sectionCols: [...originalCol]
@@ -328,7 +329,7 @@ const widgetSectionRowCreator = (widgetRowItem, sectionRowObj) => {
     return widgetSectionRowFinalObj;
 };
 
-const widgetColElementCreator = (widgetColItem) => {
+const widgetColElementCreator = (widgetColItem,languageId) => {
     let widgetBaseColItem = {
         widgetColId: widgetColItem['widget_col_count'],
         widgetColType: widgetColItem['widget_element_type'],
@@ -336,7 +337,7 @@ const widgetColElementCreator = (widgetColItem) => {
     };
     switch (widgetColItem['widget_section_type'].toLowerCase()) {
         case 'grid':
-            widgetBaseColItem = {...widgetBaseColItem, ...widgetGridElementCreator(widgetColItem)};
+            widgetBaseColItem = {...widgetBaseColItem, ...widgetGridElementCreator(widgetColItem,languageId)};
             break;
         case 'chart':
             widgetBaseColItem = {...widgetBaseColItem, ...widgetChartElementCreator(widgetColItem)};
@@ -354,7 +355,7 @@ const widgetColElementCreator = (widgetColItem) => {
     return widgetBaseColItem;
 };
 
-const widgetGridElementCreator = (widgetElementItem) => {
+const widgetGridElementCreator = async(widgetElementItem,languageId) => {
     let returnObj = {
         gridElementAction: widgetElementItem['element_action_type'],
         gridHeaderOrderId: widgetElementItem['widget_col_count'],
@@ -382,6 +383,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
             };
             break;
         case 'action-button':
+            const dropdownList = await dropDownBusiness(languageId,widgetElementItem['dropdown_id']);
             returnObj = {
                 ...returnObj,
                 onElementChangeAction: widgetElementItem['element_action_type'],
@@ -392,7 +394,8 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 dropdownEndpoint: widgetElementItem['dropdown_endpoint'],
                 dropdownReqType: widgetElementItem['dropdown_request_type'],
                 dropdownRequestParams: widgetElementItem['dropdown_request_params'],
-                dropdownId: widgetElementItem['dropdown_id']
+                dropdownId: widgetElementItem['dropdown_id'],
+                dropdownList
             };
             break;
         case 'navigate-link':
