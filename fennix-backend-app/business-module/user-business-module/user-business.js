@@ -3,13 +3,13 @@ const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAcc
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {fennixResponse,dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
-const FENNIX_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 
 const fetchUserDetailsBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
     userProfileResponse = await fetchUserProfileAccessor(request);
-    if (objectHasPropertyCheck(userProfileResponse, FENNIX_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
+    if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
         let userProfileReturnObj = {};
         userProfileResponse.rows.forEach((item) => {
             userProfileReturnObj = {
@@ -53,8 +53,8 @@ const getUserListBusiness = async (req) => {
         returnObj, totalRecordsResponse, finalResponse = {};
     userProfileResponse = await getUserListAccessor(request);
     totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.query.userId]);
-    finalResponse[FENNIX_CONSTANTS.FENNIX_TOTAL_NUMBER_OF_RECORDS] = totalRecordsResponse.rows[0]['count'];
-    if (objectHasPropertyCheck(userProfileResponse, FENNIX_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
+    finalResponse[COMMON_CONSTANTS.FENNIX_TOTAL_NUMBER_OF_RECORDS] = totalRecordsResponse.rows[0]['count'];
+    if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
         userProfileResponse.rows.forEach((item) => {
             const obj = {
                 userId: item['user_id'],
@@ -77,7 +77,7 @@ const getUserListBusiness = async (req) => {
 };
 const listOperatorsBusiness = async (req) => {
     let response, returnObj,finalResponse = {dropdownList: []};
-    response = await getUserIdNamesForAllRolesAccessor(req);
+    response = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             finalResponse.dropdownList.push(dropdownCreator(item['userId'], item['name'], false));
@@ -130,7 +130,7 @@ const downloadUsersListBusiness = async (req) => {
     keysArray = colsKeysResponse['keysArray'];
     userListResponse = await getUserListAccessor(request);
     rowsIdsResponse = excelRowsCreator(userListResponse, 'users', keysArray);
-    returnObj = rowsIdsResponse[FENNIX_CONSTANTS.FENNIX_ROWS];
+    returnObj = rowsIdsResponse[COMMON_CONSTANTS.FENNIX_ROWS];
     modifiedResponse = Object.keys(returnObj).map(key => returnObj[key]);
     sheet.addRows(modifiedResponse);
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/users.xlsx');

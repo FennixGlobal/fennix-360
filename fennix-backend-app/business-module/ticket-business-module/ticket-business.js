@@ -10,7 +10,7 @@ const {excelColCreator, excelRowsCreator} = require('../../util-module/request-v
 
 const ticketAggregatorBusiness = async (req) => {
     let request = {}, ticketResponse, returnObj, userIdList;
-    userIdList = await getUserIdsForAllRolesAccessor(req);
+    userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIds = userIdList;
     ticketResponse = await ticketAccessor.ticketAggregatorAccessor(request);
     if (notNullCheck(ticketResponse) && arrayNotEmptyCheck(ticketResponse)) {
@@ -42,9 +42,10 @@ const ticketListBasedOnStatusBusiness = async (req) => {
     }
     return returnObj;
 };
-
+//TODO after rewriting of the private method do the necessary changes
 const listTicketsBusiness = async (req) => {
-    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
+    let request = {userId: req.query.userId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)},
+        ticketResponse, modifiedResponse = {gridData: []}, beneficiaryIds = [], beneficiaryIdNameMap = {}, returnObj,
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     userIds.push(req.query.userId);
@@ -218,33 +219,33 @@ const listTicketsForDownloadBusiness = async (req) => {
     sheet.addRows(modifiedResponse);
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/tickets.xlsx');
 };
-
+//TODO rewrite this method
 //private method
 const getTicketsList = async (req) => {
     let request = {userId: req.query.userId},
         ticketResponse, modifiedResponse = [], beneficiaryIds = [], beneficiaryIdNameMap = {},
         userDetailsResponse, beneficiaryResponse, otherUserDetailResponse, userDetailMap = {}, userIds = [];
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
-
     if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
-        switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
-            case 'ROLE_SUPERVISOR' : {
-                otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-                break;
-            }
-            case 'ROLE_ADMIN' : {
-                otherUserDetailResponse = await getUserIdsForAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-                break;
-            }
-            case 'ROLE_SUPER_ADMIN' : {
-                otherUserDetailResponse = await getUserIdsForSuperAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-                break;
-            }
-            case 'ROLE_MASTER_ADMIN' : {
-                otherUserDetailResponse = await getUserIdsForMasterAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-                break;
-            }
-        }
+        otherUserDetailResponse = await getUserIdsForAllRolesAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId], COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL);
+        // switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
+        //     case 'ROLE_SUPERVISOR' : {
+        //         otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+        //         break;
+        //     }
+        //     case 'ROLE_ADMIN' : {
+        //         otherUserDetailResponse = await getUserIdsForAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+        //         break;
+        //     }
+        //     case 'ROLE_SUPER_ADMIN' : {
+        //         otherUserDetailResponse = await getUserIdsForSuperAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+        //         break;
+        //     }
+        //     case 'ROLE_MASTER_ADMIN' : {
+        //         otherUserDetailResponse = await getUserIdsForMasterAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
+        //         break;
+        //     }
+        // }
         if (objectHasPropertyCheck(otherUserDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
             otherUserDetailResponse.rows.forEach((item) => {
                 const userDetailsObj = {
@@ -254,7 +255,7 @@ const getTicketsList = async (req) => {
                     gender: item['gender']
                 };
                 userDetailMap[item['user_id']] = userDetailsObj;
-                userIds.push(`${item['user_id']}`);
+                userIds.push(item['user_id']);
             });
         }
     }
@@ -286,7 +287,6 @@ const getTicketsList = async (req) => {
                 userRole: userDetailMap[item['userId']]['role'],
                 userRoleId: userDetailMap[item['userId']]['roleId'],
                 userGender: userDetailMap[item['userId']]['gender'],
-
                 beneficiaryId: item['beneficiaryId'],
                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['roleId'] : null,
                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap, parseInt(item['beneficiaryId'])) ? beneficiaryIdNameMap[parseInt(item['beneficiaryId'])]['fullName'] : ' - ',

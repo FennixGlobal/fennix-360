@@ -8,12 +8,13 @@ const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor}
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const beneficiaryAggregatorBusiness = async (req) => {
     let beneficiaryResponse, returnObj, userIdsList;
-    userIdsList = await getUserIdsForAllRolesAccessor(req);
+    userIdsList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     beneficiaryResponse = await getBenefeciaryAggregator({languageId: req.query.languageId, userIdList: userIdsList});
-    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let beneficiaryObj = {
             victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
             offender: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
@@ -52,7 +53,7 @@ const beneficiaryMapDataList = async (req) => {
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
     beneficiaryListResponse = await getBeneifciaryIdList(request);
-    if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
@@ -182,7 +183,7 @@ const beneficiaryMapDataList = async (req) => {
 const getBeneficiaryDetailsBusiness = async (req) => {
     let request = [req.query.beneficiaryId, req.query.languageId], response, finalResponse;
     response = await getBeneficiaryByBeneficiaryIdAccesor(request);
-    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         const finalObj = {
             beneficiaryRoleId: response.rows[0]['beneficiary_role'],
             image: response.rows[0]['image'],
@@ -210,12 +211,12 @@ const beneficiaryListByOwnerUserId = async (req) => {
             limit: req.query.limit
         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
         finalResponse = {}, userIdList;
-    userIdList = await getUserIdsForAllRolesAccessor(req);
+    userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(request);
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
-    if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
             finalReturnObj[item['beneficiaryid']] = {
                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
@@ -259,7 +260,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
 //     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
 //     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
 //     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
-//     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+//     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
 //         beneficiaryListResponse.rows.forEach(item => {
 //             beneficiaryIds.push(`${item['beneficiaryid']}`);
 //         });
@@ -307,12 +308,12 @@ const downloadBeneficiariesBusiness = async (req) => {
     colsKeysResponse = await excelColCreator();
     sheet.columns = colsKeysResponse['cols'];
     keysArray = colsKeysResponse['keysArray'];
-    userIdList = await getUserIdsForAllRolesAccessor(req);
+    userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
     beneficiaryListResponse = await getBeneficiaryListByOwnerIdForDownloadAccessor(request);
     rowsIdsResponse = excelRowsCreator(beneficiaryListResponse, 'beneficiaries', keysArray);
     beneficiaryIds = rowsIdsResponse['ids'];
-    returnObj = rowsIdsResponse['rows'];
+    returnObj = rowsIdsResponse[COMMON_CONSTANTS.FENNIX_ROWS];
     if (arrayNotEmptyCheck(beneficiaryIds)) {
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {

@@ -6,39 +6,42 @@ const {fennixResponse, dropdownCreator} = require('../../util-module/custom-requ
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const deviceAggregatorDashboard = async (req) => {
     const request = [req.query.languageId, req.query.userId];
-    let beneficiaryResponse, deviceResponse, returnObj, userDetailResponse, otherUserIdsForGivenUserId, userIdList = [];
-    userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor(request);
-    if (objectHasPropertyCheck(userDetailResponse, 'rows') && arrayNotEmptyCheck(userDetailResponse.rows)) {
-        let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-        switch (nativeUserRole) {
-            case 'ROLE_SUPERVISOR' : {
-                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
-                break;
-            }
-            case 'ROLE_ADMIN' : {
-                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
-                break;
-            }
-            case 'ROLE_SUPER_ADMIN' : {
-                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
-                break;
-            }
-            case 'ROLE_MASTER_ADMIN' : {
-                otherUserIdsForGivenUserId = await userAccessor.getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
-                break;
-            }
-        }
-        if (objectHasPropertyCheck(otherUserIdsForGivenUserId, 'rows') && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
-            otherUserIdsForGivenUserId.rows.forEach(item => {
-                userIdList.push(item['user_id']);
-            });
-        }
-    }
+    let beneficiaryResponse, deviceResponse, returnObj, userIdList;
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(request,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    // userDetailResponse, otherUserIdsForGivenUserId,
+    // userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor(request);
+    // if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
+    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
+    //     switch (nativeUserRole) {
+    //         case 'ROLE_SUPERVISOR' : {
+    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
+    //             break;
+    //         }
+    //         case 'ROLE_ADMIN' : {
+    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
+    //             break;
+    //         }
+    //         case 'ROLE_SUPER_ADMIN' : {
+    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
+    //             break;
+    //         }
+    //         case 'ROLE_MASTER_ADMIN' : {
+    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
+    //             break;
+    //         }
+    //     }
+    //     if (objectHasPropertyCheck(otherUserIdsForGivenUserId, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
+    //         otherUserIdsForGivenUserId.rows.forEach(item => {
+    //             userIdList.push(item['user_id']);
+    //         });
+    //     }
+    // }
     beneficiaryResponse = await getBeneficiaryByUserIdAccessor(userIdList);
-    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
         beneficiaryResponse.rows.forEach((item) => {
             deviceArray.push(item.beneficiaryid);
@@ -70,7 +73,7 @@ const deviceAggregatorDashboard = async (req) => {
 
 //TODO: change response logic
 const listDeviceTypesBusiness = async () => {
-    let deviceTypesResponse, finalResponse,  deviceTypesListResponse = {dropdownList: []};
+    let deviceTypesResponse, finalResponse, deviceTypesListResponse = {dropdownList: []};
     deviceTypesResponse = await listDeviceTypesAccessor();
     if (arrayNotEmptyCheck(deviceTypesResponse)) {
         deviceTypesResponse.forEach((item) => {
@@ -85,9 +88,9 @@ const listDevicesBusiness = async (req) => {
     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
         modifiedResponse = {gridData: []}, finalResponse;
-    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req);
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
-    if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+    if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
@@ -100,7 +103,7 @@ const listDevicesBusiness = async (req) => {
             beneficiaryIds.push(`${item['beneficiaryId']}`);
         });
         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
-        if (objectHasPropertyCheck(beneficiaryNameResponse, 'rows') && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
+        if (objectHasPropertyCheck(beneficiaryNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
             beneficiaryNameResponse.rows.forEach((item) => {
                 let beneficiaryObj = {
                     fullName: item['full_name'],
@@ -137,7 +140,7 @@ const listDevicesBusiness = async (req) => {
 //         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
 //         modifiedResponse = {gridData: []}, finalResponse;
 //     centerIdResponse = await centerMetadataAccessors.getCenterIdsAccessor(req);
-//     if (objectHasPropertyCheck(centerIdResponse, 'rows') && arrayNotEmptyCheck(centerIdResponse.rows)) {
+//     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
 //         centerIdResponse.rows.forEach(item => {
 //             centerIdsReq.push(item['location_id']);
 //             centerIdNameMap[item['location_id']] = item['location_name'];
@@ -150,7 +153,7 @@ const listDevicesBusiness = async (req) => {
 //             beneficiaryIds.push(item['beneficiaryId']);
 //         });
 //         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
-//         if (objectHasPropertyCheck(beneficiaryNameResponse, 'rows') && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
+//         if (objectHasPropertyCheck(beneficiaryNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
 //             beneficiaryNameResponse.rows.forEach((item) => {
 //                 let beneficiaryObj = {
 //                     fullName: item['full_name'],
