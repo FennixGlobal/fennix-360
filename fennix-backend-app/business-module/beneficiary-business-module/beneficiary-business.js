@@ -9,6 +9,7 @@ const {imageStorageBusiness, emailSendBusiness} = require('../common-business-mo
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const beneficiaryAggregatorBusiness = async (req) => {
     let beneficiaryResponse, returnObj, userIdsList;
@@ -259,17 +260,19 @@ const beneficiaryListByOwnerUserId = async (req) => {
 };
 
 const listBeneficiariesForAddTicketBusiness = async (req) => {
-    let userIdList, beneficiaryListResponse, finalResponse, responseList = [], request = {};
+    let userIdList, beneficiaryListResponse, finalResponse, responseList = {dropdownList:[]}, request = {};
     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
     beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListForAddTicketAccessor(request);
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
-            let obj = {
-                beneficiaryId: item['beneficiaryid'],
-                beneficiaryName: item['full_name'],
-            };
-            responseList.push(obj);
+            // let obj = {
+            //     beneficiaryId: item['beneficiaryid'],
+            //     beneficiaryName: item['full_name'],
+            // };
+            responseList.dropdownList.push(dropdownCreator(item['beneficiaryid'], item['full_name'], false));
+
+            // responseList.push(obj);
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseList);
     } else {
