@@ -211,6 +211,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
             limit: req.query.limit
         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
         finalResponse = {}, userIdList;
+    console.log(req);
     userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     console.log(userIdList);
     request.userIdList = userIdList;

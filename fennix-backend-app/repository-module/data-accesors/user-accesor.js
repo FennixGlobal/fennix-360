@@ -103,6 +103,7 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
 
 const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
+    console.log(req);
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
     if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
