@@ -1,5 +1,5 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {fetchUserProfileAccessor, addUserAccessor, getTotalRecordsForListUsersAccessor, getUserIdNamesForAllRolesAccessor,updateUserAccessor, getUserListAccessor, updateUserProfileAccessor} = require('../../repository-module/data-accesors/user-accesor');
+const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {fennixResponse,dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
@@ -8,7 +8,7 @@ const {excelRowsCreator, excelColCreator} = require('../../util-module/request-v
 
 const fetchUserDetailsBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
-    userProfileResponse = await fetchUserProfileAccessor(request);
+    userProfileResponse = await userAccessors.fetchUserProfileAccessor(request);
     if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
         let userProfileReturnObj = {};
         userProfileResponse.rows.forEach((item) => {
@@ -34,7 +34,7 @@ const fetchUserDetailsBusiness = async (req) => {
 //TODO write the logic for this
 const updateUserProfileBusiness = async (req) => {
     let request = [req.body.userId], userProfileResponse, returnObj;
-    userProfileResponse = await updateUserProfileAccessor(request);
+    userProfileResponse = await userAccessors.updateUserProfileAccessor(request);
     if (notNullCheck(userProfileResponse) && arrayNotEmptyCheck(userProfileResponse)) {
         let ticketObj = {};
         userProfileResponse.forEach((item) => {
@@ -51,8 +51,8 @@ const getUserListBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId, req.query.skip, req.query.limit], userProfileResponse,
         modifiedResponse = [],
         returnObj, totalRecordsResponse, finalResponse = {};
-    userProfileResponse = await getUserListAccessor(request);
-    totalRecordsResponse = await getTotalRecordsForListUsersAccessor([req.query.userId]);
+    userProfileResponse = await userAccessors.getUserListAccessor(request);
+    totalRecordsResponse = await userAccessors.getTotalRecordsForListUsersAccessor([req.query.userId]);
     finalResponse[COMMON_CONSTANTS.FENNIX_TOTAL_NUMBER_OF_RECORDS] = totalRecordsResponse.rows[0]['count'];
     if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
         userProfileResponse.rows.forEach((item) => {
@@ -77,7 +77,7 @@ const getUserListBusiness = async (req) => {
 };
 const listOperatorsBusiness = async (req) => {
     let response, returnObj,finalResponse = {dropdownList: []};
-    response = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME);
+    response = await userAccessors.getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             finalResponse.dropdownList.push(dropdownCreator(item['userId'], item['name'], false));
@@ -94,14 +94,14 @@ const addUserBusiness = async (req) => {
     request.image = await imageStorageBusiness(request.image, 'USER');
     request.updated_date = new Date();
     request.created_date = new Date();
-    await addUserAccessor(request);
+    await userAccessors.addUserAccessor(request);
     emailSendBusiness(request.emailId, 'USER');
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
 const updateUserBusiness = async (req) => {
     let response, finalResponse;
-    response = await updateUserAccessor(req);
+    response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'en', 'Updated user data successfully');
     } else {
@@ -112,7 +112,7 @@ const updateUserBusiness = async (req) => {
 
 const deleteUserBusiness = async (req) => {
     let response, finalResponse;
-    response = await updateUserAccessor(req);
+    response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'en', 'Deleted user data successfully');
     } else {
@@ -128,7 +128,7 @@ const downloadUsersListBusiness = async (req) => {
     colsKeysResponse = await excelColCreator([req.query.filterId]);
     sheet.columns = colsKeysResponse['cols'];
     keysArray = colsKeysResponse['keysArray'];
-    userListResponse = await getUserListAccessor(request);
+    userListResponse = await userAccessors.getUserListAccessor(request);
     rowsIdsResponse = excelRowsCreator(userListResponse, 'users', keysArray);
     returnObj = rowsIdsResponse[COMMON_CONSTANTS.FENNIX_ROWS];
     modifiedResponse = Object.keys(returnObj).map(key => returnObj[key]);
