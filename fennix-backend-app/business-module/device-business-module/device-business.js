@@ -9,9 +9,9 @@ const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../reposito
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const deviceAggregatorDashboard = async (req) => {
-    const request = [req.query.languageId, req.query.userId];
     let beneficiaryResponse, deviceResponse, returnObj, userIdList;
-    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(request,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    // const request = [req.query.languageId, req.query.userId];
     // userDetailResponse, otherUserIdsForGivenUserId,
     // userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor(request);
     // if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
