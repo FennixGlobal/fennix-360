@@ -1,5 +1,5 @@
 const {dbTableColMap, dbDownloadTableMapper, tableKeyMap} = require("../util-module/db-constants");
-const {objectHasPropertyCheck, notNullCheck} = require('../util-module/data-validators');
+const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../util-module/data-validators');
 const {getDownloadMapperAccessor} = require('../repository-module/data-accesors/common-accessor');
 
 const mongoWhereInCreator = (data) => {
@@ -39,8 +39,8 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
         }
     );
     keysArray.forEach((key, index) => {
-        console.log(key);
-        console.log(dbTableColMap[tableName][key]);
+        // console.log(key);
+        // console.log(dbTableColMap[tableName][key]);
         if (index === 0) {
             columns = `(${dbTableColMap[tableName][key]}`;
             values = `${values} ($${counter + 1}`;
@@ -59,9 +59,9 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
     modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
     finalResponse['valuesArray'] = valuesArray;
     finalResponse['modifiedInsertQuery'] = modifiedInsertQuery;
-    console.log(modifiedInsertQuery);
-    console.log(valuesArray);
-    console.log(finalResponse);
+    // console.log(modifiedInsertQuery);
+    // console.log(valuesArray);
+    // console.log(finalResponse);
     return finalResponse;
 };
 
@@ -79,18 +79,20 @@ const updateQueryCreator = (table, fields, whereCondition) => {
 
 const requestInModifier = (itemArray, query, isLanguage) => {
     let modifiedQuery = query;
-    itemArray.forEach((item, index) => {
-        const paramNumber = isLanguage ? index + 2 : index + 1;
-        if (index === 0 && itemArray.length === 1) {
-            modifiedQuery = `${modifiedQuery} ($${paramNumber})`;
-        } else if (index === 0) {
-            modifiedQuery = `${modifiedQuery} ($${paramNumber},`;
-        } else if (index === (itemArray.length - 1)) {
-            modifiedQuery = `${modifiedQuery} $${paramNumber})`;
-        } else {
-            modifiedQuery = `${modifiedQuery} $${paramNumber},`;
-        }
-    });
+    if (arrayNotEmptyCheck(itemArray)) {
+        itemArray.forEach((item, index) => {
+            const paramNumber = isLanguage ? index + 2 : index + 1;
+            if (index === 0 && itemArray.length === 1) {
+                modifiedQuery = `${modifiedQuery} ($${paramNumber})`;
+            } else if (index === 0) {
+                modifiedQuery = `${modifiedQuery} ($${paramNumber},`;
+            } else if (index === (itemArray.length - 1)) {
+                modifiedQuery = `${modifiedQuery} $${paramNumber})`;
+            } else {
+                modifiedQuery = `${modifiedQuery} $${paramNumber},`;
+            }
+        });
+    }
     return modifiedQuery;
 };
 const excelRowsCreator = (list, table, keysArray) => {

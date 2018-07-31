@@ -103,7 +103,6 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
 
 const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
-    console.log(req);
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
     if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
@@ -125,30 +124,30 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 break;
             }
         }
-        switch (dataModifier.toLowerCase()) {
-            case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME:
-                returnObj = [];
-                otherUserIdsForGivenUserId.rows.forEach(item => {
-                    let obj = {
-                        userId: item['user_id'],
-                        name: item['full_name']
-                    };
-                    returnObj.push(obj);
-                });
-                break;
-            case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID:
-                returnObj = [];
-                otherUserIdsForGivenUserId.rows.forEach(item => {
-                    returnObj.push(item['user_id']);
-                });
-                break;
-            case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL:
-                returnObj = otherUserIdsForGivenUserId;
-                break;
+        if (objectHasPropertyCheck(otherUserIdsForGivenUserId, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
+            switch (dataModifier.toLowerCase()) {
+                case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME.toLowerCase():
+                    returnObj = [];
+                    otherUserIdsForGivenUserId.rows.forEach(item => {
+                        let obj = {
+                            userId: item['user_id'],
+                            name: item['full_name']
+                        };
+                        returnObj.push(obj);
+                    });
+                    break;
+                case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID.toLowerCase():
+                    returnObj = [];
+                    otherUserIdsForGivenUserId.rows.forEach(item => {
+                        returnObj.push(item['user_id']);
+                    });
+                    break;
+                case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL.toLowerCase():
+                    returnObj = otherUserIdsForGivenUserId;
+                    break;
+            }
         }
     }
-    console.log('get roles');
-    console.log(returnObj);
     return returnObj;
 };
 
