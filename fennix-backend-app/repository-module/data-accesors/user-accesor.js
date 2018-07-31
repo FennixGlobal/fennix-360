@@ -146,6 +146,8 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 break;
         }
     }
+    console.log('get roles');
+    console.log(returnObj);
     return returnObj;
 };
 
