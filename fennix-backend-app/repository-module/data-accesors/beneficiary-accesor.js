@@ -1,18 +1,18 @@
-const {selectBeneficiaryByUserIdQuery, getBeneficiaryByBeneficiaryIdQuery,insertBeneficiaryQuery,getBeneficiaryDetailsQuery, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, selectBeneficiaryNameFromBeneficiaryIdQuery, selectBeneficiaryByOwnerIdQuery, selectBeneficiaryListByOwnerUserIdQuery, getBenefeciaryIdListForOwnerAndCenterQuery} = require('../queries/beneficiary-query');
+const beneficiaryQueries = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier,insertQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES} = require('../../util-module/db-constants');
 
 const getBeneficiaryByUserIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
-    modifiedQuery = requestInModifier(req, selectBeneficiaryByUserIdQuery, false);
+    modifiedQuery = requestInModifier(req, beneficiaryQueries.selectBeneficiaryByUserIdQuery, false);
     returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
     return returnObj;
 };
 
 const getBenefeciaryAggregator = async (req) => {
     let returnObj, modifiedQuery, groupByQuery = 'group by beneficiary_role', request;
-    modifiedQuery = requestInModifier(req.userIdList, selectBeneficiaryByOwnerIdQuery, true);
+    modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryByOwnerIdQuery, true);
     request = [req.languageId, ...req.userIdList];
     returnObj = await connectionCheckAndQueryExec(request, `${modifiedQuery} ${groupByQuery}`);
     return returnObj;
@@ -20,8 +20,8 @@ const getBenefeciaryAggregator = async (req) => {
 
 const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     let returnObj, modifiedQuery;
-    modifiedQuery = requestInModifier(req, selectBeneficiaryNameFromBeneficiaryIdQuery, true);
-    console.log('modified Query' + modifiedQuery);
+    modifiedQuery = requestInModifier(req, beneficiaryQueries.selectBeneficiaryNameFromBeneficiaryIdQuery, true);
+    // console.log('modified Query' + modifiedQuery);
     let modifiedParams = [language];
     modifiedParams = [...modifiedParams, ...req];
     returnObj = await connectionCheckAndQueryExec(modifiedParams, modifiedQuery);
@@ -30,46 +30,47 @@ const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
 
 const addBeneficiaryAccessor = async (req) => {
     let returnObj, finalResponse;
-    finalResponse = insertQueryCreator(req, TABLE_BENEFICIARIES, insertBeneficiaryQuery);
+    finalResponse = insertQueryCreator(req, TABLE_BENEFICIARIES, beneficiaryQueries.insertBeneficiaryQuery);
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
-    console.log(returnObj);
+    // console.log(returnObj);
     return returnObj;
 };
 
-
-// const getBeneficiaryListByOwnerId = async (req) => {
-//     let returnObj;
-//     returnObj = await connectionCheckAndQueryExec(req, selectBeneficiaryListByOwnerUserIdQuery);
-//     return returnObj;
-// };
-
 const getBeneficiaryByBeneficiaryIdAccesor = async(req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getBeneficiaryByBeneficiaryIdQuery);
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBeneficiaryByBeneficiaryIdQuery);
     return returnObj;
 };
 
 const getBeneficiaryDetailsAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getBeneficiaryDetailsQuery);
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBeneficiaryDetailsQuery);
     return returnObj;
 };
 
 const getBeneifciaryIdList = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getBenefeciaryIdListForOwnerAndCenterQuery);
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery);
     return returnObj;
 };
 const getBeneficiaryListByOwnerId = async (req) => {
     let returnObj, request = [...req.userIdList,req.centerId, req.skip, req.limit], modifiedQuery, extraQuery = `and center_id = $${req.userIdList.length+1} order by device_updated_date desc nulls last offset $${req.userIdList.length+2} limit $${req.userIdList.length+3}`;
-    modifiedQuery = requestInModifier(req.userIdList, selectBeneficiaryListByOwnerUserIdQuery, false);
+    modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     modifiedQuery = `${modifiedQuery}${extraQuery}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };
+
+const getBeneficiaryListForAddTicketAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
+    returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
+    return returnObj;
+};
+
 const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
     let returnObj, modifiedQuery;
-    modifiedQuery = requestInModifier(req.userIdList, getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
+    modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
     returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
     return returnObj;
 };
@@ -83,8 +84,6 @@ module.exports = {
     getBeneficiaryNameFromBeneficiaryIdAccessor,
     getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor,
     addBeneficiaryAccessor,
+    getBeneficiaryListForAddTicketAccessor,
     getBeneficiaryByBeneficiaryIdAccesor
-    // getBeneficiaryMapData
 };
-
-// getDeviceDetailsForListOfBeneficiariesAccessor

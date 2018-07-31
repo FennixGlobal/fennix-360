@@ -1,5 +1,5 @@
-const {getBenefeciaryAggregator, getBeneficiaryListByOwnerIdForDownloadAccessor, addBeneficiaryAccessor, getBeneficiaryByBeneficiaryIdAccesor, getBeneficiaryDetailsAccessor, getBeneficiaryListByOwnerId, getBeneifciaryIdList, getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
-const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
+const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
+// const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -13,7 +13,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const beneficiaryAggregatorBusiness = async (req) => {
     let beneficiaryResponse, returnObj, userIdsList;
     userIdsList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    beneficiaryResponse = await getBenefeciaryAggregator({languageId: req.query.languageId, userIdList: userIdsList});
+    beneficiaryResponse = await beneficiaryAccessor.getBenefeciaryAggregator({languageId: req.query.languageId, userIdList: userIdsList});
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let beneficiaryObj = {
             victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
@@ -44,7 +44,7 @@ const addBeneficiaryBusiness = async (req) => {
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
-    await addBeneficiaryAccessor(request);
+    await beneficiaryAccessor.addBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
@@ -52,7 +52,7 @@ const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
-    beneficiaryListResponse = await getBeneifciaryIdList(request);
+    beneficiaryListResponse = await beneficiaryAccessor.getBeneifciaryIdList(request);
     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
@@ -182,7 +182,7 @@ const beneficiaryMapDataList = async (req) => {
 
 const getBeneficiaryDetailsBusiness = async (req) => {
     let request = [req.query.beneficiaryId, req.query.languageId], response, finalResponse;
-    response = await getBeneficiaryByBeneficiaryIdAccesor(request);
+    response = await beneficiaryAccessor.getBeneficiaryByBeneficiaryIdAccesor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         const finalObj = {
             beneficiaryRoleId: response.rows[0]['beneficiary_role'],
@@ -212,11 +212,11 @@ const beneficiaryListByOwnerUserId = async (req) => {
         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
         finalResponse = {}, userIdList;
     // console.log(req);
-    userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     // console.log(userIdList);
+    userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
-    beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
-    totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(request);
+    beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListByOwnerId(request);
+    totalNoOfRecords = await beneficiaryAccessor.getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(request);
     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
@@ -242,7 +242,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                     ...finalReturnObj[device['beneficiaryId']],
                     deviceId: device['_id'],
                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-                    // deviceType: device['deviceType'][0]['name']
+                    deviceType: objectHasPropertyCheck(device,'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name']: 'No Device Type'
                 };
             });
         }
@@ -253,6 +253,26 @@ const beneficiaryListByOwnerUserId = async (req) => {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
+};
+
+const listBeneficiariesForAddTicketBusiness = async (req) => {
+    let userIdList, beneficiaryListResponse, finalResponse, responseList = [], request = {};
+    userIdList = await getUserIdsForAllRolesAccessor(req);
+    request.userIdList = userIdList;
+    beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListForAddTicketAccessor(request);
+    if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
+        beneficiaryListResponse.rows.forEach(item => {
+            let obj = {
+                beneficiaryId: item['beneficiaryid'],
+                beneficiaryName: item['full_name'],
+            };
+            responseList.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseList);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+    }
+    return finalResponse;
 };
 
 // const beneficiaryListByOwnerUserId = async (req) => {
@@ -312,7 +332,7 @@ const downloadBeneficiariesBusiness = async (req) => {
     keysArray = colsKeysResponse['keysArray'];
     userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
-    beneficiaryListResponse = await getBeneficiaryListByOwnerIdForDownloadAccessor(request);
+    beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListByOwnerIdForDownloadAccessor(request);
     rowsIdsResponse = excelRowsCreator(beneficiaryListResponse, 'beneficiaries', keysArray);
     beneficiaryIds = rowsIdsResponse['ids'];
     returnObj = rowsIdsResponse[COMMON_CONSTANTS.FENNIX_ROWS];
@@ -340,5 +360,6 @@ module.exports = {
     beneficiaryMapDataList,
     getBeneficiaryDetailsBusiness,
     addBeneficiaryBusiness,
+    listBeneficiariesForAddTicketBusiness,
     downloadBeneficiariesBusiness
 };
