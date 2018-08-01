@@ -71,6 +71,7 @@ const getDeviceByDeviceIdAccessor = async (req) => {
 
 const getDeviceByBeneficiaryIdAccessor = async (req) => {
     let returnObj;
+    console.log(req);
     returnObj = await deviceQueries.getDeviceDetailsByBeneficiaryIdQuery(req);
     return returnObj;
 };

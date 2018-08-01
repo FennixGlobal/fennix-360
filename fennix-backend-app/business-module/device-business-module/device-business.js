@@ -193,7 +193,7 @@ const getDeviceByDeviceIdBusiness = async (req) => {
  * @returns complete device details
  */
 const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
-    const request = {beneficiaryId: req.query.beneficiaryId};
+    const request = {beneficiaryId: parseInt(req.query.beneficiaryId)};
     let deviceResponse, returnObj,finalResponse = {};
     deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
     if (notNullCheck(deviceResponse)) {
