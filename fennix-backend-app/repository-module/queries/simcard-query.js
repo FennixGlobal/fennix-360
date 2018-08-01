@@ -25,19 +25,8 @@ const listUnAssignedSimcardsQuery = (query) => {
                     ]}},
             {
                 $lookup: {
-                    from: "carrierByCountry",
-                    localField: "carrierByCountryId",
-                    foreignField: "_id",
-                    as: "cCountry"
-                }
-            },
-            {
-                $unwind:"$cCountry"
-            },
-            {
-                $lookup: {
                     from: "carrier",
-                    localField: "cCountry.carrierId",
+                    localField: "carrierByCountryId",
                     foreignField: "_id",
                     as : "carrier"
 
@@ -57,10 +46,6 @@ const listUnAssignedSimcardsQuery = (query) => {
         ]
     );
 };
-
-// const insertSimcardQuery = (query) => {
-//     return simcardDetails.insert(query);
-// };
 
 const updateSimcardQuery = (query) => {
     return simcardDetails.update(query.where, query.update, query.upsert, query.multi);
