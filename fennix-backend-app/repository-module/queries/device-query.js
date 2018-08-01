@@ -98,7 +98,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 foreignField: "_id",
                 as: "device"
             }
-        },
+         },
         {$unwind: "$device"}
     ]);
 };
@@ -260,7 +260,31 @@ const getDeviceDetailsByDeviceIdQuery = (req) => {
         }
     ])
 };
-
+const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
+    return LocationDeviceAttributeMasterModel.aggregate([
+        {
+            $match: {"beneficiaryId":  req.beneficiaryId}
+        },
+        {
+            $lookup: {
+                from: "deviceAttributes",
+                localField: "deviceAttributeId",
+                foreignField: "_id",
+                as: "deviceAttributes"
+            }
+        },
+        {$unwind: "$deviceAttributes"},
+        {
+            $lookup: {
+                from: "devices",
+                localField: "deviceId",
+                foreignField: "_id",
+                as: "device"
+            }
+        },
+        {$unwind: "$device"}
+    ]);
+};
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
@@ -274,6 +298,7 @@ module.exports = {
     updateDeviceAttributeQuery,
     updateDeviceCounterQuery,
     getBeneficiaryIdByImeiQuery,
+    getDeviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsByDeviceIdQuery,
     updateLocationDeviceAttributeMasterQuery
 };

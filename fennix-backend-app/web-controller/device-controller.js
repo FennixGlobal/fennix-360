@@ -1,10 +1,10 @@
-const {deviceAggregatorDashboard,getDeviceByDeviceIdBusiness, listDevicesBusiness,listDeviceTypesBusiness,insertDeviceBusiness} = require('../business-module/device-business-module/device-business');
+const deviceBusiness = require('../business-module/device-business-module/device-business');
 var express = require('express');
 var router = express.Router();
 
 router.get('/deviceAggregator', function (req, res) {
     let returnObj;
-    returnObj = deviceAggregatorDashboard(req);
+    returnObj = deviceBusiness.deviceAggregatorDashboard(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -12,7 +12,7 @@ router.get('/deviceAggregator', function (req, res) {
 
 router.get('/listDeviceTypes', function (req, res) {
     let returnObj;
-    returnObj = listDeviceTypesBusiness();
+    returnObj = deviceBusiness.listDeviceTypesBusiness();
     returnObj.then((response) => {
         res.send(response);
     })
@@ -20,7 +20,7 @@ router.get('/listDeviceTypes', function (req, res) {
 
 router.get('/listDevices', function (req, res) {
     let returnObj;
-    returnObj = listDevicesBusiness(req);
+    returnObj = deviceBusiness.listDevicesBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -28,7 +28,7 @@ router.get('/listDevices', function (req, res) {
 
 router.post('/addDevice', function (req, res) {
     let returnObj;
-    returnObj = insertDeviceBusiness(req);
+    returnObj = deviceBusiness.insertDeviceBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -36,7 +36,15 @@ router.post('/addDevice', function (req, res) {
 
 router.get('/getDeviceDetails', function (req, res) {
     let returnObj;
-    returnObj = getDeviceByDeviceIdBusiness(req);
+    returnObj = deviceBusiness.getDeviceByDeviceIdBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/getDeviceDetailsByBeneficiaryId', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.getDeviceDetailsByBeneficiaryIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

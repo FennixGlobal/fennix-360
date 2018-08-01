@@ -1,4 +1,4 @@
-const {deviceAggregator, getDeviceByDeviceIdAccessor, listDevicesAccessor, listDeviceTypesAccessor, fetchNextPrimaryKeyAccessor, insertDeviceAccessor, insertNextPrimaryKeyAccessor} = require('../../repository-module/data-accesors/device-accesor');
+const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
@@ -11,42 +11,13 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const deviceAggregatorDashboard = async (req) => {
     let beneficiaryResponse, deviceResponse, returnObj, userIdList;
     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    // const request = [req.query.languageId, req.query.userId];
-    // userDetailResponse, otherUserIdsForGivenUserId,
-    // userDetailResponse = await userAccessor.getUserNameFromUserIdAccessor(request);
-    // if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
-    //     let nativeUserRole = userDetailResponse.rows[0]['native_user_role'];
-    //     switch (nativeUserRole) {
-    //         case 'ROLE_SUPERVISOR' : {
-    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
-    //             break;
-    //         }
-    //         case 'ROLE_ADMIN' : {
-    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
-    //             break;
-    //         }
-    //         case 'ROLE_SUPER_ADMIN' : {
-    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
-    //             break;
-    //         }
-    //         case 'ROLE_MASTER_ADMIN' : {
-    //             otherUserIdsForGivenUserId = await userAccessor.getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
-    //             break;
-    //         }
-    //     }
-    //     if (objectHasPropertyCheck(otherUserIdsForGivenUserId, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
-    //         otherUserIdsForGivenUserId.rows.forEach(item => {
-    //             userIdList.push(item['user_id']);
-    //         });
-    //     }
-    // }
     beneficiaryResponse = await getBeneficiaryByUserIdAccessor(userIdList);
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
         beneficiaryResponse.rows.forEach((item) => {
             deviceArray.push(item.beneficiaryid);
         });
-        deviceResponse = await deviceAggregator(deviceArray);
+        deviceResponse = await deviceAccessor.deviceAggregator(deviceArray);
     }
     if (notNullCheck(deviceResponse) && arrayNotEmptyCheck(deviceResponse)) {
         let deviceObj = {
@@ -74,7 +45,7 @@ const deviceAggregatorDashboard = async (req) => {
 //TODO: change response logic
 const listDeviceTypesBusiness = async () => {
     let deviceTypesResponse, finalResponse, deviceTypesListResponse = {dropdownList: []};
-    deviceTypesResponse = await listDeviceTypesAccessor();
+    deviceTypesResponse = await deviceAccessor.listDeviceTypesAccessor();
     if (arrayNotEmptyCheck(deviceTypesResponse)) {
         deviceTypesResponse.forEach((item) => {
             deviceTypesListResponse.dropdownList.push(dropdownCreator(item['_id'], item['name'], false));
@@ -95,7 +66,7 @@ const listDevicesBusiness = async (req) => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
-        devicesResponse = await listDevicesAccessor(centerIdsReq);
+        devicesResponse = await deviceAccessor.listDevicesAccessor(centerIdsReq);
     }
 
     if (arrayNotEmptyCheck(devicesResponse)) {
@@ -186,7 +157,7 @@ const listDevicesBusiness = async (req) => {
 
 const insertDeviceBusiness = async (req) => {
     let primaryKeyResponse, counter;
-    primaryKeyResponse = await fetchNextPrimaryKeyAccessor();
+    primaryKeyResponse = await deviceAccessor.fetchNextPrimaryKeyAccessor();
     if (arrayNotEmptyCheck(primaryKeyResponse)) {
         counter = parseInt(primaryKeyResponse[0]['counter']);
         let obj = {
@@ -198,17 +169,39 @@ const insertDeviceBusiness = async (req) => {
             active: req.body.isActive,
             createdDate: new Date()
         };
-        insertDeviceAccessor(obj);
-        insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        await deviceAccessor.insertDeviceAccessor(obj);
+        await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
 
 const getDeviceByDeviceIdBusiness = async (req) => {
     const request = {deviceId: req.query.deviceId};
     let deviceResponse, returnObj;
-    deviceResponse = await getDeviceByDeviceIdAccessor(request);
+    deviceResponse = await deviceAccessor.getDeviceByDeviceIdAccessor(request);
     if (notNullCheck(deviceResponse)) {
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', deviceResponse);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+    }
+    return returnObj;
+};
+
+/**@description : This method provides the complete data for the device by beneficiaryId.
+ * It first gets the latest device attributes by fetching the device details from device attributes table using the deviceId from the deviceLocationMaster.
+ * along with the device attributes it gets the device details from the device table also
+  // * @param req.query : beneficiaryId
+ * @returns complete device details
+ */
+const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
+    const request = {beneficiaryId: req.query.beneficiaryId};
+    let deviceResponse, returnObj,finalResponse = {};
+    deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
+    if (notNullCheck(deviceResponse)) {
+        finalResponse['beneficiaryId'] = deviceResponse['beneficiaryId'];
+        finalResponse = {...finalResponse,...deviceResponse.device,...deviceResponse.deviceAttributes};
+        console.log(finalResponse);
+        console.log(deviceResponse);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
     }
@@ -220,5 +213,6 @@ module.exports = {
     listDevicesBusiness,
     insertDeviceBusiness,
     getDeviceByDeviceIdBusiness,
-    listDeviceTypesBusiness
+    listDeviceTypesBusiness,
+    getDeviceDetailsByBeneficiaryIdBusiness
 };
