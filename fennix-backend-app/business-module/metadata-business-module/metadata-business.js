@@ -570,7 +570,9 @@ const widgetDetailElementCreator = (widgetElementItem) => {
         case 'tile':
             widgetElementData = {
                 ...widgetElementData,
-                colorValue: widgetElementItem['default_value__hover_value']
+                colorValue: widgetElementItem['default_value__hover_value'],
+                iconValue: widgetElementItem['element_icon_value'],
+                colorKey: widgetElementItem['default_key__accent_value']
             };
             break;
     }
