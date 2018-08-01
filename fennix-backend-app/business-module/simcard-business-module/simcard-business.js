@@ -9,7 +9,7 @@ const {getCenterIdsBasedOnUserIdAccessor} = require('../../repository-module/dat
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const listUnAssignedSimcardsBusiness = async (req) => {
-    let response, request = {centerId: req.query.centerId}, finalResponse, modifiedResponse = [];
+    let response, request = {centerId: parseInt(req.query.centerId)}, finalResponse, modifiedResponse = [];
     response = await simCardAccessor.listUnAssignedSimcardsAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
