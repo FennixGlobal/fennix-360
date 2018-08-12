@@ -1,4 +1,4 @@
-const {mongoDev, mongoLocal,mongoSofiaDev} = require('./fennix-backend-app/util-module/connection-constants');
+const {mongoDev, mongoLocal, mongoSofiaDev} = require('./fennix-backend-app/util-module/connection-constants');
 const locationBusiness = require('./fennix-backend-app/business-module/location-business-module/location-business');
 var createError = require('http-errors');
 var express = require('express');
@@ -6,6 +6,13 @@ var path = require('path');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+// const socket = require('socket.io');
+const httpExpress = require('express');
+const http = require('http');
+const io = require('socket.io');
+const socketExpress = httpExpress();
+const server = http.createServer(socketExpress);
+const socketIO = io(server);
 var bodyParser = require('body-parser');
 
 var net = require('net');
@@ -17,8 +24,20 @@ mongoose.connect(mongoSofiaDev).catch((err) => {
 
 const TCPServer = net.createServer();
 const ELockServer = net.createServer();
+socketIO.listen(3170);
 ELockServer.listen(3150);
 TCPServer.listen(3100);
+socketIO.on('connection', (socket) => {
+    console.log('IN ELock HTTP');
+    socket.setEncoding('utf8');
+    console.log('HTTP connected');
+    socket.on('data', async (data) => {
+        console.log('HTTP data incoming');
+        console.log(data);
+    });
+
+});
+
 ELockServer.on("connection", (socket) => {
     console.log('IN ELock TCP');
     socket.setEncoding('utf8');
