@@ -88,4 +88,11 @@ router.post('/updateBeneficiary', function (req, res) {
         res.send(response);
     })
 });
+router.get('/deleteBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.deleteBeneficiaryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

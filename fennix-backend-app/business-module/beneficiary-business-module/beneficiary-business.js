@@ -41,6 +41,17 @@ const beneficiaryAggregatorBusiness = async (req) => {
     return returnObj;
 };
 
+const deleteBeneficiaryBusiness = async (req) => {
+    let request = {body: {beneficiaryId: req.query.beneficiaryId, isActive: false}}, response, finalResponse;
+    response = await updateBeneficiaryAccessor(request);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+    }
+    return finalResponse;
+}
+
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
     request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
@@ -410,5 +421,6 @@ module.exports = {
     listBeneficiariesForAddTicketBusiness,
     downloadBeneficiariesBusiness,
     updateBeneficiaryBusiness,
+    deleteBeneficiaryBusiness,
     getAllBeneficiaryDetailsBusiness
 };
