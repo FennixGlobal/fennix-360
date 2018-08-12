@@ -14,7 +14,7 @@ const ticketSchema = new Schema({
         }
     ],
     ticketStatus: String,
-    withAlerts:Boolean,
+    withAlerts: Boolean,
     previousOwner: Number,
     createdDate: Date,
     updatedDate: Date
@@ -24,9 +24,21 @@ const ticketCounterSchema = new Schema({
     counter: Number
 });
 
+const beneficiaryViolationSchema = new Schema({
+    beneficiaryId: Number,
+    totalWarnings: Number,
+    totalViolations: Number,
+    allViolations: {violationName: String, violationCount: Number},
+    majorWarning: {violationName: String, warningCount: Number},
+    allWarning: {violationName: String, warningCount: Number},
+    currentViolation: String,
+});
+
 const TicketCounter = mongoose.model('TicketCounter', ticketCounterSchema, 'ticketsCounter');
-var ticketAggregator = mongoose.model('Ticket',ticketSchema,'tickets');
+const ticketAggregator = mongoose.model('Ticket', ticketSchema, 'tickets');
+const beneficiaryViolationModel = mongoose.model('beneficiaryViolation', beneficiaryViolationSchema, 'beneficiaryViolations');
 module.exports = {
     ticketAggregator,
-    TicketCounter
+    TicketCounter,
+    beneficiaryViolationModel
 };

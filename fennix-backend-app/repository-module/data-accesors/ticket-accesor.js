@@ -53,15 +53,34 @@ const fetchNextPrimaryKeyAccessor = async () => {
     returnObj = await ticketQuery.fetchNextPrimaryKeyQuery();
     return returnObj;
 };
+const getTicketDetailsBasedOnBeneficiaryIdAccessor = async(req) => {
+    let returnObj;
+    returnObj = await ticketQuery.getTicketDetailsBasedOnBeneficiaryIdQuery(req);
+    return returnObj;
+};
 
 const insertNextPrimaryKeyAccessor = async (req) => {
     await ticketQuery.insertNextPrimaryKeyQuery(req);
 };
+
+const fetchViolationsForBeneficiaryIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await ticketQuery.fetchViolationsForBeneficiaryIdQuery(req);
+    return returnObj;
+};
+
 const listTicketsBasedOnUserIdForDownloadAccessor = async (req) => {
     let returnObj;
     returnObj = await ticketQuery.listTicketsForDownloadQuery(req);
     return returnObj;
 };
+
+const getTicketDetailsByStatusAndBenIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await ticketQuery.getTicketDetailsByStatusAndBenIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     addTicketAccessor,
     ticketAggregatorAccessor,
@@ -71,5 +90,8 @@ module.exports = {
     listTicketsBasedOnUserIdAccessor,
     ticketDetailsBasedOnTicketIdAccessor,
     updateTicketAccessor,
-    listTicketsBasedOnUserIdForDownloadAccessor
+    fetchViolationsForBeneficiaryIdAccessor,
+    getTicketDetailsBasedOnBeneficiaryIdAccessor,
+    listTicketsBasedOnUserIdForDownloadAccessor,
+    getTicketDetailsByStatusAndBenIdAccessor
 };

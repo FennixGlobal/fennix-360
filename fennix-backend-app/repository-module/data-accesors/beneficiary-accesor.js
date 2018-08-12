@@ -75,6 +75,12 @@ const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
     return returnObj;
 };
 
+const getAllBeneficiaryDetailsAccessor = async  (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getAllBeneficiaryDetailsQuery);
+    return returnObj;
+};
+
 module.exports = {
     getBeneficiaryByUserIdAccessor,
     getBenefeciaryAggregator,
@@ -85,5 +91,6 @@ module.exports = {
     getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor,
     addBeneficiaryAccessor,
     getBeneficiaryListForAddTicketAccessor,
-    getBeneficiaryByBeneficiaryIdAccesor
+    getBeneficiaryByBeneficiaryIdAccesor,
+    getAllBeneficiaryDetailsAccessor
 };

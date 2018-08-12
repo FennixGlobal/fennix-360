@@ -168,22 +168,26 @@ const addTicketBusiness = async (req) => {
 };
 
 const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
-    let primaryKeyResponse, counter;
+    let primaryKeyResponse, counter,currentViolations,currentTicketStatus;
     primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
-    if (arrayNotEmptyCheck(primaryKeyResponse)) {
-        counter = parseInt(primaryKeyResponse[0]['counter']);
-        let obj = {
-            _id: counter,
-            beneficiaryId: beneficiaryId,
-            ticketName: ticketValidation.ticketName,
-            ticketDescription: ticketValidation.ticketDescription,
-            ticketGenerationType: 'DEVICE',
-            ticketStatus: 'ACTIVE',
-            createdDate: new Date(),
-            updatedDate: new Date()
-        };
-        await ticketAccessor.addTicketAccessor(obj);
-        await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    currentTicketStatus = await ticketAccessor.getTicketDetailsBasedOnBeneficiaryIdAccessor(beneficiaryId);
+    currentViolations = await ticketAccessor.fetchViolationsForBeneficiaryIdAccessor(beneficiaryId);
+    if(notNullCheck(currentTicketStatus)) {
+        if (arrayNotEmptyCheck(primaryKeyResponse)) {
+            counter = parseInt(primaryKeyResponse[0]['counter']);
+            let obj = {
+                _id: counter,
+                beneficiaryId: beneficiaryId,
+                ticketName: ticketValidation.ticketName,
+                ticketDescription: ticketValidation.ticketDescription,
+                ticketGenerationType: 'DEVICE',
+                ticketStatus: 'ACTIVE',
+                createdDate: new Date(),
+                updatedDate: new Date()
+            };
+            await ticketAccessor.addTicketAccessor(obj);
+            await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        }
     }
 };
 const ticketDetailsBasedOnTicketIdBusiness = async (req) => {
@@ -228,24 +232,6 @@ const getTicketsList = async (req) => {
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         otherUserDetailResponse = await getUserIdsForAllRolesAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId], COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL);
-        // switch (userDetailsResponse.rows[0]['native_user_role'].toUpperCase()) {
-        //     case 'ROLE_SUPERVISOR' : {
-        //         otherUserDetailResponse = await getUserIdsForSupervisorAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-        //         break;
-        //     }
-        //     case 'ROLE_ADMIN' : {
-        //         otherUserDetailResponse = await getUserIdsForAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-        //         break;
-        //     }
-        //     case 'ROLE_SUPER_ADMIN' : {
-        //         otherUserDetailResponse = await getUserIdsForSuperAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-        //         break;
-        //     }
-        //     case 'ROLE_MASTER_ADMIN' : {
-        //         otherUserDetailResponse = await getUserIdsForMasterAdminAccessor([userDetailsResponse.rows[0]['user_id'], req.query.languageId]);
-        //         break;
-        //     }
-        // }
         if (objectHasPropertyCheck(otherUserDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserDetailResponse.rows)) {
             otherUserDetailResponse.rows.forEach((item) => {
                 const userDetailsObj = {

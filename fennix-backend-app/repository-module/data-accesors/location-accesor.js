@@ -10,12 +10,12 @@ const mapMarkerQuery = async (req) => {
 
 const updateLocation = async (req) => {
     let counterResponse = await locationCounterQuery(), locationId;
+    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
     locationId = counterResponse[0]['counter'];
     let obj = {
         _id: locationId, ...req
     };
     locationDetailsUpdateQuery(obj);
-    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
     return counterResponse;
 };
 

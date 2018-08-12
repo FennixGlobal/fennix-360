@@ -1,5 +1,4 @@
 const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
-// const {mapMarkerQuery} = require('../../repository-module/data-accesors/location-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -266,13 +265,7 @@ const listBeneficiariesForAddTicketBusiness = async (req) => {
     beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListForAddTicketAccessor(request);
     if (objectHasPropertyCheck(beneficiaryListResponse, 'rows') && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
-            // let obj = {
-            //     beneficiaryId: item['beneficiaryid'],
-            //     beneficiaryName: item['full_name'],
-            // };
             responseList.dropdownList.push(dropdownCreator(item['beneficiaryid'], item['full_name'], false));
-
-            // responseList.push(obj);
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseList);
     } else {
@@ -360,6 +353,42 @@ const downloadBeneficiariesBusiness = async (req) => {
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/test.xlsx');
 };
 
+const getAllBeneficiaryDetailsBusiness = async (req) => {
+  let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
+  response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
+  if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+      benResponse = response.rows[0];
+      modifiedResponse = {
+          beneficiaryId: benResponse['beneficiaryid'],
+          firstName: benResponse['firstname'],
+          middleName: benResponse['middle_name'],
+          firstLastName: benResponse['first_last_name'],
+          secondLastName: benResponse['second_last_name'],
+          emailId: benResponse['emailid'],
+          mobileNo: benResponse['mobileno'],
+          dob: benResponse['dob'],
+          address: benResponse['address1'],
+          crimeId: benResponse['crime_id'],
+          hasHouseArrest: benResponse['hashousearrest'],
+          eyeColor: benResponse['eye_color'],
+          weight: benResponse['weight'],
+          hairColor: benResponse['hair_color'],
+          scarsMarksTatoos: benResponse['scars_marks_tatoos'],
+          riskId: benResponse['risk_id'],
+          gender: benResponse['gender'],
+          ethnicityId: benResponse['ethnicity_id'],
+          image: benResponse['image'],
+          familyPhone: benResponse['family_phone'],
+          postalCode: benResponse['postal_code'],
+          whatsAppNumber: benResponse['whatsapp_number']
+      };
+      finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+  } else {
+      finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARY_FOR_ID, 'EN_US', []);
+  }
+  return finalResponse;
+};
+
 module.exports = {
     beneficiaryAggregatorBusiness,
     beneficiaryListByOwnerUserId,
@@ -367,5 +396,6 @@ module.exports = {
     getBeneficiaryDetailsBusiness,
     addBeneficiaryBusiness,
     listBeneficiariesForAddTicketBusiness,
-    downloadBeneficiariesBusiness
+    downloadBeneficiariesBusiness,
+    getAllBeneficiaryDetailsBusiness
 };

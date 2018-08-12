@@ -65,9 +65,18 @@ router.post('/showMapGridData', function (req, res) {
         res.send(response);
     })
 });
+
 router.get('/getBeneficiaryDetails', function (req, res) {
     let returnObj;
     returnObj = beneficiaryBusiness.getBeneficiaryDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/getCompleteBeneficiaryDetailsByBenId', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.getAllBeneficiaryDetailsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

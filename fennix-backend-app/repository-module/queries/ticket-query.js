@@ -1,4 +1,9 @@
-const {ticketAggregator, TicketCounter} = require('../models/ticket-model');
+const {ticketAggregator, TicketCounter, beneficiaryViolationModel} = require('../models/ticket-model');
+
+const fetchViolationsForBeneficiaryIdQuery = (query) => {
+    return beneficiaryViolationModel.find({'beneficiaryId': query});
+};
+
 const userIdTicketAggregatorQuery = (query) => {
     return ticketAggregator.aggregate([
         {
@@ -137,6 +142,15 @@ const listTicketsForDownloadQuery = (query) => {
             }
         );
 };
+const getTicketDetailsBasedOnBeneficiaryIdQuery = (query)=>{
+return ticketAggregator.find({
+        $and : [{
+            beneficiaryId: query,
+            ticketStatus : {$ne:'RESOLVED'}
+        }]
+    });
+};
+
 const updateTicketQuery = (query) => {
     ticketAggregator.update({_id: query.ticketId},
         {
@@ -154,6 +168,18 @@ const updateTicketQuery = (query) => {
     });
 };
 
+const getTicketDetailsByStatusAndBenIdQuery = async (req) => {
+  return ticketAggregator.find(
+      {
+          $and:[
+              {
+                  ticketStatus: req.status,
+                  beneficiaryId:req.beneficiaryId
+              }
+          ]
+      });
+};
+
 module.exports = {
     userIdTicketAggregatorQuery,
     userIdTicketDetailsBasedOnTicketStatusQuery,
@@ -162,6 +188,9 @@ module.exports = {
     insertNextPrimaryKeyQuery,
     addTicketQuery,
     updateTicketQuery,
+    getTicketDetailsBasedOnBeneficiaryIdQuery,
     listTicketsForDownloadQuery,
-    ticketDetailsBasedOnTicketIdQuery
+    ticketDetailsBasedOnTicketIdQuery,
+    fetchViolationsForBeneficiaryIdQuery,
+    getTicketDetailsByStatusAndBenIdQuery
 };

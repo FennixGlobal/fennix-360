@@ -1,7 +1,6 @@
 const {DEVICE_ATTRIBUTE_CONSTANTS} = require('./device-attribute-constants');
 const {notNullCheck, objectHasPropertyCheck} = require('../util-module/data-validators');
 const deviceValidator = (deviceAttributes, beneficiaryId, location) => {
-    // console.log(deviceAttributes, beneficiaryId, location);
     let validationObj = {}, validationResponse;
     Object.keys(deviceAttributes).forEach((key) => {
         switch (key) {

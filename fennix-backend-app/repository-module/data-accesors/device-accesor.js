@@ -13,9 +13,9 @@ const deviceBybeneficiaryQuery = async (req) => {
 
 const updateDeviceAttributesAccessor = async (req) => {
     let counterResponse = await deviceQueries.getDeviceAttributeCounterQuery();
+    deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
     req = {...req, _id: counterResponse[0]['counter']};
     deviceQueries.updateDeviceAttributeQuery(req);
-    deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
     return counterResponse;
 };
 
@@ -71,7 +71,6 @@ const getDeviceByDeviceIdAccessor = async (req) => {
 
 const getDeviceByBeneficiaryIdAccessor = async (req) => {
     let returnObj;
-    console.log(req);
     returnObj = await deviceQueries.getDeviceDetailsByBeneficiaryIdQuery(req);
     return returnObj;
 };

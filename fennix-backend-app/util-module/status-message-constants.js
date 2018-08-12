@@ -150,8 +150,15 @@ const statusCodes = {
     221: {
         devMsg: 'no carriers available for given id', userMsg: {
             EN_US: 'no carriers available for given id',
-            espMX: 'no simcard types available for the given id',
-            espLA: 'no simcard types available for the given id'
+            espMX: 'no carriers available for the given id',
+            espLA: 'no carriers available for the given id'
+        }
+    },
+    222: {
+        devMsg: 'no beneficiary available for given id', userMsg: {
+            EN_US: 'no beneficiary available for given id',
+            espMX: 'no beneficiary available for the given id',
+            espLA: 'no beneficiary available for the given id'
         }
     },
     700: {
