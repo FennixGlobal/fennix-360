@@ -81,7 +81,14 @@ const getTicketDetailsByStatusAndBenIdAccessor = async (req) => {
     return returnObj;
 };
 
+const listAlertTypesAccessor = async () => {
+    let returnObj;
+    returnObj = await ticketQuery.listAlertTypesQuery();
+    return returnObj;
+};
+
 module.exports = {
+    listAlertTypesAccessor,
     addTicketAccessor,
     ticketAggregatorAccessor,
     fetchNextPrimaryKeyAccessor,

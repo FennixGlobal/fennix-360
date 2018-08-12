@@ -1,4 +1,4 @@
-const {ticketAggregator, TicketCounter, beneficiaryViolationModel} = require('../models/ticket-model');
+const {ticketAggregator, TicketCounter, beneficiaryViolationModel, AlertTypes} = require('../models/ticket-model');
 
 const fetchViolationsForBeneficiaryIdQuery = (query) => {
     return beneficiaryViolationModel.find({'beneficiaryId': query});
@@ -180,7 +180,12 @@ const getTicketDetailsByStatusAndBenIdQuery = async (req) => {
       });
 };
 
+const listAlertTypesQuery = () => {
+    return AlertTypes.find();
+};
+
 module.exports = {
+    listAlertTypesQuery,
     userIdTicketAggregatorQuery,
     userIdTicketDetailsBasedOnTicketStatusQuery,
     listTicketsQuery,

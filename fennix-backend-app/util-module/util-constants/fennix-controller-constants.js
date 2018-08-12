@@ -43,6 +43,7 @@ const TICKET_CONTROLLER = {
     TICKET_TICKET_DETAILS: '/ticketDetails',
     TICKET_LIST_TICKETS: '/listTickets',
     TICKET_ADD_TICKET: '/addTicket',
+    TICKET_LIST_ALERT_TYPES: '/listAlertTypes',
     TICKET_UPDATE_TICKET: '/updateTicket',
     TICKET_DOWNLOAD_LIST_TICKETS: '/downloadTickets',
 

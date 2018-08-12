@@ -306,8 +306,21 @@ const updateTicketBusiness = async (req) => {
     await ticketAccessor.updateTicketAccessor(request);
 };
 
+const listAlertTypesBusiness = async () => {
+    let response, modifiedResponse = {dropdownList: []};
+    response = await ticketAccessor.listAlertTypesAccessor();
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            modifiedResponse.dropdownList.push(dropdownCreator(item['_id'], item['type'], false));
+        });
+    }
+    return modifiedResponse;
+};
+
+
 module.exports = {
     ticketAggregatorBusiness,
+    listAlertTypesBusiness,
     ticketListBasedOnStatusBusiness,
     listTicketsBusiness,
     addTicketBusiness,

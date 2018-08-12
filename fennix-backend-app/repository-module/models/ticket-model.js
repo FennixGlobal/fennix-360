@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 var Schema = mongoose.Schema;
+
 const ticketSchema = new Schema({
     _id: Number,
     userId: Number,
@@ -34,11 +35,19 @@ const beneficiaryViolationSchema = new Schema({
     currentViolation: String,
 });
 
+const alertTypesSchema = new Schema({
+    _id: Number,
+    type: String
+});
+
+const AlertTypes = mongoose.model('AlertTypes', alertTypesSchema, 'alertTypes');
 const TicketCounter = mongoose.model('TicketCounter', ticketCounterSchema, 'ticketsCounter');
 const ticketAggregator = mongoose.model('Ticket', ticketSchema, 'tickets');
 const beneficiaryViolationModel = mongoose.model('beneficiaryViolation', beneficiaryViolationSchema, 'beneficiaryViolations');
+
 module.exports = {
     ticketAggregator,
     TicketCounter,
-    beneficiaryViolationModel
+    beneficiaryViolationModel,
+    AlertTypes
 };

@@ -11,6 +11,14 @@ router.get(TICKET_CONTROLLER.TICKET_TICKET_AGGREGATOR, function (req, res) {
     })
 });
 
+router.get(TICKET_CONTROLLER.TICKET_LIST_ALERT_TYPES, function (req, res) {
+    let returnObj;
+    returnObj = ticketBusiness.listAlertTypesBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    });
+});
+
 //TODO: commented by paapu. will check with chinnu
 // router.get('/ticketDetails', function (req, res) {
 //     let returnObj;
