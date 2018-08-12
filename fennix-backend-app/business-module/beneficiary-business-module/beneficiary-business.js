@@ -259,7 +259,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
 };
 
 const listBeneficiariesForAddTicketBusiness = async (req) => {
-    let userIdList, beneficiaryListResponse, finalResponse, responseList = {dropdownList:[]}, request = {};
+    let userIdList, beneficiaryListResponse, finalResponse, responseList = {dropdownList: []}, request = {};
     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     request.userIdList = userIdList;
     beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListForAddTicketAccessor(request);
@@ -354,40 +354,52 @@ const downloadBeneficiariesBusiness = async (req) => {
 };
 
 const getAllBeneficiaryDetailsBusiness = async (req) => {
-  let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
-  response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
-  if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-      benResponse = response.rows[0];
-      modifiedResponse = {
-          beneficiaryId: benResponse['beneficiaryid'],
-          firstName: benResponse['firstname'],
-          middleName: benResponse['middle_name'],
-          firstLastName: benResponse['first_last_name'],
-          secondLastName: benResponse['second_last_name'],
-          emailId: benResponse['emailid'],
-          mobileNo: benResponse['mobileno'],
-          dob: benResponse['dob'],
-          address: benResponse['address1'],
-          crimeId: benResponse['crime_id'],
-          hasHouseArrest: benResponse['hashousearrest'],
-          eyeColor: benResponse['eye_color'],
-          weight: benResponse['weight'],
-          hairColor: benResponse['hair_color'],
-          scarsMarksTatoos: benResponse['scars_marks_tatoos'],
-          riskId: benResponse['risk_id'],
-          gender: benResponse['gender'],
-          ethnicityId: benResponse['ethnicity_id'],
-          image: benResponse['image'],
-          familyPhone: benResponse['family_phone'],
-          postalCode: benResponse['postal_code'],
-          whatsAppNumber: benResponse['whatsapp_number']
-      };
-      finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-  } else {
-      finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARY_FOR_ID, 'EN_US', []);
-  }
-  return finalResponse;
+    let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
+    response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        benResponse = response.rows[0];
+        modifiedResponse = {
+            beneficiaryId: benResponse['beneficiaryid'],
+            firstName: benResponse['firstname'],
+            middleName: benResponse['middle_name'],
+            firstLastName: benResponse['first_last_name'],
+            secondLastName: benResponse['second_last_name'],
+            emailId: benResponse['emailid'],
+            mobileNo: benResponse['mobileno'],
+            dob: benResponse['dob'],
+            address: benResponse['address1'],
+            crimeId: benResponse['crime_id'],
+            hasHouseArrest: benResponse['hashousearrest'],
+            eyeColor: benResponse['eye_color'],
+            weight: benResponse['weight'],
+            hairColor: benResponse['hair_color'],
+            scarsMarksTatoos: benResponse['scars_marks_tatoos'],
+            riskId: benResponse['risk_id'],
+            gender: benResponse['gender'],
+            ethnicityId: benResponse['ethnicity_id'],
+            image: benResponse['image'],
+            familyPhone: benResponse['family_phone'],
+            postalCode: benResponse['postal_code'],
+            whatsAppNumber: benResponse['whatsapp_number']
+        };
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
 };
+
+const updateBeneficiaryBusiness = async (req) => {
+    let response, finalResponse;
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+    }
+    return finalResponse;
+};
+
 
 module.exports = {
     beneficiaryAggregatorBusiness,
@@ -397,5 +409,6 @@ module.exports = {
     addBeneficiaryBusiness,
     listBeneficiariesForAddTicketBusiness,
     downloadBeneficiariesBusiness,
+    updateBeneficiaryBusiness,
     getAllBeneficiaryDetailsBusiness
 };

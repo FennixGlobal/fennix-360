@@ -81,5 +81,11 @@ router.get('/getCompleteBeneficiaryDetailsByBenId', function (req, res) {
         res.send(response);
     })
 });
-
+router.post('/updateBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.updateBeneficiaryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;
