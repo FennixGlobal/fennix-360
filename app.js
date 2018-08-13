@@ -16,6 +16,7 @@ const socketIO = io(server);
 var bodyParser = require('body-parser');
 
 var net = require('net');
+const eNet = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 mongoose.connect(mongoSofiaDev).catch((err) => {
@@ -23,7 +24,7 @@ mongoose.connect(mongoSofiaDev).catch((err) => {
 });
 
 const TCPServer = net.createServer();
-const ELockServer = net.createServer();
+const ELockServer = eNet.createServer();
 socketIO.listen(3170);
 ELockServer.listen(3150);
 TCPServer.listen(3100);
