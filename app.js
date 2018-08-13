@@ -29,7 +29,7 @@ ELockServer.listen(3150);
 TCPServer.listen(3100);
 socketIO.on('connection', (socket) => {
     console.log('IN ELock HTTP');
-    // socket.setEncoding('utf8');
+    socket.setEncoding('hex');
     console.log('HTTP connected');
     socket.on('data', async (data) => {
         console.log('HTTP data incoming');
@@ -40,7 +40,7 @@ socketIO.on('connection', (socket) => {
 
 ELockServer.on("connection", (socket) => {
     console.log('IN ELock TCP');
-    // socket.setEncoding('utf8');
+    socket.setEncoding('hex');
     console.log('connected');
     socket.on('data', async (data) => {
         console.log(data);
