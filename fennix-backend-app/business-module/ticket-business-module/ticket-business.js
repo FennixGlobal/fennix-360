@@ -172,6 +172,7 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
     currentTicketStatus = await ticketAccessor.getTicketDetailsBasedOnBeneficiaryIdAccessor(beneficiaryId);
     currentViolations = await ticketAccessor.fetchViolationsForBeneficiaryIdAccessor(beneficiaryId);
+    console.log(currentTicketStatus);
     if(notNullCheck(currentTicketStatus)) {
         if (arrayNotEmptyCheck(primaryKeyResponse)) {
             counter = parseInt(primaryKeyResponse[0]['counter']);

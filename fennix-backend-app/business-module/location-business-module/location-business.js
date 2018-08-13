@@ -102,6 +102,7 @@ const processLocation = async (location) => {
         };
         const locationId = await locationAccessor.updateLocation(locationObj);
         ticketResponse = deviceValidator(deviceAttribute, masterRequest.beneficiaryId, locationObj);
+        console.log(ticketResponse);
         if (notNullCheck(ticketResponse)) {
             addAutomatedTicketBusiness(ticketResponse, masterRequest.beneficiaryId);
         }
