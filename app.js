@@ -24,9 +24,9 @@ mongoose.connect(mongoSofiaDev).catch((err) => {
 });
 
 const TCPServer = net.createServer();
-const ELockServer = eNet.createServer();
+// const ELockServer = eNet.createServer();
 socketIO.listen(3170);
-ELockServer.listen(3150);
+// ELockServer.listen(3150);
 TCPServer.listen(3100);
 socketIO.on('connection', (socket) => {
     console.log('IN ELock HTTP');
