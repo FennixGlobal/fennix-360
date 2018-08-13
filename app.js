@@ -38,28 +38,28 @@ socketIO.on('connection', (socket) => {
     });
 
 });
-
-ELockServer.on("connection", (socket) => {
-    console.log('IN ELock TCP');
-    socket.setEncoding('hex');
-    console.log('connected');
-    socket.on('data', async (data) => {
-        console.log(data);
-        // const returnValue = await locationBusiness.locationUpdateBusiness(data);
-        // console.log(returnValue);
-        // socket.write(returnValue);
-    });
-    socket.on('error', (err) => {
-        console.log('error occurred');
-        console.log(err);
-    });
-    socket.on('end', () => {
-        console.log('end connection');
-    });
-    socket.on('close', (flag) => {
-        console.log(flag);
-    });
-});
+//
+// ELockServer.on("connection", (socket) => {
+//     console.log('IN ELock TCP');
+//     socket.setEncoding('hex');
+//     console.log('connected');
+//     socket.on('data', async (data) => {
+//         console.log(data);
+//         // const returnValue = await locationBusiness.locationUpdateBusiness(data);
+//         // console.log(returnValue);
+//         // socket.write(returnValue);
+//     });
+//     socket.on('error', (err) => {
+//         console.log('error occurred');
+//         console.log(err);
+//     });
+//     socket.on('end', () => {
+//         console.log('end connection');
+//     });
+//     socket.on('close', (flag) => {
+//         console.log(flag);
+//     });
+// });
 TCPServer.on("connection", (socket) => {
     console.log('IN TCP');
     socket.setEncoding('utf8');
