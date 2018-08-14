@@ -23,11 +23,11 @@ mongoose.connect(mongoSofiaDev).catch((err) => {
     console.log(err);
 });
 
-// const TCPServer = net.createServer();
+const TCPServer = net.createServer();
 const ELockServer = eNet.createServer();
 // socketIO.listen(3170);
 ELockServer.listen(3150);
-// TCPServer.listen(3100);
+TCPServer.listen(3100);
 ELockServer.on("connection", (socket) => {
     console.log('IN ELock TCP');
     socket.setEncoding('hex');
@@ -46,26 +46,26 @@ ELockServer.on("connection", (socket) => {
         console.log(flag);
     });
 });
-// TCPServer.on("connection", (socket) => {
-//     console.log('IN TCP');
-//     socket.setEncoding('utf8');
-//     console.log('connected');
-//     socket.on('data', async (data) => {
-//         const returnValue = await locationBusiness.locationUpdateBusiness(data);
-//         console.log(returnValue);
-//         socket.write(returnValue);
-//     });
-//     socket.on('error', (err) => {
-//         console.log('error occurred');
-//         console.log(err);
-//     });
-//     socket.on('end', () => {
-//         console.log('end connection');
-//     });
-//     socket.on('close', (flag) => {
-//         console.log(flag);
-//     });
-// });
+TCPServer.on("connection", (socket) => {
+    console.log('IN TCP');
+    socket.setEncoding('utf8');
+    console.log('connected');
+    socket.on('data', async (data) => {
+        const returnValue = await locationBusiness.locationUpdateBusiness(data);
+        console.log(returnValue);
+        socket.write(returnValue);
+    });
+    socket.on('error', (err) => {
+        console.log('error occurred');
+        console.log(err);
+    });
+    socket.on('end', () => {
+        console.log('end connection');
+    });
+    socket.on('close', (flag) => {
+        console.log(flag);
+    });
+});
 var carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
 var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
 var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
