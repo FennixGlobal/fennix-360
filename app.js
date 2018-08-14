@@ -15,7 +15,7 @@ const server = http.createServer(socketExpress);
 const socketIO = io(server);
 var bodyParser = require('body-parser');
 
-var net = require('net');
+const net = require('net');
 const eNet = require('net');
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -24,9 +24,9 @@ mongoose.connect(mongoSofiaDev).catch((err) => {
 });
 
 const TCPServer = net.createServer();
-// const ELockServer = eNet.createServer();
+const ELockServer = eNet.createServer();
 socketIO.listen(3170);
-// ELockServer.listen(3150);
+ELockServer.listen(3150);
 TCPServer.listen(3100);
 socketIO.on('connection', (socket) => {
     console.log('IN ELock HTTP');
@@ -39,27 +39,27 @@ socketIO.on('connection', (socket) => {
 
 });
 //
-// ELockServer.on("connection", (socket) => {
-//     console.log('IN ELock TCP');
-//     socket.setEncoding('hex');
-//     console.log('connected');
-//     socket.on('data', async (data) => {
-//         console.log(data);
-//         // const returnValue = await locationBusiness.locationUpdateBusiness(data);
-//         // console.log(returnValue);
-//         // socket.write(returnValue);
-//     });
-//     socket.on('error', (err) => {
-//         console.log('error occurred');
-//         console.log(err);
-//     });
-//     socket.on('end', () => {
-//         console.log('end connection');
-//     });
-//     socket.on('close', (flag) => {
-//         console.log(flag);
-//     });
-// });
+ELockServer.on("connection", (socket) => {
+    console.log('IN ELock TCP');
+    socket.setEncoding('hex');
+    console.log('connected');
+    socket.on('data', async (data) => {
+        console.log(data);
+        // const returnValue = await locationBusiness.locationUpdateBusiness(data);
+        // console.log(returnValue);
+        // socket.write(returnValue);
+    });
+    socket.on('error', (err) => {
+        console.log('error occurred');
+        console.log(err);
+    });
+    socket.on('end', () => {
+        console.log('end connection');
+    });
+    socket.on('close', (flag) => {
+        console.log(flag);
+    });
+});
 TCPServer.on("connection", (socket) => {
     console.log('IN TCP');
     socket.setEncoding('utf8');
