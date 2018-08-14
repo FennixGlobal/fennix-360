@@ -173,6 +173,7 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     currentTicketStatus = await ticketAccessor.getTicketDetailsBasedOnBeneficiaryIdAccessor(beneficiaryId);
     currentViolations = await ticketAccessor.fetchViolationsForBeneficiaryIdAccessor(beneficiaryId);
     console.log(currentTicketStatus);
+    console.log(currentViolations);
     if(notNullCheck(currentTicketStatus)) {
         if (arrayNotEmptyCheck(primaryKeyResponse)) {
             counter = parseInt(primaryKeyResponse[0]['counter']);
@@ -186,8 +187,8 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
                 createdDate: new Date(),
                 updatedDate: new Date()
             };
-            await ticketAccessor.addTicketAccessor(obj);
-            await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+            // await ticketAccessor.addTicketAccessor(obj);
+            // await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
         }
     }
 };

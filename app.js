@@ -45,9 +45,6 @@ ELockServer.on("connection", (socket) => {
     console.log('connected');
     socket.on('data', async (data) => {
         console.log(data);
-        // const returnValue = await locationBusiness.locationUpdateBusiness(data);
-        // console.log(returnValue);
-        // socket.write(returnValue);
     });
     socket.on('error', (err) => {
         console.log('error occurred');

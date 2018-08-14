@@ -3,7 +3,8 @@ const DEVICE_ATTRIBUTE_CONSTANTS = {
     BELT_ALARM: 'beltStatus',
     SHELL_ALARM: 'shellStatus',
     HOUSE_ARREST_ALARM: 'hasHouseArrestAlarm',
-    GSM_ALARM: 'gsmLevel'
+    GSM_ALARM: 'gsmLevel',
+    BATTERY_PERCENTAGE: 'batteryPercentage'
 };
 
 module.exports = {

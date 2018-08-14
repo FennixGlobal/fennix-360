@@ -4,8 +4,8 @@ const deviceValidator = (deviceAttributes, beneficiaryId, location) => {
     let validationObj = {}, validationResponse;
     Object.keys(deviceAttributes).forEach((key) => {
         switch (key) {
-            case DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_VOLTAGE: {
-                validationObj[DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_VOLTAGE] = batteryValidator(deviceAttributes[key]);
+            case DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_PERCENTAGE: {
+                validationObj[DEVICE_ATTRIBUTE_CONSTANTS.BATTERY_PERCENTAGE] = batteryValidator(deviceAttributes[key]);
                 break;
             }
             case DEVICE_ATTRIBUTE_CONSTANTS.GSM_ALARM: {
