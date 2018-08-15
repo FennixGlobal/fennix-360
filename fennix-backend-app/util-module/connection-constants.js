@@ -16,7 +16,7 @@ const postgresDBDev = {
 const postgresSofiaDev = {
     user: 'postgres',
     host: '172.31.23.177',
-    database: 'postgres_dev',
+    database: 'sofia_prod_aug16',
     password: 'zVCf58zMDNfF',
     port: 5432
 };
