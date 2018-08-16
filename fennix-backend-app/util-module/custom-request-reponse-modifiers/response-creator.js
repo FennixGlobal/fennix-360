@@ -32,6 +32,7 @@ const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
 
 const dropdownActionButtonCreator = (dropdownActionButton) => {
     let dropdownAction = {
+        dropdownSetId:dropdownActionButton['dropdown_set_id'],
         dropdownKey: dropdownActionButton['dropdown_key'],
         dropdownId: dropdownActionButton['dropdown_id'],
         dropdownValue: dropdownActionButton['dropdown_value'],
@@ -39,7 +40,6 @@ const dropdownActionButtonCreator = (dropdownActionButton) => {
         dropdownIconKey: dropdownActionButton['dropdown_action_button_icon_key'],
         dropdownIconValue: dropdownActionButton['dropdown_action_button_icon_value']
     };
-    // };
     if (dropdownActionButton['is_action_button']) {
         dropdownAction = {
             ...dropdownAction,
