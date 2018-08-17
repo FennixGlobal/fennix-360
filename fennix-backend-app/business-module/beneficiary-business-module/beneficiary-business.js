@@ -108,28 +108,28 @@ const beneficiaryMapDataList = async (req) => {
                 noOfViolations += 1;
             }
             deviceDetails[item.beneficiaryId].push({
-                text: 'Battery Percentage',
+                text: 'Battery',
                 status: batteryPercentage['deviceStatus'],
                 key: 'batteryPercentage',
                 icon: 'battery_charging_full',
-                value: item.deviceAttributes.batteryPercentage
+                value: `${item.deviceAttributes.batteryPercentage}%`
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'Belt Status',
+                text: 'Belt',
                 key: 'beltStatus',
                 icon: 'link',
                 status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
                 value: item.deviceAttributes.beltStatus === 1 ? 'belt' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'Shell Status',
+                text: 'Shell',
                 key: 'shellStatus',
                 icon: 'lock',
                 status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
                 value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'GSM Status',
+                text: 'GSM',
                 key: 'gmsStatus',
                 icon: 'signal_cellular_4_bar',
                 status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
@@ -150,14 +150,7 @@ const beneficiaryMapDataList = async (req) => {
                 value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'Low Power Status',
-                key: 'lowPowerStatus',
-                icon: 'battery_alert',
-                status: item.deviceAttributes.lowPowerStatus === 1 ? 'violation' : 'safe',
-                value: item.deviceAttributes.lowPowerStatus === 1 ? 'low' : 'OK'
-            });
-            deviceDetails[item.beneficiaryId].push({
-                text: 'GPS Status',
+                text: 'GPS',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
                 status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
