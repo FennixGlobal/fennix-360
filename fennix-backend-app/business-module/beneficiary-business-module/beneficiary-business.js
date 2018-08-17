@@ -133,7 +133,7 @@ const beneficiaryMapDataList = async (req) => {
                 key: 'gmsStatus',
                 icon: 'signal_cellular_4_bar',
                 status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
-                value: item.deviceAttributes.gsmSignal < 2 ? 'low' : 'OK'
+                value: item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK'
             });
             deviceDetails[item.beneficiaryId].push({
                 text: 'RF Home',
@@ -143,14 +143,14 @@ const beneficiaryMapDataList = async (req) => {
                 value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'RF Plug',
+                text: 'RFID',
                 key: 'rfPlugStatus',
                 icon: 'rss_feed',
                 status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
                 value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
             });
             deviceDetails[item.beneficiaryId].push({
-                text: 'GPS',
+                text: 'SAT',
                 key: 'gpsStatus',
                 icon: 'gps_fixed',
                 status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
