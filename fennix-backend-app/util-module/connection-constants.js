@@ -22,7 +22,7 @@ const postgresSofiaDev = {
 };
 const imageLocalLocation = 'E:/DB/';
 
-const imageDBLocation = 'home/ubuntu/code-packs/fennix-images/';
+const imageDBLocation = '../fennix-images/';
 
 const mongoLocal = 'mongodb://localhost:27017/sofia_fennix_dev';
 

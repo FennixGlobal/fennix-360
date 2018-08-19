@@ -34,7 +34,7 @@ const imageStorageBusiness = async (image, role) => {
         let bufferArray = new Buffer(image, 'base64');
         console.log(bufferArray);
         console.log(writeLocation);
-        await fs.writeFile(writeLocation, bufferArray, (err, log) => {
+        await fs.writeFile(writeLocation, bufferArray,{ flag: 'w' }, (err, log) => {
             console.log(err);
             if (!err) {
                 returnLocation = writeLocation;
