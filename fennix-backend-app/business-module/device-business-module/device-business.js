@@ -170,6 +170,7 @@ const insertDeviceBusiness = async (req) => {
             createdDate: new Date()
         };
         await deviceAccessor.insertDeviceAccessor(obj);
+        return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Device added');
         // await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
