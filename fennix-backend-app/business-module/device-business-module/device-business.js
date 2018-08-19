@@ -10,7 +10,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 
 const deviceAggregatorDashboard = async (req) => {
     let beneficiaryResponse, deviceResponse, returnObj, userIdList;
-    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     beneficiaryResponse = await getBeneficiaryByUserIdAccessor(userIdList);
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         let deviceArray = [];
@@ -190,16 +190,16 @@ const getDeviceByDeviceIdBusiness = async (req) => {
 /**@description : This method provides the complete data for the device by beneficiaryId.
  * It first gets the latest device attributes by fetching the device details from device attributes table using the deviceId from the deviceLocationMaster.
  * along with the device attributes it gets the device details from the device table also
-  // * @param req.query : beneficiaryId
+ // * @param req.query : beneficiaryId
  * @returns complete device details
  */
 const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     const request = {beneficiaryId: parseInt(req.query.beneficiaryId)};
-    let deviceResponse, returnObj,finalResponse = {};
+    let deviceResponse, returnObj, finalResponse = {};
     deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
     if (notNullCheck(deviceResponse)) {
         finalResponse['beneficiaryId'] = deviceResponse[0]['beneficiaryId'];
-        finalResponse = {...finalResponse,...deviceResponse[0].device,...deviceResponse[0].deviceAttributes};
+        finalResponse = {...finalResponse, ...deviceResponse[0].device, ...deviceResponse[0].deviceAttributes};
         console.log(finalResponse);
         console.log(deviceResponse);
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
@@ -209,11 +209,33 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     return returnObj;
 };
 
+const listUnAssignedDevicesBusiness = async (req) => {
+    let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse;
+    response = await deviceAccessor.listUnAssignedDevicesAccessor(request);
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let modifiedResponse = {
+                id: item['_id'],
+                primaryValue: {text: 'IMEI Number', value: item['imei']},
+                isActive: item['active'],
+                extraValue: {text: 'Device Type', value: item['deviceTypes']['name']},
+                secondaryValue: {text: 'Phone Number', value: item['simcards']['phoneNo']}
+            };
+            unAssignedDevices.push(modifiedResponse);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', unAssignedDevices);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 module.exports = {
     deviceAggregatorDashboard,
     listDevicesBusiness,
     insertDeviceBusiness,
     getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness,
+    listUnAssignedDevicesBusiness,
     getDeviceDetailsByBeneficiaryIdBusiness
 };

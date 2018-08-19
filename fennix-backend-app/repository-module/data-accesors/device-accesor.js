@@ -5,7 +5,11 @@ const deviceAggregator = async (req) => {
     returnObj = await deviceQueries.userIdDeviceAggregatorQuery(req);
     return returnObj;
 };
-
+const listUnAssignedDevicesAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.listUnAssignedDevicesQuery(req);
+    return returnObj;
+};
 const deviceBybeneficiaryQuery = async (req) => {
     let returnObj;
     returnObj = await deviceQueries.deviceDetailsByBeneficiaryId(req);
@@ -84,6 +88,7 @@ module.exports = {
     getDeviceByDeviceIdAccessor,
     getBeneficiaryIdByImeiAccessor,
     getDeviceByBeneficiaryIdAccessor,
+    listUnAssignedDevicesAccessor,
     updateLocationDeviceAttributeMasterAccessor
 };
 // deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);

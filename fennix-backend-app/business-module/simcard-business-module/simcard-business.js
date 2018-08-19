@@ -15,10 +15,10 @@ const listUnAssignedSimcardsBusiness = async (req) => {
         response.forEach((item) => {
             let obj = {
                 id: item['_id'],
-                primaryValue: item['phoneNo'],
-                secondaryValue: item['serial'],
+                primaryValue: {text: 'Phone Number', value: item['phoneNo']},
+                secondaryValue: {text: 'Serial Number', value: item['serial']},
                 isActive: item['active'],
-                extraValue: item['carrier']['name']
+                extraValue: {text: 'Carrier Name', value: item['carrier']['name']}
             };
             modifiedResponse.push(obj);
         });

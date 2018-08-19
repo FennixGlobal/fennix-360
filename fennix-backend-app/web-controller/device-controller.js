@@ -9,6 +9,13 @@ router.get('/deviceAggregator', function (req, res) {
         res.send(response);
     })
 });
+router.get('/listUnAssignedDevices', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.listUnAssignedDevicesBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 
 router.get('/listDeviceTypes', function (req, res) {
     let returnObj;
