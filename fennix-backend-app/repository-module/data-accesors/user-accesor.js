@@ -119,13 +119,13 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
 };
 
 const updateUserAccessor = async (req) => {
-    let returnObj, updatedQuery, fields = Object.keys(req.body), request = [];
+    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req.body), request = [];
     fields.sort();
     fields.splice(fields.indexOf('userId'), 1);
-    updatedQuery = updateQueryCreator('users', fields, 'userId');
-    fields.forEach((f) => request.push(req.body[f]));
+    updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'userId');
+    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req.body[f]));
     request.push(req.body.userId);
-    returnObj = await connectionCheckAndQueryExec(request, updatedQuery);
+    returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
 

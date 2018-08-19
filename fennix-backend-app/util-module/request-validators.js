@@ -66,15 +66,24 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
 };
 
 const updateQueryCreator = (table, fields, whereCondition) => {
-    let query = `update ${table} set `;
-    fields.forEach((field, index) => {
-        if (index === fields.length - 1) {
-            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} where ${dbDownloadTableMapper[table][whereCondition]} = $${index + 2}`;
-        } else {
-            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} ,`;
+    let responseObj,query = `update ${table} set `, counter = 0, presentFields = [];
+    fields.forEach((field) => {
+        if (notNullCheck(dbTableColMap[table][field])) {
+            presentFields.push(field);
         }
     });
-    return query;
+    presentFields.forEach((field, index) => {
+        counter++;
+        if (index === presentFields.length - 1) {
+            query = `${query} ${dbTableColMap[table][field]} = $${counter} where ${dbDownloadTableMapper[table][whereCondition]} = $${counter + 1}`;
+        } else {
+            query = `${query} ${dbTableColMap[table][field]} = $${counter} ,`;
+        }
+    });
+    responseObj = {
+      presentFields,query
+    };
+    return responseObj;
 };
 
 const requestInModifier = (itemArray, query, isLanguage) => {

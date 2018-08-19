@@ -54,6 +54,7 @@ const deleteBeneficiaryBusiness = async (req) => {
 
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
+    request.documentId =
     request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
