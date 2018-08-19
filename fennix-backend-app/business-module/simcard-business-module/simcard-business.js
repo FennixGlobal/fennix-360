@@ -14,11 +14,11 @@ const listUnAssignedSimcardsBusiness = async (req) => {
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
-                simCardId: item['_id'],
-                number: item['phoneNo'],
-                serialNo: item['serial'],
+                id: item['_id'],
+                primaryValue: item['phoneNo'],
+                secondaryValue: item['serial'],
                 isActive: item['active'],
-                carrier: item['carrier']['name']
+                extraValue: item['carrier']['name']
             };
             modifiedResponse.push(obj);
         });
