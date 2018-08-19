@@ -135,6 +135,6 @@ module.exports = {
     updateSimcardQuery,
     deleteSimcardQuery,
     listUnAssignedSimcardsQuery,
-    insertNextPrimaryKeyQuery,
+    // insertNextPrimaryKeyQuery,
     fetchNextPrimaryKeyQuery
 };

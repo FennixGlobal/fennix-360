@@ -194,7 +194,7 @@ module.exports = {
     userIdTicketDetailsBasedOnTicketStatusQuery,
     listTicketsQuery,
     fetchNextPrimaryKeyQuery,
-    insertNextPrimaryKeyQuery,
+    // insertNextPrimaryKeyQuery,
     addTicketQuery,
     updateTicketQuery,
     getTicketDetailsBasedOnBeneficiaryIdQuery,
