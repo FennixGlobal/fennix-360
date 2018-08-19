@@ -106,12 +106,12 @@ const processLocation = async (location) => {
         if (notNullCheck(ticketResponse)) {
             addAutomatedTicketBusiness(ticketResponse, masterRequest.beneficiaryId);
         }
-        deviceAttribute = {...deviceAttribute, locationId: locationId[0]['counter']};
+        deviceAttribute = {...deviceAttribute, locationId: locationId['_doc']['counter']};
         const deviceAttributeId = await deviceAccessor.updateDeviceAttributesAccessor(deviceAttribute);
         masterRequest = {
             ...masterRequest,
-            locationId: parseInt(locationId[0]['counter']),
-            deviceAttributeId: parseInt(deviceAttributeId[0]['counter'])
+            locationId: parseInt(locationId['_doc']['counter']),
+            deviceAttributeId: parseInt(deviceAttributeId['_doc']['counter'])
         };
         deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
             // console.log(doc)

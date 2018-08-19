@@ -158,8 +158,8 @@ const listDevicesBusiness = async (req) => {
 const insertDeviceBusiness = async (req) => {
     let primaryKeyResponse, counter;
     primaryKeyResponse = await deviceAccessor.fetchNextPrimaryKeyAccessor();
-    if (arrayNotEmptyCheck(primaryKeyResponse)) {
-        counter = parseInt(primaryKeyResponse[0]['counter']);
+    if (objectHasPropertyCheck(primaryKeyResponse, '_doc')) {
+        counter = parseInt(primaryKeyResponse['_doc']['counter']);
         let obj = {
             _id: counter,
             imei: req.body.imei,

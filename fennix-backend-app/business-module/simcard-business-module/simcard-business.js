@@ -63,7 +63,7 @@ const addSimcardBusiness = async (req) => {
     let request, primaryKeyResponse, finalResponse, simcardResponse;
     primaryKeyResponse = await simCardAccessor.fetchNextPrimaryKeyAccessor();
     request = {
-        _id: parseInt(primaryKeyResponse[0]['counter']),
+        _id: parseInt(primaryKeyResponse['_doc']['counter']),
         centerId: req.body.centerId,
         carrierByCountryId: req.body.carrierByCountryId,
         phoneNo: req.body.phoneNo,
@@ -84,7 +84,7 @@ const addSimcardBusiness = async (req) => {
 const getSimCardListBusiness = async (req) => {
     let response, centerIdResponse, centerIdsReq = [], finalResponse,
         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
-    userIdList = await getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {

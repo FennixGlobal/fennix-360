@@ -136,8 +136,10 @@ const listTicketsBusiness = async (req) => {
 const addTicketBusiness = async (req) => {
     let primaryKeyResponse, counter, messages = [];
     primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
-    if (arrayNotEmptyCheck(primaryKeyResponse)) {
-        counter = parseInt(primaryKeyResponse[0]['counter']);
+    if (objectHasPropertyCheck(primaryKeyResponse, '_doc')) {
+        counter = parseInt(primaryKeyResponse['_doc']['counter']);
+    // if (arrayNotEmptyCheck(primaryKeyResponse)) {
+    //     counter = parseInt(primaryKeyResponse[0]['counter']);
         req.body.messages.forEach(msg => {
             let msgObj = {
                 userId: msg.userId,
@@ -175,8 +177,10 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     console.log(currentTicketStatus);
     console.log(currentViolations);
     if(notNullCheck(currentTicketStatus)) {
-        if (arrayNotEmptyCheck(primaryKeyResponse)) {
-            counter = parseInt(primaryKeyResponse[0]['counter']);
+        if (objectHasPropertyCheck(primaryKeyResponse, '_doc')) {
+            counter = parseInt(primaryKeyResponse['_doc']['counter']);
+        // if (arrayNotEmptyCheck(primaryKeyResponse)) {
+        //     counter = parseInt(primaryKeyResponse[0]['counter']);
             let obj = {
                 _id: counter,
                 beneficiaryId: beneficiaryId,
