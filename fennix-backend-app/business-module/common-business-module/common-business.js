@@ -1,7 +1,7 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor, getImageCounterAccessor, updateImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor, getImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const fs = require('fs');
 const nodeMailer = require('nodemailer');
@@ -28,7 +28,7 @@ const imageStorageBusiness = async (image, role) => {
         mimeType = image.split(',')[0].split('/')[1].split(';')[0];
         image = image.split(',')[1];
         imageCount = await getImageCounterAccessor();
-        await updateImageCounterAccessor();
+        // await updateImageCounterAccessor();
         imageName = `${role}_${imageCount.counter}.${mimeType}`;
         writeLocation = `${writeLocation}${imageName}`;
         let bufferArray = new Buffer(image, 'base64');
@@ -70,7 +70,7 @@ const emailSendBusiness = async (emailId, roleId) => {
         if (error) {
             console.log(error);
         } else {
-            console.log(info);
+            // console.log(info);
         }
     });
 };

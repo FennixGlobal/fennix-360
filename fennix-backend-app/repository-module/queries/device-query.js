@@ -25,49 +25,7 @@ const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
             "deviceType.name": 1
         });
 };
-//
-// const deviceDetailsByBeneficiaryId = (query) => {
-//     return deviceAggregator.aggregate([
-//         {
-//             $match: {
-//                 "beneficiaryId": {"$in": query}
-//             }
-//         },
-//         {
-//             $lookup: {
-//                 from: "deviceAttributes",
-//                 localField: "beneficiaryId",
-//                 foreignField: "beneficiaryId",
-//                 as: "deviceAttributes"
-//             }
-//         },
-//         {
-//             $unwind: "$deviceAttributes"
-//         },
-//         {
-//             $unwind: "$deviceAttributes.locationDetails"
-//         },
-//         {
-//             $sort: {
-//                 "deviceAttributes.locationDetails.deviceUpdatedDate": -1
-//             }
-//         },
-//         {
-//             $group: {
-//                 _id: "$_id",
-//                 latestBeneficiaryDeviceDetails: {"$first": "$$CURRENT"}
-//             }
-//         },
-//         {
-//             $lookup: {
-//                 from: "deviceTypes",
-//                 localField: "latestBeneficiaryDeviceDetails.deviceTypeId",
-//                 foreignField: "_id",
-//                 as: "deviceType"
-//             }
-//         }
-//     ]);
-// };
+
 const deviceDetailsByBeneficiaryId = (query) => {
     return LocationDeviceAttributeMasterModel.aggregate([
         {
@@ -186,19 +144,19 @@ const updateDeviceAttributeQuery = (req) => {
 };
 
 const getDeviceAttributeCounterQuery = () => {
-    return DeviceAttributesModelCounter.find({});
+    return DeviceAttributesModelCounter..findAndModify({update:{$inc:{counter:1}}});
 };
 
-const updateDeviceCounterQuery = (req) => {
-    DeviceAttributesModelCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        }
-        // else {
-        //     console.log('success');
-        // }
-    });
-};
+// const updateDeviceCounterQuery = (req) => {
+//     DeviceAttributesModelCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         }
+//         // else {
+//         //     console.log('success');
+//         // }
+//     });
+// };
 
 const insertDeviceQuery = (req) => {
     let deviceObj = new deviceAggregator(req);
@@ -207,21 +165,21 @@ const insertDeviceQuery = (req) => {
     });
 };
 
-const fetchNextPrimaryKeyQuery = () => {
-    return DeviceCounter.find();
-};
-
-//TODO: add retry logic for failure conditions
-const insertNextPrimaryKeyQuery = (req) => {
-    DeviceCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        }
-        // else {
-        //     console.log('success');
-        // }
-    });
-};
+// const fetchNextPrimaryKeyQuery = () => {
+//     return DeviceCounter.find();
+// };
+//
+// //TODO: add retry logic for failure conditions
+// const insertNextPrimaryKeyQuery = (req) => {
+//     DeviceCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         }
+//         // else {
+//         //     console.log('success');
+//         // }
+//     });
+// };
 
 const getDeviceDetailsByDeviceIdQuery = (req) => {
     return deviceAggregator.aggregate([
@@ -260,6 +218,9 @@ const getDeviceDetailsByDeviceIdQuery = (req) => {
         }
     ])
 };
+const fetchNextPrimaryKeyQuery = () => {
+    return DeviceCounter.findAndModify({update:{$inc:{counter:1}}});
+};
 const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
     return LocationDeviceAttributeMasterModel.aggregate([
         {
@@ -292,11 +253,11 @@ module.exports = {
     listDevicesQuery,
     listDeviceTypesQuery,
     insertDeviceQuery,
-    insertNextPrimaryKeyQuery,
+    // insertNextPrimaryKeyQuery,
     fetchNextPrimaryKeyQuery,
     getDeviceAttributeCounterQuery,
     updateDeviceAttributeQuery,
-    updateDeviceCounterQuery,
+    // updateDeviceCounterQuery,
     getBeneficiaryIdByImeiQuery,
     getDeviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsByDeviceIdQuery,

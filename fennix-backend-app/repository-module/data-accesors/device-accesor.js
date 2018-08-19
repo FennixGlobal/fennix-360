@@ -1,4 +1,5 @@
 const deviceQueries = require('../queries/device-query');
+
 const deviceAggregator = async (req) => {
     let returnObj;
     returnObj = await deviceQueries.userIdDeviceAggregatorQuery(req);
@@ -13,7 +14,6 @@ const deviceBybeneficiaryQuery = async (req) => {
 
 const updateDeviceAttributesAccessor = async (req) => {
     let counterResponse = await deviceQueries.getDeviceAttributeCounterQuery();
-    deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
     req = {...req, _id: counterResponse[0]['counter']};
     deviceQueries.updateDeviceAttributeQuery(req);
     return counterResponse;
@@ -59,9 +59,6 @@ const fetchNextPrimaryKeyAccessor = async () => {
     return returnObj;
 };
 
-const insertNextPrimaryKeyAccessor = async (req) => {
-    await deviceQueries.insertNextPrimaryKeyQuery(req);
-};
 
 const getDeviceByDeviceIdAccessor = async (req) => {
     let returnObj;
@@ -84,9 +81,9 @@ module.exports = {
     insertDeviceAccessor,
     updateDeviceAttributesAccessor,
     fetchNextPrimaryKeyAccessor,
-    insertNextPrimaryKeyAccessor,
     getDeviceByDeviceIdAccessor,
     getBeneficiaryIdByImeiAccessor,
     getDeviceByBeneficiaryIdAccessor,
     updateLocationDeviceAttributeMasterAccessor
 };
+    // deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);

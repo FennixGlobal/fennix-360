@@ -27,20 +27,24 @@ const addTicketQuery = (req) => {
     });
 };
 
+// const fetchNextPrimaryKeyQuery = () => {
+//     return TicketCounter.find();
+// };
+//
+//
+// //TODO: add retry logic for failure conditions
+// const insertNextPrimaryKeyQuery = (req) => {
+//     TicketCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         } else {
+//             console.log('success');
+//         }
+//     });
+// };
+
 const fetchNextPrimaryKeyQuery = () => {
-    return TicketCounter.find();
-};
-
-
-//TODO: add retry logic for failure conditions
-const insertNextPrimaryKeyQuery = (req) => {
-    TicketCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        } else {
-            console.log('success');
-        }
-    });
+    return TicketCounter.findAndModify({update:{$inc:{counter:1}}});
 };
 
 const userIdTicketDetailsBasedOnTicketStatusQuery = (query) => {

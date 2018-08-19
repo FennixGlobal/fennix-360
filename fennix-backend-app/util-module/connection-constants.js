@@ -29,6 +29,10 @@ const mongoLocal = 'mongodb://localhost:27017/sofia_fennix_dev';
 const mongoDev = 'mongodb://fenDevUser:fenDevUser@172.31.32.79:27017/fennix_dev';
 const mongoSofiaDev = 'mongodb://fenDevUser:fenDevUser@172.31.22.124:27017/fennix_dev';
 
+const TCPBeneficiaryPORT = '3100';
+const TCPELockPORT = '3150';
+const SocketLocPORT = '3180';
+
 module.exports = {
     postgresDBLocal,
     postgresDBDev,
@@ -37,5 +41,8 @@ module.exports = {
     mongoSofiaDev,
     postgresSofiaDev,
     imageLocalLocation,
-    imageDBLocation
+    imageDBLocation,
+    SocketLocPORT,
+    TCPBeneficiaryPORT,
+    TCPELockPORT
 };

@@ -1,4 +1,4 @@
-const {getBeneficiaryLocationList, locationCounterQuery, insertNextPrimaryKeyQuery, locationDetailsUpdateQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
+const {getBeneficiaryLocationList, locationCounterQuery, locationDetailsUpdateQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 
@@ -10,7 +10,6 @@ const mapMarkerQuery = async (req) => {
 
 const updateLocation = async (req) => {
     let counterResponse = await locationCounterQuery(), locationId;
-    insertNextPrimaryKeyQuery(counterResponse[0]['_doc']['_id']);
     locationId = counterResponse[0]['counter'];
     let obj = {
         _id: locationId, ...req
@@ -50,7 +49,6 @@ const getCountryListAccessor = async (req) => {
 };
 
 module.exports = {
-    mapMarkerQuery,
     getCountryListAccessor,
     getCenterIdsAccessor,
     updateLocation,

@@ -20,15 +20,15 @@ const getImageCounterAccessor = async ()=>{
     return responseObj;
 };
 
-const updateImageCounterAccessor = async ()=>{
-    let responseObj;
-    responseObj = await imageCounterUpdateQuery();
-    return responseObj;
-};
+// const updateImageCounterAccessor = async ()=>{
+//     let responseObj;
+//     responseObj = await imageCounterUpdateQuery();
+//     return responseObj;
+// };
 
 module.exports = {
     getDownloadMapperAccessor,
     getDropdownAccessor,
     getImageCounterAccessor,
-    updateImageCounterAccessor
+    // updateImageCounterAccessor
 };

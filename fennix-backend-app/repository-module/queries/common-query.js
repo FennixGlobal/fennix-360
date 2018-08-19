@@ -14,23 +14,24 @@ const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdow
 
 const getDownloadMapperQuery = 'select mapping_key, localized_key from download_mapper';
 
-const imageCounterUpdateQuery = ()=> {
-    return imageCounterModel.update({$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        } else {
-            console.log('success');
-        }
-    });
-};
-
+// const imageCounterUpdateQuery = ()=> {
+//     return imageCounterModel.update({$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         } else {
+//             console.log('success');
+//         }
+//     });
+// };
+//
+// const fetchImageCounterQuery = ()=> {
+//     return imageCounterModel.find();
+// };
 const fetchImageCounterQuery = ()=> {
-    return imageCounterModel.find();
+    return imageCounterModel.findAndModify({update:{$inc:{counter:1}}});
 };
-
 module.exports = {
     getDropdownDataQuery,
     getDownloadMapperQuery,
-    imageCounterUpdateQuery,
     fetchImageCounterQuery
 };

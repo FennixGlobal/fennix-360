@@ -51,11 +51,11 @@ const deviceValidator = (deviceAttributes, beneficiaryId, location) => {
 };
 
 const batteryValidator = (batteryVoltage) => {
-    return batteryVoltage < 10;
+    return parseFloat(batteryVoltage) < 10;
 };
 
 const gsmValidator = (gsmLevel) => {
-    return gsmLevel <= 1;
+    return parseInt(gsmLevel,10) <= 1;
 };
 
 const geofenceValidator = () => {
@@ -63,7 +63,7 @@ const geofenceValidator = () => {
 };
 
 const alarmValidator = (alarmStatus) => {
-    return alarmStatus === 1;
+    return parseInt(alarmStatus,10) === 1;
 };
 
 module.exports = {

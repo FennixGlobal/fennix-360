@@ -170,7 +170,7 @@ const insertDeviceBusiness = async (req) => {
             createdDate: new Date()
         };
         await deviceAccessor.insertDeviceAccessor(obj);
-        await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        // await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
 

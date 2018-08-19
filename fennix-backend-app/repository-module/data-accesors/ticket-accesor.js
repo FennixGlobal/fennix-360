@@ -59,9 +59,9 @@ const getTicketDetailsBasedOnBeneficiaryIdAccessor = async(req) => {
     return returnObj;
 };
 
-const insertNextPrimaryKeyAccessor = async (req) => {
-    await ticketQuery.insertNextPrimaryKeyQuery(req);
-};
+// const insertNextPrimaryKeyAccessor = async (req) => {
+//     await ticketQuery.insertNextPrimaryKeyQuery(req);
+// };
 
 const fetchViolationsForBeneficiaryIdAccessor = async (req) => {
     let returnObj;
@@ -92,7 +92,7 @@ module.exports = {
     addTicketAccessor,
     ticketAggregatorAccessor,
     fetchNextPrimaryKeyAccessor,
-    insertNextPrimaryKeyAccessor,
+    // insertNextPrimaryKeyAccessor,
     ticketListBasedOnTicketStatusAccessor,
     listTicketsBasedOnUserIdAccessor,
     ticketDetailsBasedOnTicketIdAccessor,

@@ -163,7 +163,7 @@ const addTicketBusiness = async (req) => {
             updatedDate: new Date()
         };
         await ticketAccessor.addTicketAccessor(obj);
-        await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+        // await ticketAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
 

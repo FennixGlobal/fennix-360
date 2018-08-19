@@ -72,7 +72,7 @@ const addSimcardBusiness = async (req) => {
         serial: req.body.serialNo
     };
     simcardResponse = simCardAccessor.addSimcardAccessor(request);
-    await simCardAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
+    // await simCardAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     if (simcardResponse) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', simcardResponse);
     } else {

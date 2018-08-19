@@ -30,15 +30,15 @@ const fetchNextPrimaryKeyAccessor = async () => {
     return returnObj;
 };
 
-const insertNextPrimaryKeyAccessor = async (req) => {
-    await simCardQueries.insertNextPrimaryKeyQuery(req);
-};
+// const insertNextPrimaryKeyAccessor = async (req) => {
+//     await simCardQueries.insertNextPrimaryKeyQuery(req);
+// };
 
 module.exports = {
     listUnAssignedSimcardsAccessor,
     listSimcardTypesAccessor,
     addSimcardAccessor,
     getSimcardDetailsAccessor,
-    insertNextPrimaryKeyAccessor,
+    // insertNextPrimaryKeyAccessor,
     fetchNextPrimaryKeyAccessor
 };

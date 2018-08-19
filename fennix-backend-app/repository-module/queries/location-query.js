@@ -18,19 +18,22 @@ const getBeneficiaryLocationList = (query) => {
         });
 };
 
+// const locationCounterQuery = () => {
+//     return locationCounter.find({})
+// };
+//
+// const insertNextPrimaryKeyQuery = (req) => {
+//     locationCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         }
+//         // else {
+//         //     console.log('success');
+//         // }
+//     });
+// };
 const locationCounterQuery = () => {
-    return locationCounter.find({})
-};
-
-const insertNextPrimaryKeyQuery = (req) => {
-    locationCounter.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        }
-        // else {
-        //     console.log('success');
-        // }
-    });
+    return locationCounter.findAndModify({update:{$inc:{counter:1}}});
 };
 
 const locationDetailsUpdateQuery = (req) => {
@@ -84,7 +87,8 @@ module.exports = {
     selectCountryForSupervisorAndAdminQuery,
     selectCountryForSuperAdminQuery,
     locationDetailsUpdateQuery,
-    locationCounterQuery, insertNextPrimaryKeyQuery,
+    locationCounterQuery,
+    // insertNextPrimaryKeyQuery,
     selectAllCountriesForMasterAdminQuery,
     selectCenterIdsForLoggedInUserAndSubUsersQuery
 };

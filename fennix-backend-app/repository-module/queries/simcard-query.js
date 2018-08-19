@@ -109,21 +109,23 @@ const insertSimcardQuery = (query) => {
     });
 };
 
+// const fetchNextPrimaryKeyQuery = () => {
+//     return simcardCounterModel.find();
+// };
+
 const fetchNextPrimaryKeyQuery = () => {
-    return simcardCounterModel.find();
+    return simcardCounterModel.findAndModify({update:{$inc:{counter:1}}});
 };
-
-
-//TODO: add retry logic for failure conditions
-const insertNextPrimaryKeyQuery = (req) => {
-    simcardCounterModel.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        } else {
-            console.log('success');
-        }
-    });
-};
+// //TODO: add retry logic for failure conditions
+// const insertNextPrimaryKeyQuery = (req) => {
+//     simcardCounterModel.update({_id: req}, {$inc: {counter: 1}}).then(doc => {
+//         if (!doc) {
+//             console.log('error');
+//         } else {
+//             console.log('success');
+//         }
+//     });
+// };
 
 
 module.exports = {
