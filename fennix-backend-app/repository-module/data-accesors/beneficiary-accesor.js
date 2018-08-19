@@ -27,6 +27,11 @@ const getBeneficiaryNameFromBeneficiaryIdAccessor = async (req, language) => {
     returnObj = await connectionCheckAndQueryExec(modifiedParams, modifiedQuery);
     return returnObj;
 };
+const beneficiaryListOfUnAssignedDevicesAccesor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.selectBeneficiariesOfUnAssignedDevicesQuery);
+    return returnObj;
+};
 
 const addBeneficiaryAccessor = async (req) => {
     let returnObj, finalResponse;
@@ -105,5 +110,6 @@ module.exports = {
     addBeneficiaryAccessor,
     getBeneficiaryListForAddTicketAccessor,
     getBeneficiaryByBeneficiaryIdAccesor,
-    getAllBeneficiaryDetailsAccessor
+    getAllBeneficiaryDetailsAccessor,
+    beneficiaryListOfUnAssignedDevicesAccesor
 };

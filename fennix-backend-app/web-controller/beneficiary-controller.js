@@ -95,4 +95,13 @@ router.get('/deleteBeneficiary', function (req, res) {
         res.send(response);
     })
 });
+
+router.get('/listUnAssignedBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.beneficiaryListForUnAssignedDevicesBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

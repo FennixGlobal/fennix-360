@@ -35,6 +35,7 @@ const dbTableColMap = {
         hairColor: 'hair_color',
         eyeColor: 'eye_color',
         crimeId: 'crime_id',
+        deviceId: 'device_id',
         documentId: 'document_id',
         ethnicityId: 'ethnicity_id',
         familyPhone: 'family_phone',

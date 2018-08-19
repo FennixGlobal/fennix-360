@@ -63,6 +63,24 @@ const addBeneficiaryBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
+const beneficiaryListForUnAssignedDevicesBusiness = async () => {
+    let response, modifiedResponse = [], finalResponse;
+    response = await beneficiaryAccessor.beneficiaryListOfUnAssignedDevicesAccesor([]);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = {
+                id: item['beneficiaryid'],
+                primaryValue:{text:'Full Name',value: item['full_name']}
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const beneficiaryMapDataList = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
@@ -416,5 +434,6 @@ module.exports = {
     downloadBeneficiariesBusiness,
     updateBeneficiaryBusiness,
     deleteBeneficiaryBusiness,
+    beneficiaryListForUnAssignedDevicesBusiness,
     getAllBeneficiaryDetailsBusiness
 };
