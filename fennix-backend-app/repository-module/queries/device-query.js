@@ -144,7 +144,7 @@ const updateDeviceAttributeQuery = (req) => {
 };
 
 const getDeviceAttributeCounterQuery = () => {
-    return DeviceAttributesModelCounter..findAndModify({update:{$inc:{counter:1}}});
+    return DeviceAttributesModelCounter.findAndModify({update:{$inc:{counter:1}}});
 };
 
 // const updateDeviceCounterQuery = (req) => {
