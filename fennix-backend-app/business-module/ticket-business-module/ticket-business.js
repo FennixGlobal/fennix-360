@@ -174,8 +174,8 @@ const addAutomatedTicketBusiness = async (ticketValidation, beneficiaryId) => {
     primaryKeyResponse = await ticketAccessor.fetchNextPrimaryKeyAccessor();
     currentTicketStatus = await ticketAccessor.getTicketDetailsBasedOnBeneficiaryIdAccessor(beneficiaryId);
     currentViolations = await ticketAccessor.fetchViolationsForBeneficiaryIdAccessor(beneficiaryId);
-    console.log(currentTicketStatus);
-    console.log(currentViolations);
+    // console.log(currentTicketStatus);
+    // console.log(currentViolations);
     if(notNullCheck(currentTicketStatus)) {
         if (objectHasPropertyCheck(primaryKeyResponse, '_doc')) {
             counter = parseInt(primaryKeyResponse['_doc']['counter']);

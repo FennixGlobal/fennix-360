@@ -66,23 +66,24 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
 };
 
 const updateQueryCreator = (table, fields, whereCondition) => {
-    let responseObj,query = `update ${table} set `, counter = 0, presentFields = [];
+    let responseObj,query = `update ${table} set `, presentFields = [];
     fields.forEach((field) => {
         if (notNullCheck(dbTableColMap[table][field])) {
             presentFields.push(field);
         }
     });
     presentFields.forEach((field, index) => {
-        counter++;
+        // counter++;
         if (index === presentFields.length - 1) {
-            query = `${query} ${dbTableColMap[table][field]} = $${counter} where ${dbDownloadTableMapper[table][whereCondition]} = $${counter + 1}`;
+            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} where ${dbDownloadTableMapper[table][whereCondition]} = $${index + 2}`;
         } else {
-            query = `${query} ${dbTableColMap[table][field]} = $${counter} ,`;
+            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} ,`;
         }
     });
     responseObj = {
       presentFields,query
     };
+    console.log(responseObj);
     return responseObj;
 };
 

@@ -135,8 +135,8 @@ processLogin = async (imei) => {
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
     console.log('Beneficiary details:');
     console.log(beneficiaryResponse);
-    console.log('IMEI Number:');
-    console.log(imei);
+    // console.log('IMEI Number:');
+    // console.log(imei);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
 };
