@@ -1,7 +1,7 @@
 const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
-const {fennixResponse,dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
@@ -14,6 +14,7 @@ const fetchUserDetailsBusiness = async (req) => {
         userProfileResponse.rows.forEach((item) => {
             userProfileReturnObj = {
                 userName: `${item['first_name']} ${item['last_name']}`,
+                locationId: item['location_id'],
                 mobileNo: item['mobile_no'],
                 emailId: item['emailid'],
                 center: item['center_name'],
@@ -76,14 +77,14 @@ const getUserListBusiness = async (req) => {
     return returnObj;
 };
 const listOperatorsBusiness = async (req) => {
-    let response, returnObj,finalResponse = {dropdownList: []};
-    response = await userAccessors.getUserIdsForAllRolesAccessor(req,COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME);
+    let response, returnObj, finalResponse = {dropdownList: []};
+    response = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             finalResponse.dropdownList.push(dropdownCreator(item['userId'], item['name'], false));
         });
         returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
-    } else  {
+    } else {
         returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;

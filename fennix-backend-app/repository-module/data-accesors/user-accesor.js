@@ -52,19 +52,19 @@ const getUserIdsForSupervisorAccessor = async (req) => {
 
 const getUserIdsForAdminAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSupervisorQuery);
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForAdminQuery);
     return returnObj;
 };
 
 const getUserIdsForSuperAdminAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSupervisorQuery);
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSuperAdminQuery);
     return returnObj;
 };
 
 const getUserIdsForMasterAdminAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSupervisorQuery);
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForMasterAdminQuery);
     return returnObj;
 };
 
@@ -83,11 +83,11 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 break;
             }
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN : {
-                otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.userId, req.query.languageId]);
+                otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.locationId, req.query.languageId]);
                 break;
             }
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
-                otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.userId, req.query.languageId]);
+                otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.locationId, req.query.languageId]);
                 break;
             }
         }
