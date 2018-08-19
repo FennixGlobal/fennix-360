@@ -28,7 +28,7 @@ const getDownloadMapperQuery = 'select mapping_key, localized_key from download_
 //     return imageCounterModel.find();
 // };
 const fetchImageCounterQuery = ()=> {
-    return imageCounterModel.findAndModify({update:{$inc:{counter:1}}});
+    return imageCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 module.exports = {
     getDropdownDataQuery,

@@ -44,7 +44,7 @@ const addTicketQuery = (req) => {
 // };
 
 const fetchNextPrimaryKeyQuery = () => {
-    return TicketCounter.findAndModify({update:{$inc:{counter:1}}});
+    return TicketCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 
 const userIdTicketDetailsBasedOnTicketStatusQuery = (query) => {

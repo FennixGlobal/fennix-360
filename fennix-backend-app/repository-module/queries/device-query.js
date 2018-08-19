@@ -144,7 +144,7 @@ const updateDeviceAttributeQuery = (req) => {
 };
 
 const getDeviceAttributeCounterQuery = () => {
-    return DeviceAttributesModelCounter.findAndModify({update:{$inc:{counter:1}}});
+    return DeviceAttributesModelCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 
 // const updateDeviceCounterQuery = (req) => {
@@ -219,7 +219,7 @@ const getDeviceDetailsByDeviceIdQuery = (req) => {
     ])
 };
 const fetchNextPrimaryKeyQuery = () => {
-    return DeviceCounter.findAndModify({update:{$inc:{counter:1}}});
+    return DeviceCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
     return LocationDeviceAttributeMasterModel.aggregate([

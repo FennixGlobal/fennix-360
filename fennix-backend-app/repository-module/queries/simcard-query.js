@@ -114,7 +114,7 @@ const insertSimcardQuery = (query) => {
 // };
 
 const fetchNextPrimaryKeyQuery = () => {
-    return simcardCounterModel.findAndModify({update:{$inc:{counter:1}}});
+    return simcardCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 // //TODO: add retry logic for failure conditions
 // const insertNextPrimaryKeyQuery = (req) => {

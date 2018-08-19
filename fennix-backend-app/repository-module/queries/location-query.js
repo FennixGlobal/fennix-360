@@ -33,7 +33,7 @@ const getBeneficiaryLocationList = (query) => {
 //     });
 // };
 const locationCounterQuery = () => {
-    return locationCounter.findAndModify({update:{$inc:{counter:1}}});
+    return locationCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 
 const locationDetailsUpdateQuery = (req) => {
