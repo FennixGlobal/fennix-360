@@ -75,7 +75,7 @@ const updateQueryCreator = (table, fields, whereCondition) => {
     presentFields.forEach((field, index) => {
         // counter++;
         if (index === presentFields.length - 1) {
-            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} where ${dbDownloadTableMapper[table][whereCondition]} = $${index + 2}`;
+            query = `${query} ${dbTableColMap[table][field]} = $${index + 1} where ${whereCondition} = $${index + 2}`;
         } else {
             query = `${query} ${dbTableColMap[table][field]} = $${index + 1} ,`;
         }
