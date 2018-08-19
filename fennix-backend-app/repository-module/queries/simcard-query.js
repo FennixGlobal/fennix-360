@@ -127,6 +127,20 @@ const fetchNextPrimaryKeyQuery = () => {
 //     });
 // };
 
+const addDeviceIdForSimcardQuery = (query) => {
+    return simcardDetails.update({_id: query.simCardId},
+        {
+            $set : {
+                deviceId: query.deviceId
+            }
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 module.exports = {
     listSimcardTypesQuery,
@@ -134,6 +148,7 @@ module.exports = {
     insertSimcardQuery,
     updateSimcardQuery,
     deleteSimcardQuery,
+    addDeviceIdForSimcardQuery,
     listUnAssignedSimcardsQuery,
     // insertNextPrimaryKeyQuery,
     fetchNextPrimaryKeyQuery

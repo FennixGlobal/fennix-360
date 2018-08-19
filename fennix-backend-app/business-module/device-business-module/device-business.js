@@ -1,4 +1,5 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
+const {addDeviceIdForSimcardAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
@@ -170,6 +171,8 @@ const insertDeviceBusiness = async (req) => {
             createdDate: new Date()
         };
         await deviceAccessor.insertDeviceAccessor(obj);
+        const request = {simCardId: req.body.simCardId, deviceId: counter};
+        addDeviceIdForSimcardAccessor(request);
         return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Device added');
         // await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
