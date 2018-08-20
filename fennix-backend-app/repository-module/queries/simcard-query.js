@@ -40,6 +40,7 @@ const listUnAssignedSimcardsQuery = (query) => {
                     "carrier.name" : 1,
                     "phoneNo":1,
                     "serialNp":1,
+                    "serial":1,
                     "active":1
                 }
             }

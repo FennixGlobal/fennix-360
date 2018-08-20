@@ -1,7 +1,7 @@
 const simCardAccessor = require('../../repository-module/data-accesors/sim-card-accessor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
+const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const {mongoWhereInCreator} = require('../../util-module/request-validators');
@@ -16,7 +16,10 @@ const listUnAssignedSimcardsBusiness = async (req) => {
             let obj = {
                 id: item['_id'],
                 primaryValue: {text: 'Phone Number', value: item['phoneNo']},
-                secondaryValue: {text: 'Serial Number', value: item['serial']},
+                secondaryValue: {
+                    text: 'Serial Number',
+                    value: notNullCheck(item['serial']) ? item['serial'] : notNullCheck(item['serialNp']) ? item['serialNp'] : 'Serial Not Assigned'
+                },
                 isActive: item['active'],
                 extraValue: {text: 'Carrier Name', value: item['carrier']['name']}
             };
