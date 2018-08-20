@@ -64,7 +64,7 @@ const selectCenterIdsForOperatorQuery = 'select c.location_id, (select name from
 //SUPERVISOR
 // const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';
 // const selectCenterIdsForSupervisorQuery = 'select center_id as location_id, name as location_name from centers where center_id = (select center_id from users where user_id = $1)';
-const selectCenterIdsForSupervisorQuery = 'select center_id as location_id, name as location_name from centers where location_id in (select location_id from location where parent_location_id IN (select location_id from users where user_id = 16) and location_level = 0)';
+const selectCenterIdsForSupervisorQuery = 'select center_id as location_id, name as location_name from centers where location_id in (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1) and location_level = 0)';
 //ADMIN
 const selectCenterIdsForAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1)))';
 
