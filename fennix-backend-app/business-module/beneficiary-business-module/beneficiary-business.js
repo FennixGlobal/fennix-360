@@ -427,8 +427,8 @@ const addDeviceForBeneficiaryBusiness = async (req) => {
     let request;
     await beneficiaryAccessor.updateBeneficiaryAccessor(req);
     request = {
-        beneficiaryId: req.body.beneficiaryId,
-        deviceId: req.body.deviceId
+        beneficiaryId: parseInt(req.body.beneficiaryId,10),
+        deviceId: parseInt(req.body.deviceId,10)
     };
     await updateDeviceWithBeneficiaryIdAccessor(request);
 };
