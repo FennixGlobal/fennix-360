@@ -55,7 +55,7 @@ const deleteBeneficiaryBusiness = async (req) => {
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
     request.documentId =
-    request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
+        request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
@@ -70,7 +70,7 @@ const beneficiaryListForUnAssignedDevicesBusiness = async () => {
         response.rows.forEach((item) => {
             let obj = {
                 id: item['beneficiaryid'],
-                primaryValue:{text:'Full Name',value: item['full_name']}
+                primaryValue: {text: 'Full Name', value: item['full_name']}
             };
             modifiedResponse.push(obj);
         });
@@ -424,13 +424,15 @@ const updateBeneficiaryBusiness = async (req) => {
 };
 
 const addDeviceForBeneficiaryBusiness = async (req) => {
-    let request;
+    let request, finalResponse;
     await beneficiaryAccessor.updateBeneficiaryAccessor(req);
     request = {
-        beneficiaryId: parseInt(req.body.beneficiaryId,10),
-        deviceId: parseInt(req.body.deviceId,10)
+        beneficiaryId: parseInt(req.body.beneficiaryId, 10),
+        deviceId: parseInt(req.body.deviceId, 10)
     };
     await updateDeviceWithBeneficiaryIdAccessor(request);
+    finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+    return finalResponse;
 };
 
 module.exports = {
