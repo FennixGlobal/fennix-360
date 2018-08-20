@@ -93,7 +93,7 @@ const updateBeneficiaryAccessor = async (req) => {
     fields.splice(fields.indexOf('beneficiaryId'), 1);
     updatedQueryCreatorResponse = updateQueryCreator('beneficiaries', fields, 'beneficiaryid');
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req.body[f]));
-    request.push(req.body.userId);
+    request.push(req.body.beneficiaryId);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
