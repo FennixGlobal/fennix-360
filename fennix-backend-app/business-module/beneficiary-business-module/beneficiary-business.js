@@ -54,7 +54,8 @@ const deleteBeneficiaryBusiness = async (req) => {
 
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body;
-    request.documentId =
+    const date = new Date();
+    request.documentId = `PATDOJ-${date.getDate()}${(date.getMonth()+1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
         request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
