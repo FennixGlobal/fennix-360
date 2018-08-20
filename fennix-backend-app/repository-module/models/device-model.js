@@ -17,10 +17,10 @@ const deviceSchema = new Schema({
     beneficiaryId:  Number,
     deviceTypeId:  Number,
     imei:  Number,
-    simCardId:  String,
+    simCardId:  Number,
     active:  Boolean,
     online: String,
-    centerId:  String,
+    centerId:  Number,
     firmwareVersion:  String,
     createdDate:  Date,
     updatedDate:  Date

@@ -296,6 +296,7 @@ const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
 };
 
 const updateDeviceWithBeneficiaryIdQuery = async (req) => {
+    console.log(req);
     return deviceAggregator.update({_id: req.deviceId},
         {
             $set : {
