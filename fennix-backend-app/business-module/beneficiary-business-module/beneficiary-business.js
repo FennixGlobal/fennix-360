@@ -9,7 +9,7 @@ const {excelRowsCreator, excelColCreator} = require('../../util-module/request-v
 const Excel = require('exceljs');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-
+const {updateDeviceWithBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const beneficiaryAggregatorBusiness = async (req) => {
     let beneficiaryResponse, returnObj, userIdsList;
     userIdsList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
@@ -423,8 +423,18 @@ const updateBeneficiaryBusiness = async (req) => {
     return finalResponse;
 };
 
+const addDeviceForBeneficiaryBusiness = async (req) => {
+    let request;
+    await beneficiaryAccessor.updateBeneficiaryAccessor(req);
+    request = {
+        beneficiaryId: req.body.beneficiaryId,
+        deviceId: req.body.deviceId
+    };
+    await updateDeviceWithBeneficiaryIdAccessor(request);
+};
 
 module.exports = {
+    addDeviceForBeneficiaryBusiness,
     beneficiaryAggregatorBusiness,
     beneficiaryListByOwnerUserId,
     beneficiaryMapDataList,

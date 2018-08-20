@@ -294,11 +294,28 @@ const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
         {$unwind: "$device"}
     ]);
 };
+
+const updateDeviceWithBeneficiaryIdQuery = async (req) => {
+    return deviceAggregator.update({_id: req.deviceId},
+        {
+            $set : {
+                beneficiaryId: req.beneficiaryId
+            }
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
 module.exports = {
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
     getDeviceDetailsForListOfBeneficiariesQuery,
     listDevicesQuery,
+    updateDeviceWithBeneficiaryIdQuery,
     listDeviceTypesQuery,
     insertDeviceQuery,
     // insertNextPrimaryKeyQuery,

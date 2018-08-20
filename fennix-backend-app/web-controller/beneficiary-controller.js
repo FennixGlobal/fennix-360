@@ -103,5 +103,11 @@ router.get('/listUnAssignedBeneficiary', function (req, res) {
         res.send(response);
     })
 });
-
+router.post('/addDeviceForBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.addDeviceForBeneficiaryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

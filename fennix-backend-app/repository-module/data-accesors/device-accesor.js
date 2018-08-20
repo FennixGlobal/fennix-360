@@ -76,6 +76,12 @@ const getDeviceByBeneficiaryIdAccessor = async (req) => {
     return returnObj;
 };
 
+const updateDeviceWithBeneficiaryIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.updateDeviceWithBeneficiaryIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     deviceAggregator,
     listDeviceTypesAccessor,
@@ -83,6 +89,7 @@ module.exports = {
     getDeviceDetailsForListOfBeneficiariesAccessor,
     listDevicesAccessor,
     insertDeviceAccessor,
+    updateDeviceWithBeneficiaryIdAccessor,
     updateDeviceAttributesAccessor,
     fetchNextPrimaryKeyAccessor,
     getDeviceByDeviceIdAccessor,
