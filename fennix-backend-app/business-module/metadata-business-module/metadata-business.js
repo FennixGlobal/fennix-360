@@ -61,7 +61,10 @@ const getCardMetadataForRouteBusiness = async (req) => {
             returnObj.widgetCards[card]['widgets'] = Object.keys(returnObj.widgetCards[card]['widgets']).map((widget) => {
                 returnObj.widgetCards[card]['widgets'][widget]['widgetSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections']).map((section) => {
                     returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections']).map((subsection) => {
-                        returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]);
+                        returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => {
+                            returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row] = returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['widgetSectionCols'].sort((item, prevItem) => item.widgetColId - prevItem.widgetColId);
+                            return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row];
+                        });
                         return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]
                     });
                     return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section];
@@ -491,6 +494,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'button':
                 widgetElementData = {
                     ...widgetElementData, ...{
+                        navigateAfterEditRoute: widgetElementItem['navigation_route'],
                         submitReqType: widgetElementItem['submit_request_type'],
                         submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],

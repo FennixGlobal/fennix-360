@@ -403,8 +403,10 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             ethnicityId: benResponse['ethnicity_id'],
             image: benResponse['image'],
             familyPhone: benResponse['family_phone'],
-            postalCode: benResponse['postal_code'],
-            whatsAppNumber: benResponse['whatsapp_number']
+            zipCode: benResponse['postal_code'],
+            center: benResponse['center_id'],
+            height:benResponse['height'],
+            whatsAppNo: benResponse['whatsapp_number']
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
