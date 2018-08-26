@@ -82,7 +82,7 @@ const dbTableColMap = {
     },
     accounting: {
         creditCard: 'credit_card',
-        cvCode: 'cvCode',
+        cvCode: 'cv_code',
         startDate: 'starting_date',
         expiryDate: 'expiration_date',
         beneficiaryId: 'beneficiaryid'
