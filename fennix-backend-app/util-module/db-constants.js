@@ -133,7 +133,9 @@ const dbDownloadTableMapper = {
 const tableKeyMap = {
     beneficiaries: {key: 'beneficiaryid'},
     users: {key: 'user_id'},
-    tickets: {key: 'ticketId'}
+    tickets: {key: 'ticketId'},
+    family_info: {key: 'family_info_id'},
+    accounting: {key: 'accounting_id'}
 };
 
 module.exports = {
