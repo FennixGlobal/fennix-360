@@ -56,27 +56,30 @@ const deleteBeneficiaryBusiness = async (req) => {
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body, restrictionRequest, response, primaryKeyResponse;
     const date = new Date();
-    request.documentId = `PATDOJ-${date.getDate()}${(date.getMonth()+1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    request.documentId = `PATDOJ-${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
-    primaryKeyResponse = restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        restrictionRequest = {
-            _id: primaryKeyResponse['_doc']['counter'],
-            beneficiaryId: response.rows[0]['beneficiaryid'],
-            restrictionName: request['geoFence']['mapTitle'],
-            restrictionType: request['geoFence']['mapRestrictionType'],
-            startDate: request['geoFence']['startDate'],
-            finishDate: request['geoFence']['finishDate'],
-            repeatRules: request['geoFence']['restrictionDays'],
-            onAlert: request['geoFence']['onAlert'],
-            isActive: true,
-            locationDetails: request['geoFence']['mapLocation']
-        };
-        await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
+        if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
+            primaryKeyResponse = restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
+            console.log(primaryKeyResponse);
+            restrictionRequest = {
+                _id: primaryKeyResponse['_doc']['counter'],
+                beneficiaryId: response.rows[0]['beneficiaryid'],
+                restrictionName: request['geoFence']['mapTitle'],
+                restrictionType: request['geoFence']['mapRestrictionType'],
+                startDate: request['geoFence']['startDate'],
+                finishDate: request['geoFence']['finishDate'],
+                repeatRules: request['geoFence']['restrictionDays'],
+                onAlert: request['geoFence']['onAlert'],
+                isActive: true,
+                locationDetails: request['geoFence']['mapLocation']
+            };
+            await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
+        }
         await beneficiaryAccessor.addFamilyInfoAccessor(request);
         await beneficiaryAccessor.addAccountingAccessor(request);
     }
@@ -424,7 +427,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             familyPhone: benResponse['family_phone'],
             zipCode: benResponse['postal_code'],
             center: benResponse['center_id'],
-            height:benResponse['height'],
+            height: benResponse['height'],
             whatsAppNo: benResponse['whatsapp_number']
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
