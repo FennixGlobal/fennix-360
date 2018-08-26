@@ -64,7 +64,7 @@ const addBeneficiaryBusiness = async (req) => {
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
-            primaryKeyResponse = restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
+            primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
             console.log(primaryKeyResponse);
             restrictionRequest = {
                 _id: primaryKeyResponse['_doc']['counter'],
