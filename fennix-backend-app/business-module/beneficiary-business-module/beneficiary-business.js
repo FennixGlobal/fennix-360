@@ -81,7 +81,9 @@ const addBeneficiaryBusiness = async (req) => {
             await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
         }
         await beneficiaryAccessor.addFamilyInfoAccessor(request);
-        await beneficiaryAccessor.addAccountingAccessor(request);
+        if (objectHasPropertyCheck(request, 'cvCode') || objectHasPropertyCheck(request, 'creditCard') || objectHasPropertyCheck(request, 'startDate') || objectHasPropertyCheck(request, 'expiryDate')) {
+            await beneficiaryAccessor.addAccountingAccessor(request);
+        }
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
