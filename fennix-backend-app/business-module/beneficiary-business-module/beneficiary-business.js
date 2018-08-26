@@ -65,7 +65,7 @@ const addBeneficiaryBusiness = async (req) => {
     primaryKeyResponse = restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         restrictionRequest = {
-            _id: primaryKeyResponse[0]['counter'],
+            _id: primaryKeyResponse['_doc']['counter'],
             beneficiaryId: response.rows[0]['beneficiaryid'],
             restrictionName: request['geoFence']['mapTitle'],
             restrictionType: request['geoFence']['mapRestrictionType'],
