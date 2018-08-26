@@ -2,6 +2,8 @@ const TABLE_USERS = 'users';
 const TABLE_BENEFICIARIES = 'beneficiaries';
 const TABLE_LOCATION = 'location';
 const TABLE_ROLES = 'roles';
+const TABLE_FAMILY_INFO = 'family_info';
+const TABLE_ACCOUNTING = 'accounting';
 
 const dbTableColMap = {
     users: {
@@ -67,6 +69,24 @@ const dbTableColMap = {
         location3: 'location_3',
         location4: 'location_4'
     },
+    family_info: {
+        familyPrimaryName: 'primary_name',
+        familyPrimaryPhoneNo: 'primary_phone_no',
+        familyPrimaryGender: 'primary_gender',
+        familyPrimaryRelation: 'primary_relation',
+        familySecondaryName: 'secondary_name',
+        familySecondaryPhoneNo: 'secondary_phone_no',
+        familySecondaryGender: 'secondary_gender',
+        familySecondaryRelation: 'secondary_relation',
+        beneficiaryId: 'beneficiaryid'
+    },
+    accounting: {
+        creditCard: 'credit_card',
+        cvCode: 'cvCode',
+        startDate: 'starting_date',
+        expiryDate: 'expiration_date',
+        beneficiaryId: 'beneficiaryid'
+    },
     filterset: {
         roleCardId: 'role_card_id',
         routeId: 'route_id',
@@ -122,6 +142,8 @@ module.exports = {
     TABLE_LOCATION,
     TABLE_ROLES,
     TABLE_USERS,
+    TABLE_FAMILY_INFO,
+    TABLE_ACCOUNTING,
     tableKeyMap,
     dbDownloadTableMapper
 };

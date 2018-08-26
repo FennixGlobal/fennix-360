@@ -7,6 +7,7 @@ const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor}
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
+const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {updateDeviceWithBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
@@ -50,17 +51,35 @@ const deleteBeneficiaryBusiness = async (req) => {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
     }
     return finalResponse;
-}
+};
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body;
+    let request = req.body, restrictionRequest, response, primaryKeyResponse;
     const date = new Date();
     request.documentId = `PATDOJ-${date.getDate()}${(date.getMonth()+1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-        request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
+    request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
-    await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    primaryKeyResponse = restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        restrictionRequest = {
+            _id: primaryKeyResponse[0]['counter'],
+            beneficiaryId: response.rows[0]['beneficiaryid'],
+            restrictionName: request['geoFence']['mapTitle'],
+            restrictionType: request['geoFence']['mapRestrictionType'],
+            startDate: request['geoFence']['startDate'],
+            finishDate: request['geoFence']['finishDate'],
+            repeatRules: request['geoFence']['restrictionDays'],
+            onAlert: request['geoFence']['onAlert'],
+            isActive: true,
+            locationDetails: request['geoFence']['mapLocation']
+        };
+        await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
+        await beneficiaryAccessor.addFamilyInfoAccessor(request);
+        await beneficiaryAccessor.addAccountingAccessor(request);
+    }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 

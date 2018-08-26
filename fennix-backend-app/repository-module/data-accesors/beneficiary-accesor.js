@@ -1,7 +1,7 @@
 const beneficiaryQueries = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
-const {TABLE_BENEFICIARIES} = require('../../util-module/db-constants');
+const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
 
 const getBeneficiaryByUserIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
@@ -98,7 +98,23 @@ const updateBeneficiaryAccessor = async (req) => {
     return returnObj;
 };
 
+const addFamilyInfoAccessor = async (req) => {
+    let returnObj, finalResponse;
+    finalResponse = insertQueryCreator(req, TABLE_FAMILY_INFO, beneficiaryQueries.insertBeneficiaryQuery);
+    returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
+    return returnObj;
+};
+
+const addAccountingAccessor = async (req) => {
+    let returnObj, finalResponse;
+    finalResponse = insertQueryCreator(req, TABLE_ACCOUNTING, beneficiaryQueries.insertBeneficiaryQuery);
+    returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
+    return returnObj;
+};
+
 module.exports = {
+    addAccountingAccessor,
+    addFamilyInfoAccessor,
     updateBeneficiaryAccessor,
     getBeneficiaryByUserIdAccessor,
     getBenefeciaryAggregator,

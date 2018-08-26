@@ -56,7 +56,8 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
         }
         valuesArray.push(req[key]);
     });
-    modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
+    modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values} RETURNING ${tableKeyMap[tableName]['key']}`;
+    // modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
     finalResponse['valuesArray'] = valuesArray;
     finalResponse['modifiedInsertQuery'] = modifiedInsertQuery;
     // console.log(modifiedInsertQuery);
@@ -120,6 +121,7 @@ const excelRowsCreator = (list, table, keysArray) => {
     finalResponse['ids'] = ids;
     return finalResponse;
 };
+
 
 
 module.exports = {

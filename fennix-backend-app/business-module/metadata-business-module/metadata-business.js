@@ -63,7 +63,7 @@ const getCardMetadataForRouteBusiness = async (req) => {
                     returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections']).map((subsection) => {
                         returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => {
                             return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]
-                                // = returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['widgetSectionCols'].sort((item, prevItem) => item.widgetColId - prevItem.widgetColId);
+                            // = returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['widgetSectionCols'].sort((item, prevItem) => item.widgetColId - prevItem.widgetColId);
                             // return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row];
                         });
                         return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]
@@ -111,8 +111,8 @@ const getLoginMetadataBusiness = async () => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', loginMetadtaResponse);
 };
 
-const getLanguagesListBusiness = async (req) => {
-    let responseObj, request, languageListResponse = {dropdownList: []};
+const getLanguagesListBusiness = async () => {
+    let responseObj, languageListResponse = {dropdownList: []};
     responseObj = await metadataAccessor.getLanguagesAccessor();
     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
