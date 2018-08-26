@@ -80,9 +80,10 @@ const addBeneficiaryBusiness = async (req) => {
             };
             await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
         }
-        await beneficiaryAccessor.addFamilyInfoAccessor(request);
-        if (objectHasPropertyCheck(request, 'cvCode') || objectHasPropertyCheck(request, 'creditCard') || objectHasPropertyCheck(request, 'startDate') || objectHasPropertyCheck(request, 'expiryDate')) {
-            await beneficiaryAccessor.addAccountingAccessor(request);
+        const newRequest = {...request, ...{beneficiaryId: response.rows[0]['beneficiaryid']}};
+        await beneficiaryAccessor.addFamilyInfoAccessor(newRequest);
+        if (objectHasPropertyCheck(newRequest, 'cvCode') || objectHasPropertyCheck(newRequest, 'creditCard') || objectHasPropertyCheck(newRequest, 'startDate') || objectHasPropertyCheck(newRequest, 'expiryDate')) {
+            await beneficiaryAccessor.addAccountingAccessor(newRequest);
         }
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
