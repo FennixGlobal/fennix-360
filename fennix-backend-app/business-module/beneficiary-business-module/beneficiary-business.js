@@ -70,13 +70,14 @@ const addBeneficiaryBusiness = async (req) => {
     request.updated_date = new Date();
     request.created_date = new Date();
     // emailSendBusiness(request.emailId, 'BENEFICIARY');
-    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(request, 'image')) {
-        imageUpload = dataURLtoFile(request.image, folderName);
+        imageUpload = request.image;
         delete request.image;
     }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        imageUpload = dataURLtoFile(imageUpload, folderName);
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
