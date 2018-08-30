@@ -10,6 +10,13 @@ const Excel = require('exceljs');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+var fetch = require('isomorphic-fetch');
+var dropbox = require('dropbox').Dropbox;
+var dropBoxItem = new dropbox({
+    accessToken: '6-m7U_h1YeAAAAAAAAAAV0CNy7fXzgtcE3i1PSumhkQaaW2QfdioPQEZGSq3VXbf',
+    fetch: fetch
+});
+
 const {updateDeviceWithBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const beneficiaryAggregatorBusiness = async (req) => {
     let beneficiaryResponse, returnObj, userIdsList;
@@ -44,7 +51,7 @@ const beneficiaryAggregatorBusiness = async (req) => {
 
 const deleteBeneficiaryBusiness = async (req) => {
     let request = {body: {beneficiaryId: req.query.beneficiaryId, isActive: false}}, response, finalResponse;
-    response = await updateBeneficiaryAccessor(request);
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
     } else {
@@ -56,12 +63,18 @@ const deleteBeneficiaryBusiness = async (req) => {
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body, restrictionRequest, response, primaryKeyResponse;
     const date = new Date();
-    request.documentId = `PATDOJ-${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    request.documentId = `PATDOJ-${fullDate}`;
     request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
+    const profileResponse = await dropBoxItem.filesCreateFolderV2({path:`/pat-j/${folderName}/profile`});
+    if(notNullCheck(profileResponse)) {
+        console.log(profileResponse);
+    }
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
             primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
