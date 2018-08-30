@@ -65,17 +65,27 @@ const addBeneficiaryBusiness = async (req) => {
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.documentId = `PATDOJ-${fullDate}`;
-    request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
+    // request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
     emailSendBusiness(request.emailId, 'BENEFICIARY');
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
-    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
-    const profileResponse = await dropBoxItem.filesCreateFolderV2({path:`/pat-j/${folderName}/profile`});
-    if(notNullCheck(profileResponse)) {
-        console.log(profileResponse);
-    }
+
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
+        const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
+        if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
+            console.log(profileResponse);
+            const imageUpload = request.image;
+            imageUpload.name = `${folderName}.${imageUpload.name.split('.')[1]}`;
+            let imageUploadResponse = await dropBoxItem.filesUpload({
+                path: `${profileResponse['metadata']['path_lower']}`,
+                content: imageUpload
+            });
+            if (notNullCheck(imageUploadResponse)) {
+                // update DB with profile path
+            }
+        }
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
             primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
             console.log(primaryKeyResponse);
