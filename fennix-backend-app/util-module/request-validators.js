@@ -39,8 +39,8 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
         }
     );
     keysArray.forEach((key, index) => {
-        console.log(key);
-        console.log(dbTableColMap[tableName][key]);
+        // console.log(key);
+        // console.log(dbTableColMap[tableName][key]);
         if (index === 0) {
             columns = `(${dbTableColMap[tableName][key]}`;
             values = `${values} ($${counter + 1}`;
@@ -60,9 +60,9 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
     // modifiedInsertQuery = `${insertQuery} ${tableName} ${columns} ${values}`;
     finalResponse['valuesArray'] = valuesArray;
     finalResponse['modifiedInsertQuery'] = modifiedInsertQuery;
-    console.log(modifiedInsertQuery);
-    console.log(valuesArray);
-    console.log(finalResponse);
+    // console.log(modifiedInsertQuery);
+    // console.log(valuesArray);
+    // console.log(finalResponse);
     return finalResponse;
 };
 

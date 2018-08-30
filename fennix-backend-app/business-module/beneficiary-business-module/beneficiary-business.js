@@ -76,13 +76,13 @@ const addBeneficiaryBusiness = async (req) => {
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
-            const imageUpload = request.image;
-            imageUpload.name = `${folderName}.${imageUpload.name.split('.')[1]}`;
+            const imageUpload = dataURLtoFile(request.image,folderName);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
                 content: imageUpload
             });
             if (notNullCheck(imageUploadResponse)) {
+            // const file =
                 // update DB with profile path
             }
         }
@@ -111,7 +111,14 @@ const addBeneficiaryBusiness = async (req) => {
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
-
+const dataURLtoFile = (dataurl, filename) => {
+    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+    while(n--){
+        u8arr[n] = bstr.charCodeAt(n);
+    }
+    return new File([u8arr], filename, {type:mime});
+};
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
     response = await beneficiaryAccessor.beneficiaryListOfUnAssignedDevicesAccesor([]);
