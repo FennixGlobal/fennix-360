@@ -63,26 +63,29 @@ const deleteBeneficiaryBusiness = async (req) => {
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body, restrictionRequest, response, primaryKeyResponse;
     const date = new Date();
+    let imageUpload;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.documentId = `PATDOJ-${fullDate}`;
     // request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
-    emailSendBusiness(request.emailId, 'BENEFICIARY');
+    // emailSendBusiness(request.emailId, 'BENEFICIARY');
+    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
+    if (objectHasPropertyCheck(request, 'image')) {
+        imageUpload = dataURLtoFile(request.image, folderName);
+        delete request.image;
+    }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
-
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
-            const imageUpload = dataURLtoFile(request.image,folderName);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
                 content: imageUpload
             });
             if (notNullCheck(imageUploadResponse)) {
-            // const file =
+                // const file =
                 // update DB with profile path
             }
         }
@@ -114,10 +117,10 @@ const addBeneficiaryBusiness = async (req) => {
 const dataURLtoFile = (dataurl, filename) => {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    while(n--){
+    while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, {type:mime});
+    return new File([u8arr], filename, {type: mime});
 };
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
