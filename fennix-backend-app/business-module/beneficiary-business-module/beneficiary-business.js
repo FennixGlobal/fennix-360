@@ -71,8 +71,9 @@ const addBeneficiaryBusiness = async (req) => {
     request.updated_date = new Date();
     request.created_date = new Date();
     // emailSendBusiness(request.emailId, 'BENEFICIARY');
+    console.log(request.image);
     if (objectHasPropertyCheck(request, 'image')) {
-        imageUpload = request.image;
+        imageUpload = request.image.imageData;
         delete request.image;
     }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
@@ -84,7 +85,7 @@ const addBeneficiaryBusiness = async (req) => {
             console.log(profileResponse);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
-                content: imageUpload
+                contents: imageUpload
             }).catch((err) => {
                 console.log(err)
             });
