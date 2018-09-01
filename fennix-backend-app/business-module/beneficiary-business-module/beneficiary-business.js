@@ -11,6 +11,7 @@ const restrictionAccessor = require('../../repository-module/data-accesors/restr
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 var fetch = require('isomorphic-fetch');
+const atob = require('atob');
 var dropbox = require('dropbox').Dropbox;
 var dropBoxItem = new dropbox({
     accessToken: '6-m7U_h1YeAAAAAAAAAAV0CNy7fXzgtcE3i1PSumhkQaaW2QfdioPQEZGSq3VXbf',
