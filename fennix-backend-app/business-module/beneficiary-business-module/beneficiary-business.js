@@ -78,7 +78,7 @@ const addBeneficiaryBusiness = async (req) => {
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        imageUpload = dataURLtoFile(imageUpload, folderName);
+        // imageUpload = dataURLtoFile(imageUpload, folderName);
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
@@ -122,7 +122,8 @@ const dataURLtoFile = (dataurl, filename) => {
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    return new File([u8arr], filename, {type: mime});
+    const file = new File([u8arr], filename, {type: mime});
+    return file;
 };
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
