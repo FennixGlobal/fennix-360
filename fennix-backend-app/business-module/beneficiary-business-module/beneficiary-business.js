@@ -11,7 +11,8 @@ const restrictionAccessor = require('../../repository-module/data-accesors/restr
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 var fetch = require('isomorphic-fetch');
-const atob = require('atob');
+// const atob = require('atob');
+const fs = require('fs');
 var dropbox = require('dropbox').Dropbox;
 var dropBoxItem = new dropbox({
     accessToken: '6-m7U_h1YeAAAAAAAAAAV0CNy7fXzgtcE3i1PSumhkQaaW2QfdioPQEZGSq3VXbf',
@@ -73,7 +74,8 @@ const addBeneficiaryBusiness = async (req) => {
     // emailSendBusiness(request.emailId, 'BENEFICIARY');
     console.log(request.image);
     if (objectHasPropertyCheck(request, 'image')) {
-        imageUpload = request.image.imageData;
+        imageUpload = request.image;
+        fs.writeFile('/beneficiary',request.image);
         delete request.image;
     }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
@@ -83,9 +85,11 @@ const addBeneficiaryBusiness = async (req) => {
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
+            const file = await fs.readFile('/beneficiary');
+            console.log(file);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
-                contents: imageUpload
+                contents: file
             }).catch((err) => {
                 console.log(err)
             });
