@@ -85,6 +85,8 @@ const addBeneficiaryBusiness = async (req) => {
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
                 content: imageUpload
+            }).catch((err)=>{
+                console.log(err)
             });
             if (notNullCheck(imageUploadResponse)) {
                 // const file =
