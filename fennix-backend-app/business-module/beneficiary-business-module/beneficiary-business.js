@@ -105,6 +105,11 @@ const addBeneficiaryBusiness = async (req) => {
             if (notNullCheck(imageUploadResponse)) {
                 // const file =
                 // update DB with profile path
+                let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: imageUploadResponse.path_lower}).catch((err) => {
+                    console.log('sharing error');
+                    console.log(err);
+                })
+                console.log(shareLink);
             }
         }
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
