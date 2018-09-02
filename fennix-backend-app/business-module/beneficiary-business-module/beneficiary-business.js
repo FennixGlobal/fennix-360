@@ -136,25 +136,27 @@ const dataURLtoFile = (dataurl, filename) => {
     var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
         bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
     let newArray = dataurl.split(',')[1];
-    console.log('new Array');
-    console.log(newArray);
-    let binaryStream = atob(newArray);
-    console.log('binary stream');
-    console.log(binaryStream);
-    let arrayLength = newArray.length;
-    console.log('binary length');
-    let uIntArray = new Uint8Array(arrayLength);
-    let i = 0;
-    for (i;i<arrayLength;i++){
-        uIntArray[i] = binaryStream.charCodeAt(n);
-    }
-    console.log('uInt Array');
-    console.log(uIntArray.buffer);
+    let bufferImg = new Buffer(newArray, 'base64');
+    // console.log('new Array');
+    // console.log(newArray);
+    // let binaryStream = atob(newArray);
+    // console.log('binary stream');
+    // console.log(binaryStream);
+    // let arrayLength = newArray.length;
+    // console.log('binary length');
+    // let uIntArray = new Uint8Array(arrayLength);
+    // let i = 0;
+    // for (i;i<arrayLength;i++){
+    //     uIntArray[i] = binaryStream.charCodeAt(n);
+    // }
+    // console.log('uInt Array');
+    // console.log(uIntArray.buffer);
     // while (n--) {
     //     u8arr[n] = bstr.charCodeAt(n);
     // }
     // const file = new File([u8arr], filename, {type: mime});
-    return uIntArray.buffer;
+    // return uIntArray.buffer;
+    return bufferImg;
 };
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
