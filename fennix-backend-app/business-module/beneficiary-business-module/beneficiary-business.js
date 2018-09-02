@@ -74,8 +74,9 @@ const addBeneficiaryBusiness = async (req) => {
     // emailSendBusiness(request.emailId, 'BENEFICIARY');
     console.log(request.image);
     if (objectHasPropertyCheck(request, 'image')) {
+        let base64Image = request.image.split(';base64,').pop();
         imageUpload = request.image;
-        fs.writeFile('/beneficiary',request.image);
+        await fs.writeFile('../../../beneficiary.jpg',base64Image,{encoding: 'base64'});
         delete request.image;
     }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
@@ -85,7 +86,7 @@ const addBeneficiaryBusiness = async (req) => {
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
-            const file = await fs.readFile('/beneficiary');
+            const file = await fs.readFile('../../../beneficiary.jpg');
             console.log(file);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
