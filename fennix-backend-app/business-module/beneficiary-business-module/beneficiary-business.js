@@ -105,11 +105,19 @@ const addBeneficiaryBusiness = async (req) => {
             if (notNullCheck(imageUploadResponse)) {
                 // const file =
                 // update DB with profile path
+                // console.log(shareLink);
                 let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: imageUploadResponse.path_lower}).catch((err) => {
                     console.log('sharing error');
                     console.log(err);
-                })
-                console.log(shareLink);
+                });
+                let replaceLink = shareLink.url.split('\/s\/')[1];
+                replaceLink = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
+                const newReq = {
+                    beneficiaryId: response.rows[0]['beneficiaryid'],
+                    image: replaceLink
+                };
+                let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
+                console.log(imageUpdateForBenIdResponse);
             }
         }
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
@@ -138,10 +146,10 @@ const addBeneficiaryBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 const dataURLtoFile = (dataurl, filename) => {
-    var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
     let newArray = dataurl.split(',')[1];
     let bufferImg = new Buffer(newArray, 'base64');
+    // var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+    //     bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
     // console.log('new Array');
     // console.log(newArray);
     // let binaryStream = atob(newArray);
