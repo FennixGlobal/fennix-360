@@ -82,7 +82,7 @@ const addBeneficiaryBusiness = async (req) => {
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        const fileFormat = imageUpload.match(/:(.*?);/)[1];
+        const fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
         console.log(fileFormat);
         imageUpload = dataURLtoFile(imageUpload, folderName);
         console.log(imageUpload);
