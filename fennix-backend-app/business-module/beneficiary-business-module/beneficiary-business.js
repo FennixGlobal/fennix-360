@@ -74,23 +74,23 @@ const addBeneficiaryBusiness = async (req) => {
     // emailSendBusiness(request.emailId, 'BENEFICIARY');
     console.log(request.image);
     if (objectHasPropertyCheck(request, 'image')) {
-        let base64Image = request.image.split(';base64,').pop();
+        // let base64Image = request.image.split(';base64,').pop();
         imageUpload = request.image;
-        await fs.writeFile('../../../beneficiary.jpg',base64Image,{encoding: 'base64'});
+        // await fs.writeFile('../../../beneficiary.jpg',base64Image,{encoding: 'base64'});
         delete request.image;
     }
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        // imageUpload = dataURLtoFile(imageUpload, folderName);
+        imageUpload = dataURLtoFile(imageUpload, folderName);
         const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
         if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
             console.log(profileResponse);
-            const file = await fs.readFile('../../../beneficiary.jpg');
-            console.log(file);
+            // const file = await fs.readFile('../../../beneficiary.jpg');
+            // console.log(file);
             let imageUploadResponse = await dropBoxItem.filesUpload({
                 path: `${profileResponse['metadata']['path_lower']}`,
-                contents: file
+                contents: imageUpload
             }).catch((err) => {
                 console.log(err)
             });
@@ -132,8 +132,8 @@ const dataURLtoFile = (dataurl, filename) => {
     while (n--) {
         u8arr[n] = bstr.charCodeAt(n);
     }
-    const file = new File([u8arr], filename, {type: mime});
-    return file;
+    // const file = new File([u8arr], filename, {type: mime});
+    return u8arr.buffer;
 };
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
