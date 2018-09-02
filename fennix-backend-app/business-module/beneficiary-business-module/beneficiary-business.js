@@ -113,8 +113,10 @@ const addBeneficiaryBusiness = async (req) => {
                 let replaceLink = shareLink.url.split('\/s\/')[1];
                 replaceLink = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
                 const newReq = {
-                    beneficiaryId: response.rows[0]['beneficiaryid'],
-                    image: replaceLink
+                    body: {
+                        beneficiaryId: response.rows[0]['beneficiaryid'],
+                        image: replaceLink
+                    }
                 };
                 let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
                 console.log(imageUpdateForBenIdResponse);
