@@ -283,6 +283,7 @@ const widgetSubSectionCreator = (widgetSubSectionItem, subSectionObj) => {
             subSectionType: widgetSubSectionItem['widget_sub_section_type'],
             subSectionOrderId: widgetSubSectionItem['widget_sub_section_order_id'],
             subSectionTitle: widgetSubSectionItem['widget_sub_section_title'],
+            subSectionMandatoryFlag: widgetSubSectionItem['sub_section_mandatory_flag'],
             subSectionWidth: widgetSubSectionItem['sub_section_width'],
             subSectionOrientation: objectHasPropertyCheck(widgetSubSectionItem, 'sub_section_orientation') ? widgetSubSectionItem['sub_section_orientation'] : 'V',
             widgetSectionRows: {...widgetSectionRowCreator(widgetSubSectionItem, {})}
@@ -388,7 +389,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 ...returnObj,
                 gridModalId: widgetElementItem['element_modal_id'],
                 gridNavigationRouteUrl: widgetElementItem['route_url'],
-                gridNavigationRouteName:widgetElementItem['route_name']
+                gridNavigationRouteName: widgetElementItem['route_name']
             };
             break;
         case 'modal-link':
@@ -397,7 +398,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 gridModalId: widgetElementItem['element_modal_id'],
                 gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
                 gridNavigationRouteUrl: widgetElementItem['route_url'],
-                gridNavigationRouteName:widgetElementItem['route_name']
+                gridNavigationRouteName: widgetElementItem['route_name']
             };
             break;
         case 'text':
@@ -423,7 +424,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 btnName: widgetElementItem['element_label'],
                 gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
                 gridNavigationRouteUrl: widgetElementItem['route_url'],
-                gridNavigationRouteName:widgetElementItem['route_name']
+                gridNavigationRouteName: widgetElementItem['route_name']
             };
             break;
     }
@@ -499,7 +500,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
                 widgetElementData = {
                     ...widgetElementData, ...{
                         navigationRouteUrl: widgetElementItem['route_url'],
-                        navigationRouteName:widgetElementItem['route_name'],
+                        navigationRouteName: widgetElementItem['route_name'],
                         submitReqType: widgetElementItem['submit_request_type'],
                         submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
@@ -554,7 +555,7 @@ const widgetDetailElementCreator = (widgetElementItem) => {
                 ...widgetElementData,
                 elementChangeAction: widgetElementItem['element_action_type'],
                 navigationRouteUrl: widgetElementItem['route_url'],
-                navigationRouteName:widgetElementItem['route_name']
+                navigationRouteName: widgetElementItem['route_name']
             };
             break;
         case 'image-round-tile':
