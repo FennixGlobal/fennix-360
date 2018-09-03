@@ -36,7 +36,7 @@ const getBeneficiaryDetailsQuery = 'select beneficiaryId,firstname,middle_name,f
 
 const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select beneficiaryid,concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = b.beneficiary_role) and language = $1) as role_name, beneficiary_role, gender from public.beneficiaries b where beneficiaryid IN';
 
-const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select name from centers where center_id = b.center_id) as center_name, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = b.beneficiary_role) and language = \'EN_US\') as role_name,beneficiary_role, beneficiaryid from beneficiaries b where owner_user_id IN ';
+const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select name from centers where center_id = b.center_id) as center_name, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = b.beneficiary_role) and language = \'EN_US\') as role_name,beneficiary_role, beneficiaryid,image from beneficiaries b where owner_user_id IN ';
 
 const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries where beneficiaryid = $1';
 

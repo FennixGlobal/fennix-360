@@ -365,6 +365,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 beneficiaryName: item['full_name'],
                 emailId: item['emailid'],
                 mobileNo: item['mobileno'],
+                image:item['image'],
                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
                 crimeDetails: item['crime_id'],
             };
