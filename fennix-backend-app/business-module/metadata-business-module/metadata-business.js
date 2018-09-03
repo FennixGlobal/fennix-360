@@ -387,7 +387,8 @@ const widgetGridElementCreator = (widgetElementItem) => {
             returnObj = {
                 ...returnObj,
                 gridModalId: widgetElementItem['element_modal_id'],
-                gridNavigationRoute: widgetElementItem['route_url'],
+                gridNavigationRouteUrl: widgetElementItem['route_url'],
+                gridNavigationRouteName:widgetElementItem['route_name']
             };
             break;
         case 'modal-link':
@@ -395,7 +396,8 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 ...returnObj,
                 gridModalId: widgetElementItem['element_modal_id'],
                 gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
-                gridNavigationRoute: widgetElementItem['route_url']
+                gridNavigationRouteUrl: widgetElementItem['route_url'],
+                gridNavigationRouteName:widgetElementItem['route_name']
             };
             break;
         case 'text':
@@ -420,7 +422,8 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 gridModalId: widgetElementItem['element_modal_id'],
                 btnName: widgetElementItem['element_label'],
                 gridSubmitEndpoint: widgetElementItem['submit_endpoint'],
-                gridNavigationRoute: widgetElementItem['route_url']
+                gridNavigationRouteUrl: widgetElementItem['route_url'],
+                gridNavigationRouteName:widgetElementItem['route_name']
             };
             break;
     }
@@ -495,7 +498,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'button':
                 widgetElementData = {
                     ...widgetElementData, ...{
-                        navigationRoute: widgetElementItem['route_url'],
+                        navigationRouteUrl: widgetElementItem['route_url'],
+                        navigationRouteName:widgetElementItem['route_name'],
                         submitReqType: widgetElementItem['submit_request_type'],
                         submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
@@ -549,7 +553,8 @@ const widgetDetailElementCreator = (widgetElementItem) => {
             widgetElementData = {
                 ...widgetElementData,
                 elementChangeAction: widgetElementItem['element_action_type'],
-                navigationRoute: widgetElementItem['route_url']
+                navigationRouteUrl: widgetElementItem['route_url'],
+                navigationRouteName:widgetElementItem['route_name']
             };
             break;
         case 'image-round-tile':

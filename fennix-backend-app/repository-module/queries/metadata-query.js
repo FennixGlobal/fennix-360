@@ -21,7 +21,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , se.endpoint as submit_endpoint, se.endpoint_request_type as submit_request_type, se.endpoint_mandatory_request_params as submit_request_params\n' +
     '    , (select action_name from action where action_id = rcwa.on_change_action) as element_action_type\n' +
     '    , wa.element_type, wa.sub_type as element_subtype\n' +
-    '    , rn.route_url\n' +
+    '    , rn.route_url,(select localized_text from localization where locale_key = rn.route_name and language = $3) as route_name\n' +
     '    from users u\n' +
     '    join roles r on r.role_id = u.user_role and u.user_id = $1\n' +
     '    join role_cards rc on rc.role_id = u.user_role\n' +
