@@ -8,7 +8,7 @@ const nodeMailer = require('nodemailer');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 
 const dropDownBusiness = async (req) => {
-    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: []};
+    let request = [req.query.dropdownId, req.query.languageId], dropdownResponse, returnResponse = {dropdownList: [],isCommonDropdownFlag:true};
     dropdownResponse = await getDropdownAccessor(request);
     if (objectHasPropertyCheck(dropdownResponse, 'rows') && arrayNotEmptyCheck(dropdownResponse.rows)) {
         dropdownResponse.rows.forEach((item) => {

@@ -514,7 +514,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             hairColor: benResponse['hair_color'],
             scar: benResponse['scars_marks_tatoos'],
             riskId: benResponse['risk_id'],
-            ethnicity: benResponse['ethnicity_id'],
+            ethnicityId: benResponse['ethnicity_id'],
             zipCode: benResponse['postal_code'],
             center: benResponse['center_id'],
             operatorId: benResponse['owner_user_id'],
