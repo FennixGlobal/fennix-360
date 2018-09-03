@@ -495,7 +495,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'button':
                 widgetElementData = {
                     ...widgetElementData, ...{
-                        navigateAfterEditRoute: widgetElementItem['navigation_route'],
+                        navigationRoute: widgetElementItem['navigation_route'],
                         submitReqType: widgetElementItem['submit_request_type'],
                         submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
