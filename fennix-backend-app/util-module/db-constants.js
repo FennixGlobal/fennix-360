@@ -47,6 +47,7 @@ const dbTableColMap = {
         dob: 'dob',
         hasHouseArrest: 'hashousearrest',
         address: 'address1',
+        violationTypeId: 'violation_type_id',
         timeZone: 'time_zone',
         zipCode: 'postal_code',
         operatorId: 'owner_user_id',
@@ -66,7 +67,8 @@ const dbTableColMap = {
         location1: 'location_1',
         location2: 'location_2',
         location3: 'location_3',
-        location4: 'location_4'
+        location4: 'location_4',
+        country: 'location_3'
     },
     family_info: {
         familyPrimaryName: 'primary_name',
