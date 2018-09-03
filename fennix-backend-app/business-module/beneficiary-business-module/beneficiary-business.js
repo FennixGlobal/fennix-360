@@ -492,6 +492,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         benResponse = response.rows[0];
+        console.log(benResponse);
         modifiedResponse = {
             role:benResponse['role'],
             beneficiaryId: benResponse['beneficiaryid'],
