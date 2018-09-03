@@ -7,7 +7,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , we.endpoint as widget_endpoint, we.endpoint_initial_sort as widget_init_sort, we.endpoint_mandatory_request_params as widget_req_params, we.endpoint_request_type as widget_req_type\n' +
     '    , (select widget_size from widget_size where widget_size_id = rcw.widget_size_id) as widget_size\n' +
     '    , (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_section_subtype\n' +
-    '    , rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
+    '    , rcwa.role_card_widget_attribute_id,rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
     '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
     '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
     '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
@@ -133,7 +133,7 @@ const modalMetadataQuery = 'select  \n' +
     'm.modal_width, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
     ',(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
-    ', rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
+    ', rcwa.role_card_widget_attribute_id,rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
     '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
     '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
     '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
