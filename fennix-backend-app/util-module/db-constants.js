@@ -24,7 +24,7 @@ const dbTableColMap = {
     beneficiaries: {
         firstName: 'firstname',
         middleName: 'middle_name',
-        lastName2: 'second_last_name',
+        secondName: 'second_last_name',
         lastName: 'first_last_name',
         emailId: 'emailid',
         mobileNo: 'mobileno',
@@ -40,7 +40,6 @@ const dbTableColMap = {
         deviceId: 'device_id',
         documentId: 'document_id',
         ethnicityId: 'ethnicity_id',
-        familyPhone: 'family_phone',
         centerId: 'center_id',
         languageId: 'language_id',
         riskId: 'risk_id',
@@ -55,7 +54,7 @@ const dbTableColMap = {
         accountingId: 'accounting_id',
         lawyerId: 'lawyer_id',
         tutorId: 'tutor_id',
-        whatsAppNumber: 'whatsapp_number',
+        whatsAppNo: 'whatsapp_number',
         districtAttorney: 'district_attorney',
         judge: 'judge',
         courtHouse: 'court_house',
@@ -139,13 +138,13 @@ const tableKeyMap = {
 };
 
 module.exports = {
-    dbTableColMap,
     TABLE_BENEFICIARIES,
     TABLE_LOCATION,
     TABLE_ROLES,
     TABLE_USERS,
     TABLE_FAMILY_INFO,
     TABLE_ACCOUNTING,
+    dbTableColMap,
     tableKeyMap,
     dbDownloadTableMapper
 };
