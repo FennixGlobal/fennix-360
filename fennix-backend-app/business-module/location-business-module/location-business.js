@@ -67,6 +67,7 @@ const processLocation = async (location) => {
     console.log('location Response');
     console.log(beneficiaryResponse);
     console.log(objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId'));
+    console.log(beneficiaryResponse[0]);
     if (arrayNotEmptyCheck(beneficiaryResponse) && objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId')) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
