@@ -39,7 +39,7 @@ const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select beneficiaryid,concat
 const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select name from centers where center_id = b.center_id) as center_name, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = b.beneficiary_role) and language = \'EN_US\') as role_name,beneficiary_role, beneficiaryid,image from beneficiaries b where owner_user_id IN ';
 
 const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries b\n' +
-    'join family_info f \n' +
+    'left join family_info f \n' +
     'on b.beneficiaryid = f.beneficiaryid and b.beneficiaryid =$1';
 
 module.exports = {

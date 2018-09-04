@@ -79,6 +79,7 @@ const addBeneficiaryBusiness = async (req) => {
         // await fs.writeFile('../../../beneficiary.jpg',base64Image,{encoding: 'base64'});
         delete request.image;
     }
+    request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
