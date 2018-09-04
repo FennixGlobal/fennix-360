@@ -60,7 +60,7 @@ const getBeneifciaryIdList = async (req) => {
 };
 const getBeneficiaryListByOwnerId = async (req) => {
     let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
-        extraQuery = `and center_id = $${req.userIdList.length + 1} order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     modifiedQuery = `${modifiedQuery}${extraQuery}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
