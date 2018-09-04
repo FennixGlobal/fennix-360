@@ -66,7 +66,8 @@ const processLocation = async (location) => {
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
     console.log('location Response');
     console.log(beneficiaryResponse);
-    if (arrayNotEmptyCheck(beneficiaryResponse) && notNullCheck(beneficiaryResponse[0]) && objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId')) {
+    console.log(objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId'));
+    if (arrayNotEmptyCheck(beneficiaryResponse) && objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId')) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
             beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
