@@ -1,4 +1,4 @@
-const {arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
+const {arrayNotEmptyCheck, notNullCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
@@ -64,7 +64,7 @@ const processLocation = async (location) => {
     let seconds = location.substr(39, 2);
     let dateTime = new Date(year, month, day, hours, minutes, seconds);
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    if (arrayNotEmptyCheck(beneficiaryResponse)) {
+    if (arrayNotEmptyCheck(beneficiaryResponse) && notNullCheck(beneficiaryResponse[0]) && objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId')) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
             beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId'])
