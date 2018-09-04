@@ -115,6 +115,9 @@ const processLocation = async (location) => {
             locationId: parseInt(locationId['_doc']['counter']),
             deviceAttributeId: parseInt(deviceAttributeId['_doc']['counter'])
         };
+        console.log('device Response');
+        console.log(masterRequest.deviceAttributeId);
+        console.log(masterRequest.deviceId);
         deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
             // console.log(doc)
         });
