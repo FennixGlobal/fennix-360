@@ -199,7 +199,9 @@ const getDeviceByDeviceIdBusiness = async (req) => {
 const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     const request = {beneficiaryId: parseInt(req.query.beneficiaryId)};
     let deviceResponse, returnObj, finalResponse = {};
-    deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
+    if (notNullCheck(request.beneficiaryId)) {
+        deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
+    }
     if (notNullCheck(deviceResponse)) {
         finalResponse['beneficiaryId'] = deviceResponse[0]['beneficiaryId'];
         finalResponse = {...finalResponse, ...deviceResponse[0].device, ...deviceResponse[0].deviceAttributes};

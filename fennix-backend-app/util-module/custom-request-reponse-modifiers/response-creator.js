@@ -1,6 +1,6 @@
 const {Client} = require('pg');
 const {statusCodes} = require('../status-message-constants');
-const {postgresDBDev, postgresDBLocal,postgresSofiaDev} = require('../connection-constants');
+const {postgresDBDev, postgresDBLocal, postgresSofiaDev} = require('../connection-constants');
 
 const fennixResponse = (status, language, data) => {
     let returnObj = {};
@@ -32,18 +32,19 @@ const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
 
 const dropdownActionButtonCreator = (dropdownActionButton) => {
     let dropdownAction = {
-        dropdownSetId:dropdownActionButton['dropdown_set_id'],
+        dropdownSetId: dropdownActionButton['dropdown_set_id'],
         dropdownKey: dropdownActionButton['dropdown_key'],
         dropdownId: dropdownActionButton['dropdown_id'],
         dropdownValue: dropdownActionButton['dropdown_value'],
         isDisabledFlag: dropdownActionButton['is_disable'],
+        dropdownTransferKey: dropdownActionButton['dropdown_transfer_key'],
         dropdownIconKey: dropdownActionButton['dropdown_action_button_icon_key'],
         dropdownIconValue: dropdownActionButton['dropdown_action_button_icon_value']
     };
     if (dropdownActionButton['is_action_button']) {
         dropdownAction = {
             ...dropdownAction,
-            modalId:dropdownActionButton['dropdown_action_button_modal_id'],
+            modalId: dropdownActionButton['dropdown_action_button_modal_id'],
             actionType: dropdownActionButton['action_name'],
             submitEndpoint: dropdownActionButton['endpoint'],
             subReqType: dropdownActionButton['endpoint_request_type'],
