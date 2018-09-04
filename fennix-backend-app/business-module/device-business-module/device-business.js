@@ -213,6 +213,11 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     }
     return returnObj;
 };
+const unlinkDeviceForBeneficiaryBusiness = async (req) => {
+    let request = parseInt(req.query.beneficiaryId);
+    await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+};
 
 const listUnAssignedDevicesBusiness = async (req) => {
     let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse;
@@ -242,5 +247,6 @@ module.exports = {
     getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness,
     listUnAssignedDevicesBusiness,
+    unlinkDeviceForBeneficiaryBusiness,
     getDeviceDetailsByBeneficiaryIdBusiness
 };

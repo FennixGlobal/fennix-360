@@ -49,6 +49,14 @@ router.get('/getDeviceDetails', function (req, res) {
     })
 });
 
+router.get('/delinkDevice', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.unlinkDeviceForBeneficiaryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/getDeviceDetailsByBeneficiaryId', function (req, res) {
     let returnObj;
     returnObj = deviceBusiness.getDeviceDetailsByBeneficiaryIdBusiness(req);

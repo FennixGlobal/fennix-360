@@ -68,7 +68,8 @@ const dbTableColMap = {
         location2: 'location_2',
         location3: 'location_3',
         location4: 'location_4',
-        country: 'location_3'
+        country: 'location_3',
+        isActive: 'isactive'
     },
     family_info: {
         familyPrimaryName: 'primary_name',

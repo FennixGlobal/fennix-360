@@ -135,6 +135,24 @@ const listDeviceTypesQuery = () => {
         }
     );
 };
+const unlinkDeviceForBeneficiaryQuery = async (req) => {
+    return deviceAggregator.update(
+        {
+            $and: [{beneficiaryId: req}, {active: true}]
+        },
+        {
+            $unset: {beneficiaryId:1}
+        },
+        {
+            multi:true
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 const updateDeviceAttributeQuery = (req) => {
     let deviceAttribute = new DeviceAttributeModel(req);
@@ -325,6 +343,7 @@ module.exports = {
     updateDeviceAttributeQuery,
     // updateDeviceCounterQuery,
     getBeneficiaryIdByImeiQuery,
+    unlinkDeviceForBeneficiaryQuery,
     listUnAssignedDevicesQuery,
     getDeviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsByDeviceIdQuery,
