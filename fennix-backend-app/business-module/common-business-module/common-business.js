@@ -1,7 +1,7 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor, getImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor,getDropdownValueByDropdownIdAccessor, getImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
@@ -70,7 +70,11 @@ const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     }
     return {folderCreationFlag, folderLocation};
 };
-
+const getDropdownNameFromKeyBusiness = async(dropdownId)=>{
+    let dropdownResponse;
+    dropdownResponse = await getDropdownValueByDropdownIdAccessor(dropdownId);
+    return dropdownResponse;
+};
 const uploadToDropboxBusiness = async (documentPath, document, fileNameInit) => {
     console.log('upload to dropbox');
     console.log(documentPath);
@@ -143,5 +147,6 @@ module.exports = {
     imageStorageBusiness,
     emailSendBusiness,
     createDropboxFolderBusiness,
-    uploadToDropboxBusiness
+    uploadToDropboxBusiness,
+    getDropdownNameFromKeyBusiness
 };

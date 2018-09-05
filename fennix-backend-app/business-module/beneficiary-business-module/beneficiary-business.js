@@ -4,7 +4,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness, uploadToDropboxBusiness, emailSendBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, uploadToDropboxBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
@@ -122,11 +122,17 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     const request = req.body, postgresReq = [req.body.beneficiaryId];
     let finalResponse, beneficiaryResponse, uploadResponse, createResponse;
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
+    const documentReq = [request.documentType];
+    let documentName = 'Document';
+    const documentNameResponse = await getDropdownNameFromKeyBusiness(documentReq);
+    if (objectHasPropertyCheck(documentNameResponse, 'rows') && arrayNotEmptyCheck(documentNameResponse.rows)) {
+        documentName = documentNameResponse['rows'][0]['dropdown_value'];
+    }
     console.log(beneficiaryResponse);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         console.log(beneficiaryResponse['rows'][0]);
         if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
-            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${request.documentType}`, request.document, request.documentName);
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${documentName}`, request.document, request.documentName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
                 folderBasePath = `/pat-j/${beneficiaryResponse['rows'][0]['location_3']}/${folderName}`;

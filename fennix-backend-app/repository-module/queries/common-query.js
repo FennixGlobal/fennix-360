@@ -30,8 +30,12 @@ const getDownloadMapperQuery = 'select mapping_key, localized_key from download_
 const fetchImageCounterQuery = ()=> {
     return imageCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
 };
+
+const getDropdownValueByDropdownIdQuery = 'select localized_text as dropdown_value from localization where locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = $1) and language = \'EN_US\'';
+
 module.exports = {
     getDropdownDataQuery,
+    getDropdownValueByDropdownIdQuery,
     getDownloadMapperQuery,
     fetchImageCounterQuery
 };
