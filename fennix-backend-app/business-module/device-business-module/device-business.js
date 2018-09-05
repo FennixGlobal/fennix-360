@@ -3,6 +3,7 @@ const {addDeviceIdForSimcardAccessor} = require('../../repository-module/data-ac
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
+const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -213,9 +214,17 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     }
     return returnObj;
 };
+// const unlinkDeviceForBeneficiaryBusiness = async (req) => {
+//     let request = parseInt(req.query.beneficiaryId);
+//     await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
+//     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+// };
 const unlinkDeviceForBeneficiaryBusiness = async (req) => {
-    let request = parseInt(req.query.beneficiaryId);
+    let request = parseInt(req.query.beneficiaryId), benRequest = {body: {beneficiaryId: req.query.beneficiaryId, deviceId: null}};
+    //unlinking the device for beneficiary in devices collection, beneficiaries table & locationAttributesMaster collection
     await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
+    await beneficiaryAccessor.updateBeneficiaryAccessor(benRequest);
+    await deviceAccessor.unlinkLocationMasterForBeneficiaryAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 

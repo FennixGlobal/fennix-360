@@ -74,13 +74,19 @@ const getBeneficiaryListForAddTicketAccessor = async (req) => {
     return returnObj;
 };
 
+// const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
+//     let returnObj, modifiedQuery;
+//     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
+//     returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
+//     return returnObj;
+// };
 const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
-    let returnObj, modifiedQuery;
+    let returnObj, modifiedQuery, extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`, request = [...req.userIdList, req.centerId];
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
-    returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
+    modifiedQuery = `${modifiedQuery}${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };
-
 const getAllBeneficiaryDetailsAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getAllBeneficiaryDetailsQuery);

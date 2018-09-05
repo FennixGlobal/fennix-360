@@ -78,6 +78,24 @@ const updateLocationDeviceAttributeMasterQuery = (req) => {
     });
 };
 
+const unlinkLocationMasterForBeneficiaryQuery = async (req) => {
+    return LocationDeviceAttributeMasterModel.update(
+        {
+            beneficiaryId: req
+        },
+        {
+            $unset: {beneficiaryId:1}
+        },
+        {
+            multi:true
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 const getBeneficiaryIdByImeiQuery = (query) => {
     return deviceAggregator.find({imei: query, active: true}, {"_id": 1, "beneficiaryId": 1});
@@ -343,6 +361,7 @@ module.exports = {
     updateDeviceAttributeQuery,
     // updateDeviceCounterQuery,
     getBeneficiaryIdByImeiQuery,
+    unlinkLocationMasterForBeneficiaryQuery,
     unlinkDeviceForBeneficiaryQuery,
     listUnAssignedDevicesQuery,
     getDeviceDetailsByBeneficiaryIdQuery,

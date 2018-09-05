@@ -89,7 +89,14 @@ const updateDeviceWithBeneficiaryIdAccessor = async (req) => {
     return returnObj;
 };
 
+const unlinkLocationMasterForBeneficiaryAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.unlinkLocationMasterForBeneficiaryQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    unlinkLocationMasterForBeneficiaryAccessor,
     deviceAggregator,
     listDeviceTypesAccessor,
     deviceBybeneficiaryQuery,
