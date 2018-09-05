@@ -73,7 +73,9 @@ const listDevicesBusiness = async (req) => {
 
     if (arrayNotEmptyCheck(devicesResponse)) {
         devicesResponse.forEach((item) => {
-            beneficiaryIds.push(`${item['beneficiaryId']}`);
+            if (objectHasPropertyCheck(item, 'beneficiaryId')) {
+                beneficiaryIds.push(`${item['beneficiaryId']}`);
+            }
         });
         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
         if (objectHasPropertyCheck(beneficiaryNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
