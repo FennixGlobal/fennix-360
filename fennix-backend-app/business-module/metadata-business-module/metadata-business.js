@@ -62,13 +62,8 @@ const getCardMetadataForRouteBusiness = async (req) => {
                 returnObj.widgetCards[card]['widgets'][widget]['widgetSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections']).map((section) => {
                     returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections']).map((subsection) => {
                         returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => {
-                            console.log('row response');
                             returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['sectionCols'].sort((current, previous) => current.widgetColId - previous.widgetColId);
-                            // row['widgetSectionCols'].sort((previous, current) => previous['widgetColId'] - current['widgetColId']);
-                            console.log(returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['sectionCols']);
                             return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]
-                            // = returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['widgetSectionCols'].sort((item, prevItem) => item.widgetColId - prevItem.widgetColId);
-                            // return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row];
                         });
                         return returnObj.widgetCards[card]['widgets'][widget]['widgetSections'][section]['widgetSubSections'][subsection]
                     });
@@ -106,7 +101,10 @@ const getLoginMetadataBusiness = async () => {
         }, {});
         loginMetadtaResponse['widgetSections'] = Object.keys(loginMetadtaResponse.widgetSections).map((section) => {
             loginMetadtaResponse.widgetSections[section]['widgetSubSections'] = Object.keys(loginMetadtaResponse.widgetSections[section]['widgetSubSections']).map((subsection) => {
-                loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((rows) => loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][rows]);
+                loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((rows) => {
+                    loginMetadtaResponse['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['sectionCols'].sort((current, previous) => current.widgetColId - previous.widgetColId);
+                    return loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][rows];
+                });
                 return loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection];
             });
             return loginMetadtaResponse.widgetSections[section];
@@ -144,8 +142,7 @@ const getModelMetadataBusiness = async (req) => {
         responseMap.modalBody.widgetSections = Object.keys(responseMap.modalBody.widgetSections).map((section) => {
             responseMap.modalBody.widgetSections[section]['widgetSubSections'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections']).map((subsection) => {
                 responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => {
-                    row.sort((previous, current) => previous['widgetColId'] - current['widgetColId']);
-                    console.log(row);
+                    responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['sectionCols'].sort((previous, current) => previous['widgetColId'] - current['widgetColId']);
                     return responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][row]
                 });
                 return responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection];
