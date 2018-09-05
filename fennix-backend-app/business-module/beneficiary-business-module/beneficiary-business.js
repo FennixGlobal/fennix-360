@@ -121,7 +121,8 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.beneficiaryId];
     let finalResponse, beneficiaryResponse, uploadResponse, createResponse;
-    beneficiaryResponse = beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
+    beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
+    console.log(beneficiaryResponse);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         console.log(beneficiaryResponse['rows'][0]);
         if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
