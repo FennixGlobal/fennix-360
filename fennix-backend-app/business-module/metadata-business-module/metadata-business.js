@@ -139,7 +139,10 @@ const getModelMetadataBusiness = async (req) => {
         });
         responseMap.modalBody.widgetSections = Object.keys(responseMap.modalBody.widgetSections).map((section) => {
             responseMap.modalBody.widgetSections[section]['widgetSubSections'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections']).map((subsection) => {
-                responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][row]);
+                responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((row) => {
+                    row.sort((previous, current) => previous['widgetColId'] - current['widgetColId']);
+                    return responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][row]
+                });
                 return responseMap.modalBody.widgetSections[section]['widgetSubSections'][subsection];
             });
             return responseMap.modalBody.widgetSections[section];
