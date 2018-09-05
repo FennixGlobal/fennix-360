@@ -69,7 +69,10 @@ const dbTableColMap = {
         location3: 'location_3',
         location4: 'location_4',
         country: 'location_3',
-        isActive: 'isactive'
+        isActive: 'isactive',
+        baseFolderPath: 'dropbox_base_path',
+        endDate: 'end_date',
+        startDate: 'start_date'
     },
     family_info: {
         familyPrimaryName: 'primary_name',

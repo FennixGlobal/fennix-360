@@ -96,6 +96,14 @@ router.get('/deleteBeneficiary', function (req, res) {
     })
 });
 
+router.post('/uploadDocumentsForBeneficiary', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.uploadBeneficiaryDocumentsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/listUnAssignedBeneficiary', function (req, res) {
     let returnObj;
     returnObj = beneficiaryBusiness.beneficiaryListForUnAssignedDevicesBusiness();

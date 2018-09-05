@@ -4,7 +4,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, uploadToDropboxBusiness, emailSendBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
@@ -55,9 +55,8 @@ const deleteBeneficiaryBusiness = async (req) => {
 };
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body, restrictionRequest, response, primaryKeyResponse;
+    let request = req.body, restrictionRequest, response, primaryKeyResponse, imageUpload;
     const date = new Date();
-    let imageUpload;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.documentId = `PATDOJ-${fullDate}`;
     request.updated_date = new Date();
@@ -71,9 +70,9 @@ const addBeneficiaryBusiness = async (req) => {
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         const fileLocations = imageStorageBusiness(imageUpload, response.rows[0]['beneficiaryid'], 'DO', 'BENEFICIARY', fullDate);
         const newReq = {
-                beneficiaryId: response.rows[0]['beneficiaryid'],
-                image: fileLocations.sharePath,
-                baseFolderPath: fileLocations.folderBasePath
+            beneficiaryId: response.rows[0]['beneficiaryid'],
+            image: fileLocations.sharePath,
+            baseFolderPath: fileLocations.folderBasePath
         };
         let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
@@ -99,6 +98,44 @@ const addBeneficiaryBusiness = async (req) => {
         }
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+};
+
+
+const updateBeneficiaryBusiness = async (req) => {
+    let response, finalResponse;
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+    }
+    return finalResponse;
+};
+
+const uploadBeneficiaryDocumentsBusiness = async (req) => {
+    const date = new Date(),
+        fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    const request = req.body, postgresReq = [req.body.beneficiaryId];
+    let finalResponse, beneficiaryResponse, uploadResponse, createResponse;
+    beneficiaryResponse = beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
+    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${request.documentType}`, request.document, request.documentName);
+        } else {
+            let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
+                folderBasePath = `/pat-j/${beneficiaryResponse['rows'][0]['location_3']}/${folderName}`;
+            createResponse = await createDropboxFolderBusiness(folderBasePath, request.documentType);
+            if (createResponse) {
+                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document, request.documentName);
+            }
+        }
+    }
+    if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+    }
+    return finalResponse;
 };
 
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
@@ -468,17 +505,6 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     return finalResponse;
 };
 
-const updateBeneficiaryBusiness = async (req) => {
-    let response, finalResponse;
-    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
-    if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
-    }
-    return finalResponse;
-};
-
 const addDeviceForBeneficiaryBusiness = async (req) => {
     let request, finalResponse;
     await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
@@ -503,5 +529,6 @@ module.exports = {
     updateBeneficiaryBusiness,
     deleteBeneficiaryBusiness,
     beneficiaryListForUnAssignedDevicesBusiness,
-    getAllBeneficiaryDetailsBusiness
+    getAllBeneficiaryDetailsBusiness,
+    uploadBeneficiaryDocumentsBusiness
 };

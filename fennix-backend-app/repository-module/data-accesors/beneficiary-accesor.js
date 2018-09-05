@@ -117,8 +117,13 @@ const addAccountingAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
     return returnObj;
 };
-
+const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBeneficiaryDocumentByBeneficiaryIdQuery);
+    return returnObj;
+};
 module.exports = {
+    getBeneficiaryDocumentByBeneficiaryIdAccessor,
     addAccountingAccessor,
     addFamilyInfoAccessor,
     updateBeneficiaryAccessor,

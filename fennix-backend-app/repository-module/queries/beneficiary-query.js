@@ -42,9 +42,10 @@ const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries  where benefi
 // '\n' +
 // 'left join family_info f \n' +
 // 'on b.beneficiaryid = f.beneficiaryid and b.beneficiaryid =$1';
-
+const getBeneficiaryDocumentByBeneficiaryIdQuery = 'select dropbox_base_path,location_3 from from beneficiaries  where beneficiaryid =$1';
 module.exports = {
     getBeneficiaryDetailsQuery,
+    getBeneficiaryDocumentByBeneficiaryIdQuery,
     getTotalRecordsBasedOnOwnerUserIdCenterIdQuery,
     selectBeneficiaryNameFromBeneficiaryIdQuery,
     selectBeneficiaryByUserIdQuery,

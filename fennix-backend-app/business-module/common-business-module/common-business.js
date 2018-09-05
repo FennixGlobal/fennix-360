@@ -28,54 +28,63 @@ const dropDownBusiness = async (req) => {
 };
 
 const imageStorageBusiness = async (imageUpload, id, country, role, date) => {
-    let fileFormat, folderName, folderBasePath, sharePath;
-        folderName = `${role}_${id}_${date}`;
-        folderBasePath = `/pat-j/${country}/${folderName}`;
-        const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`});
-    if (notNullCheck(imageUpload)) {
-        fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
-        imageUpload = dataURLtoFile(imageUpload);
-        if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
-            const fileName = `${folderName}.${fileFormat}`;
-            let imageUploadResponse = await dropBoxItem.filesUpload({
-                path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
-                contents: imageUpload
-            }).catch((err) => {
-                console.log(err)
+    let folderName, folderBasePath, sharePath, fileUploadResponse;
+    folderName = `${role}_${id}_${date}`;
+    folderBasePath = `/pat-j/${country}/${folderName}`;
+    const profileResponse = await createDropboxFolderBusiness(folderBasePath, 'profile');
+    if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
+        fileUploadResponse = await uploadToDropboxBusiness(folderBasePath, imageUpload, folderName);
+        // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})
+        // && (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')
+        // fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
+        // imageUpload = dataURLtoFile(imageUpload);
+        // const fileName = `${folderName}.${fileFormat}`;
+        // let imageUploadResponse = await dropBoxItem.filesUpload({
+        //     path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
+        //     contents: imageUpload
+        // }).catch((err) => {
+        //     console.log(err)
+        // });
+        if (fileUploadResponse.uploadSuccessFlag) {
+            let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: fileUploadResponse.docUploadResponse.path_lower}).catch((err) => {
+                console.log('sharing error');
+                console.log(err);
             });
-            if (notNullCheck(imageUploadResponse)) {
-                let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: imageUploadResponse.path_lower}).catch((err) => {
-                    console.log('sharing error');
-                    console.log(err);
-                });
-                let replaceLink = shareLink.url.split('\/s\/')[1];
-                sharePath = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
-            }
+            let replaceLink = shareLink.url.split('\/s\/')[1];
+            sharePath = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
         }
     }
     return {sharePath, folderBasePath};
-    // let returnLocation = '', imageCount, imageName, writeLocation = imageDBLocation,
-    //     mimeType;
-    // if (notNullCheck(image)) {
-    //     mimeType = image.split(',')[0].split('/')[1].split(';')[0];
-    //     image = image.split(',')[1];
-    //     imageCount = await getImageCounterAccessor();
-    //     // await updateImageCounterAccessor();
-    //     imageName = `${role}_${imageCount['_doc']['counter']}.${mimeType}`;
-    //     writeLocation = `${writeLocation}${imageName}`;
-    //     let bufferArray = new Buffer(image, 'base64');
-    //     console.log(bufferArray);
-    //     console.log(writeLocation);
-    //     await fs.writeFile(writeLocation, bufferArray,{ flag: 'w' }, (err, log) => {
-    //         console.log(err);
-    //         if (!err) {
-    //             returnLocation = writeLocation;
-    //         }
-    //         console.log(log);
-    //     });
-    // }
-    // return returnLocation;
 };
+const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
+    let folderCreationFlag = false, folderLocation;
+    const folderResponse = await dropBoxItem.filesCreateFolderV2({path: `${basePath}/${categoryFolder}`}).catch((err) => {
+        console.log(err);
+    });
+    if (notNullCheck(folderResponse) && objectHasPropertyCheck(folderResponse, 'metadata') && objectHasPropertyCheck(folderResponse['metadata'], 'path_lower')) {
+        folderCreationFlag = true;
+        folderLocation = folderResponse['metadata']['path_lower'];
+    }
+    return {folderCreationFlag, folderLocation};
+};
+
+const uploadToDropboxBusiness = async (documentPath, document, fileNameInit) => {
+    const fileFormat = document.match(/:(.*?);/)[1].split('/')[1];
+    let documentUpload = document, docUploadResponse, uploadSuccessFlag = false;
+    documentUpload = dataURLtoFile(documentUpload);
+    const fileName = `${fileNameInit}.${fileFormat}`;
+    docUploadResponse = await dropBoxItem.filesUpload({
+        path: `${documentPath}/${fileName}`,
+        contents: documentUpload
+    }).catch((err) => {
+        console.log(err)
+    });
+    if (notNullCheck(docUploadResponse)) {
+        uploadSuccessFlag = true;
+    }
+    return {uploadSuccessFlag, docUploadResponse};
+};
+
 const dataURLtoFile = (dataurl) => {
     let newArray = dataurl.split(',')[1];
     return new Buffer(newArray, 'base64');
@@ -124,5 +133,7 @@ const mailModifier = (email, roleName) => {
 module.exports = {
     dropDownBusiness,
     imageStorageBusiness,
-    emailSendBusiness
+    emailSendBusiness,
+    createDropboxFolderBusiness,
+    uploadToDropboxBusiness
 };
