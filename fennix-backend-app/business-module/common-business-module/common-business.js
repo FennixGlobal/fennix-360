@@ -34,7 +34,7 @@ const imageStorageBusiness = async (imageUpload, id, country, role, date) => {
     console.log('folderBasePath', folderBasePath);
     const profileResponse = await createDropboxFolderBusiness(folderBasePath, 'profile');
     if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
-        fileUploadResponse = await uploadToDropboxBusiness(folderBasePath, imageUpload, folderName);
+        fileUploadResponse = await uploadToDropboxBusiness(profileResponse.folderLocation, imageUpload, folderName);
         // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})
         // && (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')
         // fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
@@ -72,6 +72,9 @@ const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
 };
 
 const uploadToDropboxBusiness = async (documentPath, document, fileNameInit) => {
+    console.log('upload to dropbox');
+    console.log(documentPath);
+    console.log(fileNameInit);
     const fileFormat = document.match(/:(.*?);/)[1].split('/')[1];
     let documentUpload = document, docUploadResponse, uploadSuccessFlag = false;
     documentUpload = dataURLtoFile(documentUpload);

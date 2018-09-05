@@ -123,6 +123,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     let finalResponse, beneficiaryResponse, uploadResponse, createResponse;
     beneficiaryResponse = beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        console.log(beneficiaryResponse['rows'][0]);
         if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
             uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${request.documentType}`, request.document, request.documentName);
         } else {
