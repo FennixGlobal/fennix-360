@@ -68,13 +68,17 @@ const addBeneficiaryBusiness = async (req) => {
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        const fileLocations = imageStorageBusiness(imageUpload, response.rows[0]['beneficiaryid'], 'DO', 'BENEFICIARY', fullDate);
-        const newReq = {
-            beneficiaryId: response.rows[0]['beneficiaryid'],
-            image: fileLocations.sharePath,
-            baseFolderPath: fileLocations.folderBasePath
-        };
-        let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
+        const fileLocations = await imageStorageBusiness(imageUpload, response.rows[0]['beneficiaryid'], 'DO', 'BENEFICIARY', fullDate);
+        if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
+            console.log('image response');
+            console.log(imageStorageBusiness);
+            const newReq = {
+                beneficiaryId: response.rows[0]['beneficiaryid'],
+                image: fileLocations.sharePath,
+                baseFolderPath: fileLocations.folderBasePath
+            };
+            let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
+        }
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
             primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
             restrictionRequest = {

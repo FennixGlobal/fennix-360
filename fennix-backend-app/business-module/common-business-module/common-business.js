@@ -31,6 +31,7 @@ const imageStorageBusiness = async (imageUpload, id, country, role, date) => {
     let folderName, folderBasePath, sharePath, fileUploadResponse;
     folderName = `${role}_${id}_${date}`;
     folderBasePath = `/pat-j/${country}/${folderName}`;
+    console.log('folderBasePath', folderBasePath);
     const profileResponse = await createDropboxFolderBusiness(folderBasePath, 'profile');
     if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
         fileUploadResponse = await uploadToDropboxBusiness(folderBasePath, imageUpload, folderName);
@@ -61,6 +62,8 @@ const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     const folderResponse = await dropBoxItem.filesCreateFolderV2({path: `${basePath}/${categoryFolder}`}).catch((err) => {
         console.log(err);
     });
+    console.log('create folder response');
+    console.log(folderResponse);
     if (notNullCheck(folderResponse) && objectHasPropertyCheck(folderResponse, 'metadata') && objectHasPropertyCheck(folderResponse['metadata'], 'path_lower')) {
         folderCreationFlag = true;
         folderLocation = folderResponse['metadata']['path_lower'];
@@ -79,6 +82,8 @@ const uploadToDropboxBusiness = async (documentPath, document, fileNameInit) => 
     }).catch((err) => {
         console.log(err)
     });
+    console.log('upload dropbox response');
+    console.log('file Name', fileName);
     if (notNullCheck(docUploadResponse)) {
         uploadSuccessFlag = true;
     }

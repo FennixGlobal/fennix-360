@@ -64,11 +64,11 @@ const processLocation = async (location) => {
     let seconds = location.substr(39, 2);
     let dateTime = new Date(year, month, day, hours, minutes, seconds);
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    console.log('location Response');
-    console.log(beneficiaryResponse);
-    console.log(objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId'));
-    console.log(notNullCheck(beneficiaryResponse[0]['beneficiaryId']));
-    console.log(beneficiaryResponse[0]);
+    // console.log('location Response');
+    // console.log(beneficiaryResponse);
+    // console.log(objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId'));
+    // console.log(notNullCheck(beneficiaryResponse[0]['beneficiaryId']));
+    // console.log(beneficiaryResponse[0]);
     if (arrayNotEmptyCheck(beneficiaryResponse) && notNullCheck(beneficiaryResponse[0]) && notNullCheck(beneficiaryResponse[0]['beneficiaryId'])) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
@@ -118,9 +118,9 @@ const processLocation = async (location) => {
             locationId: parseInt(locationId['_doc']['counter']),
             deviceAttributeId: parseInt(deviceAttributeId['_doc']['counter'])
         };
-        console.log('device Response');
-        console.log(masterRequest.deviceAttributeId);
-        console.log(masterRequest.deviceId);
+        // console.log('device Response');
+        // console.log(masterRequest.deviceAttributeId);
+        // console.log(masterRequest.deviceId);
         deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
             // console.log(doc)
         });
@@ -141,9 +141,9 @@ const processLocation = async (location) => {
 
 processLogin = async (imei) => {
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
-    console.log('Beneficiary details:');
-    console.log(beneficiaryResponse);
-    // console.log('IMEI Number:');
+    // console.log('Beneficiary details:');
+    // console.log(beneficiaryResponse);
+    // // console.log('IMEI Number:');
     // console.log(imei);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
