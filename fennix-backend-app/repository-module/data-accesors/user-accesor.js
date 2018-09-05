@@ -68,6 +68,12 @@ const getUserIdsForMasterAdminAccessor = async (req) => {
     return returnObj;
 };
 
+const getUserIdsForGlobalAdminAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForGlobalAdminQuery);
+    return returnObj;
+};
+
 const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
@@ -88,6 +94,10 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
             }
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
                 otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.locationId, req.query.languageId]);
+                break;
+            }
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN : {
+                otherUserIdsForGivenUserId = await getUserIdsForGlobalAdminAccessor([req.query.locationId, req.query.languageId]);
                 break;
             }
         }

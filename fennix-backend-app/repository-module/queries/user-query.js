@@ -39,9 +39,15 @@ const getUserIdsForMasterAdminQuery = 'select concat(first_name, \\\' \\\', last
     '    \', user_id, gender, user_role \\n\' +\n' +
     '    \'from users u where location_id = $1';
 
+const getUserIdsForGlobalAdminQuery = 'select concat(first_name, \\\' \\\', last_name) as full_name,\\n\' +\n' +
+    '    \'(select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\\n\' +\n' +
+    '    \', user_id, gender, user_role \\n\' +\n' +
+    '    \'from users u where u.isactive = true';
+
 
 module.exports = {
     insertUserQuery,
+    getUserIdsForGlobalAdminQuery,
     getUserListQuery,
     checkUserEmailQuery,
     userProfileQuery,
