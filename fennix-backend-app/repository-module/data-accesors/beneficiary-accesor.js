@@ -94,12 +94,12 @@ const getAllBeneficiaryDetailsAccessor = async (req) => {
 };
 
 const updateBeneficiaryAccessor = async (req) => {
-    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req.body), request = [];
+    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
     fields.sort();
     fields.splice(fields.indexOf('beneficiaryId'), 1);
     updatedQueryCreatorResponse = updateQueryCreator('beneficiaries', fields, 'beneficiaryid');
-    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req.body[f]));
-    request.push(req.body.beneficiaryId);
+    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
+    request.push(req.beneficiaryId);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };

@@ -10,14 +10,6 @@ const Excel = require('exceljs');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-var fetch = require('isomorphic-fetch');
-const atob = require('atob');
-// const fs = require('fs');
-var dropbox = require('dropbox').Dropbox;
-var dropBoxItem = new dropbox({
-    accessToken: '6-m7U_h1YeAAAAAAAAAAV0CNy7fXzgtcE3i1PSumhkQaaW2QfdioPQEZGSq3VXbf',
-    fetch: fetch
-});
 
 const {updateDeviceWithBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const beneficiaryAggregatorBusiness = async (req) => {
@@ -52,7 +44,7 @@ const beneficiaryAggregatorBusiness = async (req) => {
 };
 
 const deleteBeneficiaryBusiness = async (req) => {
-    let request = {body: {beneficiaryId: req.query.beneficiaryId, isActive: false}}, response, finalResponse;
+    let request = {beneficiaryId: req.query.beneficiaryId, isActive: false}, response, finalResponse;
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
@@ -68,64 +60,24 @@ const addBeneficiaryBusiness = async (req) => {
     let imageUpload;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.documentId = `PATDOJ-${fullDate}`;
-    // request.image = imageStorageBusiness(request.image, 'BENEFICIARY');
     request.updated_date = new Date();
     request.created_date = new Date();
-    // emailSendBusiness(request.emailId, 'BENEFICIARY');
-    // console.log(request.image);
     if (objectHasPropertyCheck(request, 'image')) {
-        // let base64Image = request.image.split(';base64,').pop();
         imageUpload = request.image;
-        // await fs.writeFile('../../../beneficiary.jpg',base64Image,{encoding: 'base64'});
         delete request.image;
     }
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
-    const folderName = `Beneficiary_${response.rows[0]['beneficiaryid']}_${fullDate}`;
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        const fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
-        console.log(fileFormat);
-        imageUpload = dataURLtoFile(imageUpload, folderName);
-        console.log(imageUpload);
-        const profileResponse = await dropBoxItem.filesCreateFolderV2({path: `/pat-j/DO/${folderName}/profile`});
-        if (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')) {
-            console.log(profileResponse);
-            // const file = await fs.readFile('../../../beneficiary.jpg');
-            // console.log(file);
-            const fileName = `${folderName}.${fileFormat}`;
-            console.log('file Name');
-            console.log(fileName);
-            let imageUploadResponse = await dropBoxItem.filesUpload({
-                path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
-                contents: imageUpload
-            }).catch((err) => {
-                console.log(err)
-            });
-            console.log('image response');
-            console.log(imageUploadResponse);
-            if (notNullCheck(imageUploadResponse)) {
-                // const file =
-                // update DB with profile path
-                // console.log(shareLink);
-                let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: imageUploadResponse.path_lower}).catch((err) => {
-                    console.log('sharing error');
-                    console.log(err);
-                });
-                let replaceLink = shareLink.url.split('\/s\/')[1];
-                replaceLink = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
-                const newReq = {
-                    body: {
-                        beneficiaryId: response.rows[0]['beneficiaryid'],
-                        image: replaceLink
-                    }
-                };
-                let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
-                console.log(imageUpdateForBenIdResponse);
-            }
-        }
+        const fileLocations = imageStorageBusiness(imageUpload, response.rows[0]['beneficiaryid'], 'DO', 'BENEFICIARY', fullDate);
+        const newReq = {
+                beneficiaryId: response.rows[0]['beneficiaryid'],
+                image: fileLocations.sharePath,
+                baseFolderPath: fileLocations.folderBasePath
+        };
+        let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
         if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
             primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
-            console.log(primaryKeyResponse);
             restrictionRequest = {
                 _id: primaryKeyResponse['_doc']['counter'],
                 beneficiaryId: response.rows[0]['beneficiaryid'],
@@ -148,32 +100,7 @@ const addBeneficiaryBusiness = async (req) => {
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
-const dataURLtoFile = (dataurl, filename) => {
-    let newArray = dataurl.split(',')[1];
-    let bufferImg = new Buffer(newArray, 'base64');
-    // var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-    //     bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-    // console.log('new Array');
-    // console.log(newArray);
-    // let binaryStream = atob(newArray);
-    // console.log('binary stream');
-    // console.log(binaryStream);
-    // let arrayLength = newArray.length;
-    // console.log('binary length');
-    // let uIntArray = new Uint8Array(arrayLength);
-    // let i = 0;
-    // for (i;i<arrayLength;i++){
-    //     uIntArray[i] = binaryStream.charCodeAt(n);
-    // }
-    // console.log('uInt Array');
-    // console.log(uIntArray.buffer);
-    // while (n--) {
-    //     u8arr[n] = bstr.charCodeAt(n);
-    // }
-    // const file = new File([u8arr], filename, {type: mime});
-    // return uIntArray.buffer;
-    return bufferImg;
-};
+
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
     response = await beneficiaryAccessor.beneficiaryListOfUnAssignedDevicesAccesor([]);
@@ -543,7 +470,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
 
 const updateBeneficiaryBusiness = async (req) => {
     let response, finalResponse;
-    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req);
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
     } else {
@@ -554,7 +481,7 @@ const updateBeneficiaryBusiness = async (req) => {
 
 const addDeviceForBeneficiaryBusiness = async (req) => {
     let request, finalResponse;
-    await beneficiaryAccessor.updateBeneficiaryAccessor(req);
+    await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
     request = {
         beneficiaryId: parseInt(req.body.beneficiaryId, 10),
         deviceId: parseInt(req.body.deviceId, 10)
