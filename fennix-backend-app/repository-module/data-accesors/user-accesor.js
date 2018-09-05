@@ -97,7 +97,7 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 break;
             }
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN : {
-                otherUserIdsForGivenUserId = await getUserIdsForGlobalAdminAccessor([req.query.locationId, req.query.languageId]);
+                otherUserIdsForGivenUserId = await getUserIdsForGlobalAdminAccessor([req.query.languageId]);
                 break;
             }
         }

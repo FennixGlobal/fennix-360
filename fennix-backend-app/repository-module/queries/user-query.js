@@ -40,7 +40,7 @@ const getUserIdsForMasterAdminQuery = 'select concat(first_name, \' \', last_nam
     '    from users u where location_id = $1';
 
 const getUserIdsForGlobalAdminQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
-    '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\n' +
+    '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name\n' +
     '    , user_id, gender, user_role \n' +
     '    from users u where u.isactive = true';
 
