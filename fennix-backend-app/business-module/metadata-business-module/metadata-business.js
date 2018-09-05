@@ -102,7 +102,7 @@ const getLoginMetadataBusiness = async () => {
         loginMetadtaResponse['widgetSections'] = Object.keys(loginMetadtaResponse.widgetSections).map((section) => {
             loginMetadtaResponse.widgetSections[section]['widgetSubSections'] = Object.keys(loginMetadtaResponse.widgetSections[section]['widgetSubSections']).map((subsection) => {
                 loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'] = Object.keys(loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows']).map((rows) => {
-                    loginMetadtaResponse['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][row]['sectionCols'].sort((current, previous) => current.widgetColId - previous.widgetColId);
+                    loginMetadtaResponse['widgetSections'][section]['widgetSubSections'][subsection]['widgetSectionRows'][rows]['sectionCols'].sort((current, previous) => current.widgetColId - previous.widgetColId);
                     return loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection]['widgetSectionRows'][rows];
                 });
                 return loginMetadtaResponse.widgetSections[section]['widgetSubSections'][subsection];
