@@ -1,5 +1,5 @@
-const {getDownloadMapperQuery,getDropdownDataQuery,getDropdownValueByDropdownIdQuery} = require('../queries/common-query');
-const {imageCounterUpdateQuery,fetchImageCounterQuery} = require('../queries/common-query');
+const {getDownloadMapperQuery, getDropdownDataQuery, getDropdownValueByDropdownIdQuery} = require('../queries/common-query');
+const {imageCounterUpdateQuery, fetchImageCounterQuery} = require('../queries/common-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const getDownloadMapperAccessor = async (req) => {
@@ -14,14 +14,14 @@ const getDropdownAccessor = async (req) => {
     return responseObj;
 };
 
-const getImageCounterAccessor = async ()=>{
+const getImageCounterAccessor = async () => {
     let responseObj;
     responseObj = await fetchImageCounterQuery();
     return responseObj;
 };
-const getDropdownValueByDropdownIdAccessor = async (req)=>{
+const getDropdownValueByDropdownIdAccessor = async (req) => {
     let responseObj;
-    responseObj = await getDropdownValueByDropdownIdQuery(req);
+    responseObj = await connectionCheckAndQueryExec(req, getDropdownValueByDropdownIdQuery);
     return responseObj;
 };
 // const updateImageCounterAccessor = async ()=>{
