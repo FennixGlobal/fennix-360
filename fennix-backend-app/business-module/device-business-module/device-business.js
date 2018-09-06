@@ -222,7 +222,7 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
 //     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 // };
 const unlinkDeviceForBeneficiaryBusiness = async (req) => {
-    let request = parseInt(req.query.beneficiaryId), benRequest = {body: {beneficiaryId: req.query.beneficiaryId, deviceId: null}};
+    let request = parseInt(req.query.beneficiaryId), benRequest = {beneficiaryId: req.query.beneficiaryId, deviceId: null};
     //unlinking the device for beneficiary in devices collection, beneficiaries table & locationAttributesMaster collection
     await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
     await beneficiaryAccessor.updateBeneficiaryAccessor(benRequest);
