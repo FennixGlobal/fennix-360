@@ -2,6 +2,7 @@ const beneficiaryQueries = require('../queries/beneficiary-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const getBeneficiaryByUserIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
@@ -58,10 +59,26 @@ const getBeneifciaryIdList = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery);
     return returnObj;
 };
+// const getBeneficiaryListByOwnerId = async (req) => {
+//     let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
+//         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+//     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
+//     modifiedQuery = `${modifiedQuery}${extraQuery}`;
+//     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
+//     return returnObj;
+// };
+
 const getBeneficiaryListByOwnerId = async (req) => {
-    let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
-        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+    let returnObj, request = [], modifiedQuery,
+        extraQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId, req.skip, req.limit];
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+    }  else {
+        request = [...req.userIdList, req.skip, req.limit];
+        extraQuery = `and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 1} limit $${req.userIdList.length + 2}`;
+    }
     modifiedQuery = `${modifiedQuery}${extraQuery}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
@@ -75,18 +92,28 @@ const getBeneficiaryListForAddTicketAccessor = async (req) => {
 };
 
 // const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
-//     let returnObj, modifiedQuery;
+//     let returnObj, modifiedQuery, extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`, request = [...req.userIdList, req.centerId];
 //     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
-//     returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
+//     modifiedQuery = `${modifiedQuery}${extraQuery}`;
+//     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
 //     return returnObj;
 // };
+
 const getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor = async (req) => {
-    let returnObj, modifiedQuery, extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`, request = [...req.userIdList, req.centerId];
+    let returnObj, modifiedQuery, extraQuery = ``, request = [];
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.getTotalRecordsBasedOnOwnerUserIdCenterIdQuery, false);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
+        request = [...req.userIdList, req.centerId];
+    } else {
+        extraQuery = `and isactive = true`;
+        request = [...req.userIdList];
+    }
     modifiedQuery = `${modifiedQuery}${extraQuery}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };
+
 const getAllBeneficiaryDetailsAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getAllBeneficiaryDetailsQuery);

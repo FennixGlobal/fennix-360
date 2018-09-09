@@ -74,12 +74,70 @@ const getUserIdsForGlobalAdminAccessor = async (req) => {
     return returnObj;
 };
 
+// const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
+//     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
+//     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
+//     if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
+//         let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
+//         switch (nativeUserRole) {
+//             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR : {
+//                 otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
+//                 break;
+//             }
+//             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN : {
+//                 otherUserIdsForGivenUserId = await getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
+//                 break;
+//             }
+//             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN : {
+//                 otherUserIdsForGivenUserId = await getUserIdsForSuperAdminAccessor([req.query.locationId, req.query.languageId]);
+//                 break;
+//             }
+//             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN : {
+//                 otherUserIdsForGivenUserId = await getUserIdsForMasterAdminAccessor([req.query.locationId, req.query.languageId]);
+//                 break;
+//             }
+//             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN : {
+//                 otherUserIdsForGivenUserId = await getUserIdsForGlobalAdminAccessor([req.query.languageId]);
+//                 break;
+//             }
+//         }
+//         if (objectHasPropertyCheck(otherUserIdsForGivenUserId, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(otherUserIdsForGivenUserId.rows)) {
+//             switch (dataModifier.toLowerCase()) {
+//                 case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NAME.toLowerCase():
+//                     returnObj = [];
+//                     otherUserIdsForGivenUserId.rows.forEach(item => {
+//                         let obj = {
+//                             userId: item['user_id'],
+//                             name: item['full_name']
+//                         };
+//                         returnObj.push(obj);
+//                     });
+//                     break;
+//                 case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID.toLowerCase():
+//                     returnObj = [];
+//                     otherUserIdsForGivenUserId.rows.forEach(item => {
+//                         returnObj.push(item['user_id']);
+//                     });
+//                     break;
+//                 case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL.toLowerCase():
+//                     returnObj = otherUserIdsForGivenUserId;
+//                     break;
+//             }
+//         }
+//     }
+//     return returnObj;
+// };
+
 const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
     if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
         switch (nativeUserRole) {
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR: {
+                otherUserIdsForGivenUserId = userDetailResponse.rows[0];
+                break;
+            }
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR : {
                 otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
                 break;
@@ -122,6 +180,11 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL.toLowerCase():
                     returnObj = otherUserIdsForGivenUserId;
                     break;
+                case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE.toLowerCase():
+                    returnObj = {
+                        userIdsList: otherUserIdsForGivenUserId,
+                        nativeUserRole: nativeUserRole
+                    }
             }
         }
     }
