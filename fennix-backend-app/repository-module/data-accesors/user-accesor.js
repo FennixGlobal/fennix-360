@@ -181,8 +181,12 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                     returnObj = otherUserIdsForGivenUserId;
                     break;
                 case COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE.toLowerCase():
+                    let userIds = [];
+                    otherUserIdsForGivenUserId.rows.forEach(item => {
+                        userIds.push(item['user_id']);
+                    });
                     returnObj = {
-                        userIdsList: otherUserIdsForGivenUserId,
+                        userIdsList: userIds,
                         nativeUserRole: nativeUserRole
                     }
             }
