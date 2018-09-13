@@ -94,6 +94,9 @@ const getCenterIdsAccessor = async (req) => {
                 centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectAllCenterIdsForMasterAdminQuery);
                 break;
             }
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN : {
+                centerIdResponse = await connectionCheckAndQueryExec(request, locationQueries.selectAllCenterIdsForGlobalAdminQuery);
+            }
         }
     }
     return centerIdResponse;

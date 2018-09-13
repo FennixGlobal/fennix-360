@@ -1,4 +1,4 @@
-const {getBeneficiaryLocationList, locationCounterQuery, locationDetailsUpdateQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
+const {getBeneficiaryLocationList, locationCounterQuery, locationDetailsUpdateQuery, selectAllCountriesForGlobalAdminQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 
@@ -44,6 +44,10 @@ const getCountryListAccessor = async (req) => {
         }
         case 'ROLE_MASTER_ADMIN' : {
             countryListResponse = await connectionCheckAndQueryExec(request, selectAllCountriesForMasterAdminQuery);
+            break;
+        }
+        case 'ROLE_GLOBAL_ADMIN' : {
+            countryListResponse = await connectionCheckAndQueryExec(request, selectAllCountriesForGlobalAdminQuery);
         }
     }
     return countryListResponse;

@@ -74,6 +74,12 @@ const selectCenterIdsForSuperAdminQuery = 'select c.location_id, (select name fr
 //MASTER_ADMIN
 const selectAllCenterIdsForMasterAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where location_level = 0';
 
+//GLOBAL_ADMIN
+const selectAllCountriesForGlobalAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $2) as country_name,location_id, loc.locale_key from location loc where location_level = 3';
+
+//GLOBAL_ADMIN
+const selectAllCenterIdsForGlobalAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where location_level = 0';
+
 const selectCenterIdsForGivenUserIdQuery = 'select location_id from location where parent_location_id = (select location_id from location where parent_location_id = (select location_id from users where user_id = $1))';
 
 
@@ -91,5 +97,7 @@ module.exports = {
     locationCounterQuery,
     // insertNextPrimaryKeyQuery,
     selectAllCountriesForMasterAdminQuery,
-    selectCenterIdsForLoggedInUserAndSubUsersQuery
+    selectCenterIdsForLoggedInUserAndSubUsersQuery,
+    selectAllCountriesForGlobalAdminQuery,
+    selectAllCenterIdsForGlobalAdminQuery
 };
