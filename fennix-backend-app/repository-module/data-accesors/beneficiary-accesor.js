@@ -3,6 +3,7 @@ const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-
 const {requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const userAccessor = require('../data-accesors/user-accesor');
 
 const getBeneficiaryByUserIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
@@ -54,11 +55,21 @@ const getBeneficiaryDetailsAccessor = async (req) => {
     return returnObj;
 };
 
+// const getBeneifciaryIdList = async (req) => {
+//     let returnObj;
+//     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery);
+//     return returnObj;
+// };
+
 const getBeneifciaryIdList = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery);
+    let returnObj, userIds, extraQuery, modifiedQuery;
+    userIds = userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    extraQuery= ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
+    modifiedQuery = `$${beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery} $${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], modifiedQuery);
     return returnObj;
 };
+
 // const getBeneficiaryListByOwnerId = async (req) => {
 //     let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
 //         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
