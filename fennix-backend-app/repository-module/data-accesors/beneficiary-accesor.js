@@ -62,15 +62,15 @@ const getBeneficiaryDetailsAccessor = async (req) => {
 // };
 
 const getBeneifciaryIdList = async (req) => {
-    let returnObj, userIds, extraQuery, modifiedQuery;
+    let returnObj, userIds, extraQuery, finalQuery, modifiedQuery;
     userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     extraQuery= ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
-    modifiedQuery = `$${beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery} $${extraQuery}`;
+    modifiedQuery = requestInModifier(userIds, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     console.log(modifiedQuery);
-    returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], modifiedQuery);
+    finalQuery = `$${modifiedQuery} $${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], finalQuery);
     return returnObj;
 };
-
 // const getBeneficiaryListByOwnerId = async (req) => {
 //     let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
 //         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
