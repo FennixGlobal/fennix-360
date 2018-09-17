@@ -63,7 +63,7 @@ const getBeneficiaryDetailsAccessor = async (req) => {
 
 const getBeneifciaryIdList = async (req) => {
     let returnObj, userIds, extraQuery, modifiedQuery;
-    userIds = userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     console.log(userIds);
     extraQuery= ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
     modifiedQuery = `$${beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery} $${extraQuery}`;
