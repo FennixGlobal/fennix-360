@@ -64,8 +64,8 @@ const getBeneficiaryDetailsAccessor = async (req) => {
 const getBeneifciaryIdList = async (req) => {
     let returnObj, userIds, extraQuery, finalQuery, modifiedQuery;
     userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    extraQuery= ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
-    modifiedQuery = requestInModifier(userIds, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
+    extraQuery = ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
+    modifiedQuery = requestInModifier(userIds, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
     console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery}`;
     console.log(finalQuery);
@@ -88,7 +88,7 @@ const getBeneficiaryListByOwnerId = async (req) => {
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
         request = [...req.userIdList, req.centerId, req.skip, req.limit];
         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
-    }  else {
+    } else {
         request = [...req.userIdList, req.skip, req.limit];
         extraQuery = `and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 1} limit $${req.userIdList.length + 2}`;
     }
