@@ -68,6 +68,7 @@ const getBeneifciaryIdList = async (req) => {
     modifiedQuery = requestInModifier(userIds, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     console.log(modifiedQuery);
     finalQuery = `$${modifiedQuery} $${extraQuery}`;
+    console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], finalQuery);
     return returnObj;
 };
