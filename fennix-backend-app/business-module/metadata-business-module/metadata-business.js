@@ -178,7 +178,6 @@ const getRolesForAdminBusiness = async (req) => {
     response = await metadataAccessor.getRolesForRoleIdAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         if (req.query.isDropdownFlag) {
-
             const dropdownObj = {dropdownList: []};
             response.rows.forEach((role) => {
                 dropdownObj.dropdownList.push(dropdownCreator(role['role_id'], role['role_name'], true));

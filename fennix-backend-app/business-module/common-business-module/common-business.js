@@ -1,10 +1,10 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor,getDropdownValueByDropdownIdAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
-const {getCountryCodeByLocationIdAccessor} =require('../../repository-module/data-accesors/location-accesor');
+const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 const fetch = require('isomorphic-fetch');
 const dropbox = require('dropbox').Dropbox;
@@ -28,25 +28,14 @@ const dropDownBusiness = async (req) => {
     return returnResponse;
 };
 
-const imageStorageBusiness = async (imageUpload, id, country, role, date) => {
-    let folderName, folderBasePath, sharePath, fileUploadResponse;
-    folderName = `${role}_${id}_${date}`;
-    folderBasePath = `/pat-j/${country}/${folderName}`;
-    console.log('folderBasePath', folderBasePath);
-    const profileResponse = await createDropboxFolderBusiness(folderBasePath, 'profile');
+const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, createFolderFlag) => {
+    let sharePath, fileUploadResponse;
+    const profileResponse = createFolderFlag ? await createDropboxFolderBusiness(folderBasePath, 'profile') : {
+        folderLocation: `${folderBasePath}/profile`,
+        folderCreationFlag: true
+    };
     if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
         fileUploadResponse = await uploadToDropboxBusiness(profileResponse.folderLocation, imageUpload, folderName);
-        // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})
-        // && (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')
-        // fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
-        // imageUpload = dataURLtoFile(imageUpload);
-        // const fileName = `${folderName}.${fileFormat}`;
-        // let imageUploadResponse = await dropBoxItem.filesUpload({
-        //     path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
-        //     contents: imageUpload
-        // }).catch((err) => {
-        //     console.log(err)
-        // });
         if (fileUploadResponse.uploadSuccessFlag) {
             let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: fileUploadResponse.docUploadResponse.path_lower}).catch((err) => {
                 console.log('sharing error');
@@ -73,7 +62,7 @@ const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     return {folderCreationFlag, folderLocation};
 };
 
-const getDropdownNameFromKeyBusiness = async(dropdownId)=>{
+const getDropdownNameFromKeyBusiness = async (dropdownId) => {
     let dropdownResponse;
     dropdownResponse = await getDropdownValueByDropdownIdAccessor(dropdownId);
     return dropdownResponse;
@@ -144,7 +133,7 @@ const mailModifier = (email, roleName) => {
     // console.log(returnMailBody);
     return returnMailBody;
 };
-getLocationCodeBusiness = async (locationId)=>{
+getLocationCodeBusiness = async (locationId) => {
     let returnObj;
     returnObj = await getCountryCodeByLocationIdAccessor(locationId);
     return returnObj;
@@ -158,3 +147,14 @@ module.exports = {
     getLocationCodeBusiness,
     getDropdownNameFromKeyBusiness
 };
+// await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})
+// && (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')
+// fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
+// imageUpload = dataURLtoFile(imageUpload);
+// const fileName = `${folderName}.${fileFormat}`;
+// let imageUploadResponse = await dropBoxItem.filesUpload({
+//     path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
+//     contents: imageUpload
+// }).catch((err) => {
+//     console.log(err)
+// });

@@ -56,7 +56,7 @@ const deleteBeneficiaryBusiness = async (req) => {
 };
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body, restrictionRequest,countryCode, response, primaryKeyResponse, imageUpload;
+    let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload;
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.updated_date = new Date();
@@ -65,16 +65,20 @@ const addBeneficiaryBusiness = async (req) => {
         imageUpload = request.image;
         delete request.image;
     }
+    // set the beneficiary to active if the beneficiary is not active
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    // getting country code for the given location id
     countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
+        countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         request.documentId = `PAT${countryCode}J-${fullDate}`;
-        const fileLocations = await imageStorageBusiness(imageUpload, response.rows[0]['beneficiaryid'], countryCode, 'BENEFICIARY', fullDate);
+        const folderName = `BENEFICIARY_${response.rows[0]['beneficiaryid']}_${fullDate}`;
+        const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
+        // adding image to the dropbox
+        const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
         if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
-            console.log('image response');
-            console.log(imageStorageBusiness);
             const newReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
@@ -107,18 +111,25 @@ const addBeneficiaryBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
-
 const updateBeneficiaryBusiness = async (req) => {
-    let response, finalResponse, imageUpload,countryCode;
+    let response, finalResponse, imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
+        profileName;
     if (objectHasPropertyCheck(request, 'image')) {
         imageUpload = req.image;
         delete req.image;
     }
-    countryCode = await getCountryCodeByLocationIdAccessor(request.country);
-    countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    const fileLocations = await imageStorageBusiness(imageUpload, req['beneficiaryid'], countryCode, 'BENEFICIARY', fullDate);
+    beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([req.beneficiaryId]);
+    countryCode = await getCountryCodeByLocationIdAccessor(request.country);
+    countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
+    countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        createFolderFlag = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']);
+        profileName = `BENEFICIARY_${req['beneficiaryid']}_${fullDate}`;
+        folderBasePath = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']) ? beneficiaryResponse.rows[0]['dropbox_base_path'] : `/pat-j/${countryCode}/${profileName}`;
+    }
+    const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, profileName, createFolderFlag);
     if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath)) {
         req.image = fileLocations.sharePath
     }
@@ -132,25 +143,25 @@ const updateBeneficiaryBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse,countryCode;
     const date = new Date(),
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.beneficiaryId];
-    let finalResponse, beneficiaryResponse, uploadResponse, createResponse;
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
     const documentReq = [request.documentType];
-    let documentName = 'Document';
     const documentNameResponse = await getDropdownNameFromKeyBusiness(documentReq);
     if (objectHasPropertyCheck(documentNameResponse, 'rows') && arrayNotEmptyCheck(documentNameResponse.rows)) {
-        documentName = documentNameResponse['rows'][0]['dropdown_value'];
+        documentName = notNullCheck(documentNameResponse['rows'][0]['dropdown_value']) ? documentNameResponse['rows'][0]['dropdown_value'] : 'Document';
     }
     console.log(beneficiaryResponse);
     if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
-        console.log(beneficiaryResponse['rows'][0]);
+        countryCode = notNullCheck(beneficiaryResponse['rows'][0]['location_code']) ? beneficiaryResponse['rows'][0]['location_code'] : 'OO';
+        countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
             uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${documentName}`, request.document, request.documentName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
-                folderBasePath = `/pat-j/${beneficiaryResponse['rows'][0]['location_3']}/${folderName}`;
+                folderBasePath = `/pat-j/${countryCode}/${folderName}`;
             createResponse = await createDropboxFolderBusiness(folderBasePath, documentName);
             if (createResponse) {
                 uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document, documentName);
