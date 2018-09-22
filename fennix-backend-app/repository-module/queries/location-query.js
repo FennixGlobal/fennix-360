@@ -82,6 +82,7 @@ const selectAllCenterIdsForGlobalAdminQuery = 'select c.location_id, (select nam
 
 const selectCenterIdsForGivenUserIdQuery = 'select location_id from location where parent_location_id = (select location_id from location where parent_location_id = (select location_id from users where user_id = $1))';
 
+const getCountryCodeByLocationIdQuery = 'select location_code from location where location_id = $1';
 
 module.exports = {
     getBeneficiaryLocationList,
@@ -95,7 +96,7 @@ module.exports = {
     selectCountryForSuperAdminQuery,
     locationDetailsUpdateQuery,
     locationCounterQuery,
-    // insertNextPrimaryKeyQuery,
+    getCountryCodeByLocationIdQuery,
     selectAllCountriesForMasterAdminQuery,
     selectCenterIdsForLoggedInUserAndSubUsersQuery,
     selectAllCountriesForGlobalAdminQuery,

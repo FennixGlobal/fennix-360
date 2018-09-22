@@ -1,9 +1,10 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor,getDropdownValueByDropdownIdAccessor, getImageCounterAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor,getDropdownValueByDropdownIdAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
+const {getCountryCodeByLocationIdAccessor} =require('../../repository-module/data-accesors/location-accesor');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 const fetch = require('isomorphic-fetch');
 const dropbox = require('dropbox').Dropbox;
@@ -57,6 +58,7 @@ const imageStorageBusiness = async (imageUpload, id, country, role, date) => {
     }
     return {sharePath, folderBasePath};
 };
+
 const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     let folderCreationFlag = false, folderLocation;
     const folderResponse = await dropBoxItem.filesCreateFolderV2({path: `${basePath}/${categoryFolder}`}).catch((err) => {
@@ -70,6 +72,7 @@ const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     }
     return {folderCreationFlag, folderLocation};
 };
+
 const getDropdownNameFromKeyBusiness = async(dropdownId)=>{
     let dropdownResponse;
     dropdownResponse = await getDropdownValueByDropdownIdAccessor(dropdownId);
@@ -141,12 +144,17 @@ const mailModifier = (email, roleName) => {
     // console.log(returnMailBody);
     return returnMailBody;
 };
-
+getLocationCodeBusiness = async (locationId)=>{
+    let returnObj;
+    returnObj = await getCountryCodeByLocationIdAccessor(locationId);
+    return returnObj;
+};
 module.exports = {
     dropDownBusiness,
     imageStorageBusiness,
     emailSendBusiness,
     createDropboxFolderBusiness,
     uploadToDropboxBusiness,
+    getLocationCodeBusiness,
     getDropdownNameFromKeyBusiness
 };
