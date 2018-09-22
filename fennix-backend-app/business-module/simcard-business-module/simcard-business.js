@@ -84,9 +84,44 @@ const addSimcardBusiness = async (req) => {
     return finalResponse;
 };
 
+// const getSimCardListBusiness = async (req) => {
+//     let response, centerIdResponse, centerIdsReq = [], finalResponse,
+//         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
+//     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+//     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+//     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
+//         centerIdResponse.rows.forEach(item => {
+//             centerIdsReq.push(item['center_id']);
+//             cardIdNameMap[item['center_id']] = item['center_name'];
+//         });
+//         response = await simCardAccessor.getSimcardDetailsAccessor(centerIdsReq);
+//     }
+//
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let simCardObj = {
+//                 simCardId: item['_id'],
+//                 deviceId: item['deviceId'],
+//                 simType: item['simCardType'],
+//                 mobileNo: item['phoneNo'],
+//                 serialNumber: item['serialNp'],
+//                 apn: item['carrierByCountryDetails']['apn'],
+//                 carrierName: item['carrier']['name'],
+//                 center: cardIdNameMap[item['centerId']]
+//             };
+//             modifiedResponse.gridData.push(simCardObj);
+//         });
+//
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
+
 const getSimCardListBusiness = async (req) => {
     let response, centerIdResponse, centerIdsReq = [], finalResponse,
-        modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList;
+        modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList, totalNoOfSimcards;
     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
@@ -94,6 +129,7 @@ const getSimCardListBusiness = async (req) => {
             centerIdsReq.push(item['center_id']);
             cardIdNameMap[item['center_id']] = item['center_name'];
         });
+        totalNoOfSimcards = await simCardAccessor.getTotalNoOfSimcardsAccessor(centerIdsReq);
         response = await simCardAccessor.getSimcardDetailsAccessor(centerIdsReq);
     }
 
@@ -111,7 +147,7 @@ const getSimCardListBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(simCardObj);
         });
-
+        modifiedResponse.totalNoOfRecords = totalNoOfSimcards;
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);

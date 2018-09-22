@@ -143,6 +143,10 @@ const addDeviceIdForSimcardQuery = (query) => {
     });
 };
 
+const getTotalNoOfSimcardsQuery = (query) => {
+    return simcardDetails.count({centerId: {$in : query}});
+};
+
 module.exports = {
     listSimcardTypesQuery,
     getSimcardDetailsQuery,
@@ -152,5 +156,6 @@ module.exports = {
     addDeviceIdForSimcardQuery,
     listUnAssignedSimcardsQuery,
     // insertNextPrimaryKeyQuery,
-    fetchNextPrimaryKeyQuery
+    fetchNextPrimaryKeyQuery,
+    getTotalNoOfSimcardsQuery
 };

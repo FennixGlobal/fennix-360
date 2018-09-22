@@ -37,6 +37,12 @@ const addDeviceIdForSimcardAccessor = async (req) => {
     await simCardQueries.addDeviceIdForSimcardQuery(req);
 };
 
+const getTotalNoOfSimcardsAccessor = async (req) => {
+    let responseObj;
+    responseObj = await simCardQueries.getTotalNoOfSimcardsQuery(req);
+    return responseObj;
+};
+
 module.exports = {
     listUnAssignedSimcardsAccessor,
     addDeviceIdForSimcardAccessor,
@@ -44,5 +50,6 @@ module.exports = {
     addSimcardAccessor,
     getSimcardDetailsAccessor,
     // insertNextPrimaryKeyAccessor,
-    fetchNextPrimaryKeyAccessor
+    fetchNextPrimaryKeyAccessor,
+    getTotalNoOfSimcardsAccessor
 };
