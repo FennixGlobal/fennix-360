@@ -168,7 +168,9 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     }
     if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
         const shareResponse = await shareDropboxLinkBusiness(uploadResponse.docUploadResponse.path_lower, false);
-        const downloadPath = shareResponse.sharePath.replace('?dl=0', '?dl=1');
+        console.log('share response path');
+        console.log(shareResponse);
+        const downloadPath = shareResponse.replace('?dl=0', '?dl=1');
         console.log('download path');
         console.log(downloadPath);
         const fileFormat = request.document.fileType.split('/')[1];
