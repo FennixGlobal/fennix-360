@@ -87,6 +87,12 @@ const listAlertTypesAccessor = async () => {
     return returnObj;
 };
 
+const getTotalNoOfTicketsAccessor = async (req) => {
+    let returnObj;
+    returnObj = await ticketQuery.getTotalNoOfTicketsQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     listAlertTypesAccessor,
     addTicketAccessor,
@@ -100,5 +106,6 @@ module.exports = {
     fetchViolationsForBeneficiaryIdAccessor,
     getTicketDetailsBasedOnBeneficiaryIdAccessor,
     listTicketsBasedOnUserIdForDownloadAccessor,
+    getTotalNoOfTicketsAccessor,
     getTicketDetailsByStatusAndBenIdAccessor
 };

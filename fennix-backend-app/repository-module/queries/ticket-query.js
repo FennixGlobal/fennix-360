@@ -99,6 +99,10 @@ const listTicketsQuery = (query) => {
         );
 };
 
+const getTotalNoOfTicketsQuery = (query) => {
+    return ticketAggregator.count({userId : {$in: query.userId}});
+};
+
 const ticketDetailsBasedOnTicketIdQuery = (query) => {
     return ticketAggregator.find(
         {
@@ -201,5 +205,6 @@ module.exports = {
     listTicketsForDownloadQuery,
     ticketDetailsBasedOnTicketIdQuery,
     fetchViolationsForBeneficiaryIdQuery,
-    getTicketDetailsByStatusAndBenIdQuery
+    getTicketDetailsByStatusAndBenIdQuery,
+    getTotalNoOfTicketsQuery
 };
