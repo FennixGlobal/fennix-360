@@ -130,7 +130,7 @@ const getSimCardListBusiness = async (req) => {
             cardIdNameMap[item['center_id']] = item['center_name'];
         });
         totalNoOfSimcards = await simCardAccessor.getTotalNoOfSimcardsAccessor(centerIdsReq);
-        request = {centerIds: centerIdsReq, skip: req.query.skip, limit: req.query.limit};
+        request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
         response = await simCardAccessor.getSimcardDetailsAccessor(request);
     }
 
