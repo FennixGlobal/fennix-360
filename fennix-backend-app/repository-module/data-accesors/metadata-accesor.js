@@ -50,6 +50,12 @@ const getLanguagesAccessor = async (req) => {
     return returnObj;
 };
 
+const getLanguagesDropdownAccessor = async () => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec([], languageQueries.selectLanguageDropdownQuery);
+    return returnObj;
+};
+
 const getLoginMetadataAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, metadataQueries.loginMetadataQuery);
@@ -120,6 +126,7 @@ module.exports = {
     getFilterMetadataAccessor,
     getModalMetadataAccessor,
     getCenterIdsAccessor,
+    getLanguagesDropdownAccessor,
     getTotalNoOfLanguagesAccessor
 };
 

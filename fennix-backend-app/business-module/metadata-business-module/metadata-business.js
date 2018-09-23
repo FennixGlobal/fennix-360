@@ -115,7 +115,7 @@ const getLoginMetadataBusiness = async () => {
 
 const getLanguagesListBusiness = async () => {
     let responseObj, languageListResponse = {dropdownList: []};
-    responseObj = await metadataAccessor.getLanguagesAccessor();
+    responseObj = await metadataAccessor.getLanguagesDropdownAccessor();
     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
             languageListResponse.dropdownList.push(dropdownCreator(item.language_code, item.language_name, false));
