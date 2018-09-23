@@ -164,11 +164,20 @@ const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
 };
 const updateBeneficiaryDocumentPathAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
+    // TODO add the logic to get data from mongo - Paapu
+    returnObj = await (req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
+    return returnObj;
+};
+
+const getBeneficiaryDocumentDownloadListAccessor = async()=>{
+    let returnObj;
+    // TODO add the logic to get data from mongo - Paapu
+    returnObj = await (req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
     return returnObj;
 };
 
 module.exports = {
+    getBeneficiaryDocumentDownloadListAccessor,
     updateBeneficiaryDocumentPathAccessor,
     getBeneficiaryDocumentByBeneficiaryIdAccessor,
     addAccountingAccessor,

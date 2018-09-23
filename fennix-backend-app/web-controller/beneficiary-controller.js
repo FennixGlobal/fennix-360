@@ -49,6 +49,13 @@ router.get('/downloadBeneficiaries', function (req, res) {
         res.send(response);
     })
 });
+router.get('/beneficiaryDocumentList', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.getBenficiaryDocumentDownloadListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 
 router.post('/addBeneficiary', function (req, res) {
     let returnObj;

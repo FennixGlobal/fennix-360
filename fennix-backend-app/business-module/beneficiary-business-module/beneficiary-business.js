@@ -143,8 +143,10 @@ const updateBeneficiaryBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
-    const date = new Date(), fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
+        dropboxShareResponse;
+    const date = new Date(),
+        fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.beneficiaryId];
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
     const documentReq = [request.documentType];
@@ -156,23 +158,19 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         if (objectHasPropertyCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0], 'dropbox_base_path')) {
-            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.documentName);
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.document.fileName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
                 folderBasePath = `/pat-j/${countryCode}/${folderName}`;
             createResponse = await createDropboxFolderBusiness(folderBasePath, documentName);
             if (createResponse) {
-                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, documentName);
+                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, request.document.fileName);
             }
         }
     }
     if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
         const shareResponse = await shareDropboxLinkBusiness(uploadResponse.docUploadResponse.path_lower, false);
-        console.log('share response path');
-        console.log(shareResponse);
         const downloadPath = shareResponse.replace('?dl=0', '?dl=1');
-        console.log('download path');
-        console.log(downloadPath);
         const fileFormat = request.document.fileType.split('/')[1];
         const documentObj = {
             documentType: fileFormat,
@@ -183,13 +181,25 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
             createdDate: new Date(),
             createdByUser: request.document.createdBy
         };
-        dropboxShareResponse = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(req.body.beneficiaryId, request.documentName, documentObj);
+        dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, request.documentName, documentObj);
         console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
     }
     return finalResponse;
+};
+
+const getBenficiaryDocumentDownloadListBusiness = async(req)=>{
+    let returnObj,beneficiaryId = req.query.beneficiaryId;
+    returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
+    return returnObj;
+};
+
+const updateBeneficiaryDocumentPathBusiness = async (beneficiaryId, categoryName, documentObj) => {
+    let returnObj;
+    returnObj = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(beneficiaryId, categoryName, documentObj);
+    return returnObj;
 };
 
 const beneficiaryListForUnAssignedDevicesBusiness = async () => {
@@ -770,5 +780,6 @@ module.exports = {
     deleteBeneficiaryBusiness,
     beneficiaryListForUnAssignedDevicesBusiness,
     getAllBeneficiaryDetailsBusiness,
+    getBenficiaryDocumentDownloadListBusiness,
     uploadBeneficiaryDocumentsBusiness
 };
