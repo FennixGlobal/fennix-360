@@ -37,7 +37,7 @@ const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, cre
     if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
         fileUploadResponse = await uploadToDropboxBusiness(profileResponse.folderLocation, imageUpload, folderName);
         if (fileUploadResponse.uploadSuccessFlag) {
-            sharePath = await shareDropboxLinkBusiness(fileUploadResponse.docUploadResponse.path_lower,true);
+            sharePath = await shareDropboxLinkBusiness(fileUploadResponse.docUploadResponse.path_lower, true);
             // let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: fileUploadResponse.docUploadResponse.path_lower}).catch((err) => {
             //     console.log('sharing error');
             //     console.log(err);
@@ -49,15 +49,23 @@ const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, cre
     return {sharePath, folderBasePath};
 };
 
-const shareDropboxLinkBusiness = async (dropboxPath,replaceLinkFlag) => {
-    let sharePath,
+const shareDropboxLinkBusiness = async (dropboxPath, replaceLinkFlag) => {
+    let sharePath,downloadLink,
         shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: dropboxPath}).catch((err) => {
             console.log('sharing error');
             console.log(err);
         });
-    let replaceLink = shareLink.url.split('\/s\/')[1];
+    console.log('shareLink');
     console.log(shareLink);
-    sharePath = replaceLinkFlag ? `https://dl.dropboxusercontent.com/s/${replaceLink}`:shareLink.url;
+    let replaceLink = shareLink.url.split('\/s\/')[1];
+    sharePath = replaceLinkFlag ? `https://dl.dropboxusercontent.com/s/${replaceLink}` : shareLink.url;
+    if (!replaceLinkFlag) {
+        downloadLink = await dropBoxItem.sharingGetSharedLinkFile({url:sharePath}).catch((err) => {
+            console.log('sharing error');
+            console.log(err);
+        });
+        console.log(downloadLink);
+    }
     return sharePath;
 };
 const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
