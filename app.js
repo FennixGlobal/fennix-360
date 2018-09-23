@@ -17,15 +17,15 @@ var bodyParser = require('body-parser');
 
 const net = require('net');
 const eNet = require('net');
-var mongoose = require('mongoose');
+
+const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoSofiaDev).catch((err) => {
+mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
     console.log(err);
 });
 
 const TCPServer = net.createServer();
 const ELockServer = eNet.createServer();
-// socketIO.listen(3170);
 ELockServer.listen(3150);
 TCPServer.listen(3100);
 ELockServer.on("connection", (socket) => {
