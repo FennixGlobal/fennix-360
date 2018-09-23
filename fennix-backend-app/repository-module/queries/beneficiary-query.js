@@ -1,4 +1,4 @@
-const {} = require('../models/');
+const {beneficiaryDocumentModel} = require('../models/beneficiay-document-model');
 
 const selectBeneficiaryByUserIdQuery = 'select beneficiaryid from beneficiaries where owner_user_id IN ';
 
