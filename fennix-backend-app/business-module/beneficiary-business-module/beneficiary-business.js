@@ -86,6 +86,7 @@ const addBeneficiaryBusiness = async (req) => {
             const newReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
+                documentId: request.documentId,
                 baseFolderPath: fileLocations.folderBasePath
             };
             let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
@@ -194,8 +195,8 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     return finalResponse;
 };
 
-const getBenficiaryDocumentDownloadListBusiness = async(req)=>{
-    let returnObj,beneficiaryId = req.query.beneficiaryId;
+const getBenficiaryDocumentDownloadListBusiness = async (req) => {
+    let returnObj, beneficiaryId = req.query.beneficiaryId;
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
     return returnObj;
 };
