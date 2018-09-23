@@ -159,7 +159,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         if (objectHasPropertyCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0], 'dropbox_base_path')) {
-            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document, request.documentName);
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.documentName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
                 folderBasePath = `/pat-j/${countryCode}/${folderName}`;
