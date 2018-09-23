@@ -120,7 +120,7 @@ const addSimcardBusiness = async (req) => {
 // };
 
 const getSimCardListBusiness = async (req) => {
-    let response, centerIdResponse, centerIdsReq = [], finalResponse,
+    let response, centerIdResponse, centerIdsReq = [], finalResponse, request = {},
         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList, totalNoOfSimcards;
     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
@@ -130,7 +130,8 @@ const getSimCardListBusiness = async (req) => {
             cardIdNameMap[item['center_id']] = item['center_name'];
         });
         totalNoOfSimcards = await simCardAccessor.getTotalNoOfSimcardsAccessor(centerIdsReq);
-        response = await simCardAccessor.getSimcardDetailsAccessor(centerIdsReq);
+        request = {centerIds: centerIdsReq, skip: req.query.skip, limit: req.query.limit};
+        response = await simCardAccessor.getSimcardDetailsAccessor(request);
     }
 
     if (arrayNotEmptyCheck(response)) {

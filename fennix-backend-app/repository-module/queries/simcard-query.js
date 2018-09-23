@@ -56,13 +56,17 @@ const deleteSimcardQuery = (query) => {
     return simcardDetails.find(query.where).remove().exec();
 };
 
-const getSimcardDetailsQuery = (query) => {
+const getSimcardDetailsQuery = (req) => {
     return simcardDetails.aggregate([
         {
             $match: {
-                "centerId": {$in: query}
+                "centerId": {$in: req.centerIds}
             }
         },
+        {
+            $sort: {"createdDate":-1}
+        },
+        {$skip: req.skip}, {$limit:req.limit},
         {
             $lookup: {
                 from: "carrierByCountry",
