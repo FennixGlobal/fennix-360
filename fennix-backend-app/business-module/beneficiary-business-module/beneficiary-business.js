@@ -103,8 +103,8 @@ const addBeneficiaryBusiness = async (req) => {
 const updateBeneficiaryBusiness = async (req) => {
     let response, finalResponse, imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
         profileName;
-    if (objectHasPropertyCheck(request, 'image')) {
-        imageUpload = req.image;
+    if (objectHasPropertyCheck(req.body, 'image')) {
+        imageUpload = req.body.image;
         delete req.image;
     }
     const date = new Date();
