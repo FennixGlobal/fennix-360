@@ -4,7 +4,7 @@ const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdow
     '    , ds.dropdown_set_id, ds.dropdown_key, (select localized_text from localization where locale_key = ds.dropdown_value and language = $2) as dropdown_value, ds.is_disable\n' +
     '    , ds.dropdown_action_button_icon_value, ds.dropdown_action_button_icon_key, ds.is_action_button, ds.dropdown_action_button_modal_id,ds.dropdown_transfer_key\n' +
     '    , dse.endpoint, dse.endpoint_mandatory_request_params, dse.endpoint_request_type\n' +
-    '    , r.route_id, r.route_url, r.route_name\n' +
+    '    , r.route_id, r.route_url, (select localized_text from localization where locale_key = r.route_name and language = $2) as route_name\n' +
     '    , a.action_name\n' +
     '    from dropdown d\n' +
     '    join dropdown_set ds on d.dropdown_id = ds.dropdown_id and d.dropdown_id = $1\n' +
