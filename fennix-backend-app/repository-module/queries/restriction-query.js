@@ -10,7 +10,13 @@ const addLocationRestrictionQuery = (req) => {
 const fetchNextPrimaryKeyQuery = () => {
     return LocationRestrictionCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
+
+const fetchLocationRestrictionQuery = (query) => {
+    return LocationRestriction.find({$and: [{beneficiaryId: query}, {isActive: true}]});
+};
+
 module.exports = {
     addLocationRestrictionQuery,
-    fetchNextPrimaryKeyQuery
+    fetchNextPrimaryKeyQuery,
+    fetchLocationRestrictionQuery
 };

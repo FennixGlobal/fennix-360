@@ -72,7 +72,12 @@ const dbTableColMap = {
         isActive: 'isactive',
         baseFolderPath: 'dropbox_base_path',
         endDate: 'end_date',
-        startDate: 'start_date'
+        startDate: 'start_date',
+        createdDate: 'created_date',
+        updatedDate: 'updated_date',
+        deactivatedBy: 'deactivated_by',
+        updatedBy: 'updated_by',
+        createdBy: 'created_by'
     },
     family_info: {
         familyPrimaryName: 'primary_name',

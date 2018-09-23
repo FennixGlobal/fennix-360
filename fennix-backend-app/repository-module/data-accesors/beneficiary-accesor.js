@@ -87,10 +87,10 @@ const getBeneficiaryListByOwnerId = async (req) => {
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
         request = [...req.userIdList, req.centerId, req.skip, req.limit];
-        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
     } else {
         request = [...req.userIdList, req.skip, req.limit];
-        extraQuery = `and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 1} limit $${req.userIdList.length + 2}`;
+        extraQuery = `and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 1} limit $${req.userIdList.length + 2}`;
     }
     modifiedQuery = `${modifiedQuery}${extraQuery}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);

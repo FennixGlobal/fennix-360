@@ -44,23 +44,12 @@ const beneficiaryAggregatorBusiness = async (req) => {
     return returnObj;
 };
 
-const deleteBeneficiaryBusiness = async (req) => {
-    let request = {beneficiaryId: req.query.beneficiaryId, isActive: false}, response, finalResponse;
-    response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
-    if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
-    }
-    return finalResponse;
-};
-
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload;
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    request.updated_date = new Date();
-    request.created_date = new Date();
+    request.createdDate = new Date();
+    request.createdBy = request.userId;
     if (objectHasPropertyCheck(request, 'image')) {
         imageUpload = request.image;
         delete request.image;
@@ -68,16 +57,11 @@ const addBeneficiaryBusiness = async (req) => {
     // set the beneficiary to active if the beneficiary is not active
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     // getting country code for the given location id
-    console.log('country code');
     countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
-    console.log(countryCode);
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        console.log('add beneficiary response');
-        console.log(response);
         countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
-        request.documentId = `PAT${countryCode}J-${fullDate}`;
         const folderName = `BENEFICIARY_${response.rows[0]['beneficiaryid']}_${fullDate}`;
         const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
         // adding image to the dropbox
@@ -86,7 +70,7 @@ const addBeneficiaryBusiness = async (req) => {
             const newReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
-                documentId: request.documentId,
+                documentId: `PAT${countryCode}J-${fullDate}`,
                 baseFolderPath: fileLocations.folderBasePath
             };
             let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
@@ -124,6 +108,8 @@ const updateBeneficiaryBusiness = async (req) => {
         delete req.image;
     }
     const date = new Date();
+    req.updatedDate = new Date();
+    req.updatedBy = req.body.userId;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([req.beneficiaryId]);
     countryCode = await getCountryCodeByLocationIdAccessor(request.country);
@@ -141,6 +127,19 @@ const updateBeneficiaryBusiness = async (req) => {
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+    }
+    return finalResponse;
+};
+
+const deleteBeneficiaryBusiness = async (req) => {
+    let request = {beneficiaryId: req.query.beneficiaryId, isActive: false}, response, finalResponse;
+    request['endDate'] = new Date();
+    request['deactivatedBy'] = req.query.userId;
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
     }
@@ -568,8 +567,6 @@ const beneficiaryListByOwnerUserId = async (req) => {
             limit: req.query.limit
         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
         finalResponse = {}, userResponse;
-    // console.log(req);
-    // console.log(userIdList);
     userResponse = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
@@ -709,8 +706,26 @@ const downloadBeneficiariesBusiness = async (req) => {
 };
 
 const getAllBeneficiaryDetailsBusiness = async (req) => {
-    let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
+    let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse,
+        locationRestrictionResponse, restrictionResponse;
     response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
+    locationRestrictionResponse = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
+    if (arrayNotEmptyCheck(locationRestrictionResponse)) {
+        let locations = [];
+        locationRestrictionResponse[0]['locationDetails'].forEach((item) => {
+            let obj = {
+                lat: item['lat'],
+                lng: item['lng']
+            };
+            locations.push(obj);
+        });
+        restrictionResponse = {
+            repeatRules: locationRestrictionResponse[0]['repeatRules'],
+            restrictionName: locationRestrictionResponse[0]['restrictionName'],
+            restrictionType: locationRestrictionResponse[0]['restrictionType'],
+            locationDetails: locations
+        }
+    }
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         benResponse = response.rows[0];
         console.log(benResponse);
@@ -751,7 +766,18 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             sentenceCourtHouse: benResponse['court_house'],
             sentenceCountry: benResponse['sentence_country'],
             sentenceCity: benResponse['sentence_city'],
-            country: benResponse['location_3']
+            familyPrimaryName: benResponse['primary_name'],
+            familyPrimaryPhoneNo: benResponse['primary_phone_no'],
+            familyPrimaryGender: benResponse['primary_gender'],
+            familyPrimaryRelation: benResponse['primary_relation'],
+            familySecondaryName: benResponse['secondary_name'],
+            familySecondaryPhoneNo: benResponse['secondary_phone_no'],
+            familySecondaryGender: benResponse['secondary_gender'],
+            familySecondaryRelation: benResponse['secondary_relation'],
+            familyInfoId: benResponse['family_info_id'],
+            geoFence: restrictionResponse
+            // scentenceLawyerId:sentence_house_arrest: null,
+            // scentenceLawyerId:sentence_restraining_order: null,
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
@@ -759,6 +785,58 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     }
     return finalResponse;
 };
+//
+// const getAllBeneficiaryDetailsBusiness = async (req) => {
+//     let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
+//     response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
+//     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+//         benResponse = response.rows[0];
+//         console.log(benResponse);
+//         modifiedResponse = {
+//             beneficiaryId: benResponse['beneficiaryid'],
+//             firstName: benResponse['firstname'],
+//             middleName: benResponse['middle_name'],
+//             lastName: benResponse['first_last_name'],
+//             secondName: benResponse['second_last_name'],
+//             role: benResponse['beneficiary_role'],
+//             gender: benResponse['gender'],
+//             image: benResponse['image'],
+//             emailId: benResponse['emailid'],
+//             mobileNo: benResponse['mobileno'],
+//             dob: benResponse['dob'],
+//             address: benResponse['address1'],
+//             crimeId: benResponse['crime_id'],
+//             hasHouseArrest: benResponse['hashousearrest'],
+//             weight: benResponse['weight'],
+//             height: benResponse['height'],
+//             eyeColor: benResponse['eye_color'],
+//             hairColor: benResponse['hair_color'],
+//             scar: benResponse['scars_marks_tatoos'],
+//             riskId: benResponse['risk_id'],
+//             ethnicityId: benResponse['ethnicity_id'],
+//             zipCode: benResponse['postal_code'],
+//             center: benResponse['center_id'],
+//             operatorId: benResponse['owner_user_id'],
+//             isActive: benResponse['isactive'],
+//             comments: benResponse['comments'],
+//             timeZone: benResponse['time_zone'],
+//             languageId: benResponse['language_id'],
+//             whatsAppNo: benResponse['whatsapp_number'],
+//             sentenceLawyerId: benResponse['lawyer_id'],
+//             sentenceTutorId: benResponse['tutor_id'],
+//             sentenceDistrictAttorney: benResponse['district_attorney'],
+//             sentenceJudge: benResponse['judge'],
+//             sentenceCourtHouse: benResponse['court_house'],
+//             sentenceCountry: benResponse['sentence_country'],
+//             sentenceCity: benResponse['sentence_city'],
+//             country: benResponse['location_3']
+//         };
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARY_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 const addDeviceForBeneficiaryBusiness = async (req) => {
     let request, finalResponse;

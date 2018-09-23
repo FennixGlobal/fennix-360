@@ -41,15 +41,15 @@ const selectBeneficiaryNameFromBeneficiaryIdQuery = 'select beneficiaryid,concat
 
 const selectBeneficiaryListByOwnerUserIdQuery = 'select concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name, emailid, document_id,crime_id, mobileno, gender, location_id, (select name from centers where center_id = b.center_id) as center_name, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = b.beneficiary_role) and language = \'EN_US\') as role_name,beneficiary_role, beneficiaryid,image from beneficiaries b where owner_user_id IN ';
 
-const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries  where beneficiaryid =$1';
-// '\n' +
-// 'left join family_info f \n' +
-// 'on b.beneficiaryid = f.beneficiaryid and b.beneficiaryid =$1';
+const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries b\n' +
+    'left join family_info f\n' +
+    'on b.beneficiaryid = f.beneficiaryid\n' +
+    'where b.beneficiaryid = $1';
+
 const getBeneficiaryDocumentByBeneficiaryIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = b.location_3) as location_code from beneficiaries b  where b.beneficiaryid = $1';
 
-const updateBeneficiaryDocumentPathQuery = '';
+
 module.exports = {
-    updateBeneficiaryDocumentPathQuery,
     getBeneficiaryDetailsQuery,
     getBeneficiaryDocumentByBeneficiaryIdQuery,
     getTotalRecordsBasedOnOwnerUserIdCenterIdQuery,

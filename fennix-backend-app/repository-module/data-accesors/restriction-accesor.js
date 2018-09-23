@@ -12,7 +12,15 @@ const fetchLocRestrictionNextPrimaryKeyAccessor = async () => {
     return returnObj;
 };
 
+const fetchLocationRestrictionAccessor = async (req) => {
+    let returnObj;
+    returnObj = await restrictionQuery.fetchLocationRestrictionQuery(req);
+    return returnObj;
+};
+
+
 module.exports = {
     addLocationRestrictionAccessor,
+    fetchLocationRestrictionAccessor,
     fetchLocRestrictionNextPrimaryKeyAccessor
 };
