@@ -101,13 +101,15 @@ const getBeneficiaryIdByImeiQuery = (query) => {
     return deviceAggregator.find({imei: query, active: true}, {"_id": 1, "beneficiaryId": 1});
 };
 
-const listDevicesQuery = (query) => {
+const listDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
             $match: {
-                "centerId": {$in: query}
+                "centerId": {$in: req.centerIds}
             }
         },
+        {$sort: {"createdDate": -1}},
+        {$skip: req.skip}, {$limit:req.limit},
         {
             $lookup: {
                 from: "deviceTypes",
@@ -170,6 +172,10 @@ const unlinkDeviceForBeneficiaryQuery = async (req) => {
             console.log('success');
         }
     });
+};
+
+const getTotalNoOfDevicesQuery = (query) => {
+    return deviceAggregator.count({centerId: {$in : query}});
 };
 
 const updateDeviceAttributeQuery = (req) => {
@@ -364,5 +370,6 @@ module.exports = {
     listUnAssignedDevicesQuery,
     getDeviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsByDeviceIdQuery,
-    updateLocationDeviceAttributeMasterQuery
+    updateLocationDeviceAttributeMasterQuery,
+    getTotalNoOfDevicesQuery
 };

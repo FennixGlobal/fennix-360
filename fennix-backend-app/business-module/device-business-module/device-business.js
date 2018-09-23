@@ -59,8 +59,8 @@ const listDeviceTypesBusiness = async () => {
 
 const listDevicesBusiness = async (req) => {
     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
-        beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
-        modifiedResponse = {gridData: []}, finalResponse;
+        beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [], totalNoOfRecords,
+        modifiedResponse = {gridData: []}, finalResponse, request = {};
     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
@@ -68,7 +68,9 @@ const listDevicesBusiness = async (req) => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
-        devicesResponse = await deviceAccessor.listDevicesAccessor(centerIdsReq);
+        request = {centerIds: centerIdsReq, skip: req.query.skip, limit: req.query.limit};
+        totalNoOfRecords = await deviceAccessor.getTotalNoOfDevicesAccessor(centerIdsReq);
+        devicesResponse = await deviceAccessor.listDevicesAccessor(request);
     }
 
     if (arrayNotEmptyCheck(devicesResponse)) {
@@ -102,12 +104,65 @@ const listDevicesBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(deviceObj);
         });
+        modifiedResponse.totalNoOfRecords = totalNoOfRecords;
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
+
+// const listDevicesBusiness = async (req) => {
+//     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+//         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
+//         modifiedResponse = {gridData: []}, finalResponse;
+//     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+//     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+//     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
+//         centerIdResponse.rows.forEach(item => {
+//             centerIdsReq.push(item['center_id']);
+//             centerIdNameMap[item['center_id']] = item['center_name'];
+//         });
+//         devicesResponse = await deviceAccessor.listDevicesAccessor(centerIdsReq);
+//     }
+//
+//     if (arrayNotEmptyCheck(devicesResponse)) {
+//         devicesResponse.forEach((item) => {
+//             if (objectHasPropertyCheck(item, 'beneficiaryId')) {
+//                 beneficiaryIds.push(`${item['beneficiaryId']}`);
+//             }
+//         });
+//         beneficiaryNameResponse = await getBeneficiaryNameFromBeneficiaryIdAccessor(beneficiaryIds, req.query.languageId);
+//         if (objectHasPropertyCheck(beneficiaryNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryNameResponse.rows)) {
+//             beneficiaryNameResponse.rows.forEach((item) => {
+//                 let beneficiaryObj = {
+//                     fullName: item['full_name'],
+//                     roleName: item['role_name'],
+//                     roleId: item['beneficiary_role']
+//                 };
+//                 beneficiaryIdNameMap[item['beneficiaryid']] = beneficiaryObj;
+//             });
+//         }
+//         devicesResponse.forEach((item) => {
+//             deviceObj = {
+//                 deviceId: item['_id'],
+//                 deviceType: item['deviceTypes']['name'],
+//                 imei: item['imei'],
+//                 isActive: item['active'],
+//                 mobileNo: item['simcards']['phoneNo'],
+//                 center: centerIdNameMap[item['centerId']],
+//                 beneficiaryName: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'fullName') ? beneficiaryIdNameMap[item['beneficiaryId']]['fullName'] : '-',
+//                 beneficiaryRole: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'roleName') ? beneficiaryIdNameMap[item['beneficiaryId']]['roleName'] : '-',
+//                 beneficiaryRoleId: objectHasPropertyCheck(beneficiaryIdNameMap[item['beneficiaryId']], 'roleId') ? beneficiaryIdNameMap[item['beneficiaryId']]['roleId'] : '-'
+//             };
+//             modifiedResponse.gridData.push(deviceObj);
+//         });
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 //
 // const listDevicesBusiness = async (req) => {

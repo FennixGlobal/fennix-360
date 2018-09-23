@@ -29,6 +29,11 @@ const unlinkDeviceForBeneficiaryAccessor = async (req) => {
     return returnObj;
 };
 
+const getTotalNoOfDevicesAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getTotalNoOfDevicesQuery(req);
+    return returnObj;
+};
 
 const getBeneficiaryIdByImeiAccessor = async (req) => {
     let returnObj;
@@ -111,6 +116,7 @@ module.exports = {
     getDeviceByBeneficiaryIdAccessor,
     listUnAssignedDevicesAccessor,
     unlinkDeviceForBeneficiaryAccessor,
-    updateLocationDeviceAttributeMasterAccessor
+    updateLocationDeviceAttributeMasterAccessor,
+    getTotalNoOfDevicesAccessor
 };
 // deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
