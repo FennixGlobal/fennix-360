@@ -165,8 +165,9 @@ const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
 };
 
 const updateBeneficiaryDocumentPathAccessor = async (beneficiaryId, categoryName, documentObj) => {
-    let returnObj;
-    returnObj = await beneficiaryDocumentQuery.updateBeneficiaryDocumentQuery(beneficiaryId, categoryName, documentObj);
+    let returnObj,categoryDoc;
+    categoryDoc[categoryName] = documentObj;
+    returnObj = await beneficiaryDocumentQuery.updateBeneficiaryDocumentQuery(beneficiaryId, categoryDoc);
     return returnObj;
 };
 

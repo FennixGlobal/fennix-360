@@ -163,13 +163,13 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         if (objectHasPropertyCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0], 'dropbox_base_path')) {
-            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.document.fileName);
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.documentName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
                 folderBasePath = `/pat-j/${countryCode}/${folderName}`;
             createResponse = await createDropboxFolderBusiness(folderBasePath, documentName);
             if (createResponse) {
-                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, request.document.fileName);
+                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, request.documentName);
             }
         }
     }
@@ -178,6 +178,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         const downloadPath = shareResponse.replace('?dl=0', '?dl=1');
         const fileFormat = request.document.fileType.split('/')[1];
         const documentObj = {
+            documentId:`beneficiary_${req.body.beneficiaryId}_${documentName}_${fullDate}`,
             documentType: fileFormat,
             documentSize: request.document.fileSize,
             documentLink: downloadPath,

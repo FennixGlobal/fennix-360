@@ -1,11 +1,10 @@
 const {beneficiaryDocumentModel} = require('../models/beneficiay-document-model');
 
-const updateBeneficiaryDocumentQuery = (beneficiaryId, categoryName, documentObj) => {
+const updateBeneficiaryDocumentQuery = (beneficiaryId, categoryDoc) => {
+    console.log(categoryDoc);
     return beneficiaryDocumentModel.update({beneficiaryId: beneficiaryId},
         {
-            $push : {
-                [categoryName]: documentObj
-            }
+            $push : categoryDoc
         },{upsert: true}).then(doc => {
         if (!doc) {
             console.log('error');
