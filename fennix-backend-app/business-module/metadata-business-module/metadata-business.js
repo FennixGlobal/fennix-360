@@ -156,9 +156,27 @@ const getModelMetadataBusiness = async (req) => {
     return response;
 };
 
+// const getLanguageListGridBusiness = async (req) => {
+//     let responseObj, languageListResponse = {gridData: []};
+//     responseObj = await metadataAccessor.getLanguagesAccessor();
+//     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
+//         responseObj.rows.forEach((item) => {
+//             const languageObj = {
+//                 languageId: item['language_id'],
+//                 language: item['language_name'],
+//                 languageIso: item['iso_code'],
+//                 activeStatus: item['isactive']
+//             };
+//             languageListResponse['gridData'].push(languageObj);
+//         });
+//     }
+//     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);
+// };
+
 const getLanguageListGridBusiness = async (req) => {
-    let responseObj, languageListResponse = {gridData: []};
-    responseObj = await metadataAccessor.getLanguagesAccessor();
+    let responseObj, languageListResponse = {gridData: []}, totalNoOfLangauges, request = [req.query.skip, req.query.limit];
+    totalNoOfLangauges = await metadataAccessor.getTotalNoOfLanguagesAccessor();
+    responseObj = await metadataAccessor.getLanguagesAccessor(request);
     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         responseObj.rows.forEach((item) => {
             const languageObj = {
@@ -168,6 +186,7 @@ const getLanguageListGridBusiness = async (req) => {
                 activeStatus: item['isactive']
             };
             languageListResponse['gridData'].push(languageObj);
+            languageListResponse.totalNoOfRecords = totalNoOfLangauges;
         });
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);

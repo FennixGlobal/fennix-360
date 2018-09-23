@@ -5,7 +5,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const metadataQueries = require('../queries/metadata-query');
 const locationQueries = require('../queries/location-query');
 const {selectCenterIdsForGivenUserIdQuery} = require('../queries/location-query');
-const {selectLanguagesQuery} = require('../queries/language-query');
+const languageQueries = require('../queries/language-query');
 
 const {getUserNameFromUserIdAccessor} = require('../data-accesors/user-accesor');
 
@@ -46,7 +46,7 @@ const getFilterMetadataAccessor = async (req, colName) => {
 
 const getLanguagesAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, selectLanguagesQuery);
+    returnObj = await connectionCheckAndQueryExec(req, languageQueries.selectLanguagesQuery);
     return returnObj;
 };
 
@@ -102,6 +102,12 @@ const getCenterIdsAccessor = async (req) => {
     return centerIdResponse;
 };
 
+const getTotalNoOfLanguagesAccessor = async () => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec([], languageQueries.getTotalNoOfLanguagesQuery);
+    return returnObj;
+};
+
 module.exports = {
     getCardMetadataAccessor,
     getSideNavMetadataAccessor,
@@ -113,6 +119,7 @@ module.exports = {
     getRolesForRoleIdAccessor,
     getFilterMetadataAccessor,
     getModalMetadataAccessor,
-    getCenterIdsAccessor
+    getCenterIdsAccessor,
+    getTotalNoOfLanguagesAccessor
 };
 
