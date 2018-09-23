@@ -97,7 +97,7 @@ const addBeneficiaryBusiness = async (req) => {
             await beneficiaryAccessor.addAccountingAccessor(newRequest);
         }
     }
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+    return fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_ADDED_SUCCESS, 'EN_US', []);
 };
 
 const updateBeneficiaryBusiness = async (req) => {
@@ -126,9 +126,9 @@ const updateBeneficiaryBusiness = async (req) => {
     }
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_EDIT_SUCCESS, 'EN_US', 'Updated beneficiary data successfully');
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'EN_US', '');
     }
     return finalResponse;
 };
@@ -139,9 +139,9 @@ const deleteBeneficiaryBusiness = async (req) => {
     request['deactivatedBy'] = req.query.userId;
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Deleted beneficiary data successfully');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_DEACTIVATE_SUCCESS, 'EN_US', 'Deleted beneficiary data successfully');
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'en', '');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'EN_US', '');
     }
     return finalResponse;
 };
@@ -187,16 +187,17 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
             createdByUser: request.document.createdBy
         };
         dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName.toLowerCase(), documentObj);
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_DOC_UPLOAD_SUCCESS, 'EN_US', []);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return finalResponse;
 };
 const getBenficiaryDocumentDownloadListBusiness = async (req) => {
     let returnObj, beneficiaryId = parseInt(req.query.beneficiaryId);
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
-    return returnObj;
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnObj);
+    // return returnObj;
 };
 
 const updateBeneficiaryDocumentPathBusiness = async (beneficiaryId, categoryName, documentObj) => {
@@ -618,9 +619,9 @@ const listBeneficiariesForAddTicketBusiness = async (req) => {
         beneficiaryListResponse.rows.forEach(item => {
             responseList.dropdownList.push(dropdownCreator(item['beneficiaryid'], item['full_name'], false));
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', responseList);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', responseList);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -847,7 +848,7 @@ const addDeviceForBeneficiaryBusiness = async (req) => {
         deviceId: parseInt(req.body.deviceId, 10)
     };
     await updateDeviceWithBeneficiaryIdAccessor(request);
-    finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', 'Updated beneficiary data successfully');
+    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated beneficiary data successfully');
     return finalResponse;
 };
 

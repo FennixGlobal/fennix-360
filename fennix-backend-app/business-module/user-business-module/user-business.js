@@ -104,7 +104,7 @@ const updateUserBusiness = async (req) => {
     let response, finalResponse;
     response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'en', 'Updated user data successfully');
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK,  'EN_US', 'Updated user data successfully');
     } else {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID)
     }
@@ -115,7 +115,7 @@ const deleteUserBusiness = async (req) => {
     let response, finalResponse;
     response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'en', 'Deleted user data successfully');
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK,  'EN_US', 'Deleted user data successfully');
     } else {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID)
     }
