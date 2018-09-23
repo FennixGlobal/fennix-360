@@ -77,7 +77,7 @@ const addSimcardBusiness = async (req) => {
     simcardResponse = simCardAccessor.addSimcardAccessor(request);
     // await simCardAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     if (simcardResponse) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', simcardResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_SIM_CARD_ADD_SUCCESS, 'EN_US', simcardResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
     }

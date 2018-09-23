@@ -231,7 +231,7 @@ const insertDeviceBusiness = async (req) => {
         await deviceAccessor.insertDeviceAccessor(obj);
         const request = {simCardId: req.body.simCardId, deviceId: counter};
         addDeviceIdForSimcardAccessor(request);
-        return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Device added');
+        return fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Device added');
         // await deviceAccessor.insertNextPrimaryKeyAccessor(primaryKeyResponse[0]['_doc']['_id']);
     }
 };
@@ -282,7 +282,7 @@ const unlinkDeviceForBeneficiaryBusiness = async (req) => {
     await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
     await beneficiaryAccessor.updateBeneficiaryAccessor(benRequest);
     await deviceAccessor.unlinkLocationMasterForBeneficiaryAccessor(request);
-    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+    return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
 
 const listUnAssignedDevicesBusiness = async (req) => {
