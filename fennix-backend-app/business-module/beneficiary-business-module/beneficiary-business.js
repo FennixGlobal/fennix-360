@@ -196,6 +196,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
 const getBenficiaryDocumentDownloadListBusiness = async (req) => {
     let returnObj, beneficiaryId = parseInt(req.query.beneficiaryId);
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
+    returnObj = arrayNotEmptyCheck(returnObj) ? returnObj[0] : [];
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnObj);
     // return returnObj;
 };
