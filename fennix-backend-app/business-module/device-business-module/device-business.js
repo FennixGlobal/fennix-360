@@ -68,7 +68,7 @@ const listDevicesBusiness = async (req) => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
-        request = {centerIds: centerIdsReq, skip: req.query.skip, limit: req.query.limit};
+        request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
         totalNoOfRecords = await deviceAccessor.getTotalNoOfDevicesAccessor(centerIdsReq);
         devicesResponse = await deviceAccessor.listDevicesAccessor(request);
     }
