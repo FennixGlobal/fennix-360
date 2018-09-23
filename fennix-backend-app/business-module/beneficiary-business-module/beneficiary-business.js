@@ -178,7 +178,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
         const downloadPath = shareResponse.replace('?dl=0', '?dl=1');
         const fileFormat = request.document.fileType.split('/')[1];
         const documentObj = {
-            documentId:`beneficiary_${req.body.beneficiaryId}_${documentName}_${fullDate}`,
+            documentId: `beneficiary_${req.body.beneficiaryId}_${documentName}_${fullDate}`,
             documentType: fileFormat,
             documentSize: request.document.fileSize,
             documentLink: downloadPath,
@@ -187,7 +187,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
             createdDate: new Date(),
             createdByUser: request.document.createdBy
         };
-        dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName, documentObj);
+        dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName.toLowerCase(), documentObj);
         console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {
@@ -195,8 +195,8 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     }
     return finalResponse;
 };
-const getBenficiaryDocumentDownloadListBusiness = async(req)=>{
-    let returnObj,beneficiaryId = parseInt(req.query.beneficiaryId);
+const getBenficiaryDocumentDownloadListBusiness = async (req) => {
+    let returnObj, beneficiaryId = parseInt(req.query.beneficiaryId);
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
     return returnObj;
 };
