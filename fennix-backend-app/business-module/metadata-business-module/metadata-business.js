@@ -186,7 +186,7 @@ const getLanguageListGridBusiness = async (req) => {
                 activeStatus: item['isactive']
             };
             languageListResponse['gridData'].push(languageObj);
-            languageListResponse.totalNoOfRecords = totalNoOfLangauges;
+            languageListResponse.totalNoOfRecords = objectHasPropertyCheck(totalNoOfLangauges, 'rows') && arrayNotEmptyCheck(totalNoOfLangauges.rows) ? totalNoOfLangauges.rows[0]['count'] : 0;
         });
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', languageListResponse);
