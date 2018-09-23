@@ -187,7 +187,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
             createdDate: new Date(),
             createdByUser: request.document.createdBy
         };
-        dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, request.documentName, documentObj);
+        dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName, documentObj);
         console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {
