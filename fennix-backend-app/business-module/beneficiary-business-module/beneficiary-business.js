@@ -187,7 +187,6 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
             createdByUser: request.document.createdBy
         };
         dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName.toLowerCase(), documentObj);
-        console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
@@ -840,6 +839,8 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
 
 const addDeviceForBeneficiaryBusiness = async (req) => {
     let request, finalResponse;
+    req.body.startDate = new Date();
+    req.body.deviceAssignedBy = req.body.userId;
     await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
     request = {
         beneficiaryId: parseInt(req.body.beneficiaryId, 10),

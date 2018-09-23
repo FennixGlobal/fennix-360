@@ -263,8 +263,8 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     if (notNullCheck(deviceResponse)) {
         finalResponse['beneficiaryId'] = deviceResponse[0]['beneficiaryId'];
         finalResponse = {...finalResponse, ...deviceResponse[0].device, ...deviceResponse[0].deviceAttributes};
-        console.log(finalResponse);
-        console.log(deviceResponse);
+        // console.log(finalResponse);
+        // console.log(deviceResponse);
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
