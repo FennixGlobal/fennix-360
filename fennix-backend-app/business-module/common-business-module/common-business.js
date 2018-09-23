@@ -37,17 +37,29 @@ const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, cre
     if (notNullCheck(imageUpload) && profileResponse.folderCreationFlag) {
         fileUploadResponse = await uploadToDropboxBusiness(profileResponse.folderLocation, imageUpload, folderName);
         if (fileUploadResponse.uploadSuccessFlag) {
-            let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: fileUploadResponse.docUploadResponse.path_lower}).catch((err) => {
-                console.log('sharing error');
-                console.log(err);
-            });
-            let replaceLink = shareLink.url.split('\/s\/')[1];
-            sharePath = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
+            sharePath = await shareDropboxLinkBusiness(fileUploadResponse.docUploadResponse.path_lower,true);
+            // let shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: fileUploadResponse.docUploadResponse.path_lower}).catch((err) => {
+            //     console.log('sharing error');
+            //     console.log(err);
+            // });
+            // let replaceLink = shareLink.url.split('\/s\/')[1];
+            // sharePath = `https://dl.dropboxusercontent.com/s/${replaceLink}`;
         }
     }
     return {sharePath, folderBasePath};
 };
 
+const shareDropboxLinkBusiness = async (dropboxPath,replaceLinkFlag) => {
+    let sharePath,
+        shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: dropboxPath}).catch((err) => {
+            console.log('sharing error');
+            console.log(err);
+        });
+    let replaceLink = shareLink.url.split('\/s\/')[1];
+    console.log(shareLink);
+    sharePath = replaceLinkFlag ? `https://dl.dropboxusercontent.com/s/${replaceLink}`:shareLink.url;
+    return sharePath;
+};
 const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
     let folderCreationFlag = false, folderLocation;
     const folderResponse = await dropBoxItem.filesCreateFolderV2({path: `${basePath}/${categoryFolder}`}).catch((err) => {
@@ -145,6 +157,7 @@ module.exports = {
     createDropboxFolderBusiness,
     uploadToDropboxBusiness,
     getLocationCodeBusiness,
+    shareDropboxLinkBusiness,
     getDropdownNameFromKeyBusiness
 };
 // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})

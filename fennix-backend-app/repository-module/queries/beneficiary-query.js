@@ -1,3 +1,5 @@
+const {} = require('../models/');
+
 const selectBeneficiaryByUserIdQuery = 'select beneficiaryid from beneficiaries where owner_user_id IN ';
 
 const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from beneficiaries b where owner_user_id IN ';
@@ -44,7 +46,10 @@ const getAllBeneficiaryDetailsQuery = 'select * from beneficiaries  where benefi
 // 'left join family_info f \n' +
 // 'on b.beneficiaryid = f.beneficiaryid and b.beneficiaryid =$1';
 const getBeneficiaryDocumentByBeneficiaryIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = b.location_3) as location_code from beneficiaries b  where b.beneficiaryid = $1';
+
+const updateBeneficiaryDocumentPathQuery = '';
 module.exports = {
+    updateBeneficiaryDocumentPathQuery,
     getBeneficiaryDetailsQuery,
     getBeneficiaryDocumentByBeneficiaryIdQuery,
     getTotalRecordsBasedOnOwnerUserIdCenterIdQuery,

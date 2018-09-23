@@ -162,7 +162,14 @@ const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBeneficiaryDocumentByBeneficiaryIdQuery);
     return returnObj;
 };
+const updateBeneficiaryDocumentPathAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
+    return returnObj;
+};
+
 module.exports = {
+    updateBeneficiaryDocumentPathAccessor,
     getBeneficiaryDocumentByBeneficiaryIdAccessor,
     addAccountingAccessor,
     addFamilyInfoAccessor,

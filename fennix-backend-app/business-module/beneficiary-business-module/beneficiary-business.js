@@ -4,7 +4,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness, uploadToDropboxBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, uploadToDropboxBusiness,shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -143,32 +143,49 @@ const updateBeneficiaryBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse,countryCode;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
+        dropboxShareResponse;
     const date = new Date(),
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.beneficiaryId];
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
     const documentReq = [request.documentType];
     const documentNameResponse = await getDropdownNameFromKeyBusiness(documentReq);
-    if (objectHasPropertyCheck(documentNameResponse, 'rows') && arrayNotEmptyCheck(documentNameResponse.rows)) {
-        documentName = notNullCheck(documentNameResponse['rows'][0]['dropdown_value']) ? documentNameResponse['rows'][0]['dropdown_value'] : 'Document';
+    if (objectHasPropertyCheck(documentNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(documentNameResponse.rows)) {
+        documentName = notNullCheck(documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value']) ? documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value'] : 'Document';
     }
     console.log(beneficiaryResponse);
-    if (objectHasPropertyCheck(beneficiaryResponse, 'rows') && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
-        countryCode = notNullCheck(beneficiaryResponse['rows'][0]['location_code']) ? beneficiaryResponse['rows'][0]['location_code'] : 'OO';
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
-        if (objectHasPropertyCheck(beneficiaryResponse['rows'][0], 'dropbox_base_path')) {
-            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse['rows'][0]['dropbox_base_path']}/${documentName}`, request.document, request.documentName);
+        if (objectHasPropertyCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0], 'dropbox_base_path')) {
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document, request.documentName);
         } else {
             let folderName = `BENEFICIARY_${req.body.beneficiaryId}_${fullDate}`,
                 folderBasePath = `/pat-j/${countryCode}/${folderName}`;
             createResponse = await createDropboxFolderBusiness(folderBasePath, documentName);
             if (createResponse) {
-                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document, documentName);
+                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, documentName);
             }
         }
     }
     if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
+        const shareResponse = await shareDropboxLinkBusiness(uploadResponse.docUploadResponse.path_lower, false);
+        console.log('upload response');
+        console.log(uploadResponse);
+        console.log(shareResponse);
+        const fileFormat = request.document.fileType.split('/')[1];
+        const documentObj = {
+            documentType: fileFormat,
+            documentSize: request.document.fileSize,
+            documentLink: shareResponse.sharePath,
+            documentName: request.documentName,
+            documentOriginalName: request.document.fileName,
+            createdDate: new Date(),
+            createdByUser: request.document.createdBy
+        };
+        dropboxShareResponse = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(req.body.beneficiaryId, request.documentName, uploadResponse.docUploadResponse.path_lower);
+        console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'en', []);
