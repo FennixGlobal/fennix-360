@@ -6,6 +6,7 @@ const documentSchema = new Schema({
     documentSize: String,
     documentLink: String,
     documentName: String,
+    documentOriginalName: String,
     createdDate: Date,
     createdByUser: String,
     updatedDate: Date,

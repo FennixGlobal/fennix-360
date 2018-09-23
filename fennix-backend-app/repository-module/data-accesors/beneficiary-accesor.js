@@ -1,4 +1,5 @@
 const beneficiaryQueries = require('../queries/beneficiary-query');
+const beneficiaryDocumentQuery = require('../queries/beneficiary-document-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
@@ -156,25 +157,24 @@ const addAccountingAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
     return returnObj;
 };
+
 const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBeneficiaryDocumentByBeneficiaryIdQuery);
     return returnObj;
 };
-const updateBeneficiaryDocumentPathAccessor = async (req) => {
+
+const updateBeneficiaryDocumentPathAccessor = async (beneficiaryId, categoryName, documentObj) => {
     let returnObj;
-    // TODO add the logic to get data from mongo - Paapu
-    returnObj = await (req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
+    returnObj = await beneficiaryDocumentQuery.updateBeneficiaryDocumentQuery(beneficiaryId, categoryName, documentObj);
     return returnObj;
 };
 
-const getBeneficiaryDocumentDownloadListAccessor = async()=>{
+const getBeneficiaryDocumentDownloadListAccessor = async(beneficiaryId)=>{
     let returnObj;
-    // TODO add the logic to get data from mongo - Paapu
-    returnObj = await (req, beneficiaryQueries.updateBeneficiaryDocumentPathQuery);
+    returnObj = await beneficiaryDocumentQuery.getBeneficiaryDocumentsQuery(beneficiaryId);
     return returnObj;
 };
-
 module.exports = {
     getBeneficiaryDocumentDownloadListAccessor,
     updateBeneficiaryDocumentPathAccessor,

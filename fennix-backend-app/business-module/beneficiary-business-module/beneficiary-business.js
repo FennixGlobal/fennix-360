@@ -194,16 +194,15 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     }
     return finalResponse;
 };
-
-const getBenficiaryDocumentDownloadListBusiness = async (req) => {
-    let returnObj, beneficiaryId = req.query.beneficiaryId;
+const getBenficiaryDocumentDownloadListBusiness = async(req)=>{
+    let returnObj,beneficiaryId = parseInt(req.query.beneficiaryId);
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
     return returnObj;
 };
 
 const updateBeneficiaryDocumentPathBusiness = async (beneficiaryId, categoryName, documentObj) => {
     let returnObj;
-    returnObj = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(beneficiaryId, categoryName, documentObj);
+    returnObj = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(parseInt(beneficiaryId), categoryName, documentObj);
     return returnObj;
 };
 
