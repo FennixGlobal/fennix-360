@@ -10,15 +10,33 @@ const statusCodes = {
             HT_HC: 'OK'
         }
     },
+    250: {devMsg: 'Beneficiary Added Successfully', userMsg: {EN_US: 'Beneficiary Added Successfully'}},
+    251: {devMsg: 'Beneficiary Edited Successfully', userMsg: {EN_US: 'Beneficiary Edited Successfully'}},
+    252: {devMsg: 'Beneficiary Deactivated Successfully', userMsg: {EN_US: 'Beneficiary Deactivated Successfully'}},
+    253: {
+        devMsg: 'Beneficiary Document uploaded Successfully',
+        userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}
+    },
+    254: {devMsg: 'Device added Successfully', userMsg: {EN_US: 'Device added Successfully'}},
+    255: {devMsg: 'Sim Card added Successfully', userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}},
+    256: {devMsg: 'Carrier added Successfully', userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}},
+    257: {
+        devMsg: 'Device is now assigned to the Beneficiary',
+        userMsg: {EN_US: 'Device is now assigned to the Beneficiary'}
+    },
+    258: {
+        devMsg: 'Device is now delinked from the Beneficiary and is ready for reassigning',
+        userMsg: {EN_US: 'Device is now delinked from the Beneficiary and is ready for reassigning'}
+    },
     220: {
         devMsg: 'no groups available for the given id', userMsg: {
             EN_US: 'no groups available for the given id',
-            PT_PT:'Nenhum grupo disponível para o ID fornecido',
-            DT_DT:'geen groepen beschikbaar voor de gegeven id',
-            ES_ES:'no hay grupos disponibles para la identificación dada',
-            FR_FR:'aucun groupe disponible pour l\'identifiant donné',
-            GR_GR:'Keine Gruppen für die angegebene ID verfügbar',
-            HT_HC:'pa gen okenn gwoup ki disponib pou id la'
+            PT_PT: 'Nenhum grupo disponível para o ID fornecido',
+            DT_DT: 'geen groepen beschikbaar voor de gegeven id',
+            ES_ES: 'no hay grupos disponibles para la identificación dada',
+            FR_FR: 'aucun groupe disponible pour l\'identifiant donné',
+            GR_GR: 'Keine Gruppen für die angegebene ID verfügbar',
+            HT_HC: 'pa gen okenn gwoup ki disponib pou id la'
         }
     },
     207: {
