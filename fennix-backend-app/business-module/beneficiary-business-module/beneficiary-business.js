@@ -4,7 +4,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
-const {imageStorageBusiness, uploadToDropboxBusiness,shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -143,10 +143,8 @@ const updateBeneficiaryBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
-        dropboxShareResponse;
-    const date = new Date(),
-        fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
+    const date = new Date(), fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.beneficiaryId];
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor(postgresReq);
     const documentReq = [request.documentType];
@@ -154,7 +152,6 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     if (objectHasPropertyCheck(documentNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(documentNameResponse.rows)) {
         documentName = notNullCheck(documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value']) ? documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value'] : 'Document';
     }
-    console.log(beneficiaryResponse);
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
@@ -171,20 +168,20 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     }
     if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
         const shareResponse = await shareDropboxLinkBusiness(uploadResponse.docUploadResponse.path_lower, false);
-        console.log('upload response');
-        console.log(uploadResponse);
-        console.log(shareResponse);
+        const downloadPath = shareResponse.sharePath.replace('?dl=0', '?dl=1');
+        console.log('download path');
+        console.log(downloadPath);
         const fileFormat = request.document.fileType.split('/')[1];
         const documentObj = {
             documentType: fileFormat,
             documentSize: request.document.fileSize,
-            documentLink: shareResponse.sharePath,
+            documentLink: downloadPath,
             documentName: request.documentName,
             documentOriginalName: request.document.fileName,
             createdDate: new Date(),
             createdByUser: request.document.createdBy
         };
-        dropboxShareResponse = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(req.body.beneficiaryId, request.documentName, uploadResponse.docUploadResponse.path_lower);
+        dropboxShareResponse = await beneficiaryAccessor.updateBeneficiaryDocumentPathAccessor(req.body.beneficiaryId, request.documentName, documentObj);
         console.log(dropboxShareResponse);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'en', []);
     } else {

@@ -50,22 +50,13 @@ const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, cre
 };
 
 const shareDropboxLinkBusiness = async (dropboxPath, replaceLinkFlag) => {
-    let sharePath,downloadLink,
+    let sharePath,
         shareLink = await dropBoxItem.sharingCreateSharedLinkWithSettings({path: dropboxPath}).catch((err) => {
             console.log('sharing error');
             console.log(err);
         });
-    console.log('shareLink');
-    console.log(shareLink);
     let replaceLink = shareLink.url.split('\/s\/')[1];
     sharePath = replaceLinkFlag ? `https://dl.dropboxusercontent.com/s/${replaceLink}` : shareLink.url;
-    if (!replaceLinkFlag) {
-        downloadLink = await dropBoxItem.sharingGetSharedLinkFile({url:sharePath}).catch((err) => {
-            console.log('sharing error');
-            console.log(err);
-        });
-        console.log(downloadLink);
-    }
     return sharePath;
 };
 const createDropboxFolderBusiness = async (basePath, categoryFolder) => {
