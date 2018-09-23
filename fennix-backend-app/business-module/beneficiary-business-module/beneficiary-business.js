@@ -67,10 +67,14 @@ const addBeneficiaryBusiness = async (req) => {
     }
     // set the beneficiary to active if the beneficiary is not active
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
-    response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     // getting country code for the given location id
+    console.log('country code');
     countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
+    console.log(countryCode);
+    response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        console.log('add beneficiary response');
+        console.log(response);
         countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
         countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         request.documentId = `PAT${countryCode}J-${fullDate}`;

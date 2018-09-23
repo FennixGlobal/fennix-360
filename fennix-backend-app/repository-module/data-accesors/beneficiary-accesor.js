@@ -39,7 +39,6 @@ const addBeneficiaryAccessor = async (req) => {
     let returnObj, finalResponse;
     finalResponse = insertQueryCreator(req, TABLE_BENEFICIARIES, beneficiaryQueries.insertBeneficiaryQuery);
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
-    // console.log(returnObj);
     return returnObj;
 };
 
