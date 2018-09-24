@@ -112,7 +112,7 @@ const updateBeneficiaryBusiness = async (req) => {
     req.updatedBy = req.body.userId;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([req.beneficiaryId]);
-    countryCode = await getCountryCodeByLocationIdAccessor(request.country);
+    countryCode = await getCountryCodeByLocationIdAccessor(req.body.country);
     countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
