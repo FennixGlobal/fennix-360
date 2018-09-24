@@ -8,7 +8,7 @@ const addLocationRestrictionQuery = (req) => {
 };
 
 const fetchNextPrimaryKeyQuery = () => {
-    return LocationRestrictionCounter.findOneAndUpdate({}, {$inc:{counter:1}});
+    return LocationRestrictionCounter.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 
 const fetchLocationRestrictionQuery = (query) => {
@@ -16,10 +16,10 @@ const fetchLocationRestrictionQuery = (query) => {
 };
 
 
-const updateLocationRestrictionDetailsQuery = (req) => {
+const updateLocationRestrictionDetailsQuery = (req, counter) => {
     return LocationRestriction.update({beneficiaryId: req.beneficiaryId},
         {
-            $set: req
+            $set: req, $setOnInsert: {_id: counter}
         },
         {
             upsert: true

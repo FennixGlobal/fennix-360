@@ -1,8 +1,8 @@
 const restrictionQuery = require('../queries/restriction-query');
 
-const addLocationRestrictionAccessor = async (req) => {
+const addLocationRestrictionAccessor = async (req,counter) => {
     let returnObj;
-    returnObj = await restrictionQuery.addLocationRestrictionQuery(req);
+    returnObj = await restrictionQuery.addLocationRestrictionQuery(req,counter);
     return returnObj;
 };
 

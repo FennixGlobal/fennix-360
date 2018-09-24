@@ -101,20 +101,29 @@ const addBeneficiaryBusiness = async (req) => {
 };
 
 const updateBeneficiaryBusiness = async (req) => {
-    let response, locationRequest,finalResponse,  imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
+    let response, primaryKeyResponse,restrictionRequest,finalResponse,  imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
         profileName;
     const request = {...req.body};
     if (objectHasPropertyCheck(request, 'image')) {
         imageUpload = request.image;
         delete request.image;
     }
-    locationRequest = {
-        beneficiaryId: request.beneficiaryId,
-        repeatRules: request.restrictionDays,
-        restrictionName: request.mapTitle,
-        locationDetails: request.mapLocation,
-        restrictionType: request.mapRestrictionType
-    };
+    if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
+        primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
+        restrictionRequest = {
+            // _id: primaryKeyResponse['_doc']['counter'],
+            beneficiaryId: request['beneficiaryid'],
+            restrictionName: request['geoFence']['mapTitle'],
+            restrictionType: request['geoFence']['mapRestrictionType'],
+            startDate: request['geoFence']['startDate'],
+            finishDate: request['geoFence']['finishDate'],
+            repeatRules: request['geoFence']['restrictionDays'],
+            onAlert: request['geoFence']['onAlert'],
+            isActive: true,
+            locationDetails: request['geoFence']['mapLocation']
+        };
+        await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest,primaryKeyResponse['_doc']['counter']);
+    }
     const date = new Date();
     req.updatedDate = new Date();
     req.updatedBy = request.userId;
@@ -133,7 +142,7 @@ const updateBeneficiaryBusiness = async (req) => {
         request.image = fileLocations.sharePath
     }
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
-    await restrictionAccessor.updateLocationRestrictionAccessor(locationRequest);
+    // await restrictionAccessor.updateLocationRestrictionAccessor(locationRequest);
     await beneficiaryAccessor.updateFamilyAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_EDIT_SUCCESS, 'EN_US', 'Updated beneficiary data successfully');
