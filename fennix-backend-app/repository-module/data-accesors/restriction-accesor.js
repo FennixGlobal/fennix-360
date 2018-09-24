@@ -19,7 +19,14 @@ const fetchLocationRestrictionAccessor = async (req) => {
 };
 
 
+const updateLocationRestrictionAccessor = async (req) => {
+    let returnObj;
+    returnObj = await restrictionQuery.updateLocationRestrictionDetailsQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    updateLocationRestrictionAccessor,
     addLocationRestrictionAccessor,
     fetchLocationRestrictionAccessor,
     fetchLocRestrictionNextPrimaryKeyAccessor

@@ -176,7 +176,20 @@ const getBeneficiaryDocumentDownloadListAccessor = async(beneficiaryId)=>{
     returnObj = await beneficiaryDocumentQuery.getBeneficiaryDocumentsQuery(beneficiaryId);
     return returnObj;
 };
+
+const updateFamilyAccessor = async (req) => {
+    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
+    fields.sort();
+    fields.splice(fields.indexOf('beneficiaryId'), 1);
+    updatedQueryCreatorResponse = updateQueryCreator('family_info', fields, 'beneficiaryid');
+    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
+    request.push(req.beneficiaryId);
+    returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
+    return returnObj;
+};
+
 module.exports = {
+    updateFamilyAccessor,
     getBeneficiaryDocumentDownloadListAccessor,
     updateBeneficiaryDocumentPathAccessor,
     getBeneficiaryDocumentByBeneficiaryIdAccessor,

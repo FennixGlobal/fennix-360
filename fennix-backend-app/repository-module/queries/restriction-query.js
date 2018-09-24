@@ -15,7 +15,25 @@ const fetchLocationRestrictionQuery = (query) => {
     return LocationRestriction.find({$and: [{beneficiaryId: query}, {isActive: true}]});
 };
 
+
+const updateLocationRestrictionDetailsQuery = (req) => {
+    return LocationRestriction.update({beneficiaryId: req.beneficiaryId},
+        {
+            $set: req
+        },
+        {
+            upsert: true
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    })
+};
+
 module.exports = {
+    updateLocationRestrictionDetailsQuery,
     addLocationRestrictionQuery,
     fetchNextPrimaryKeyQuery,
     fetchLocationRestrictionQuery

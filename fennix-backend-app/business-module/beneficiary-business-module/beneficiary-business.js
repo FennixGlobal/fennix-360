@@ -101,30 +101,40 @@ const addBeneficiaryBusiness = async (req) => {
 };
 
 const updateBeneficiaryBusiness = async (req) => {
-    let response, finalResponse, imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
+    let response, locationRequest,finalResponse,  imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
         profileName;
-    if (objectHasPropertyCheck(req.body, 'image')) {
-        imageUpload = req.body.image;
-        delete req.image;
+    const request = {...req.body};
+    if (objectHasPropertyCheck(request, 'image')) {
+        imageUpload = request.image;
+        delete request.image;
     }
+    locationRequest = {
+        beneficiaryId: request.beneficiaryId,
+        repeatRules: request.restrictionDays,
+        restrictionName: request.mapTitle,
+        locationDetails: request.mapLocation,
+        restrictionType: request.mapRestrictionType
+    };
     const date = new Date();
     req.updatedDate = new Date();
-    req.updatedBy = req.body.userId;
+    req.updatedBy = request.userId;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
-    beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([req.beneficiaryId]);
-    countryCode = await getCountryCodeByLocationIdAccessor([req.body.country]);
+    beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([request.beneficiaryId]);
+    countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
     countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
         createFolderFlag = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']);
-        profileName = `BENEFICIARY_${req['beneficiaryid']}_${fullDate}`;
+        profileName = `BENEFICIARY_${request['beneficiaryid']}_${fullDate}`;
         folderBasePath = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']) ? beneficiaryResponse.rows[0]['dropbox_base_path'] : `/pat-j/${countryCode}/${profileName}`;
     }
     const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, profileName, createFolderFlag);
     if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath)) {
-        req.image = fileLocations.sharePath
+        request.image = fileLocations.sharePath
     }
-    response = await beneficiaryAccessor.updateBeneficiaryAccessor(req.body);
+    response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
+    await restrictionAccessor.updateLocationRestrictionAccessor(locationRequest);
+    await beneficiaryAccessor.updateFamilyAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_EDIT_SUCCESS, 'EN_US', 'Updated beneficiary data successfully');
     } else {
