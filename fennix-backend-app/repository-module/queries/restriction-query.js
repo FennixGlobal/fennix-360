@@ -18,7 +18,7 @@ const fetchLocationRestrictionQuery = (query) => {
 
 const updateLocationRestrictionDetailsQuery = (req, counter) => {
     console.log(req);
-    return LocationRestriction.findOneAndUpdate(
+    return LocationRestriction.update(
         {_id:20 ,beneficiaryId:req.beneficiaryId},
         {
             $set: {
