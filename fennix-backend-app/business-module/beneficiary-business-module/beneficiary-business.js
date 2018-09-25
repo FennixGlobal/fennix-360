@@ -113,7 +113,6 @@ const updateBeneficiaryBusiness = async (req) => {
     if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
         primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
         restrictionRequest = {
-            _id: 20,
             // primaryKeyResponse['_doc']['counter'],
             beneficiaryId: request['beneficiaryid'],
             restrictionName: request['geoFence']['mapTitle'],
@@ -125,6 +124,7 @@ const updateBeneficiaryBusiness = async (req) => {
             isActive: true,
             locationDetails: request['geoFence']['mapLocation']
         };
+        console.log(restrictionRequest);
         console.log(primaryKeyResponse['_doc']['counter']);
         await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest, primaryKeyResponse['_doc']['counter']);
     }

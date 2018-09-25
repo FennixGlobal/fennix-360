@@ -21,7 +21,6 @@ const fetchLocationRestrictionAccessor = async (req) => {
 
 const updateLocationRestrictionAccessor = async (req) => {
     let returnObj;
-    console.log(req);
     returnObj = await restrictionQuery.updateLocationRestrictionDetailsQuery(req);
     return returnObj;
 };
