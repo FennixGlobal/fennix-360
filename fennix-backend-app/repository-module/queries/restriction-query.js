@@ -19,21 +19,21 @@ const fetchLocationRestrictionQuery = (query) => {
 const updateLocationRestrictionDetailsQuery = (request, counter) => {
     console.log(request);
     return LocationRestriction.update(
-        {_id:20, beneficiaryId:request.beneficiaryId},
+        {beneficiaryId:request.beneficiaryId},
         {
             $set: {
                 // _id: 20,
                 // primaryKeyResponse['_doc']['counter'],
-                beneficiaryId: request['beneficiaryid'],
-                restrictionName: request['mapTitle'],
-                restrictionType: request['mapRestrictionType'],
+                beneficiaryId: request['beneficiaryId'],
+                restrictionName: request['restrictionName'],
+                restrictionType: request['restrictionType'],
                 // startDate: request['startDate'],
                 // finishDate: request['finishDate'],
-                repeatRules: request['restrictionDays'],
-                onAlert: request['onAlert'],
+                repeatRules: request['repeatRules'],
+                // onAlert: request['onAlert'],
                 isActive: true,
-                locationDetails: request['mapLocation']
-            }, $setOnInsert: {_id: 21}
+                locationDetails: request['locationDetails']
+            }, $setOnInsert: {_id: counter}
             // req
             // $setOnInsert: {_id: counter}
         }, {upsert: true});
