@@ -124,6 +124,7 @@ const updateBeneficiaryBusiness = async (req) => {
             isActive: true,
             locationDetails: request['geoFence']['mapLocation']
         };
+        console.log(primaryKeyResponse['_doc']['counter']);
         await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest, primaryKeyResponse['_doc']['counter']);
     }
     const date = new Date();
@@ -144,7 +145,6 @@ const updateBeneficiaryBusiness = async (req) => {
         request.image = fileLocations.sharePath
     }
     response = await beneficiaryAccessor.updateBeneficiaryAccessor(request);
-    // await restrictionAccessor.updateLocationRestrictionAccessor(locationRequest);
     await beneficiaryAccessor.updateFamilyAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_EDIT_SUCCESS, 'EN_US', 'Updated beneficiary data successfully');
