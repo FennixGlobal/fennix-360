@@ -17,14 +17,15 @@ const fetchLocationRestrictionQuery = (query) => {
 
 
 const updateLocationRestrictionDetailsQuery = (req, counter) => {
-    return LocationRestriction.findAndModify({
-        query: {beneficiaryId: req.beneficiaryId},
-        update: {
+    return LocationRestriction.findOneAndUpdate(
+        {beneficiaryId: req.beneficiaryId},
+        {
             $set: req,
             $setOnInsert: {_id: counter}
         },
-        upsert:true
-    });
+        {
+            upsert: true
+        });
 
 };
 
