@@ -33,10 +33,15 @@ const updateLocationRestrictionDetailsQuery = (request, counter) => {
                 // onAlert: request['onAlert'],
                 isActive: true,
                 locationDetails: request['locationDetails']
-            }, $setOnInsert: {_id: counter}
+            }
+            // $setOnInsert: {_id: counter}
             // req
             // $setOnInsert: {_id: counter}
-        }, {upsert: true});
+        }, {upsert: true}).then((doc) => {
+            if (!doc) {
+                console.log('error');
+            }
+    });
 
 };
 
