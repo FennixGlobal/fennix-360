@@ -16,10 +16,10 @@ const fetchLocationRestrictionQuery = (query) => {
 };
 
 
-const updateLocationRestrictionDetailsQuery = (req, counter) => {
-    console.log(req);
+const updateLocationRestrictionDetailsQuery = (request, counter) => {
+    console.log(request);
     return LocationRestriction.update(
-        {_id:20 ,beneficiaryId:req.beneficiaryId},
+        {_id:20, beneficiaryId:request.beneficiaryId},
         {
             $set: {
                 // _id: 20,
