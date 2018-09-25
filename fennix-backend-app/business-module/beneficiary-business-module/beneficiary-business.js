@@ -750,7 +750,6 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     }
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         benResponse = response.rows[0];
-        console.log(benResponse);
         modifiedResponse = {
             beneficiaryId: benResponse['beneficiaryid'],
             firstName: benResponse['firstname'],
@@ -797,7 +796,8 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             familySecondaryGender: benResponse['secondary_gender'],
             familySecondaryRelation: benResponse['secondary_relation'],
             familyInfoId: benResponse['family_info_id'],
-            geoFence: restrictionResponse
+            geoFence: restrictionResponse,
+            country:benResponse['location_3']
             // scentenceLawyerId:sentence_house_arrest: null,
             // scentenceLawyerId:sentence_restraining_order: null,
         };
