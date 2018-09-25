@@ -114,7 +114,7 @@ const updateBeneficiaryBusiness = async (req) => {
         primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
         restrictionRequest = {
             // primaryKeyResponse['_doc']['counter'],
-            beneficiaryId: request['beneficiaryid'],
+            beneficiaryId: request['beneficiaryId'],
             restrictionName: request['geoFence']['mapTitle'],
             restrictionType: request['geoFence']['mapRestrictionType'],
             startDate: request['geoFence']['startDate'],
