@@ -58,10 +58,11 @@ const addBeneficiaryBusiness = async (req) => {
     request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
     // getting country code for the given location id
     countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
+    countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
+    countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
+    request.documentId = `PAT${countryCode}J-${fullDate}`;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
-        countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         const folderName = `BENEFICIARY_${response.rows[0]['beneficiaryid']}_${fullDate}`;
         const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
         // adding image to the dropbox
@@ -70,7 +71,7 @@ const addBeneficiaryBusiness = async (req) => {
             const newReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
-                documentId: `PAT${countryCode}J-${fullDate}`,
+                // documentId: `PAT${countryCode}J-${fullDate}`,
                 baseFolderPath: fileLocations.folderBasePath
             };
             let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
@@ -101,7 +102,8 @@ const addBeneficiaryBusiness = async (req) => {
 };
 
 const updateBeneficiaryBusiness = async (req) => {
-    let response, primaryKeyResponse,restrictionRequest,finalResponse,  imageUpload, countryCode, createFolderFlag, beneficiaryResponse, folderBasePath,
+    let response, primaryKeyResponse, restrictionRequest, finalResponse, imageUpload, countryCode, createFolderFlag,
+        beneficiaryResponse, folderBasePath,
         profileName;
     const request = {...req.body};
     if (objectHasPropertyCheck(request, 'image')) {
@@ -122,7 +124,7 @@ const updateBeneficiaryBusiness = async (req) => {
             isActive: true,
             locationDetails: request['geoFence']['mapLocation']
         };
-        await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest,primaryKeyResponse['_doc']['counter']);
+        await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest, primaryKeyResponse['_doc']['counter']);
     }
     const date = new Date();
     req.updatedDate = new Date();
