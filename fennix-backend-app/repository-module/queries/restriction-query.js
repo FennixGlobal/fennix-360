@@ -22,9 +22,6 @@ const updateLocationRestrictionDetailsQuery = (req, counter) => {
         {
             $set: req
             // $setOnInsert: {_id: counter}
-        },
-        {
-            upsert: true
         });
 
 };
