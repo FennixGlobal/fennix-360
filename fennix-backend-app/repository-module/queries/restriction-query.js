@@ -17,19 +17,15 @@ const fetchLocationRestrictionQuery = (query) => {
 
 
 const updateLocationRestrictionDetailsQuery = (req, counter) => {
-    return LocationRestriction.update({beneficiaryId: req.beneficiaryId},
-        {
-            $set: req, $setOnInsert: {_id: counter}
+    return LocationRestriction.findAndModify({
+        query: {beneficiaryId: req.beneficiaryId},
+        update: {
+            $set: req,
+            $setOnInsert: {_id: counter}
         },
-        {
-            upsert: true
-        }).then(doc => {
-        if (!doc) {
-            console.log('error');
-        } else {
-            console.log('success');
-        }
-    })
+        upsert:true
+    });
+
 };
 
 module.exports = {
