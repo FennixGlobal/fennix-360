@@ -36,6 +36,7 @@ ELockServer.on("connection", (socket) => {
         console.log(data);
     });
     socket.on('error', (err) => {
+        console.log('in elocks');
         console.log('error occurred');
         console.log(err);
     });
