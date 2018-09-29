@@ -52,7 +52,7 @@ const getUserListBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId, req.query.skip, req.query.limit], userProfileResponse,
         modifiedResponse = [],
         returnObj, totalRecordsResponse, finalResponse = {};
-    userProfileResponse = await userAccessors.getUserListAccessor(request);
+    userProfileResponse = await userAccessors.getUserListAccessor(req);
     totalRecordsResponse = await userAccessors.getTotalRecordsForListUsersAccessor([req.query.userId]);
     finalResponse[COMMON_CONSTANTS.FENNIX_TOTAL_NUMBER_OF_RECORDS] = totalRecordsResponse.rows[0]['count'];
     if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {

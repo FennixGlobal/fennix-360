@@ -17,7 +17,7 @@ const authenticateUser = 'select (select localized_text from localization where 
 
 const updateUserProfileQuery = 'update users set first_name=$2,last_name=$3,address1=$4,mobile_no=$5,image=$6) where user_id=$1';
 
-const getUserListQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name, email_id, mobile_no, isactive, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = user_role) and language = $2) as role,user_role as role_id, (select name from centers where center_id = u.center_id) as center, image from users u where owner_user_id = $1 order by updated_date desc nulls last offset $3 limit $4';
+const getUserListQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name, email_id, mobile_no, isactive, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = user_role) and language = $1) as role,user_role as role_id, (select name from centers where center_id = u.center_id) as center, image from users u where owner_user_id IN ';
 
 const getTotalRecordsForListUsersQuery = 'select count(*) from users u where owner_user_id = $1';
 
