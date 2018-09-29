@@ -22,7 +22,7 @@ const updateUserProfileAccessor = async (req) => {
 
 const getUserListAccessor = async (req) => {
     let returnObj, userIdList, modifiedQuery, extraQuery, finalQuery;
-    userIdList = getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     // started here from +2 because we have added language as 1st argument and remaining ids from 2nd argument onwards.
     extraQuery = ` order by updated_date desc nulls last offset $${userIdList.length + 2} limit $${userIdList.length + 3}`;
     modifiedQuery = requestModifiers.requestInModifier(userIdList, userQueries.getUserListQuery, true);
