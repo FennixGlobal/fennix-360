@@ -78,7 +78,7 @@ const getBeneifciaryIdList = async (req) => {
     userIdNativeRoleResponse = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     userIds = userIdNativeRoleResponse['userIdsList'];
     let nativeUserRole = userIdNativeRoleResponse['nativeUserRole'];
-    return getExtraQueryBasedOnUserRole(userIds, nativeUserRole);
+    return getExtraQueryBasedOnUserRole(userIds, nativeUserRole, req);
 };
 
 const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) => {
