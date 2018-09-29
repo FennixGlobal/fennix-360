@@ -26,7 +26,7 @@ const getUserListAccessor = async (req) => {
     // started here from +2 because we have added language as 1st argument and remaining ids from 2nd argument onwards.
     extraQuery = ` order by updated_date desc nulls last offset $${userIdList.length + 2} limit $${userIdList.length + 3}`;
     modifiedQuery = requestModifiers.requestInModifier(userIdList, userQueries.getUserListQuery, true);
-    finalQuery = `$${modifiedQuery} $${extraQuery}`;
+    finalQuery = `${modifiedQuery} ${extraQuery}`;
     console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec([req.query.languageId, ...userIdList, req.query.skip, req.query.limit], finalQuery);
     return returnObj;
