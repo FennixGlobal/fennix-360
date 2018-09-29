@@ -501,7 +501,16 @@ const widgetFormElementCreator = (widgetElementItem) => {
                     }
                 };
                 break;
-            // case 'action-button':
+            case 'date':
+                widgetElementData = {
+                    ...widgetElementData, ...{
+                        defaultValue: widgetElementItem['default_value__hover_value'],
+                        elementTitle: widgetElementItem['element_title'],
+                        requestMappingKey: widgetElementItem['request_mapping_key'],
+                        elementLabel: widgetElementItem['element_label']
+                    }
+                };
+                break;
             case 'dropdown':
                 widgetElementData = {
                     ...widgetElementData, ...{
