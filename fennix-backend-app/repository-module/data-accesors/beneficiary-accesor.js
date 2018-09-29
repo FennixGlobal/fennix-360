@@ -61,17 +61,47 @@ const getBeneficiaryDetailsAccessor = async (req) => {
 //     return returnObj;
 // };
 
+// const getBeneifciaryIdList = async (req) => {
+//     let returnObj, userIds, extraQuery, finalQuery, modifiedQuery;
+//     userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+//     extraQuery = ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
+//     modifiedQuery = requestInModifier(userIds, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
+//     console.log(modifiedQuery);
+//     finalQuery = `${modifiedQuery} ${extraQuery}`;
+//     console.log(finalQuery);
+//     returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], finalQuery);
+//     return returnObj;
+// };
+
 const getBeneifciaryIdList = async (req) => {
-    let returnObj, userIds, extraQuery, finalQuery, modifiedQuery;
-    userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    extraQuery = ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
-    modifiedQuery = requestInModifier(userIds, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
+    let userIdNativeRoleResponse, userIds;
+    userIdNativeRoleResponse = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    userIds = userIdNativeRoleResponse['userIdsList'];
+    let nativeUserRole = userIdNativeRoleResponse['nativeUserRole'];
+    return getExtraQueryBasedOnUserRole(userIds, nativeUserRole);
+};
+
+const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) => {
+    let extraQuery, modifiedQuery, finalQuery, returnObj, finalRequest;
+    switch (nativeUserRole) {
+        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN: {
+            extraQuery = ` order by $${requestList.length + 1} desc nulls last offset $${requestList.length + 2} limit $${requestList.length + 3}`;
+            finalRequest = [...requestList, req.query.sort, req.query.skip, req.query.limit];
+            break;
+        }
+        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR: {
+            extraQuery = ` and center_id = $${requestList.length + 1} order by $${requestList.length + 2} desc nulls last offset $${requestList.length + 3} limit $${requestList.length + 4}`;
+            finalRequest = [...requestList, req.query.centerId, req.query.sort, req.query.skip, req.query.limit];
+        }
+    }
+    modifiedQuery = requestInModifier(requestList, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
     console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery}`;
     console.log(finalQuery);
-    returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], finalQuery);
+    returnObj = await connectionCheckAndQueryExec(finalRequest, finalQuery);
     return returnObj;
 };
+
 // const getBeneficiaryListByOwnerId = async (req) => {
 //     let returnObj, request = [...req.userIdList, req.centerId, req.skip, req.limit], modifiedQuery,
 //         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by device_updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
