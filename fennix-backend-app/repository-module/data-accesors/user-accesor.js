@@ -36,7 +36,7 @@ const getTotalRecordsForListUsersAccessor = async (req) => {
     let returnObj, modifiedQuery, userIdList;
     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     modifiedQuery = requestModifiers.requestInModifier(userIdList, userQueries.getTotalRecordsForListUsersQuery, false);
-    returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
+    returnObj = await connectionCheckAndQueryExec(userIdList, modifiedQuery);
     return returnObj;
 };
 
