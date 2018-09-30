@@ -37,7 +37,7 @@ const getCenterIdsAccessor = async (req) => {
     return returnObj;
 };
 const getCountryListAccessor = async (req) => {
-    let countryListResponse, request = [req.userId, req.languageId];
+    let countryListResponse, request = [req.userId, req.languageId], masterGlobalAdminRequest = [req.languageId];
     switch (req.userRole) {
         case 'ROLE_SUPERVISOR':
         case 'ROLE_ADMIN': {
@@ -49,11 +49,11 @@ const getCountryListAccessor = async (req) => {
             break;
         }
         case 'ROLE_MASTER_ADMIN' : {
-            countryListResponse = await connectionCheckAndQueryExec(request, selectAllCountriesForMasterAdminQuery);
+            countryListResponse = await connectionCheckAndQueryExec(masterGlobalAdminRequest, selectAllCountriesForMasterAdminQuery);
             break;
         }
         case 'ROLE_GLOBAL_ADMIN' : {
-            countryListResponse = await connectionCheckAndQueryExec(request, selectAllCountriesForGlobalAdminQuery);
+            countryListResponse = await connectionCheckAndQueryExec(masterGlobalAdminRequest, selectAllCountriesForGlobalAdminQuery);
         }
     }
     return countryListResponse;
