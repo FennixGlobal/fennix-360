@@ -44,6 +44,7 @@ ELockServer.on("connection", (socket) => {
         console.log('end connection');
     });
     socket.on('close', (flag) => {
+        console.log('socket closed due to error');
         console.log(flag);
     });
 });
