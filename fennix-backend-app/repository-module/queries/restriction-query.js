@@ -16,30 +16,44 @@ const fetchLocationRestrictionQuery = (query) => {
 };
 
 
-const updateLocationRestrictionDetailsQuery = (request, counter) => {
-    return LocationRestriction.update(
+// const updateLocationRestrictionDetailsQuery = (request, counter) => {
+//     return LocationRestriction.update(
+//         {beneficiaryId:request.beneficiaryId},
+//         {
+//             $set: {
+//                 // _id: 20,
+//                 // primaryKeyResponse['_doc']['counter'],
+//                 beneficiaryId: request['beneficiaryId'],
+//                 restrictionName: request['restrictionName'],
+//                 restrictionType: request['restrictionType'],
+//                 // startDate: request['startDate'],
+//                 // finishDate: request['finishDate'],
+//                 repeatRules: request['repeatRules'],
+//                 // onAlert: request['onAlert'],
+//                 isActive: true,
+//                 locationDetails: request['locationDetails']
+//             },
+//             $setOnInsert: {_id: counter}
+//             // req
+//             // $setOnInsert: {_id: counter}
+//         }, {upsert: true}).then((doc) => {
+//             if (!doc) {
+//                 console.log('error');
+//             }
+//     });
+//
+// };
+
+const updateLocationRestrictionDetailsQuery = (request) => {
+    return LocationRestriction.findOneAndUpdate(
         {beneficiaryId:request.beneficiaryId},
-        {
-            $set: {
-                // _id: 20,
-                // primaryKeyResponse['_doc']['counter'],
-                beneficiaryId: request['beneficiaryId'],
-                restrictionName: request['restrictionName'],
-                restrictionType: request['restrictionType'],
-                // startDate: request['startDate'],
-                // finishDate: request['finishDate'],
-                repeatRules: request['repeatRules'],
-                // onAlert: request['onAlert'],
-                isActive: true,
-                locationDetails: request['locationDetails']
-            },
-            $setOnInsert: {_id: counter}
-            // req
-            // $setOnInsert: {_id: counter}
-        }, {upsert: true}).then((doc) => {
-            if (!doc) {
-                console.log('error');
-            }
+        request
+        ,{upsert: true}).then((doc) => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
     });
 
 };

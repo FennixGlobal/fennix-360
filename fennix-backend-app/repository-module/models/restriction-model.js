@@ -3,20 +3,41 @@ const Schema = mongoose.Schema;
 require('mongoose-double')(mongoose);
 let SchemaType = mongoose.Schema.Types;
 
+// const locationRestrictionSchema = new Schema({
+//     _id: Number,
+//     beneficiaryId: Number,
+//     restrictionName: String,
+//     restrictionType: String,
+//     startDate: Date,
+//     finishDate: Date,
+//     repeatRules: [String],
+//     onAlert: Boolean,
+//     isActive: Boolean,
+//     locationDetails: [
+//         {
+//             lat: SchemaType.Double,
+//             lng: SchemaType.Double
+//         }
+//     ]
+// });
+
 const locationRestrictionSchema = new Schema({
-    _id: Number,
     beneficiaryId: Number,
-    restrictionName: String,
-    restrictionType: String,
-    startDate: Date,
-    finishDate: Date,
-    repeatRules: [String],
-    onAlert: Boolean,
-    isActive: Boolean,
-    locationDetails: [
+    restrictions: [
         {
-            lat: SchemaType.Double,
-            lng: SchemaType.Double
+            restrictionName: String,
+            restrictionType: String,
+            startDate: Date,
+            finishDate: Date,
+            repeatRules: [String],
+            onAlert: Boolean,
+            isActive: Boolean,
+            locationDetails: [
+                {
+                    lat: SchemaType.Double,
+                    lng: SchemaType.Double
+                }
+            ]
         }
     ]
 });
