@@ -25,18 +25,19 @@ const beneficiaryAggregatorBusiness = async (req) => {
             victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
             offender: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
         };
-        if (beneficiaryResponse.rows.length === 1) {
-            let propName = beneficiaryResponse.rows[0]['role_name'].toLowerCase();
-            let propName2 = propName.toLowerCase() === 'victim' ? 'victim' : "offender";
-            beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
-            beneficiaryObj[propName2]['value'] = 0;
-        } else {
+        //TODO: commented below to test the flow
+        // if (beneficiaryResponse.rows.length === 1) {
+        //     let propName = beneficiaryResponse.rows[0]['role_name'].toLowerCase();
+        //     let propName2 = propName.toLowerCase() === 'victim' ? 'victim' : "offender";
+        //     beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
+        //     beneficiaryObj[propName2]['value'] = 0;
+        // } else {
             beneficiaryResponse.rows.forEach((item) => {
                 if (notNullCheck(item['role_name'])) {
                     beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
                 }
             });
-        }
+        // }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryObj);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
