@@ -84,12 +84,12 @@ const getBeneifciaryIdList = async (req) => {
 const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) => {
     let extraQuery, modifiedQuery, finalQuery, returnObj, finalRequest;
     switch (nativeUserRole) {
-        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN: {
+        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN: {
             extraQuery = ` order by $${requestList.length + 1} desc nulls last offset $${requestList.length + 2} limit $${requestList.length + 3}`;
             finalRequest = [...requestList, req.query.sort, req.query.skip, req.query.limit];
             break;
         }
-        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR: {
+        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR: {
             extraQuery = ` and center_id = $${requestList.length + 1} order by $${requestList.length + 2} desc nulls last offset $${requestList.length + 3} limit $${requestList.length + 4}`;
             finalRequest = [...requestList, req.query.centerId, req.query.sort, req.query.skip, req.query.limit];
         }
