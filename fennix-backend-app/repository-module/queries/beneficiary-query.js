@@ -7,7 +7,7 @@ const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from ben
 const selectBeneficiaryByOwnerIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $1) as role_name, count(beneficiary_role) from beneficiaries\n' +
     'where owner_user_id IN ';
 const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
-    'where owner_user_id IN';
+    'where isactive = true and device_id is not null and owner_user_id IN';
 // const selectBeneficiaryListByOwnerUserIdQuery = 'select beneficiaryId, firstname, middle_name, emailid, crime_id, mobileno, gender\n' +
 //     'from beneficiaries\n' +
 //     'where owner_user_id = $1 and center_id = $2\n' +
