@@ -31,12 +31,12 @@ TCPServer.listen(3100);
 ELockServer.listen(3150);
 
 TCPServer.on("connection", (socket) => {
-    // console.log('IN TCP');
+    console.log('IN TCP');
     socket.setEncoding('utf8');
-    // console.log('connected');
+    console.log('connected');
     socket.on('data', async (data) => {
         const returnValue = await locationBusiness.locationUpdateBusiness(data);
-        // console.log(returnValue);
+        console.log(returnValue);
         socket.write(returnValue);
     });
     socket.on('error', (err) => {
