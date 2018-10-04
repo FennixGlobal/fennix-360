@@ -48,7 +48,7 @@ const dbTableColMap = {
         hasHouseArrest: 'hashousearrest',
         address: 'address1',
         violationTypeId: 'violation_type_id',
-        timeZone: 'time_zone',
+        timeZone: 'time_zone_id',
         zipCode: 'postal_code',
         operatorId: 'owner_user_id',
         center: 'center_id',
