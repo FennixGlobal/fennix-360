@@ -45,6 +45,20 @@ const beneficiaryAggregatorBusiness = async (req) => {
     return returnObj;
 };
 
+const getTimeZoneDetailsBusiness = async () => {
+    let timeZoneIdList = {dropdownList: []}, timeZoneResponse, finalResponse;
+    timeZoneResponse = await beneficiaryAccessor.getTimeZoneDetailsAccessor();
+    if (objectHasPropertyCheck(timeZoneResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(timeZoneResponse.rows)) {
+        timeZoneResponse.rows.forEach((item) => {
+            timeZoneIdList.dropdownList.push(dropdownCreator(item['time_zone_id'], item['time_zone_name'], false));
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', timeZoneIdList);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_TIME_ZONE_DETAILS, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const addBeneficiaryBusiness = async (req) => {
     let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload, restrictionRequestList = [], finalRestrictionObj;
     const date = new Date();
@@ -931,5 +945,6 @@ module.exports = {
     beneficiaryListForUnAssignedDevicesBusiness,
     getAllBeneficiaryDetailsBusiness,
     getBenficiaryDocumentDownloadListBusiness,
-    uploadBeneficiaryDocumentsBusiness
+    uploadBeneficiaryDocumentsBusiness,
+    getTimeZoneDetailsBusiness
 };

@@ -193,6 +193,13 @@ const statusCodes = {
             espLA: 'El servidor está caído'
         }
     },
+    607: {
+        devMsg: 'no timezone details available for given id', userMsg: {
+            EN_US: 'no timezone details available for given id',
+            espMX: 'no timezone details available for the given id',
+            espLA: 'no timezone details available for the given id'
+        }
+    },
     900: {
         devMsg: 'Status code is not a number'
     }

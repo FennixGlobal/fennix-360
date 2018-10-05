@@ -16,6 +16,8 @@ const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstna
 //     'order by $3\n' +
 //     'offset $4 limit $5';
 
+const getTimeZoneDetailsQuery = 'select * from time_zone';
+
 const checkBeneficiaryEmailIdQuery = 'select beneficiaryid from beneficiaries where emailid = $1';
 // select ,u.user_role,password, first_name, last_name, user_id, owner_user_id, email_id, isactive,u.center_id from users u\n' +
 // 'join roles r on r.role_id = u.user_role\n' +
@@ -64,5 +66,6 @@ module.exports = {
     getBeneficiaryByBeneficiaryIdQuery,
     getBenefeciaryIdListForOwnerAndCenterQuery,
     getAllBeneficiaryDetailsQuery,
+    getTimeZoneDetailsQuery,
     selectBeneficiariesOfUnAssignedDevicesQuery
 };

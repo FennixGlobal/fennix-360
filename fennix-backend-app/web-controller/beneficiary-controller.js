@@ -10,6 +10,14 @@ router.get('/listBeneficiariesForAddTicket', function (req, res) {
     })
 });
 
+router.get('/listTimeZone', function (req, res) {
+    let returnObj;
+    returnObj = beneficiaryBusiness.getTimeZoneDetailsBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/beneficiaryAggregator', function (req, res) {
     let returnObj;
     returnObj = beneficiaryBusiness.beneficiaryAggregatorBusiness(req);
