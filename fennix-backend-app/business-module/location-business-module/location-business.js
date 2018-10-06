@@ -9,9 +9,12 @@ let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
     console.log(deviceCommandConstants);
     let returnString = '';
-    if (data.indexOf('#SA') !== -1) {
+    if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {
+        // '#SA'
+
         returnString = processData(data);
-    } else if (data.indexOf('#RD') !== -1) {
+    } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {
+        // '#RD'
         await processLocation(data);
     }
     return returnString;
