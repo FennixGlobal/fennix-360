@@ -7,12 +7,12 @@ const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // const socket = require('socket.io');
-const httpExpress = require('express');
-const http = require('http');
-const io = require('socket.io');
-const socketExpress = httpExpress();
-const server = http.createServer(socketExpress);
-const socketIO = io(server);
+// const httpExpress = require('express');
+// const http = require('http');
+// const io = require('socket.io');
+// const socketExpress = httpExpress();
+// const server = http.createServer(socketExpress);
+// const socketIO = io(server);
 var bodyParser = require('body-parser');
 
 const net = require('net');
@@ -24,32 +24,32 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
     console.log(err);
 });
 
-// const TCPServer = net.createServer();
+const TCPServer = net.createServer();
 const ELockServer = eNet.createServer();
 
-// TCPServer.listen(3100);
+TCPServer.listen(3100);
 ELockServer.listen(3150);
 
-// TCPServer.on("connection", (socket) => {
-//     console.log('IN TCP');
-//     socket.setEncoding('utf8');
-//     console.log('connected');
-//     socket.on('data', async (data) => {
-//         const returnValue = await locationBusiness.locationUpdateBusiness(data);
-//         console.log(returnValue);
-//         socket.write(returnValue);
-//     });
-//     socket.on('error', (err) => {
-//         console.log('error occurred');
-//         console.log(err);
-//     });
-//     socket.on('end', () => {
-//         console.log('end connection');
-//     });
-//     socket.on('close', (flag) => {
-//         console.log(flag);
-//     });
-// });
+TCPServer.on("connection", (socket) => {
+    console.log('IN TCP');
+    socket.setEncoding('utf8');
+    console.log('connected');
+    socket.on('data', async (data) => {
+        const returnValue = await locationBusiness.locationUpdateBusiness(data);
+        console.log(returnValue);
+        socket.write(returnValue);
+    });
+    socket.on('error', (err) => {
+        console.log('error occurred');
+        console.log(err);
+    });
+    socket.on('end', () => {
+        console.log('end connection');
+    });
+    socket.on('close', (flag) => {
+        console.log(flag);
+    });
+});
 
 ELockServer.on("connection", (socket) => {
     console.log('IN ELock TCP');

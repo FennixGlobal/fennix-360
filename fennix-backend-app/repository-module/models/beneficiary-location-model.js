@@ -4,9 +4,9 @@ require('mongoose-double')(mongoose);
 let SchemaType = mongoose.Schema.Types;
 const locationSchema = new Schema({
     _id: Number,
-    beneficiaryId: String,
-    deviceId: String,
-    deviceDate: String,
+    beneficiaryId: Number,
+    deviceId: Number,
+    deviceDate: Date,
     latitude:SchemaType.Double,
     longitude: SchemaType.Double
 });
