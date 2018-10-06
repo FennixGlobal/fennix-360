@@ -7,14 +7,11 @@ const {deviceValidator} = require('../../util-module/device-validations');
 
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
-    console.log(deviceCommandConstants);
     let returnString = '';
-    if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {
-        // '#SA'
-
+    if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {  // '#SA'
         returnString = processData(data);
-    } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {
-        // '#RD'
+    } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {  // '#RD
+
         await processLocation(data);
     }
     return returnString;
@@ -34,7 +31,7 @@ const processData = (loginString) => {
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
     loginFlag = processLogin(loginString.substr(14, 15));
-    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
+    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3),deviceCommandConstants.cmdLoginResponse ) : loginString; // '#SB'
     return returnString;
 };
 
@@ -89,7 +86,7 @@ const processLocation = async (location) => {
         };
         const locationId = await locationAccessor.updateLocation(locationObj);
         ticketResponse = deviceValidator(deviceAttribute, masterRequest.beneficiaryId, locationObj);
-        // console.log(ticketResponse);
+        console.log(ticketResponse);
         // if (notNullCheck(ticketResponse)) {
         //     addAutomatedTicketBusiness(ticketResponse, masterRequest.beneficiaryId);
         // }
@@ -100,33 +97,16 @@ const processLocation = async (location) => {
             locationId: parseInt(locationId['_doc']['counter']),
             deviceAttributeId: parseInt(deviceAttributeId['_doc']['counter'])
         };
-        // console.log('device Response');
-        // console.log(masterRequest.deviceAttributeId);
-        // console.log(masterRequest.deviceId);
-        deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
+        await deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
             // console.log(doc)
         });
     }
-    // socketIO.listen(3110);
-    // socketIO.on('connection', (sock) => {
-    //     console.log('on connection');
-    //     sock.on('requestDetails', async (data) => {
-    //         let returnObj;
-    //         returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
-    //         console.log('map data');
-    //         console.log(returnObj);
-    //         sock.emit('mapData', returnObj);
-    //     })
-    // })
-
 };
 
 processLogin = async (imei) => {
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
-    // console.log('Beneficiary details:');
-    // console.log(beneficiaryResponse);
-    // // console.log('IMEI Number:');
-    // console.log(imei);
+    console.log('Beneficiary details:');
+    console.log(beneficiaryResponse);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
 };
