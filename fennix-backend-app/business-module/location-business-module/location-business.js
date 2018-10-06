@@ -7,7 +7,7 @@ const {deviceValidator} = require('../../util-module/device-validations');
 
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
-    console.log(deviceCommandConstants.deviceCommandConstants);
+    console.log(deviceCommandConstants);
     let returnString = '';
     if (data.indexOf('#SA') !== -1) {
         returnString = processData(data);
