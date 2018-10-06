@@ -184,7 +184,12 @@ const getGSMLevel = (gsmStatus) => {
 
 const eLocksDataUpdateBusiness = async (data) => {
     console.log(data);
-    let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date, location = {}, deviceAttributes = {};
+    let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date,covertingHexToDecimal, location = {}, deviceAttributes = {};
+    // data = data.split('');
+    console.log('split data');
+    covertingHexToDecimal = parseInt(data,16).toString(10);
+    console.log(covertingHexToDecimal);
+    console.log('##########################');
     const eLockStatus = data.substr(0, 2);
     console.log(eLockStatus);
     if (parseInt(eLockStatus, 10) === 24) {
