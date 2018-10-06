@@ -187,39 +187,39 @@ const eLocksDataUpdateBusiness = async (data) => {
     let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date,covertingHexToDecimal, location = {}, deviceAttributes = {};
     // data = data.split('');
     console.log('split data');
-    covertingHexToDecimal = parseInt(data,16).toString(10);
-    console.log(covertingHexToDecimal);
+    // covertingHexToDecimal = parseInt(data,16).toString(10);
+    // console.log(covertingHexToDecimal);
     console.log('##########################');
-    const eLockStatus = data.substr(0, 2);
+    const eLockStatus = data.slice(0, 2);
     console.log(eLockStatus);
     if (parseInt(eLockStatus, 10) === 24) {
-        deviceId = data.substr(2, 12);
+        deviceId = data.slice(2, 12);
         console.log(deviceId);
-        protocol = data.substr(12, 14);
+        protocol = data.slice(12, 14);
         console.log(protocol);
-        deviceType = data.substr(14, 15);
+        deviceType = data.slice(14, 15);
         console.log(deviceType);
-        deviceStatus = data.substr(15, 16);
+        deviceStatus = data.slice(15, 16);
         console.log(deviceStatus);
         returnFlag = parseInt(deviceStatus, 10) === 3;
-        date = data.substr(20, 26);
+        date = data.slice(20, 26);
         console.log(date);
         location = {
-            lat: data.substr(26, 34),
-            lng: data.substr(35, 44)
+            lat: data.slice(26, 34),
+            lng: data.slice(35, 44)
         };
         console.log(location);
         deviceAttributes = {
-            gps: data.substr(44, 45),
-            speed: data.substr(45, 47),
-            direction: data.substr(47, 49),
-            mileage: data.substr(49, 57),
-            gpsQuality: data.substr(57, 59),
-            vehicleId: data.substr(59, 69),
-            deviceStatus: data.substr(69, 73),
-            batteryPercentage: data.substr(73, 75),
-            cellIdLAC: data.substr(75, 83),
-            geoFenceAlarm: data.substr(83, 85)
+            gps: data.slice(44, 45),
+            speed: data.slice(45, 47),
+            direction: data.slice(47, 49),
+            mileage: data.slice(49, 57),
+            gpsQuality: data.slice(57, 59),
+            vehicleId: data.slice(59, 69),
+            deviceStatus: data.slice(69, 73),
+            batteryPercentage: data.slice(73, 75),
+            cellIdLAC: data.slice(75, 83),
+            geoFenceAlarm: data.slice(83, 85)
         };
         console.log(deviceAttributes);
     } else {
