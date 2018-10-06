@@ -172,6 +172,7 @@ const statusCodes = {
             espLA: 'no carriers available for the given id'
         }
     },
+    259: {devMsg: 'Container Added Successfully', userMsg: {EN_US: 'Container Added Successfully'}},
     222: {
         devMsg: 'no beneficiary available for given id', userMsg: {
             EN_US: 'no beneficiary available for given id',

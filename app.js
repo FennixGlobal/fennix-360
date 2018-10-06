@@ -57,6 +57,11 @@ ELockServer.on("connection", (socket) => {
     socket.write('P01');
     console.log('connected');
     socket.on('data', async (data) => {
+        const returnValue = await locationBusiness.eLocksDataUpdateBusiness(data);
+        console.log(returnValue);
+        if(returnValue){
+        socket.write('P35');
+        }
         console.log(data);
     });
     socket.on('error', (err) => {
@@ -84,6 +89,7 @@ var beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary
 var commonRouter = require('./fennix-backend-app/web-controller/common-controller');
 var indexRouter = require('./routes/index');
 var groupRouter = require('./fennix-backend-app/web-controller/group-controller');
+var containerRouter = require('./fennix-backend-app/web-controller/container-controller');
 
 var app = express();
 app.use(bodyParser.json());
@@ -144,6 +150,7 @@ app.use('/common', commonRouter);
 app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
+app.use('/container', containerRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler

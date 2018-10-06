@@ -31,7 +31,7 @@ const processData = (loginString) => {
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
     loginFlag = processLogin(loginString.substr(14, 15));
-    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3),deviceCommandConstants.cmdLoginResponse ) : loginString; // '#SB'
+    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), deviceCommandConstants.cmdLoginResponse) : loginString; // '#SB'
     return returnString;
 };
 
@@ -86,7 +86,7 @@ const processLocation = async (location) => {
         };
         const locationId = await locationAccessor.updateLocation(locationObj);
         ticketResponse = deviceValidator(deviceAttribute, masterRequest.beneficiaryId, locationObj);
-        console.log(ticketResponse);
+        // console.log(ticketResponse);
         // if (notNullCheck(ticketResponse)) {
         //     addAutomatedTicketBusiness(ticketResponse, masterRequest.beneficiaryId);
         // }
@@ -182,6 +182,47 @@ const getGSMLevel = (gsmStatus) => {
     return gsmLevel;
 };
 
+const eLocksDataUpdateBusiness = async (data) => {
+    console.log(data);
+    let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date, location = {}, deviceAttributes = {};
+    const eLockStatus = data.substr(0, 2);
+    console.log(eLockStatus);
+    if (parseInt(eLockStatus, 10) === 24) {
+        deviceId = data.substr(2, 12);
+        console.log(deviceId);
+        protocol = data.substr(12, 14);
+        console.log(protocol);
+        deviceType = data.substr(14, 15);
+        console.log(deviceType);
+        deviceStatus = data.substr(15, 16);
+        console.log(deviceStatus);
+        returnFlag = parseInt(deviceStatus, 10) === 3;
+        date = data.substr(20, 26);
+        console.log(date);
+        location = {
+            lat: data.substr(26, 34),
+            lng: data.substr(35, 44)
+        };
+        console.log(location);
+        deviceAttributes = {
+            gps: data.substr(44, 45),
+            speed: data.substr(45, 47),
+            direction: data.substr(47, 49),
+            mileage: data.substr(49, 57),
+            gpsQuality: data.substr(57, 59),
+            vehicleId: data.substr(59, 69),
+            deviceStatus: data.substr(69, 73),
+            batteryPercentage: data.substr(73, 75),
+            cellIdLAC: data.substr(75, 83),
+            geoFenceAlarm: data.substr(83, 85)
+        };
+        console.log(deviceAttributes);
+    } else {
+        returnFlag = true;
+    }
+    return returnFlag;
+};
 module.exports = {
-    locationUpdateBusiness
+    locationUpdateBusiness,
+    eLocksDataUpdateBusiness
 };
