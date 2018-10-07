@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const containerBusiness = require('../business-module/container-business-module/container-business');
+const deviceBusiness = require('../business-module/device-business-module/device-business');
 
 router.get('/addContainer', function (req, res) {
     let returnObj;
@@ -34,7 +35,7 @@ router.get('/assignContainer', function (req, res) {
 
 router.get('/delinkContainer', function (req, res) {
     let returnObj;
-    returnObj = containerBusiness.delinkContainerBusiness(req);
+    returnObj = deviceBusiness.unlinkDeviceForContainerBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -50,9 +51,10 @@ router.get('/listUnAssignedContainer', function (req, res) {
 
 router.get('/listUnAssignedELocks', function (req, res) {
     let returnObj;
-    returnObj = containerBusiness.listUnassignedELocksBusiness(req);
+    returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();
     returnObj.then((response) => {
         res.send(response);
     })
 });
+
 module.exports = router;

@@ -102,7 +102,7 @@ const dbTableColMap = {
         containerHeight: 'container_height',
         containerUnitType: 'container_unit_type',
         containerCapacity: 'container_capacity',
-        ownerUserId: 'owner_user_id',
+        userId: 'owner_user_id',
         deviceId: 'device_id',
         createdDate: 'created_date',
         updatedDate: 'updated_date',
@@ -115,7 +115,8 @@ const dbTableColMap = {
         field2: 'field2',
         field3: 'field3',
         dropboxBasePath: 'dropbox_base_path',
-        containerImage: 'container_image'
+        containerImage: 'container_image',
+        isActive: 'isactive'
     },
     accounting: {
         creditCard: 'credit_card',

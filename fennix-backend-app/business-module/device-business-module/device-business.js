@@ -6,6 +6,7 @@ const userAccessor = require('../../repository-module/data-accesors/user-accesor
 const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
+const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
@@ -305,6 +306,35 @@ const listUnAssignedDevicesBusiness = async (req) => {
     }
     return finalResponse;
 };
+const listUnAssignedDevicesForContainerBusiness = async () => {
+    let response, unAssignedDevices = [], finalResponse;
+    response = await deviceAccessor.listUnAssignedDevicesForContainerAccessor();
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let modifiedResponse = {
+                id: item['_id'],
+                primaryValue: {text: 'IMEI Number', value: item['imei']},
+                isActive: item['active'],
+                extraValue: {text: 'Device Type', value: item['deviceTypes']['name']},
+                secondaryValue: {text: 'Phone Number', value: item['simcards']['phoneNo']}
+            };
+            unAssignedDevices.push(modifiedResponse);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', unAssignedDevices);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
+const unlinkDeviceForContainerBusiness = async (req) => {
+    let request = parseInt(req.query.containerId), containerRequest = {containerId: req.query.containerId, deviceId: null};
+    //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection
+    await deviceAccessor.unlinkDeviceForContainerAccessor(request);
+    await containerAccessor.updateContainerAccessor(containerRequest);
+    await deviceAccessor.unlinkLocationMasterForContainerAccessor(request);
+    return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
+};
 
 module.exports = {
     deviceAggregatorDashboard,
@@ -313,6 +343,8 @@ module.exports = {
     getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness,
     listUnAssignedDevicesBusiness,
+    unlinkDeviceForContainerBusiness,
+    listUnAssignedDevicesForContainerBusiness,
     unlinkDeviceForBeneficiaryBusiness,
     getDeviceDetailsByBeneficiaryIdBusiness
 };

@@ -100,7 +100,40 @@ const unlinkLocationMasterForBeneficiaryAccessor = async (req) => {
     return returnObj;
 };
 
+const unlinkDeviceForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.unlinkDeviceForContainerQuery(req);
+    return returnObj;
+};
+const unlinkLocationMasterForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.unlinkLocationMasterForContainerQuery(req);
+    return returnObj;
+};
+
+const updateDeviceWithContainerIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.updateDeviceWithContainerIdQuery(req);
+    return returnObj;
+};
+
+const getDeviceDetailsForListOfContainersAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getDeviceDetailsForListOfContainersQuery(req);
+    return returnObj;
+};
+const listUnAssignedDevicesForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.listUnAssignedDevicesForContainerQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    unlinkDeviceForContainerAccessor,
+    unlinkLocationMasterForContainerAccessor,
+    updateDeviceWithContainerIdAccessor,
+    getDeviceDetailsForListOfContainersAccessor,
+    listUnAssignedDevicesForContainerAccessor,
     unlinkLocationMasterForBeneficiaryAccessor,
     deviceAggregator,
     listDeviceTypesAccessor,
@@ -119,4 +152,3 @@ module.exports = {
     updateLocationDeviceAttributeMasterAccessor,
     getTotalNoOfDevicesAccessor
 };
-// deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);
