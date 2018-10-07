@@ -10,6 +10,37 @@ const addContainerDetailsBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
 
+const listContainerBusiness =async() => {
+
+};
+
+const listUnassignedContainerBusiness =async() => {
+
+};
+
+const deactivateContainerBusiness =async() => {
+
+};
+
+const assignContainerBusiness =async() => {
+
+};
+
+const delinkContainerBusiness = async() => {
+
+};
+
+const listUnassignedELocksBusiness = async() => {
+
+};
+
+
 module.exports = {
-    addContainerDetailsBusiness
+    addContainerDetailsBusiness,
+    assignContainerBusiness,
+    deactivateContainerBusiness,
+    listUnassignedContainerBusiness,
+    listContainerBusiness,
+    delinkContainerBusiness,
+    listUnassignedELocksBusiness
 };
