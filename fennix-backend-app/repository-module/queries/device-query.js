@@ -470,6 +470,41 @@ const listUnAssignedDevicesForContainerQuery = () => {
     ]);
 };
 
+const deviceDetailsByContainerIdQuery = (query) => {
+    return LocationDeviceAttributeContainerMasterModel.aggregate([
+        {
+            $match: {"containerId": {$in: query}}
+        },
+        {
+            $lookup: {
+                from: "ElocksDeviceAttributeModel",
+                localField: "deviceAttributeId",
+                foreignField: "_id",
+                as: "deviceAttributes"
+            }
+        },
+        {$unwind: "$deviceAttributes"},
+        {
+            $lookup: {
+                from: "ElocksLocationModel",
+                localField: "locationId",
+                foreignField: "_id",
+                as: "location"
+            }
+        },
+        {$unwind: "$location"},
+        {
+            $lookup: {
+                from: "devices",
+                localField: "deviceId",
+                foreignField: "_id",
+                as: "device"
+            }
+        },
+        {$unwind: "$device"}
+    ]);
+};
+
 module.exports = {
     getDeviceDetailsForListOfContainersQuery,
     updateDeviceWithContainerIdQuery,
@@ -483,6 +518,7 @@ module.exports = {
     updateDeviceWithBeneficiaryIdQuery,
     listDeviceTypesQuery,
     insertDeviceQuery,
+    deviceDetailsByContainerIdQuery,
     fetchNextPrimaryKeyQuery,
     getDeviceAttributeCounterQuery,
     updateDeviceAttributeQuery,

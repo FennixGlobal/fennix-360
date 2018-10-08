@@ -49,6 +49,13 @@ router.get('/listUnAssignedContainer', function (req, res) {
     })
 });
 
+router.get('/showContainerMap', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.containerMapDataListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 router.get('/listUnAssignedELocks', function (req, res) {
     let returnObj;
     returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();

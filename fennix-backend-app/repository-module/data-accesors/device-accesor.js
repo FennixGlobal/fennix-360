@@ -128,8 +128,15 @@ const listUnAssignedDevicesForContainerAccessor = async (req) => {
     return returnObj;
 };
 
+const deviceByContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.deviceDetailsByContainerIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     unlinkDeviceForContainerAccessor,
+    deviceByContainerAccessor,
     unlinkLocationMasterForContainerAccessor,
     updateDeviceWithContainerIdAccessor,
     getDeviceDetailsForListOfContainersAccessor,

@@ -39,11 +39,17 @@ const updateContainerAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
-
+const getContainerIdListAccessor = async (req) => {
+    let returnObj, extraQuery = 'order by $1 desc nulls last offset $2 limit $3', finalQuery;
+    finalQuery = `${containerQueries.listContainersQuery} ${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec(req, finalQuery);
+    return returnObj;
+};
 module.exports = {
     addContainerDetailsAccessor,
     listContainersAccessor,
     getTotalNoOfContainersAccessor,
+    getContainerIdListAccessor,
     listUnAssignedContainersAccessor,
     updateContainerAccessor
 };
