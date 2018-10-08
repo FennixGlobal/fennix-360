@@ -6,13 +6,17 @@ const getTotalRecordsBasedOnOwnerUserIdCenterIdQuery = 'select count(*) from ben
 
 const selectBeneficiaryByOwnerIdQuery = 'select (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $1) as role_name, count(beneficiary_role) from beneficiaries\n' +
     'where isactive = true and owner_user_id IN ';
-const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
-    'where isactive = true and device_id is not null and owner_user_id IN';
+// const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
+//     'where isactive = true and device_id is not null and owner_user_id IN';
+const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, device_updated_date, document_id, mobileno,image, (select time_zone_name from time_zone t where t.time_zone_id = b.time_zone_id) as time_zone_name from beneficiaries b \n' +
+    'where owner_user_id IN';
 // const selectBeneficiaryListByOwnerUserIdQuery = 'select beneficiaryId, firstname, middle_name, emailid, crime_id, mobileno, gender\n' +
 //     'from beneficiaries\n' +
 //     'where owner_user_id = $1 and center_id = $2\n' +
 //     'order by $3\n' +
 //     'offset $4 limit $5';
+
+const getTimeZoneDetailsQuery = 'select * from time_zone';
 
 const checkBeneficiaryEmailIdQuery = 'select beneficiaryid from beneficiaries where emailid = $1';
 // select ,u.user_role,password, first_name, last_name, user_id, owner_user_id, email_id, isactive,u.center_id from users u\n' +
@@ -24,8 +28,7 @@ const authenticateBeneficiaryQuery = 'select (select localized_text from localiz
 
 const insertBeneficiaryQuery = 'insert into ';
 
-const selectBeneficiariesOfUnAssignedDevicesQuery = 'select beneficiaryid, concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name from beneficiaries where device_id is null';
-
+const selectBeneficiariesOfUnAssignedDevicesQuery = 'select beneficiaryid, concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name from beneficiaries where (device_id is null or device_id = 0) and isactive = true';
 // const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $6) as role, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
 //     'where owner_user_id = (select user_id from users where user_id = $1) and center_id = $2\n' +
 //     'order by $3 desc nulls last\n' +
@@ -63,5 +66,6 @@ module.exports = {
     getBeneficiaryByBeneficiaryIdQuery,
     getBenefeciaryIdListForOwnerAndCenterQuery,
     getAllBeneficiaryDetailsQuery,
+    getTimeZoneDetailsQuery,
     selectBeneficiariesOfUnAssignedDevicesQuery
 };

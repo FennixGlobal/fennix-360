@@ -1,4 +1,4 @@
-const {deviceAggregator, LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
+const {LocationDeviceAttributeContainerMasterModel,deviceAggregator, LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
 
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
@@ -353,7 +353,164 @@ const updateDeviceWithBeneficiaryIdQuery = async (req) => {
     });
 };
 
+const getDeviceDetailsForListOfContainersQuery = (query) => {
+    return deviceAggregator.aggregate()
+        .match({
+            "containerId": {$in: query}
+        })
+        .lookup({
+            from: "deviceTypes",
+            localField: "deviceTypeId",
+            foreignField: "_id",
+            as: "deviceType"
+        }).project({
+            "_id": 1,
+            "imei": 1,
+            "containerId": 1,
+            "deviceType.name": 1
+        });
+};
+const updateDeviceWithContainerIdQuery = async (req) => {
+    console.log(req);
+    return deviceAggregator.update({_id: req.deviceId},
+        {
+            $set : {
+                containerId: req.containerId
+            }
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+const unlinkDeviceForContainerQuery = async (req) => {
+    return deviceAggregator.update(
+        {
+            $and: [{containerId: req}, {active: true}]
+        },
+        {
+            $unset: {containerId:1}
+        },
+        {
+            multi:true
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+const unlinkLocationMasterForContainerQuery = async (req) => {
+    return LocationDeviceAttributeContainerMasterModel.update(
+        {
+            containerId: req
+        },
+        {
+            $unset: {containerId:1}
+        },
+        {
+            multi:true
+        }).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
+
+const listUnAssignedDevicesForContainerQuery = () => {
+    return deviceAggregator.aggregate([
+        {
+            $match :{
+                $and : [
+                    {
+                        $or : [
+                            {
+                                "beneficiaryId": { $eq:null }
+                            },
+                            {
+                                "beneficiaryId": { $eq:0 }
+                            },
+                            {"beneficiaryId":{$exists:false}}
+                        ]
+                    },
+                    {
+                        "active":true
+                    }
+                ]}},
+        {
+            $lookup: {
+                from: "deviceTypes",
+                localField: "deviceTypeId",
+                foreignField: "_id",
+                as : "deviceTypes"
+            }
+        },{$unwind: "$deviceTypes"},
+        {$match: {"deviceTypes.name":{$in:["E-Locks"]}}},
+        {$lookup: {
+                from:"simcards",
+                localField:"simCardId",
+                foreignField:"_id",
+                as: "simcards"
+            }},{$unwind:"$simcards"},
+        {
+            $project: {
+                "imei":1,
+                "deviceTypes.name":1,
+                "simcards.phoneNo":1,
+                "active":1
+            }
+        }
+    ]);
+};
+
+const deviceDetailsByContainerIdQuery = (query) => {
+    return LocationDeviceAttributeContainerMasterModel.aggregate([
+        {
+            $match: {"containerId": {$in: query}}
+        },
+        {
+            $lookup: {
+                from: "ElocksDeviceAttributeModel",
+                localField: "deviceAttributeId",
+                foreignField: "_id",
+                as: "deviceAttributes"
+            }
+        },
+        {$unwind: "$deviceAttributes"},
+        {
+            $lookup: {
+                from: "ElocksLocationModel",
+                localField: "locationId",
+                foreignField: "_id",
+                as: "location"
+            }
+        },
+        {$unwind: "$location"},
+        {
+            $lookup: {
+                from: "devices",
+                localField: "deviceId",
+                foreignField: "_id",
+                as: "device"
+            }
+        },
+        {$unwind: "$device"}
+    ]);
+};
+
 module.exports = {
+    getDeviceDetailsForListOfContainersQuery,
+    updateDeviceWithContainerIdQuery,
+    unlinkDeviceForContainerQuery,
+    unlinkLocationMasterForContainerQuery,
+    listUnAssignedDevicesForContainerQuery,
     userIdDeviceAggregatorQuery,
     deviceDetailsByBeneficiaryId,
     getDeviceDetailsForListOfBeneficiariesQuery,
@@ -361,6 +518,7 @@ module.exports = {
     updateDeviceWithBeneficiaryIdQuery,
     listDeviceTypesQuery,
     insertDeviceQuery,
+    deviceDetailsByContainerIdQuery,
     fetchNextPrimaryKeyQuery,
     getDeviceAttributeCounterQuery,
     updateDeviceAttributeQuery,

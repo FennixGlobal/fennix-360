@@ -172,6 +172,7 @@ const statusCodes = {
             espLA: 'no carriers available for the given id'
         }
     },
+    259: {devMsg: 'Container Added Successfully', userMsg: {EN_US: 'Container Added Successfully'}},
     222: {
         devMsg: 'no beneficiary available for given id', userMsg: {
             EN_US: 'no beneficiary available for given id',
@@ -191,6 +192,13 @@ const statusCodes = {
             EN_US: 'Server is down',
             espMX: 'El servidor está caído',
             espLA: 'El servidor está caído'
+        }
+    },
+    607: {
+        devMsg: 'no timezone details available for given id', userMsg: {
+            EN_US: 'no timezone details available for given id',
+            espMX: 'no timezone details available for the given id',
+            espLA: 'no timezone details available for the given id'
         }
     },
     900: {

@@ -19,7 +19,7 @@ const deviceBybeneficiaryQuery = async (req) => {
 const updateDeviceAttributesAccessor = async (req) => {
     let counterResponse = await deviceQueries.getDeviceAttributeCounterQuery();
     req = {...req, _id: counterResponse['_doc']['counter']};
-    deviceQueries.updateDeviceAttributeQuery(req);
+    await deviceQueries.updateDeviceAttributeQuery(req);
     return counterResponse;
 };
 
@@ -100,7 +100,47 @@ const unlinkLocationMasterForBeneficiaryAccessor = async (req) => {
     return returnObj;
 };
 
+const unlinkDeviceForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.unlinkDeviceForContainerQuery(req);
+    return returnObj;
+};
+const unlinkLocationMasterForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.unlinkLocationMasterForContainerQuery(req);
+    return returnObj;
+};
+
+const updateDeviceWithContainerIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.updateDeviceWithContainerIdQuery(req);
+    return returnObj;
+};
+
+const getDeviceDetailsForListOfContainersAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getDeviceDetailsForListOfContainersQuery(req);
+    return returnObj;
+};
+const listUnAssignedDevicesForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.listUnAssignedDevicesForContainerQuery(req);
+    return returnObj;
+};
+
+const deviceByContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.deviceDetailsByContainerIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    unlinkDeviceForContainerAccessor,
+    deviceByContainerAccessor,
+    unlinkLocationMasterForContainerAccessor,
+    updateDeviceWithContainerIdAccessor,
+    getDeviceDetailsForListOfContainersAccessor,
+    listUnAssignedDevicesForContainerAccessor,
     unlinkLocationMasterForBeneficiaryAccessor,
     deviceAggregator,
     listDeviceTypesAccessor,
@@ -119,4 +159,3 @@ module.exports = {
     updateLocationDeviceAttributeMasterAccessor,
     getTotalNoOfDevicesAccessor
 };
-// deviceQueries.updateDeviceCounterQuery(counterResponse[0]['_doc']['_id']);

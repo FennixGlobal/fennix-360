@@ -13,6 +13,12 @@ const getBeneficiaryByUserIdAccessor = async (req) => {
     return returnObj;
 };
 
+const getTimeZoneDetailsAccessor = async () => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec([], beneficiaryQueries.getTimeZoneDetailsQuery());
+    return returnObj;
+};
+
 const getBenefeciaryAggregator = async (req) => {
     let returnObj, modifiedQuery, groupByQuery = 'group by beneficiary_role', request;
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryByOwnerIdQuery, true);
@@ -237,5 +243,6 @@ module.exports = {
     getBeneficiaryListForAddTicketAccessor,
     getBeneficiaryByBeneficiaryIdAccesor,
     getAllBeneficiaryDetailsAccessor,
+    getTimeZoneDetailsAccessor,
     beneficiaryListOfUnAssignedDevicesAccesor
 };

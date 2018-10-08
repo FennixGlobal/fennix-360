@@ -4,6 +4,7 @@ const TABLE_LOCATION = 'location';
 const TABLE_ROLES = 'roles';
 const TABLE_FAMILY_INFO = 'family_info';
 const TABLE_ACCOUNTING = 'accounting';
+const TABLE_CONTAINER = 'container';
 
 const dbTableColMap = {
     users: {
@@ -91,6 +92,32 @@ const dbTableColMap = {
         familySecondaryRelation: 'secondary_relation',
         beneficiaryId: 'beneficiaryid'
     },
+    container: {
+        containerName: 'container_name',
+        containerType: 'container_type',
+        companyName: 'company_name',
+        containerColor: 'container_color',
+        containerLength: 'container_length',
+        containerWidth: 'container_width',
+        containerHeight: 'container_height',
+        containerUnitType: 'container_unit_type',
+        containerCapacity: 'container_capacity',
+        userId: 'owner_user_id',
+        deviceId: 'device_id',
+        createdDate: 'created_date',
+        updatedDate: 'updated_date',
+        startDate: 'start_date',
+        endDate: 'end_date',
+        createdBy: 'created_by',
+        updatedBy: 'updated_by',
+        deactivatedBy: 'deactivated_by',
+        field1: 'field1',
+        field2: 'field2',
+        field3: 'field3',
+        dropboxBasePath: 'dropbox_base_path',
+        containerImage: 'container_image',
+        isActive: 'isactive'
+    },
     accounting: {
         creditCard: 'credit_card',
         cvCode: 'cv_code',
@@ -146,7 +173,8 @@ const tableKeyMap = {
     users: {key: 'user_id'},
     tickets: {key: 'ticketId'},
     family_info: {key: 'family_info_id'},
-    accounting: {key: 'accounting_id'}
+    accounting: {key: 'accounting_id'},
+    container:{key:'container_id'}
 };
 
 module.exports = {

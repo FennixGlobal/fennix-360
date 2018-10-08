@@ -3,26 +3,15 @@ const {deviceCommandConstants} = require('../../util-module/device-command-const
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const {deviceValidator} = require('../../util-module/device-validations');
-const {addAutomatedTicketBusiness} = require('../ticket-business-module/ticket-business');
-// const {deviceBusiness} = require('../location-business-module/location-business');
-// const beneficiaryBusiness = require('../beneficiary-business-module/beneficiary-business');
-// const beneficiaryAccesor = require('../../')
-// const express = require('express');
-// const http = require('http');
-// const io = require('socket.io');
-// const socketExpress = express();
-// const server = http.createServer(socketExpress);
-// const socketIO = io(server);
 
-// let id, loginStatus;
+
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
-    // console.log(data);
-    // console.log(deviceCommandConstants.deviceCommandConstants.cmdLogin);
     let returnString = '';
-    if (data.indexOf('#SA') !== -1) {
+    if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {  // '#SA'
         returnString = processData(data);
-    } else if (data.indexOf('#RD') !== -1) {
+    } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {  // '#RD
+
         await processLocation(data);
     }
     return returnString;
@@ -41,11 +30,8 @@ const processData = (loginString) => {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
-    // console.log('IMEI');
-    // console.log(loginString.substr(14, 15));
     loginFlag = processLogin(loginString.substr(14, 15));
-    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), '#SB') : loginString;
-    // console.log(returnString);
+    returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), deviceCommandConstants.cmdLoginResponse) : loginString; // '#SB'
     return returnString;
 };
 
@@ -54,8 +40,6 @@ const processLocation = async (location) => {
     let locationObj = {}, latitude, longitude;
     const NudosToKm = 1.852;
     const direction = 6;
-    // let command = location.substr(0, 3);
-    // let connectionSession = location.substr(3, 6);
     let day = location.substr(29, 2);
     let month = parseInt(location.substr(31, 2)) - 1;
     let year = `20${location.substr(33, 2)}`;
@@ -64,11 +48,6 @@ const processLocation = async (location) => {
     let seconds = location.substr(39, 2);
     let dateTime = new Date(year, month, day, hours, minutes, seconds);
     let beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(location.substr(14, 15)));
-    // console.log('location Response');
-    // console.log(beneficiaryResponse);
-    // console.log(objectHasPropertyCheck(beneficiaryResponse[0], 'beneficiaryId'));
-    // console.log(notNullCheck(beneficiaryResponse[0]['beneficiaryId']));
-    // console.log(beneficiaryResponse[0]);
     if (arrayNotEmptyCheck(beneficiaryResponse) && notNullCheck(beneficiaryResponse[0]) && notNullCheck(beneficiaryResponse[0]['beneficiaryId'])) {
         let masterRequest = {
             deviceId: parseInt(beneficiaryResponse[0]['_id']),
@@ -118,33 +97,16 @@ const processLocation = async (location) => {
             locationId: parseInt(locationId['_doc']['counter']),
             deviceAttributeId: parseInt(deviceAttributeId['_doc']['counter'])
         };
-        // console.log('device Response');
-        // console.log(masterRequest.deviceAttributeId);
-        // console.log(masterRequest.deviceId);
-        deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
+        await deviceAccessor.updateLocationDeviceAttributeMasterAccessor(masterRequest).then((doc) => {
             // console.log(doc)
         });
     }
-    // socketIO.listen(3110);
-    // socketIO.on('connection', (sock) => {
-    //     console.log('on connection');
-    //     sock.on('requestDetails', async (data) => {
-    //         let returnObj;
-    //         returnObj = await beneficiaryBusiness.beneficiaryMapDataList(data);
-    //         console.log('map data');
-    //         console.log(returnObj);
-    //         sock.emit('mapData', returnObj);
-    //     })
-    // })
-
 };
 
 processLogin = async (imei) => {
     let returnFlag, beneficiaryResponse = await deviceAccessor.getBeneficiaryIdByImeiAccessor(parseInt(imei));
-    // console.log('Beneficiary details:');
-    // console.log(beneficiaryResponse);
-    // // console.log('IMEI Number:');
-    // console.log(imei);
+    console.log('Beneficiary details:');
+    console.log(beneficiaryResponse);
     returnFlag = arrayNotEmptyCheck(beneficiaryResponse);
     return returnFlag;
 };
@@ -220,6 +182,52 @@ const getGSMLevel = (gsmStatus) => {
     return gsmLevel;
 };
 
+const eLocksDataUpdateBusiness = async (data) => {
+    console.log(data);
+    let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date,covertingHexToDecimal, location = {}, deviceAttributes = {};
+    // data = data.split('');
+    console.log('split data');
+    // covertingHexToDecimal = parseInt(data,16).toString(10);
+    // console.log(covertingHexToDecimal);
+    console.log('##########################');
+    const eLockStatus = data.slice(0, 2);
+    console.log(eLockStatus);
+    if (parseInt(eLockStatus, 10) === 24) {
+        deviceId = data.slice(2, 12);
+        console.log(deviceId);
+        protocol = data.slice(12, 14);
+        console.log(protocol);
+        deviceType = data.slice(14, 15);
+        console.log(deviceType);
+        deviceStatus = data.slice(15, 16);
+        console.log(deviceStatus);
+        returnFlag = parseInt(deviceStatus, 10) === 3;
+        date = data.slice(20, 26);
+        console.log(date);
+        location = {
+            lat: data.slice(26, 34),
+            lng: data.slice(35, 44)
+        };
+        console.log(location);
+        deviceAttributes = {
+            gps: data.slice(44, 45),
+            speed: data.slice(45, 47),
+            direction: data.slice(47, 49),
+            mileage: data.slice(49, 57),
+            gpsQuality: data.slice(57, 59),
+            vehicleId: data.slice(59, 69),
+            deviceStatus: data.slice(69, 73),
+            batteryPercentage: data.slice(73, 75),
+            cellIdLAC: data.slice(75, 83),
+            geoFenceAlarm: data.slice(83, 85)
+        };
+        console.log(deviceAttributes);
+    } else {
+        returnFlag = true;
+    }
+    return returnFlag;
+};
 module.exports = {
-    locationUpdateBusiness
+    locationUpdateBusiness,
+    eLocksDataUpdateBusiness
 };

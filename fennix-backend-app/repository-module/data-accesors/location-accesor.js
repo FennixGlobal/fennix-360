@@ -17,11 +17,10 @@ const getCountryCodeByLocationIdAccessor = async(locationId)=>{
 const updateLocation = async (req) => {
     let counterResponse = await locationCounterQuery(), locationId;
     locationId = counterResponse['_doc']['counter'];
-    // locationId = counterResponse[0]['counter'];
     let obj = {
         _id: locationId, ...req
     };
-    locationDetailsUpdateQuery(obj);
+    await locationDetailsUpdateQuery(obj);
     return counterResponse;
 };
 
