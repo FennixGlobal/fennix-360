@@ -182,6 +182,7 @@ module.exports = {
     TABLE_LOCATION,
     TABLE_ROLES,
     TABLE_USERS,
+    TABLE_CONTAINER,
     TABLE_FAMILY_INFO,
     TABLE_ACCOUNTING,
     dbTableColMap,
