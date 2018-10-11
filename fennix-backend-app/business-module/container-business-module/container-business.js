@@ -27,6 +27,7 @@ const listContainerBusiness = async () => {
                 containerId: item['container_id'],
                 containerType: item['container_type'],
                 containerName: item['container_name'],
+                companyName: item['company_name'],
                 image: item['container_image']
             };
             containerIds.push(item['container_id']);
