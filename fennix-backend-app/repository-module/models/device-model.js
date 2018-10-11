@@ -108,7 +108,7 @@ const devicesModel = mongoose.model('Device');
 
 const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
 
-const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
+const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
 
 const LocationDeviceAttributeMasterModel = mongoose.model('LocationDeviceAttribute', locationDeviceAttributeMasterSchema, 'locationDeviceAttributeMaster');
 
