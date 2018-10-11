@@ -9,11 +9,12 @@ const addContainerDetailsBusiness = async (req) => {
     let request = req.body;
     request.createdDate = new Date();
     request.createdBy = request.userId;
+    console.log(request);
     await containerAccessors.addContainerDetailsAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
 
-const listContainerBusiness =async() => {
+const listContainerBusiness = async () => {
     let returnObj, totalNoOfRecords, finalResponse = {}, containerListResponse, containerIds = [], finalReturnObj = {};
     containerListResponse = await containerAccessors.listContainersAccessor();
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor();
@@ -48,7 +49,7 @@ const listContainerBusiness =async() => {
     return returnObj;
 };
 
-const listUnassignedContainerBusiness =async() => {
+const listUnassignedContainerBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
     response = await containerAccessors.listUnAssignedContainersAccessor([]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
@@ -66,7 +67,7 @@ const listUnassignedContainerBusiness =async() => {
     return finalResponse;
 };
 
-const deactivateContainerBusiness = async(req) => {
+const deactivateContainerBusiness = async (req) => {
     let request = {containerId: req.query.containerId, isActive: false}, response, finalResponse;
     request['endDate'] = new Date();
     request['deactivatedBy'] = req.query.userId;
@@ -79,7 +80,7 @@ const deactivateContainerBusiness = async(req) => {
     return finalResponse;
 };
 
-const assignContainerBusiness =async(req) => {
+const assignContainerBusiness = async (req) => {
     let request, finalResponse;
     req.body.startDate = new Date();
     req.body.deviceAssignedBy = req.body.userId;
@@ -226,7 +227,7 @@ module.exports = {
     deactivateContainerBusiness,
     listUnassignedContainerBusiness,
     listContainerBusiness,
-    containerMapDataListBusiness
+    containerMapDataListBusiness,
     //delinkContainerBusiness,
     //listUnassignedELocksBusiness,
 };

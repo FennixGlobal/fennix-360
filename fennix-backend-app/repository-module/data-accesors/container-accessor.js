@@ -6,7 +6,7 @@ const {updateQueryCreator} = require('../../util-module/request-validators');
 
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
-    finalResponse = insertQueryCreator(req, TABLE_CONTAINER, containerQueries.addContainerDetailsQuery);
+    finalResponse = await insertQueryCreator(req, TABLE_CONTAINER, containerQueries.addContainerDetailsQuery);
     console.log(finalResponse.modifiedInsertQuery);
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
     return returnObj;
@@ -46,11 +46,33 @@ const getContainerIdListAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, finalQuery);
     return returnObj;
 };
+
+const containerDeviceUpdateAccessor = async (data) => {
+    let returnObj;
+    returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
+    return returnObj;
+};
+
+const getContainerIdAccessor = async (data) => {
+    let returnObj;
+    returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
+    return returnObj;
+};
+
+const containerLocationUpdateAccessor = async (data) => {
+    let returnObj;
+    returnObj = await deviceQueries.updateLocationDeviceAttributeMasterQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     addContainerDetailsAccessor,
     listContainersAccessor,
     getTotalNoOfContainersAccessor,
     getContainerIdListAccessor,
     listUnAssignedContainersAccessor,
-    updateContainerAccessor
+    updateContainerAccessor,
+    containerLocationUpdateAccessor,
+    getContainerIdAccessor,
+    containerDeviceUpdateAccessor
 };
