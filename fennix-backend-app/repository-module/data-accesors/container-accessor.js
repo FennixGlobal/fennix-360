@@ -7,6 +7,7 @@ const {updateQueryCreator} = require('../../util-module/request-validators');
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
     finalResponse = insertQueryCreator(req, TABLE_CONTAINER, containerQueries.addContainerDetailsQuery);
+    console.log(finalResponse.modifiedInsertQuery);
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
     return returnObj;
 };
