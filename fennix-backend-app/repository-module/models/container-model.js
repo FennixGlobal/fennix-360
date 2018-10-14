@@ -14,7 +14,7 @@ const elocksLocationSchema = new Schema({
 const elocksLocationCounterSchema = new Schema({counter:Number});
 
 const elocksDeviceAttributesSchema = new Schema({
-    gps: data.slice(49, 50),
+    gps: Number,
     direction: Number,
     mileage: Number,
     gpsQuality: Number,
