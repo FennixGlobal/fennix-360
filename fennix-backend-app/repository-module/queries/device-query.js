@@ -207,6 +207,54 @@ const insertDeviceQuery = (req) => {
     });
 };
 
+// const listUnAssignedDevicesQuery = (req) => {
+//     return deviceAggregator.aggregate([
+//         {
+//             $match :{
+//                 $and : [
+//                     {
+//                         $or : [
+//                             {
+//                                 "beneficiaryId": { $eq:null }
+//                             },
+//                             {
+//                                 "beneficiaryId": { $eq:0 }
+//                             },
+//                             {"beneficiaryId":{$exists:false}}
+//                         ]
+//                     },
+//                     {
+//                         "active":true
+//                     },
+//                     {
+//                         "centerId": req.centerId
+//                     }
+//                 ]}},
+//         {
+//             $lookup: {
+//                 from: "deviceTypes",
+//                 localField: "deviceTypeId",
+//                 foreignField: "_id",
+//                 as : "deviceTypes"
+//             }
+//         },{$unwind: "$deviceTypes"},
+//         {$lookup: {
+//                 from:"simcards",
+//                 localField:"simCardId",
+//                 foreignField:"_id",
+//                 as: "simcards"
+//             }},{$unwind:"$simcards"},
+//         {
+//             $project: {
+//                 "imei":1,
+//                 "deviceTypes.name":1,
+//                 "simcards.phoneNo":1,
+//                 "active":1
+//
+//             }
+//         }
+//     ]);
+// };
 const listUnAssignedDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
@@ -238,6 +286,7 @@ const listUnAssignedDevicesQuery = (req) => {
                 as : "deviceTypes"
             }
         },{$unwind: "$deviceTypes"},
+        {$match: {"deviceTypes.name":{$in:["Celular","Grillete"]}}},
         {$lookup: {
                 from:"simcards",
                 localField:"simCardId",
@@ -250,7 +299,6 @@ const listUnAssignedDevicesQuery = (req) => {
                 "deviceTypes.name":1,
                 "simcards.phoneNo":1,
                 "active":1
-
             }
         }
     ]);
@@ -432,12 +480,12 @@ const listUnAssignedDevicesForContainerQuery = () => {
                     {
                         $or : [
                             {
-                                "beneficiaryId": { $eq:null }
+                                "containerId": { $eq:null }
                             },
                             {
-                                "beneficiaryId": { $eq:0 }
+                                "containerId": { $eq:0 }
                             },
-                            {"beneficiaryId":{$exists:false}}
+                            {"containerId":{$exists:false}}
                         ]
                     },
                     {

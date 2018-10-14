@@ -114,10 +114,10 @@ var whiteList = ['http://localhost:4200', 'http://sofiadev.fennix360.com:4200', 
 //     // }
 // };
 // var whitelist = ['http://example1.com', 'http://example2.com']
-var corsOptions = {
-    origin: 'http://sofiadev.fennix360.com:4200',
-    credentials: true
-};
+// var corsOptions = {
+//     origin: 'http://sofiadev.fennix360.com:4200',
+//     credentials: true
+// };
 //     function (origin, callback) {
 //     if (whiteList.indexOf(origin) !== -1) {
 //         callback(null, true)
