@@ -35,7 +35,6 @@ const liteUserSchema = new Schema({
     updatedDate: Date,
     createdBy:String,
     updatedBy:String
-
 });
 
 const LiteUser = mongoose.model('LiteUser', liteUserSchema, 'liteUsers');

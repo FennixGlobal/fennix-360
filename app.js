@@ -1,4 +1,4 @@
-const {mongoDev, mongoLocal, mongoSofiaDev} = require('./fennix-backend-app/util-module/connection-constants');
+const {mongoDev, mongoLocal, mongoSofiaDev, mongoLab} = require('./fennix-backend-app/util-module/connection-constants');
 const locationBusiness = require('./fennix-backend-app/business-module/location-business-module/location-business');
 var createError = require('http-errors');
 var express = require('express');
@@ -152,7 +152,7 @@ app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
 app.use('/container', containerRouter);
-app.use('/liteUser', liteUserRouter);
+app.use('/lite', liteUserRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
