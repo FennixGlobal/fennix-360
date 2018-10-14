@@ -312,7 +312,7 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let modifiedResponse = {
-                id: item['_id'],
+                elockId: item['_id'],
                 primaryValue: {text: 'IMEI Number', value: item['imei']},
                 isActive: item['active'],
                 extraValue: {text: 'Device Type', value: item['deviceTypes']['name']},
