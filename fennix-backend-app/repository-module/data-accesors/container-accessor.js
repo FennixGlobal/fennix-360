@@ -29,6 +29,11 @@ const listUnAssignedContainersAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.listUnassignedContainersQuery);
     return returnObj;
 };
+const getContainerForDeviceIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerForDeviceIdQuery);
+    return returnObj;
+};
 
 const updateContainerAccessor = async (req) => {
     let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
@@ -53,11 +58,11 @@ const containerDeviceUpdateAccessor = async (data) => {
     return returnObj;
 };
 
-const getContainerIdAccessor = async (data) => {
-    let returnObj;
-    returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
-    return returnObj;
-};
+// const getContainerIdAccessor = async (data) => {
+//     let returnObj;
+//     returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
+//     return returnObj;
+// };
 
 const containerLocationUpdateAccessor = async (data) => {
     let returnObj;
@@ -73,6 +78,7 @@ module.exports = {
     listUnAssignedContainersAccessor,
     updateContainerAccessor,
     containerLocationUpdateAccessor,
-    getContainerIdAccessor,
+    // getContainerIdAccessor,
+    getContainerForDeviceIdAccessor,
     containerDeviceUpdateAccessor
 };

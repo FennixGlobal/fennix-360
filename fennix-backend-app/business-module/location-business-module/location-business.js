@@ -199,7 +199,7 @@ const dataSplitter = async (data) => {
     date = data.slice(20, 26);// data length
     console.log(date);
     let time = data.slice(26, 32);// time length
-    const containerResponse = await containerAccessor.getContainerIdAccessor(deviceId);
+    const containerResponse = await containerAccessor.getContainerForDeviceIdAccessor(deviceId);
     if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
         location = {
             containerId: containerResponse['rows'][0]['container_id'],
@@ -229,38 +229,49 @@ const dataSplitter = async (data) => {
         if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
             returnString = '(P35)';
         }
-        const updateLoc = await containerAccessor.containerLocationUpdateAccessor(location);
-        const updateDeviceAttr = await containerAccessor.containerDeviceUpdateAccessor(deviceAttributes);
-        console.log(updateLoc);
-        console.log(updateDeviceAttr);
+        // const updateLoc = await containerAccessor.containerLocationUpdateAccessor(location);
+        // const updateDeviceAttr = await containerAccessor.containerDeviceUpdateAccessor(deviceAttributes);
+        // console.log(updateLoc);
+        // console.log(updateDeviceAttr);
     }
     console.log(deviceAttributes);
     return returnString;
 };
 const eLocksDataUpdateBusiness = async (data) => {
-    let returnString = '', returnValue;
+    let returnString = '', returnValue,returnArray;
     console.log('##########################');
     console.log(data);
+    // data = 2478605036401713002714051703391022348647113549984f0000000000000c0000000000205f0000000708000f0f0f0e2478605036401712002714051703392022348648113549999f0000000000000c0000000010205f0000000708000f0f0f022478605036401713002714051703394022348646113550014f0000000000000c0000000000205f000000070c000f0f0f0f2478605036401713002714051703401022348644113550027f0000000000000c0000000000205f0000000716000f0f0f102478605036401713002714051703411022348644113550037f0000000000000c002c000000205f0000000700000f0f0f122478605036401713002714051703414022348651113550039f0000000000000c0000000000205f000000070c000f0f0f132478605036401713002714051703424600000000000000000e000000000000000000000000a05f0000000100000f0f0f002478605036401712002714051703424800000000000000000e000000000000000000000001205f0000000300000f0f0f002478605036401712002714051703424900000000000000000e000000000000000000000010205f0000000400000f0f0f012478605036401713002714051703431700000000000000000e000000000000000000000000205f000000070b000f0f0f01;
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
-            if (data.length < 93) {
-                returnString = await dataSplitter(data);
-            } else {
-                returnValue = await dataIterator(data);
-                console.log(returnValue);
-                if (returnValue.alarm.length === 0) {
-                    returnString = await dataSplitter(returnValue.gps);
-                } else {
-                    returnString = '(P35)';
-                }
-            }
+            returnArray = dataIterator(data,{});
+            // dataInput = returnArray.gps()
             break;
         case 28:
             returnString = '(P46)';
+
     }
-    return returnString;
-};
+
+    // switch (parseInt(eLockStatus, 10)) {
+    //     case 24:
+    //         if (data.length < 93) {
+    //             returnString = await dataSplitter(data);
+    //         } else {
+    //             returnValue = await dataIterator(data);
+    //             console.log(returnValue);
+    //             if (returnValue.alarm.length === 0) {
+    //                 returnString = await dataSplitter(returnValue.gps);
+    //             } else {
+    //                 returnString = '(P35)';
+    //             }
+    //         }
+    //         break;
+    //     case 28:
+    //         returnString = '(P46)';
+    // }
+    // return returnString;
+        };
 
 const degreeConverter = async (minuteData, direction) => {
     let degree, minute, total, loc;
@@ -304,7 +315,7 @@ const dataIterator = (data, obj) => {
             case 28:
                 const alarmArray = [];
                 alarmArray.push(data.splice(0, 32));
-                obj.gps.push(alarmArray);
+                obj.alarm.push(alarmArray);
                 break;
             default:
         }
