@@ -9,6 +9,7 @@ const addContainerDetailsBusiness = async (req) => {
     let request = req.body;
     request.createdDate = new Date();
     request.createdBy = request.userId;
+    request.isActive = true;
     console.log(request);
     await containerAccessors.addContainerDetailsAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
@@ -26,6 +27,7 @@ const listContainerBusiness = async () => {
                 containerId: item['container_id'],
                 containerType: item['container_type'],
                 containerName: item['container_name'],
+                companyName: item['company_name'],
                 image: item['container_image']
             };
             containerIds.push(item['container_id']);

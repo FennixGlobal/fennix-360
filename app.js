@@ -90,6 +90,7 @@ var commonRouter = require('./fennix-backend-app/web-controller/common-controlle
 var indexRouter = require('./routes/index');
 var groupRouter = require('./fennix-backend-app/web-controller/group-controller');
 var containerRouter = require('./fennix-backend-app/web-controller/container-controller');
+var liteUserRouter = require('./fennix-backend-app/web-controller/lite-user-controller');
 
 var app = express();
 app.use(bodyParser.json());
@@ -151,6 +152,7 @@ app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
 app.use('/container', containerRouter);
+app.use('/liteUser', liteUserRouter);
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
