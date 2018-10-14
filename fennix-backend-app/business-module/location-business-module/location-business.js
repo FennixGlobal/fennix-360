@@ -2,6 +2,7 @@ const {arrayNotEmptyCheck, notNullCheck, objectHasPropertyCheck} = require('../.
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
+const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
 const {deviceValidator} = require('../../util-module/device-validations');
 
 
@@ -181,52 +182,161 @@ const getGSMLevel = (gsmStatus) => {
     }
     return gsmLevel;
 };
-
-const eLocksDataUpdateBusiness = async (data) => {
-    console.log(data);
-    let returnFlag = false, deviceId, deviceType, protocol, deviceStatus, date,covertingHexToDecimal, location = {}, deviceAttributes = {};
-    // data = data.split('');
-    console.log('split data');
-    // covertingHexToDecimal = parseInt(data,16).toString(10);
-    // console.log(covertingHexToDecimal);
-    console.log('##########################');
-    const eLockStatus = data.slice(0, 2);
-    console.log(eLockStatus);
-    if (parseInt(eLockStatus, 10) === 24) {
-        deviceId = data.slice(2, 12);
-        console.log(deviceId);
-        protocol = data.slice(12, 14);
-        console.log(protocol);
-        deviceType = data.slice(14, 15);
-        console.log(deviceType);
-        deviceStatus = data.slice(15, 16);
-        console.log(deviceStatus);
-        returnFlag = parseInt(deviceStatus, 10) === 3;
-        date = data.slice(20, 26);
-        console.log(date);
+const dataSplitter = async (data) => {
+    let deviceId, datalength, deviceAlertInfo, deviceType, protocol, deviceStatus, date, returnString = '',
+        location = {},
+        deviceAttributes = {};
+    deviceAlertInfo = await hexToBinary(data.slice(72, 76));
+    deviceId = data.slice(2, 12);//device Id
+    console.log(deviceId);
+    protocol = data.slice(12, 14);// 17 being the protocol
+    console.log(protocol);
+    deviceType = data.slice(14, 15);// 1 being rechargeable
+    console.log(deviceType);
+    deviceStatus = data.slice(15, 16);// data type
+    console.log(deviceStatus);
+    datalength = data.slice(16, 20);
+    date = data.slice(20, 26);// data length
+    console.log(date);
+    let time = data.slice(26, 32);// time length
+    const containerResponse = await containerAccessor.getContainerIdAccessor(deviceId);
+    if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
         location = {
-            lat: data.slice(26, 34),
-            lng: data.slice(35, 44)
+            containerId: containerResponse['rows'][0]['container_id'],
+            deviceId: deviceId,
+            lat: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+            lng: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
         };
         console.log(location);
         deviceAttributes = {
-            gps: data.slice(44, 45),
-            speed: data.slice(45, 47),
-            direction: data.slice(47, 49),
-            mileage: data.slice(49, 57),
-            gpsQuality: data.slice(57, 59),
-            vehicleId: data.slice(59, 69),
-            deviceStatus: data.slice(69, 73),
-            batteryPercentage: data.slice(73, 75),
-            cellIdLAC: data.slice(75, 83),
-            geoFenceAlarm: data.slice(83, 85)
+            containerId: containerResponse['rows'][0]['container_id'],
+            deviceId: deviceId,
+            gps: data.slice(49, 50),
+            speed: data.slice(50, 52),
+            direction: data.slice(52, 54),
+            mileage: data.slice(54, 62),
+            gpsQuality: data.slice(62, 64),
+            vehicleId: data.slice(64, 72),
+            deviceStatus: deviceAlertInfo.returnValue,
+            serverDate: new Date(),
+            deviceUpdatedDate: new Date(),
+            batteryPercentage: data.slice(76, 78),
+            cellId: data.slice(78, 82),
+            LAC: data.slice(82, 86),
+            gsmQuality: data.slice(86, 88),
+            geoFenceAlarm: data.slice(88, 90)
         };
-        console.log(deviceAttributes);
-    } else {
-        returnFlag = true;
+        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
+            returnString = '(P35)';
+        }
+        const updateLoc = await containerAccessor.containerLocationUpdateAccessor(location);
+        const updateDeviceAttr = await containerAccessor.containerDeviceUpdateAccessor(deviceAttributes);
+        console.log(updateLoc);
+        console.log(updateDeviceAttr);
     }
-    return returnFlag;
+    console.log(deviceAttributes);
+    return returnString;
 };
+const eLocksDataUpdateBusiness = async (data) => {
+    let returnString = '', returnValue;
+    console.log('##########################');
+    console.log(data);
+    const eLockStatus = data.slice(0, 2);
+    switch (parseInt(eLockStatus, 10)) {
+        case 24:
+            if (data.length < 93) {
+                returnString = await dataSplitter(data);
+            } else {
+                returnValue = await dataIterator(data);
+                console.log(returnValue);
+                if (returnValue.alarm.length === 0) {
+                    returnString = await dataSplitter(returnValue.gps);
+                } else {
+                    returnString = '(P35)';
+                }
+            }
+            break;
+        case 28:
+            returnString = '(P46)';
+    }
+    return returnString;
+};
+
+const degreeConverter = async (minuteData, direction) => {
+    let degree, minute, total, loc;
+    if (minuteData.length === 8) {
+        degree = minuteData.slice(0, 2);
+        minute = (parseFloat('' + minuteData.slice(2, 4) + '.' + minuteData.slice(4, 8))) / 60;
+        total = degree + minute;
+        if (direction.toString() === '1111' || direction.toString() === '1110') {
+            loc = '' + total + 'W';
+        } else {
+            loc = direction[2] === 1 ? '' + total + 'E' : '' + total + 'W';
+        }
+    } else {
+        degree = minuteData.slice(0, 3);
+        minute = (parseFloat('' + minuteData.slice(3, 5) + '.' + minuteData.slice(5, 9))) / 60;
+        total = degree + minute;
+        if (direction.toString() === '1111' || direction.toString() === '1110') {
+            loc = '' + total + 'N';
+        } else {
+            loc = direction[2] === 1 ? '' + total + 'N' : '' + total + 'S';
+        }
+    }
+    return loc;
+};
+
+const dataIterator = (data, obj) => {
+    if (!obj) {
+        obj = {
+            gps: [],
+            alarm: [],
+            others: []
+        }
+    }
+    if (data.length > 0) {
+        switch (parseInt(data.slice(0, 2))) {
+            case 24:
+                const gpsArray = [];
+                gpsArray.push(data.splice(0, 93));
+                obj.gps.push(gpsArray);
+                break;
+            case 28:
+                const alarmArray = [];
+                alarmArray.push(data.splice(0, 32));
+                obj.gps.push(alarmArray);
+                break;
+            default:
+        }
+        if (data.length > 0) {
+            dataIterator(data, obj);
+        } else {
+            return obj;
+        }
+    }
+};
+
+const hexToBinary = async (deviceStatus) => {
+    let ret = '', returnValue = {flag: false, returnArray: ''},
+        lookupTable = {
+            '0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100',
+            '5': '0101', '6': '0110', '7': '0111', '8': '1000', '9': '1001',
+            'a': '1010', 'b': '1011', 'c': '1100', 'd': '1101',
+            'e': '1110', 'f': '1111',
+            'A': '1010', 'B': '1011', 'C': '1100', 'D': '1101',
+            'E': '1110', 'F': '1111'
+        };
+    // lookup table for easier conversion. '0' characters are padded for '1' to '7'
+    for (let i = 0; i < deviceStatus.length; i += 1) {
+        if (lookupTable.hasOwnProperty(deviceStatus[i])) {
+            ret += lookupTable[deviceStatus[i]];
+        }
+    }
+    returnValue.flag = ret.length === 16;
+    returnValue.returnArray = ret;
+    return returnValue;
+};
+
 module.exports = {
     locationUpdateBusiness,
     eLocksDataUpdateBusiness
