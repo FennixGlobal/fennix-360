@@ -545,6 +545,9 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'container':
                 widgetElementData = {
                     ...widgetElementData, ...{
+                        elementContainerReqUrl: widgetElementItem['checkbox_container_endpoint'],
+                        elementContainerReqType: widgetElementItem['checkbox_container_req_type'],
+                        elementContainerReqParams: widgetElementItem['checkbox_container_req_params'],
                         elementContainerId: widgetElementItem['checkbox_container_set_id'],
                         elementTitle: widgetElementItem['element_title'],
                         submitReqType: widgetElementItem['submit_request_type'],

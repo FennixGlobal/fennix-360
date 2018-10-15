@@ -4,6 +4,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , (select localized_text from localization where locale_key = rc.card_header_localization_key and language = $3) as card_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
     '    , rcw.widget_order_id,rcw.role_cards_widgets_id,rcwa.dropdown_id\n' +
+    '    , ce.endpoint as checkbox_container_endpoint,ce.endpoint_mandatory_request_params as checkbox_container_req_params, ce.endpoint_request_type as checkbox_container_req_type\n' +
     '    , we.endpoint as widget_endpoint, we.endpoint_initial_sort as widget_init_sort, we.endpoint_mandatory_request_params as widget_req_params, we.endpoint_request_type as widget_req_type\n' +
     '    , (select widget_size from widget_size where widget_size_id = rcw.widget_size_id) as widget_size\n' +
     '    , (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_section_subtype,rcwa.sub_section_mandatory_flag\n' +
@@ -33,6 +34,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    join widget_attributes wa on wa.widget_attribute_id = rcwa.widget_attribute_id\n' +
     '    left outer join endpoints de on de.endpoint_id = rcwa.dropdown_endpoint\n' +
     '    left outer join endpoints se on se.endpoint_id = rcwa.submit_endpoint\n' +
+    '    left outer join endpoints ce on ce.endpoint_id = rcwa.checkbox_container_meta_endpoint\n' +
     '    left outer join route rn on rn.route_id = rcwa.navigation_route\n' +
     '    left outer join endpoints we on we.endpoint_id = rcw.endpoint_id';
 
