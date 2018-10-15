@@ -17,6 +17,7 @@ const liteUserTrackingSchema = new Schema({
     speed: Number,
     time: Number,
     weight: String,
+    userId:Number,
     createdDate: Date,
     updatedDate: Date,
     createdBy:String,
