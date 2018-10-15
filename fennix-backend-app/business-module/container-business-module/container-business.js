@@ -57,7 +57,7 @@ const listUnassignedContainerBusiness = async () => {
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
-                containerId: item['container_id'],
+                id: item['container_id'],
                 primaryValue: {text: 'Container Name', value: item['container_name']}
             };
             modifiedResponse.push(obj);
