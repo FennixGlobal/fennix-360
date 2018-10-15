@@ -1,7 +1,7 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor, getContainerDropdownAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -26,6 +26,36 @@ const dropDownBusiness = async (req) => {
         returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'EN_US', []);
     }
     return returnResponse;
+};
+
+const getContainerDropdownBusiness = async (req) => {
+    let request = [req.query.containerSetId], response, modifiedResponse = [], finalResponse;
+    response = await getContainerDropdownAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = {
+                checkBoxContainerSetName: item['checkbox_container_set_name'],
+                checkBoxContainerSetId: item['checkbox_container_set_id'],
+                requestMappingKey: item['request_mapping_key'],
+                defaultValue: item['default_value'],
+                elementTitle: item['element_title'],
+                elementValue: item['element_value'],
+                elementType: item['element_type'],
+                elementSubType: item['element_subtype'],
+                checkBoxDynamicContainerId: item['checkbox_deviceattributes_dynamiccontainer_id'],
+                checkBoxDynamicContainerOrderId: item['checkbox_deviceattributes_dynamiccontainer_order_id'],
+                widgetAttributeId: item['widget_attribute_id'],
+                widgetElementType: item['widget_element_type'],
+                widgetElementSubType: item['widget_sub_type'],
+                widgetType: item['widget_type']
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DROPDOWN, 'EN_US', []);
+    }
+    return finalResponse;
 };
 
 const imageStorageBusiness = async (imageUpload, folderBasePath, folderName, createFolderFlag) => {
@@ -157,6 +187,7 @@ module.exports = {
     uploadToDropboxBusiness,
     getLocationCodeBusiness,
     shareDropboxLinkBusiness,
+    getContainerDropdownBusiness,
     getDropdownNameFromKeyBusiness
 };
 // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})

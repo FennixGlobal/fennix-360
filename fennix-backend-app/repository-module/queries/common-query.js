@@ -1,5 +1,3 @@
-const {imageCounterModel} = require('../models/image-model');
-
 const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdown_id\n' +
     '    , ds.dropdown_set_id, ds.dropdown_key, (select localized_text from localization where locale_key = ds.dropdown_value and language = $2) as dropdown_value, ds.is_disable\n' +
     '    , ds.dropdown_action_button_icon_value, ds.dropdown_action_button_icon_key, ds.is_action_button, ds.dropdown_action_button_modal_id,ds.dropdown_transfer_key\n' +
@@ -14,22 +12,20 @@ const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdow
 
 const getDownloadMapperQuery = 'select mapping_key, localized_key from download_mapper';
 
-// const imageCounterUpdateQuery = ()=> {
-//     return imageCounterModel.update({$inc: {counter: 1}}).then(doc => {
-//         if (!doc) {
-//             console.log('error');
-//         } else {
-//             console.log('success');
-//         }
-//     });
-// };
-//
-// const fetchImageCounterQuery = ()=> {
-//     return imageCounterModel.find();
-// };
-const fetchImageCounterQuery = ()=> {
-    return imageCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
-};
+const getContainerDropdownQuery = 'select ccs.checkbox_container_set_name, css.checkbox_container_set_id\n' +
+    ', cdd.request_mapping_key, cdd.default_value\n' +
+    ', (select localized_text from localization where locale_key = cdd.element_title) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
+    ', cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
+    ', checkbox_deviceattributes_dynamiccontainer_order_id\n' +
+    ', wa.widget_attribute_id, wa.elemet_type as widget_element_type, wa.sub_type as widget_sub_type\n' +
+    ', w.widget_type\n' +
+    'from checkbox_container_set ccs\n' +
+    'join checkbox_deviceattributes_dynamiccontainer cdd\n' +
+    'on ccs.checkbox_container_set_id = cdd.checkbox_container_set_id and ccs.checkbox_container_set_id = $1\n' +
+    'join widget_attributes wa \n' +
+    'on cdd.widget_attribute_id = wa.widget_attribute_id\n' +
+    'join widgets w on w.widget_id = wa.widget_id';
+
 
 const getDropdownValueByDropdownIdQuery = 'select localized_text as dropdown_value from localization where locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = $1) and language = \'EN_US\'';
 
@@ -37,5 +33,5 @@ module.exports = {
     getDropdownDataQuery,
     getDropdownValueByDropdownIdQuery,
     getDownloadMapperQuery,
-    fetchImageCounterQuery
+    getContainerDropdownQuery
 };

@@ -1,39 +1,33 @@
-const {getDownloadMapperQuery, getDropdownDataQuery, getDropdownValueByDropdownIdQuery} = require('../queries/common-query');
-const {imageCounterUpdateQuery, fetchImageCounterQuery} = require('../queries/common-query');
+const commonQueries = require('../queries/common-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const getDownloadMapperAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getDownloadMapperQuery);
+    returnObj = await connectionCheckAndQueryExec(req, commonQueries.getDownloadMapperQuery);
     return returnObj;
 };
 
 const getDropdownAccessor = async (req) => {
     let responseObj;
-    responseObj = await connectionCheckAndQueryExec(req, getDropdownDataQuery);
+    responseObj = await connectionCheckAndQueryExec(req, commonQueries.getDropdownDataQuery);
     return responseObj;
 };
 
-const getImageCounterAccessor = async () => {
-    let responseObj;
-    responseObj = await fetchImageCounterQuery();
-    return responseObj;
-};
 const getDropdownValueByDropdownIdAccessor = async (req) => {
     let responseObj;
-    responseObj = await connectionCheckAndQueryExec(req, getDropdownValueByDropdownIdQuery);
+    responseObj = await connectionCheckAndQueryExec(req, commonQueries.getDropdownValueByDropdownIdQuery);
     return responseObj;
 };
-// const updateImageCounterAccessor = async ()=>{
-//     let responseObj;
-//     responseObj = await imageCounterUpdateQuery();
-//     return responseObj;
-// };
+
+const getContainerDropdownAccessor = async (req) => {
+    let responseObj;
+    responseObj = await connectionCheckAndQueryExec(req, commonQueries.getContainerDropdownQuery);
+    return responseObj;
+};
 
 module.exports = {
     getDownloadMapperAccessor,
     getDropdownAccessor,
-    getImageCounterAccessor,
+    getContainerDropdownAccessor,
     getDropdownValueByDropdownIdAccessor
-    // updateImageCounterAccessor
 };
