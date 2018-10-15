@@ -25,7 +25,7 @@ router.get('/deactivateContainer', function (req, res) {
         res.send(response);
     })
 });
-router.get('/assignContainer', function (req, res) {
+router.post('/assignElock', function (req, res) {
     let returnObj;
     returnObj = containerBusiness.assignContainerBusiness(req);
     returnObj.then((response) => {
