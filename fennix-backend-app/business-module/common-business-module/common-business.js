@@ -1,7 +1,7 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
-const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor, getContainerDropdownAccessor} = require('../../repository-module/data-accesors/common-accessor');
+const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor, getContainerCheckboxMetadataAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -28,9 +28,9 @@ const dropDownBusiness = async (req) => {
     return returnResponse;
 };
 
-const getContainerDropdownBusiness = async (req) => {
+const getContainerCheckboxMetadataBusiness = async (req) => {
     let request = [req.query.containerSetId], response, modifiedResponse = [], finalResponse;
-    response = await getContainerDropdownAccessor(request);
+    response = await getContainerCheckboxMetadataAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
@@ -187,7 +187,7 @@ module.exports = {
     uploadToDropboxBusiness,
     getLocationCodeBusiness,
     shareDropboxLinkBusiness,
-    getContainerDropdownBusiness,
+    getContainerCheckboxMetadataBusiness,
     getDropdownNameFromKeyBusiness
 };
 // await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})

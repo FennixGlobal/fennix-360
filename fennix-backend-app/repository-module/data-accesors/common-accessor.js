@@ -19,15 +19,15 @@ const getDropdownValueByDropdownIdAccessor = async (req) => {
     return responseObj;
 };
 
-const getContainerDropdownAccessor = async (req) => {
+const getContainerCheckboxMetadataAccessor = async (req) => {
     let responseObj;
-    responseObj = await connectionCheckAndQueryExec(req, commonQueries.getContainerDropdownQuery);
+    responseObj = await connectionCheckAndQueryExec(req, commonQueries.getContainerCheckboxMetadataQuery);
     return responseObj;
 };
 
 module.exports = {
     getDownloadMapperAccessor,
     getDropdownAccessor,
-    getContainerDropdownAccessor,
+    getContainerCheckboxMetadataAccessor,
     getDropdownValueByDropdownIdAccessor
 };

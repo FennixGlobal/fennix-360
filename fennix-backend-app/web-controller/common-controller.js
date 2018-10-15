@@ -1,4 +1,4 @@
-const {dropDownBusiness, getContainerDropdownBusiness} = require('../business-module/common-business-module/common-business');
+const {dropDownBusiness, getContainerCheckboxMetadataBusiness} = require('../business-module/common-business-module/common-business');
 var express = require('express');
 var router = express.Router();
 
@@ -9,9 +9,9 @@ router.get('/dropdownData', function (req, res) {
         res.send(response);
     })
 });
-router.get('/containerDropdown', function (req, res) {
+router.get('/containerCheckboxMetadata', function (req, res) {
     let returnObj;
-    returnObj = getContainerDropdownBusiness(req);
+    returnObj = getContainerCheckboxMetadataBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
