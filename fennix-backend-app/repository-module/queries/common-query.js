@@ -13,18 +13,16 @@ const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdow
 const getDownloadMapperQuery = 'select mapping_key, localized_key from download_mapper';
 
 const getContainerCheckboxMetadataQuery = 'select ccs.checkbox_container_set_name, ccs.checkbox_container_set_id\n' +
-    ', cdd.request_mapping_key, cdd.default_value\n' +
-    ', (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
-    ', cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
-    ', checkbox_deviceattributes_dynamiccontainer_order_id\n' +
-    ', wa.widget_attribute_id, wa.element_type as widget_element_type, wa.sub_type as widget_sub_type\n' +
-    ', w.widget_type\n' +
-    'from checkbox_container_set ccs\n' +
-    'join checkbox_deviceattributes_dynamiccontainer cdd\n' +
-    'on ccs.checkbox_container_set_id = cdd.checkbox_container_set_id and ccs.checkbox_container_set_id = $1\n' +
-    'join widget_attributes wa \n' +
-    'on cdd.widget_attribute_id = wa.widget_attribute_id\n' +
-    'join widgets w on w.widget_id = wa.widget_id';
+    '    , cdd.request_mapping_key, cdd.default_value\n' +
+    '    , (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
+    '    , cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
+    '    , checkbox_deviceattributes_dynamiccontainer_order_id\n' +
+    '    , wa.widget_attribute_id, wa.element_type as widget_element_type, wa.sub_type as widget_sub_type\n' +
+    '    from checkbox_deviceattributes_dynamiccontainer cdd \n' +
+    '    join checkbox_container_set ccs\n' +
+    '    on cdd.checkbox_container_set_id = ccs.checkbox_container_set_id and cdd.checkbox_container_set_id = $1\n' +
+    '    left join widget_attributes wa \n' +
+    '    on cdd.widget_attribute_id = wa.widget_attribute_id';
 
 
 const getDropdownValueByDropdownIdQuery = 'select localized_text as dropdown_value from localization where locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = $1) and language = \'EN_US\'';
