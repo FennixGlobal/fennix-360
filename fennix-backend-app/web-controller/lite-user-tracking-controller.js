@@ -5,9 +5,9 @@ var router = express.Router();
 
 
 
-router.get("/userTracking/:_id", (req, res) => {
-     console.log("params", req.params);
-    LiteUserTracking.find(req.params, (err, data) => {
+router.get("/userTracking", (req, res) => {
+     console.log("params", req.query);
+    LiteUserTracking.find(req.query, (err, data) => {
         if (err) {
             res.status(500).send(err);
             return;
