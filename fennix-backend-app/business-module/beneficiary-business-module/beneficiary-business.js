@@ -292,7 +292,10 @@ const beneficiaryListForUnAssignedDevicesBusiness = async () => {
         response.rows.forEach((item) => {
             let obj = {
                 id: item['beneficiaryid'],
-                primaryValue: {text: 'Full Name', value: item['full_name']}
+                beneficiaryId:item['beneficiaryid'],
+                beneficiaryName: item['full_name'],
+                beneficiaryRole:item['role_name'],
+
             };
             modifiedResponse.push(obj);
         });

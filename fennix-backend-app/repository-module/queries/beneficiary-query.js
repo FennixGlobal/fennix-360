@@ -28,7 +28,7 @@ const authenticateBeneficiaryQuery = 'select (select localized_text from localiz
 
 const insertBeneficiaryQuery = 'insert into ';
 
-const selectBeneficiariesOfUnAssignedDevicesQuery = 'select beneficiaryid, concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name from beneficiaries where (device_id is null or device_id = 0) and isactive = true';
+const selectBeneficiariesOfUnAssignedDevicesQuery = 'select beneficiaryid,(select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language=$2) as role_name, concat(firstname, \' \', middle_name, \' \', first_last_name, \' \', second_last_name) as full_name from beneficiaries where (device_id is null or device_id = 0) and isactive = true';
 // const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstname,middle_name,first_last_name,second_last_name,beneficiary_role as role_id,gender,emailid, (select localized_text from localization where locale_key = (select role_name from roles where role_id = beneficiary_role) and language = $6) as role, device_updated_date, document_id, mobileno,image from beneficiaries\n' +
 //     'where owner_user_id = (select user_id from users where user_id = $1) and center_id = $2\n' +
 //     'order by $3 desc nulls last\n' +

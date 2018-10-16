@@ -294,10 +294,11 @@ const listUnAssignedDevicesBusiness = async (req) => {
         response.forEach((item) => {
             let modifiedResponse = {
                 id: item['_id'],
-                primaryValue: {text: 'IMEI Number', value: item['imei']},
+                imei: item['imei'],
                 isActive: item['active'],
-                extraValue: {text: 'Device Type', value: item['deviceTypes']['name']},
-                secondaryValue: {text: 'Phone Number', value: item['simcards']['phoneNo']}
+                deviceType: item['deviceTypes']['name'],
+                phoneNo: item['simcards']['phoneNo'],
+                deviceId: item['_id']
             };
             unAssignedDevices.push(modifiedResponse);
         });
