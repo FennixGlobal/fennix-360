@@ -14,7 +14,7 @@ const getDownloadMapperQuery = 'select mapping_key, localized_key from download_
 
 const getContainerCheckboxMetadataQuery = 'select ccs.checkbox_container_set_name, ccs.checkbox_container_set_id\n' +
     '    , cdd.request_mapping_key, cdd.default_value\n' +
-    '    , (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
+    '    , (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_primary_value, cdd.element_width, cdd.element_secondary_value\n' +
     '    , cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
     '    , checkbox_deviceattributes_dynamiccontainer_order_id\n' +
     '    , wa.widget_attribute_id, wa.element_type as widget_element_type, wa.sub_type as widget_sub_type\n' +

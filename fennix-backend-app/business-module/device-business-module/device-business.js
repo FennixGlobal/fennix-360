@@ -278,7 +278,8 @@ const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
 //     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
 // };
 const unlinkDeviceForBeneficiaryBusiness = async (req) => {
-    let request = parseInt(req.query.beneficiaryId), benRequest = {beneficiaryId: req.query.beneficiaryId, deviceId: null};
+    let request = parseInt(req.query.beneficiaryId),
+        benRequest = {beneficiaryId: req.query.beneficiaryId, deviceId: null};
     //unlinking the device for beneficiary in devices collection, beneficiaries table & locationAttributesMaster collection
     await deviceAccessor.unlinkDeviceForBeneficiaryAccessor(request);
     await beneficiaryAccessor.updateBeneficiaryAccessor(benRequest);
@@ -313,10 +314,11 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
         response.forEach((item) => {
             let modifiedResponse = {
                 id: item['_id'],
-                primaryValue: {text: 'IMEI Number', value: item['imei']},
+                imei: item['imei'],
                 isActive: item['active'],
-                extraValue: {text: 'Device Type', value: item['deviceTypes']['name']},
-                secondaryValue: {text: 'Phone Number', value: item['simcards']['phoneNo']}
+                deviceType: item['deviceTypes']['name'],
+                deviceId: item['_id'],
+                phoneNo: item['simcards']['phoneNo']
             };
             unAssignedDevices.push(modifiedResponse);
         });
@@ -328,7 +330,8 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
 };
 
 const unlinkDeviceForContainerBusiness = async (req) => {
-    let request = parseInt(req.query.containerId), containerRequest = {containerId: req.query.containerId, deviceId: null};
+    let request = parseInt(req.query.containerId),
+        containerRequest = {containerId: req.query.containerId, deviceId: null};
     //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection
     await deviceAccessor.unlinkDeviceForContainerAccessor(request);
     await containerAccessor.updateContainerAccessor(containerRequest);
