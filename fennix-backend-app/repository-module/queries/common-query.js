@@ -12,7 +12,7 @@ const getDropdownDataQuery = 'select d.dropdown_type, d.dropdown_name, d.dropdow
 
 const getDownloadMapperQuery = 'select mapping_key, localized_key from download_mapper';
 
-const getContainerCheckboxMetadataQuery = 'select ccs.checkbox_container_set_name, css.checkbox_container_set_id\n' +
+const getContainerCheckboxMetadataQuery = 'select ccs.checkbox_container_set_name, ccs.checkbox_container_set_id\n' +
     ', cdd.request_mapping_key, cdd.default_value\n' +
     ', (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
     ', cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
