@@ -29,7 +29,7 @@ const dropDownBusiness = async (req) => {
 };
 
 const getContainerCheckboxMetadataBusiness = async (req) => {
-    let request = [req.query.containerSetId], response, modifiedResponse = [], finalResponse;
+    let request = [req.query.containerSetId, req.query.languageId], response, modifiedResponse = [], finalResponse;
     response = await getContainerCheckboxMetadataAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
