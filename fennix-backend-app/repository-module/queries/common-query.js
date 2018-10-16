@@ -17,7 +17,7 @@ const getContainerCheckboxMetadataQuery = 'select ccs.checkbox_container_set_nam
     ', (select localized_text from localization where locale_key = cdd.element_title and language = $2) as element_title, cdd.element_value, cdd.element_type, cdd.element_subtype\n' +
     ', cdd.checkbox_deviceattributes_dynamiccontainer_id\n' +
     ', checkbox_deviceattributes_dynamiccontainer_order_id\n' +
-    ', wa.widget_attribute_id, wa.elemet_type as widget_element_type, wa.sub_type as widget_sub_type\n' +
+    ', wa.widget_attribute_id, wa.element_type as widget_element_type, wa.sub_type as widget_sub_type\n' +
     ', w.widget_type\n' +
     'from checkbox_container_set ccs\n' +
     'join checkbox_deviceattributes_dynamiccontainer cdd\n' +
