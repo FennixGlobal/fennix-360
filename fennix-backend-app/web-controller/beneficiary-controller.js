@@ -121,7 +121,7 @@ router.post('/uploadDocumentsForBeneficiary', function (req, res) {
 
 router.get('/listUnAssignedBeneficiary', function (req, res) {
     let returnObj;
-    returnObj = beneficiaryBusiness.beneficiaryListForUnAssignedDevicesBusiness();
+    returnObj = beneficiaryBusiness.beneficiaryListForUnAssignedDevicesBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

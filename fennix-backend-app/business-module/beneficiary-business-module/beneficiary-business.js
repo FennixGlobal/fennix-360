@@ -285,9 +285,9 @@ const updateBeneficiaryDocumentPathBusiness = async (beneficiaryId, categoryName
     return returnObj;
 };
 
-const beneficiaryListForUnAssignedDevicesBusiness = async () => {
+const beneficiaryListForUnAssignedDevicesBusiness = async (req) => {
     let response, modifiedResponse = [], finalResponse;
-    response = await beneficiaryAccessor.beneficiaryListOfUnAssignedDevicesAccesor([]);
+    response = await beneficiaryAccessor.beneficiaryListOfUnAssignedDevicesAccesor([req.query.languageId]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
