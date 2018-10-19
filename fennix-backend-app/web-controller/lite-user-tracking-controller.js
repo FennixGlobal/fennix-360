@@ -7,7 +7,14 @@ var router = express.Router();
 
 router.get("/userTracking", (req, res) => {
      console.log("params", req.query);
-    LiteUserTracking.find(req.query, (err, data) => {
+     let params = {
+        userId: req.query.userId,
+        date:{
+            $gt: req.query.startDate,
+            $lt: req.query.endDate
+        }
+      }
+    LiteUserTracking.find(params, (err, data) => {
         if (err) {
             res.status(500).send(err);
             return;
