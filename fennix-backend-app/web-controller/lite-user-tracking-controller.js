@@ -13,7 +13,7 @@ router.get("/userTracking", (req, res) => {
             $gt: req.query.startDate,
             $lt: req.query.endDate
         }
-      }
+      };
     LiteUserTracking.find(params, (err, data) => {
         if (err) {
             res.status(500).send(err);
