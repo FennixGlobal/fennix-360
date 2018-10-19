@@ -15,13 +15,12 @@ const listUnAssignedSimcardsBusiness = async (req) => {
         response.forEach((item) => {
             let obj = {
                 id: item['_id'],
-                primaryValue: {text: 'Phone Number', value: item['phoneNo']},
-                secondaryValue: {
-                    text: 'Serial Number',
-                    value: notNullCheck(item['serial']) ? item['serial'] : notNullCheck(item['serialNp']) ? item['serialNp'] : 'Serial Not Assigned'
-                },
+                phoneNo: item['phoneNo'],
+                serialNo: notNullCheck(item['serial']) ? item['serial'] : notNullCheck(item['serialNp']) ? item['serialNp'] : 'Serial Not Assigned',
                 isActive: item['active'],
-                extraValue: {text: 'Carrier Name', value: item['carrier']['name']}
+                carrier: item['carrier']['name'],
+                simcardId:item['_id'],
+                simType:item['simType']
             };
             modifiedResponse.push(obj);
         });

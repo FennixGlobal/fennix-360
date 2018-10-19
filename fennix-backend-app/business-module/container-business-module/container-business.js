@@ -36,7 +36,7 @@ const listContainerBusiness = async () => {
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
                 finalReturnObj[device['containerId']] = {
-                    ...finalReturnObj[device['beneficiaryId']],
+                    ...finalReturnObj[device['containerId']],
                     deviceId: device['_id'],
                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
                     deviceType: objectHasPropertyCheck(device, 'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name'] : 'No Device Type'
@@ -57,8 +57,11 @@ const listUnassignedContainerBusiness = async () => {
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
+                containerId: item['container_id'],
+                containerName: item['container_name'],
                 id: item['container_id'],
-                primaryValue: {text: 'Container Name', value: item['container_name']}
+                containerType: item['container_type'],
+                companyName: item['container_name']
             };
             modifiedResponse.push(obj);
         });

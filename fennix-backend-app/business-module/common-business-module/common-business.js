@@ -29,7 +29,7 @@ const dropDownBusiness = async (req) => {
 };
 
 const getContainerCheckboxMetadataBusiness = async (req) => {
-    let request = [req.query.containerSetId], response, modifiedResponse = [], finalResponse;
+    let request = [req.query.containerSetId, req.query.languageId], response, modifiedResponse = [], finalResponse;
     response = await getContainerCheckboxMetadataAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
@@ -39,15 +39,14 @@ const getContainerCheckboxMetadataBusiness = async (req) => {
                 requestMappingKey: item['request_mapping_key'],
                 defaultValue: item['default_value'],
                 elementTitle: item['element_title'],
-                elementValue: item['element_value'],
-                elementType: item['element_type'],
-                elementSubType: item['element_subtype'],
+                elementWidth: item['element_width'],
+                elementPrimaryValue: item['element_primary_value'],
+                elementSecondaryValue: item['element_secondary_value'],
                 checkBoxDynamicContainerId: item['checkbox_deviceattributes_dynamiccontainer_id'],
                 checkBoxDynamicContainerOrderId: item['checkbox_deviceattributes_dynamiccontainer_order_id'],
                 widgetAttributeId: item['widget_attribute_id'],
                 widgetElementType: item['widget_element_type'],
-                widgetElementSubType: item['widget_sub_type'],
-                widgetType: item['widget_type']
+                widgetElementSubType: item['widget_sub_type']
             };
             modifiedResponse.push(obj);
         });

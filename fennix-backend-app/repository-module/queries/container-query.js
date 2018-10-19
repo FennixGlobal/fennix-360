@@ -6,7 +6,7 @@ const listContainersQuery = 'select * from container where isactive = true';
 
 const getTotalNoOfContainersQuery = 'select count(*) from container where isactive = true';
 
-const listUnassignedContainersQuery = 'select container_id, container_name from container where (device_id is null or device_id = 0) and isactive = true';
+const listUnassignedContainersQuery = 'select container_id, container_name,container_type,company_name from container where (device_id is null or device_id = 0) and isactive = true';
 
 
 const updateElockAttributeQuery = (req) => {
