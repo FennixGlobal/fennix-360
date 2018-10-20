@@ -125,15 +125,15 @@ const getBeneficiaryListByOwnerId = async (req) => {
         request = [...req.userIdList, req.centerId, req.skip, req.limit];
         // extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
-        limit = req.userIdList.length + 2;
-        offset = req.userIdList.length + 3;
+        offset = req.userIdList.length + 2;
+        limit = req.userIdList.length + 3;
     } else {
         request = [...req.userIdList, req.skip, req.limit];
         extraQuery = `and isactive = true`;
-        limit = req.userIdList.length + 1;
-        offset = req.userIdList.length + 2;
+        offset = req.userIdList.length + 1;
+        limit = req.userIdList.length + 2;
     }
-    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('created_date', 'desc', offset, limit)}`;
+    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('created_date', 'desc', parseInt(offset,10), parseInt(limit,10))}`;
     console.log(modifiedQuery);
     console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
