@@ -134,6 +134,8 @@ const getBeneficiaryListByOwnerId = async (req) => {
         offset = req.userIdList.length + 2;
     }
     modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('created_date', 'desc', offset, limit)}`;
+    console.log(modifiedQuery);
+    console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };
