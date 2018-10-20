@@ -36,7 +36,7 @@ const listContainerBusiness = async () => {
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
                 finalReturnObj[device['containerId']] = {
-                    ...finalReturnObj[device['beneficiaryId']],
+                    ...finalReturnObj[device['containerId']],
                     deviceId: device['_id'],
                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
                     deviceType: objectHasPropertyCheck(device, 'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name'] : 'No Device Type'
