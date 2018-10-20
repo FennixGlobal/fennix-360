@@ -676,6 +676,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
             };
             beneficiaryIds.push(item['beneficiaryid']);
         });
+        console.log(beneficiaryIds);
         // console.log(finalReturnObj);
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
