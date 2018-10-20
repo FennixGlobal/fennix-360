@@ -690,6 +690,8 @@ const beneficiaryListByOwnerUserId = async (req) => {
         // console.log(finalReturnObj);
         let sortedArray = [];
         Object.keys(finalReturnObj).map((key) => {
+            console.log(key);
+            console.log(beneficiaryIds.indexOf(key));
             sortedArray[beneficiaryIds.indexOf(key)] = finalReturnObj[key];
         });
         finalResponse['gridData'] = sortedArray;
