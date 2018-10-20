@@ -124,7 +124,7 @@ const excelRowsCreator = (list, table, keysArray) => {
 
 const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit) => {
     let query;
-    query = `order by ${sortBy} ${sortOrder} nulls last offset ${offset} limit ${limit}`;
+    query = `order by ${sortBy} ${sortOrder} nulls last offset $${offset} limit $${limit}`;
     return query;
 };
 
