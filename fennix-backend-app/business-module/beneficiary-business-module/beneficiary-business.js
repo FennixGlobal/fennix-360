@@ -32,11 +32,11 @@ const beneficiaryAggregatorBusiness = async (req) => {
         //     beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
         //     beneficiaryObj[propName2]['value'] = 0;
         // } else {
-            beneficiaryResponse.rows.forEach((item) => {
-                if (notNullCheck(item['role_name'])) {
-                    beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
-                }
-            });
+        beneficiaryResponse.rows.forEach((item) => {
+            if (notNullCheck(item['role_name'])) {
+                beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
+            }
+        });
         // }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryObj);
     } else {
@@ -60,7 +60,8 @@ const getTimeZoneDetailsBusiness = async () => {
 };
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload, restrictionRequestList = [], finalRestrictionObj;
+    let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload,
+        restrictionRequestList = [], finalRestrictionObj;
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.createdDate = new Date();
@@ -292,9 +293,9 @@ const beneficiaryListForUnAssignedDevicesBusiness = async (req) => {
         response.rows.forEach((item) => {
             let obj = {
                 id: item['beneficiaryid'],
-                beneficiaryId:item['beneficiaryid'],
+                beneficiaryId: item['beneficiaryid'],
                 beneficiaryName: item['full_name'],
-                beneficiaryRole:item['role_name'],
+                beneficiaryRole: item['role_name'],
 
             };
             modifiedResponse.push(obj);
@@ -672,6 +673,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
             };
             beneficiaryIds.push(item['beneficiaryid']);
         });
+        console.log(finalReturnObj);
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
@@ -683,6 +685,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 };
             });
         }
+        console.log(finalReturnObj);
         finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
@@ -857,7 +860,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
             familySecondaryRelation: benResponse['secondary_relation'],
             familyInfoId: benResponse['family_info_id'],
             geoFence: restrictionResponse,
-            country:benResponse['location_3']
+            country: benResponse['location_3']
             // scentenceLawyerId:sentence_house_arrest: null,
             // scentenceLawyerId:sentence_restraining_order: null,
         };
