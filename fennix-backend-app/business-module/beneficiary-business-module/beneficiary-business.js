@@ -658,6 +658,9 @@ const beneficiaryListByOwnerUserId = async (req) => {
     finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
+            console.log('**************');
+            console.log(item['beneficiaryid']);
+            console.log('******order********');
             finalReturnObj[item['beneficiaryid']] = {
                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 beneficiaryId: item['beneficiaryid'],
@@ -673,7 +676,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
             };
             beneficiaryIds.push(item['beneficiaryid']);
         });
-        console.log(finalReturnObj);
+        // console.log(finalReturnObj);
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
@@ -685,7 +688,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
                 };
             });
         }
-        console.log(finalReturnObj);
+        // console.log(finalReturnObj);
         finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
