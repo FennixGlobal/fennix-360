@@ -676,8 +676,6 @@ const beneficiaryListByOwnerUserId = async (req) => {
             };
             beneficiaryIds.push(item['beneficiaryid']);
         });
-        console.log(beneficiaryIds);
-        // console.log(finalReturnObj);
         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
             deviceDetailsResponse.forEach(device => {
@@ -690,7 +688,11 @@ const beneficiaryListByOwnerUserId = async (req) => {
             });
         }
         // console.log(finalReturnObj);
-        finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
+        let sortedArray = [];
+        Object.keys(finalReturnObj).map((key) => {
+            sortedArray[beneficiaryIds.indexOf(key)] = finalReturnObj[key];
+        });
+        finalResponse['gridData'] = sortedArray;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
