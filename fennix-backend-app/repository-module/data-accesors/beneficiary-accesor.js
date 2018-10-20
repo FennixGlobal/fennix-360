@@ -1,7 +1,7 @@
 const beneficiaryQueries = require('../queries/beneficiary-query');
 const beneficiaryDocumentQuery = require('../queries/beneficiary-document-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
+const {sortWithPaginationQueryCreator, requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const userAccessor = require('../data-accesors/user-accesor');
@@ -119,16 +119,21 @@ const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) =>
 
 const getBeneficiaryListByOwnerId = async (req) => {
     let returnObj, request = [], modifiedQuery,
-        extraQuery = ``;
+        extraQuery = ``, limit, offset;
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
         request = [...req.userIdList, req.centerId, req.skip, req.limit];
-        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+        // extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
+        limit = req.userIdList.length + 2;
+        offset = req.userIdList.length + 3;
     } else {
         request = [...req.userIdList, req.skip, req.limit];
-        extraQuery = `and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 1} limit $${req.userIdList.length + 2}`;
+        extraQuery = `and isactive = true`;
+        limit = req.userIdList.length + 1;
+        offset = req.userIdList.length + 2;
     }
-    modifiedQuery = `${modifiedQuery}${extraQuery}`;
+    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('created_date', 'desc', offset, limit)}`;
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };

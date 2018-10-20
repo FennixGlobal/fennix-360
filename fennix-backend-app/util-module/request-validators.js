@@ -122,7 +122,11 @@ const excelRowsCreator = (list, table, keysArray) => {
     return finalResponse;
 };
 
-
+const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit) => {
+    let query;
+    query = `order by ${sortBy} ${sortOrder} nulls last offset ${offset} limit ${limit}`;
+    return query;
+};
 
 module.exports = {
     filterQueryCreator,
@@ -131,5 +135,6 @@ module.exports = {
     insertQueryCreator,
     excelColCreator,
     excelRowsCreator,
-    updateQueryCreator
+    updateQueryCreator,
+    sortWithPaginationQueryCreator
 };
