@@ -59,14 +59,17 @@ ELockServer.on("connection", (socket) => {
     socket.on('data', async (data) => {
         const returnValue = await locationBusiness.eLocksDataUpdateBusiness(data);
         console.log(returnValue);
-        if(returnValue){
-        socket.write('P35');
+        if (returnValue) {
+            socket.write('P35');
         }
         console.log(data);
     });
     socket.on('error', (err) => {
         console.log('in elocks');
         console.log('error occurred');
+        console.log(err.stack);
+        throw err;
+    }).catch(err => {
         console.log(err);
     });
     socket.on('end', () => {
