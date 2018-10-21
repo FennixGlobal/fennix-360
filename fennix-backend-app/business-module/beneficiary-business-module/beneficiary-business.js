@@ -658,9 +658,9 @@ const beneficiaryListByOwnerUserId = async (req) => {
     finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
         beneficiaryListResponse.rows.forEach(item => {
-            console.log('**************');
-            console.log(item['beneficiaryid']);
-            console.log('******order********');
+            // console.log('**************');
+            // console.log(item['beneficiaryid']);
+            // console.log('******order********');
             finalReturnObj[item['beneficiaryid']] = {
                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 beneficiaryId: item['beneficiaryid'],
@@ -689,7 +689,7 @@ const beneficiaryListByOwnerUserId = async (req) => {
         }
         // console.log(finalReturnObj);
         let sortedArray = [];
-        Object.keys(finalReturnObj).map((key) => {
+        Object.keys(finalReturnObj).forEach((key) => {
             console.log(key);
             console.log(beneficiaryIds.indexOf(key));
             sortedArray[beneficiaryIds.indexOf(key)] = finalReturnObj[key];
