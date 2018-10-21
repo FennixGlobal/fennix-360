@@ -24,7 +24,7 @@ router.get('/updateLoginProfile', function (req, res) {
     })
 });
 
-router.post('/checkEmail', function (req, res) {
+router.get('/checkEmail', function (req, res) {
     var returnObj = authBusiness.checkEmailId(req);
     returnObj.then((response) => {
         res.send(response);

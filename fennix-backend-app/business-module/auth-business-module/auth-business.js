@@ -8,18 +8,18 @@ const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails
 const {fetchUserDetailsBusiness} = require('../user-business-module/user-business');
 
 
-const checkEmailId = (req) => {
+const checkEmailId = async(req) => {
     let responseObj, businessResponse;
-    const algo = emoji[req.body.avatar]['encoding'];
-    const passKey = emoji[req.body.avatar]['secretPass'];
-    const request = [
-        decrypt(algo, passKey, req.body.email)
-    ];
-    businessResponse = checkUserEmailId(request);
+    // const algo = emoji[req.query.avatar]['encoding'];
+    // const passKey = emoji[req.query.avatar]['secretPass'];
+    // const request = [
+    //     decrypt(algo, passKey, req.query.email)
+    // ];
+    businessResponse = await checkUserEmailId(req.query.email);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'EN_US', businessResponse.rows[0]);
     } else {
-        businessResponse = checkBenificiaryEmailId(request);
+        businessResponse = checkBenificiaryEmailId(req.query.email);
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'EN_US', businessResponse.rows[0]);
         } else {
@@ -82,6 +82,7 @@ const authenticateUser = async (req) => {
     }
     return responseObj;
 };
+
 const decrypt = (algo, passKey, message) => {
     try {
         const decryptedBytes = crypto[algo]['decrypt'](message, passKey);

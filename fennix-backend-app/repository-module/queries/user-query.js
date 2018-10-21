@@ -1,4 +1,4 @@
-const checkUserEmailQuery = 'select  user_id FROM users where email_id=$1';
+const checkUserEmailQuery = 'select  user_id,user_role as role FROM users where email_id=$1';
 
 const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no\n' +
     '    , u.address1\n' +

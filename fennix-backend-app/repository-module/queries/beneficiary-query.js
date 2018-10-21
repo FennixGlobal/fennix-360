@@ -18,7 +18,7 @@ const getBenefeciaryIdListForOwnerAndCenterQuery = 'select beneficiaryId,firstna
 
 const getTimeZoneDetailsQuery = 'select * from time_zone';
 
-const checkBeneficiaryEmailIdQuery = 'select beneficiaryid from beneficiaries where emailid = $1';
+const checkBeneficiaryEmailIdQuery = 'select beneficiaryid,beneficiary_role from beneficiaries where emailid = $1';
 // select ,u.user_role,password, first_name, last_name, user_id, owner_user_id, email_id, isactive,u.center_id from users u\n' +
 // 'join roles r on r.role_id = u.user_role\n' +
 // 'where email_id=$1'
