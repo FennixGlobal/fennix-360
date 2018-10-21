@@ -15,7 +15,7 @@ const checkEmailId = async(req) => {
     // const request = [
     //     decrypt(algo, passKey, req.query.email)
     // ];
-    businessResponse = await checkUserEmailId(req.query.email);
+    businessResponse = await checkUserEmailId([req.query.userMailId]);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'EN_US', businessResponse.rows[0]);
     } else {
