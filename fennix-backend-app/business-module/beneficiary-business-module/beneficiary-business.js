@@ -689,10 +689,16 @@ const beneficiaryListByOwnerUserId = async (req) => {
         }
         // console.log(finalReturnObj);
         let sortedArray = [];
-        Object.keys(finalReturnObj).forEach((key) => {
-            console.log(key);
-            console.log(beneficiaryIds.indexOf(key));
-            sortedArray[beneficiaryIds.indexOf(key)] = finalReturnObj[key];
+        console.log('******final Obj');
+        console.log(finalReturnObj);
+        console.log('*******ben Id***********');
+        console.log(beneficiaryIds);
+        beneficiaryIds.forEach((id) => {
+            console.log(id);
+            console.log(finalReturnObj[id]);
+            console.log(typeof id);
+            // console.log(beneficiaryIds.indexOf(key));
+            sortedArray.push(finalReturnObj[id]);
         });
         finalResponse['gridData'] = sortedArray;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
