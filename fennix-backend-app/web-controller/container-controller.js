@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+const locationBusiness = require('../business-module/location-business-module/location-business');
 const containerBusiness = require('../business-module/container-business-module/container-business');
 const deviceBusiness = require('../business-module/device-business-module/device-business');
 
@@ -67,7 +68,8 @@ router.get('/listUnAssignedELocks', function (req, res) {
 router.post('/fetchELocksData', function (req, res) {
     let returnObj;
     console.log('data in container');
-    console.log(res.body);
+    console.log(req.body);
+    returnObj = locationBusiness.eLocksDataUpdateBusiness(data);
     // returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();
     returnObj.then((response) => {
         res.send(response);

@@ -25,10 +25,10 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
 });
 
 const TCPServer = net.createServer();
-const ELockServer = eNet.createServer();
+// const ELockServer = eNet.createServer();
 
 TCPServer.listen(3100);
-ELockServer.listen(3150);
+// ELockServer.listen(3150);
 
 TCPServer.on("connection", (socket) => {
     console.log('IN TCP');
@@ -51,33 +51,33 @@ TCPServer.on("connection", (socket) => {
     });
 });
 
-ELockServer.on("connection", (socket) => {
-    console.log('IN ELock TCP');
-    socket.setEncoding('hex');
-    // socket.write('P01');
-    console.log('connected');
-    socket.on('data', async (data) => {
-        const returnValue = await locationBusiness.eLocksDataUpdateBusiness(data);
-        console.log(returnValue);
-        if (returnValue) {
-            socket.write('P35');
-        }
-        console.log(data);
-    });
-    socket.on('error', (err) => {
-        console.log('in elocks');
-        console.log('error occurred');
-        console.log(err.stack);
-        // throw err;
-    });
-    socket.on('end', () => {
-        console.log('end connection');
-    });
-    socket.on('close', (flag) => {
-        console.log('socket closed due to error');
-        console.log(flag);
-    });
-});
+// ELockServer.on("connection", (socket) => {
+//     console.log('IN ELock TCP');
+//     socket.setEncoding('hex');
+//     // socket.write('P01');
+//     console.log('connected');
+//     socket.on('data', async (data) => {
+//
+//         console.log(returnValue);
+//         if (returnValue) {
+//             socket.write('P35');
+//         }
+//         console.log(data);
+//     });
+//     socket.on('error', (err) => {
+//         console.log('in elocks');
+//         console.log('error occurred');
+//         console.log(err.stack);
+//         // throw err;
+//     });
+//     socket.on('end', () => {
+//         console.log('end connection');
+//     });
+//     socket.on('close', (flag) => {
+//         console.log('socket closed due to error');
+//         console.log(flag);
+//     });
+// });
 
 var carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
 var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
