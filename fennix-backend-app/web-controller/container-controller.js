@@ -64,4 +64,14 @@ router.get('/listUnAssignedELocks', function (req, res) {
     })
 });
 
+router.post('/fetchELocksData', function (req, res) {
+    let returnObj;
+    console.log('data in container');
+    console.log(res.body);
+    // returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
