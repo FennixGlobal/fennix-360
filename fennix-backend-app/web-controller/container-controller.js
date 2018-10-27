@@ -69,7 +69,7 @@ router.post('/fetchELocksData', function (req, res) {
     let returnObj;
     console.log('data in container');
     console.log(req.body);
-    returnObj = locationBusiness.eLocksDataUpdateBusiness(req.body);
+    returnObj = locationBusiness.eLocksDataUpdateBusiness(req.body['data']);
     // returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();
     returnObj.then((response) => {
         res.send(response);
