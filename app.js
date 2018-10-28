@@ -7,16 +7,17 @@ const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 // const socket = require('socket.io');
-// const httpExpress = require('express');
-// const http = require('http');
-// const io = require('socket.io');
-// const socketExpress = httpExpress();
-// const server = http.createServer(socketExpress);
-// const socketIO = io(server);
+const httpExpress = require('express');
+const http = require('http');
+const io = require('socket.io');
+const socketExpress = httpExpress();
+const server = http.createServer(socketExpress);
+server.listen(3150);
+const socketIO = io(server);
 var bodyParser = require('body-parser');
 
 const net = require('net');
-const eNet = require('net');
+// const eNet = require('net');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -25,6 +26,12 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
 });
 
 const TCPServer = net.createServer();
+socketIO.on('connection', (sock) => {
+    console.log('connected to elock');
+    sock.on('elock_data', (newSock) => {
+        console.log(newSock);
+    })
+});
 // const ELockServer = eNet.createServer();
 
 TCPServer.listen(3100);
@@ -50,7 +57,7 @@ TCPServer.on("connection", (socket) => {
         console.log(flag);
     });
 });
-
+// socketIO.on("connection")
 // ELockServer.on("connection", (socket) => {
 //     console.log('IN ELock TCP');
 //     socket.setEncoding('hex');
