@@ -27,9 +27,14 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
 
 const TCPServer = net.createServer();
 socketIO.on('connection', (sock) => {
+    let responseData;
     console.log('connected to elock');
-    sock.on('elock_data', (newSock) => {
-        console.log(newSock);
+    sock.on('elock_data', async (newSockData) => {
+        console.log(newSockData);
+        responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
+        if (responseData) {
+            sock.emit('server_data', responseData);
+        }
     })
 });
 // const ELockServer = eNet.createServer();
