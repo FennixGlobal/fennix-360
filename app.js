@@ -34,7 +34,7 @@ socketIO.on('connection', (sock) => {
         sock.off('elock_data');
         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
         if (responseData !== null && responseData !== undefined && responseData !== '') {
-            sock.emit('server_data', responseData);
+            socketIO.emit('server_data', responseData);
         }
     })
 });
