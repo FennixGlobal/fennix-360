@@ -82,9 +82,23 @@ const containerDeviceAttributesUpdateAccessor = async (data) => {
     return returnObj;
 };
 
+const fetchNextLocationPrimaryKeyAccessor = async () => {
+    let returnObj;
+    returnObj = await containerQueries.fetchNextLocationPrimaryKeyQuery();
+    return returnObj;
+};
+
+const fetchNextDeviceAttributesPrimaryKeyAccessor = async () => {
+    let returnObj;
+    returnObj = await containerQueries.fetchNextDeviceAttributesPrimaryKeyQuery();
+    return returnObj;
+};
+
 module.exports = {
     addContainerDetailsAccessor,
     listContainersAccessor,
+    fetchNextDeviceAttributesPrimaryKeyAccessor,
+    fetchNextLocationPrimaryKeyAccessor,
     getTotalNoOfContainersAccessor,
     getContainerIdListAccessor,
     listUnAssignedContainersAccessor,

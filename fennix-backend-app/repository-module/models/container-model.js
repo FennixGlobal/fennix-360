@@ -14,6 +14,7 @@ const elocksLocationSchema = new Schema({
 const elocksLocationCounterSchema = new Schema({counter: Number});
 
 const elocksDeviceAttributesSchema = new Schema({
+    _id: Number,
     gps: Number,
     direction: Number,
     mileage: Number,
@@ -21,7 +22,6 @@ const elocksDeviceAttributesSchema = new Schema({
     vehicleId: Number,
     deviceStatus: Number,
     geoFenceAlarm: Boolean,
-    _id: Number,
     containerId: Number,
     deviceId: Number,
     cellId: Number,
