@@ -336,12 +336,12 @@ const dataIterator = (data, obj) => {
         switch (parseInt(data.slice(0, 2).join(''))) {
             case 24:
                 const gpsArray = [];
-                gpsArray.push(data.splice(0, 98));
+                gpsArray.push(data.splice(0, 98).join(''));
                 obj.gps.push(gpsArray);
                 break;
             case 28:
                 const alarmArray = [];
-                alarmArray.push(data.splice(0, 32));
+                alarmArray.push(data.splice(0, 32).join(''));
                 obj.alarm.push(alarmArray);
                 break;
             default:
