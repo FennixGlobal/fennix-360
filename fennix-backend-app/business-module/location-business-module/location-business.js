@@ -294,10 +294,8 @@ const dataSplitter = async (data) => {
 };
 
 const eLocksDataUpdateBusiness = async (data) => {
-    let returnString = '', returnArray;
-    let locationList = [], deviceAttributesList = [], dataSplitterResponse;
-    // console.log('##########################');
-    // console.log(data);
+    let returnString = '', updateLoc, updateDevice, returnArray, locationList = [], deviceAttributesList = [],
+        dataSplitterResponse;
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
@@ -318,9 +316,12 @@ const eLocksDataUpdateBusiness = async (data) => {
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
     }
-
-    const updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
-    const updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+    if (arrayNotEmptyCheck(locationList)) {
+        updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
+    }
+    if (arrayNotEmptyCheck(deviceAttributesList)) {
+        updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+    }
     console.log(updateLoc);
     console.log(updateDevice);
     returnString = returnString || dataSplitterResponse['returnString'];
