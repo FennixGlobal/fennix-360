@@ -258,6 +258,8 @@ const eLocksDataUpdateBusiness = async (data) => {
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
         let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) + 1;
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
+        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(returnArray.gps.length + 1);
+        await containerAccessor.updateNextLocationPrimaryKeyAccessor(returnArray.gps.length + 1);
         returnArray.gps.forEach(async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
@@ -265,8 +267,6 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationList.push(dataSplitterResponse['location']);
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
-        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId++);
-        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId++);
         const masterData = {
             containerId: dataSplitterResponse['containerId'],
             deviceId: dataSplitterResponse['deviceId'],
