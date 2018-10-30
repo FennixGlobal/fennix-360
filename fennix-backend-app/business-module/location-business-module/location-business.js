@@ -209,7 +209,6 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         latitude: await degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
         longitude: await degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
     };
-    // console.log(location);
     deviceAttributes = {
         containerId: containerId,
         deviceId: deviceId,
@@ -263,8 +262,6 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
-            console.log('Splitter response');
-            console.log(dataSplitterResponse);
             locationList.push(dataSplitterResponse['location']);
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
@@ -280,15 +277,17 @@ const eLocksDataUpdateBusiness = async (data) => {
     }
     returnString = returnString || dataSplitterResponse['returnString'];
     if (arrayNotEmptyCheck(locationList)) {
+        console.log('++++++++++++++++++++++Location+++++++++++++++++++');
         console.log(locationList);
         console.log('**********************____________+++++++++++++++++++++++++++');
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
+        console.log('++++++++++++++++++++++Device Attr+++++++++++++++++++');
+        console.log(deviceAttributesList);
+        console.log('++++++++++++++++++++++Device Attr2+++++++++++++++++++');
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
     }
-    // console.log('++++++++++++++++++++++Return String+++++++++++++++++++');
-    // console.log(returnString);
     return returnString;
 };
 const degreeConverter = async (minuteData, direction) => {
