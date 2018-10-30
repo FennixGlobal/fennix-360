@@ -108,6 +108,9 @@ const getContainerIdByImeiQuery = (req) => {
                 imei:req
             },
             {
+                active:true
+            },
+            {
                 containerId:{
                     $exists:true
                 }
