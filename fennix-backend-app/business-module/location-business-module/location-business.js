@@ -262,6 +262,10 @@ const eLocksDataUpdateBusiness = async (data) => {
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
         const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
+        console.log(locationPrimaryKeyResponse);
+        console.log('++++++++++++++++++++++++++++++');
+        console.log(eLockAttributesPrimaryKeyResponse);
+        console.log('============++++++++++++++++++++++++++++++=================');
         let locationPrimaryId = parseInt(locationPrimaryKeyResponse['_doc']['counter']) - 1;
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse['_doc']['counter']) - 1;
         returnArray.gps.forEach((data) => {
