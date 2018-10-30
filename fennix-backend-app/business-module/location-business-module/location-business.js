@@ -266,10 +266,12 @@ const eLocksDataUpdateBusiness = async (data) => {
         console.log('============++++++++++++++++++++++++++++++=================');
         let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) - 1;
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) - 1;
-        returnArray.gps.forEach((data) => {
+        returnArray.gps.forEach(async(data) => {
+            console.log(data);
+
             locationPrimaryId++;
             eLockAttributeId++;
-            dataSplitterResponse = dataSplitter(data.join(''), locationPrimaryId, eLockAttributeId);
+            dataSplitterResponse =await dataSplitter(data.join(''), locationPrimaryId, eLockAttributeId);
             locationList.push(dataSplitterResponse['location']);
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
