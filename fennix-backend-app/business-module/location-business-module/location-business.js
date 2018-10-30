@@ -243,7 +243,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
 
 const eLocksDataUpdateBusiness = async (data) => {
     let returnString = '', updateLoc, updateDevice, returnArray, locationList = [], deviceAttributesList = [],
-        dataSplitterResponse;
+        dataSplitterResponse = null;
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
@@ -273,6 +273,8 @@ const eLocksDataUpdateBusiness = async (data) => {
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
         });
+        console.log('+++++++++++++dataSplitterResponse+++++++++++++');
+        console.log(dataSplitterResponse);
         const masterData = {
             containerId: dataSplitterResponse ? dataSplitterResponse['containerId'] : null,
             deviceId: dataSplitterResponse ? dataSplitterResponse['deviceId'] : null,
