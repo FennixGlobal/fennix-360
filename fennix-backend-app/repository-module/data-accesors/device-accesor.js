@@ -41,6 +41,12 @@ const getBeneficiaryIdByImeiAccessor = async (req) => {
     return returnObj;
 };
 
+const getContainerIdByImeiAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getContainerIdByImeiQuery(req);
+    return returnObj;
+};
+
 const updateLocationDeviceAttributeMasterAccessor = async (req) => {
     let returnObj;
     returnObj = await deviceQueries.updateLocationDeviceAttributeMasterQuery(req);
@@ -151,6 +157,7 @@ module.exports = {
     updateDeviceWithBeneficiaryIdAccessor,
     updateDeviceAttributesAccessor,
     fetchNextPrimaryKeyAccessor,
+    getContainerIdByImeiAccessor,
     getDeviceByDeviceIdAccessor,
     getBeneficiaryIdByImeiAccessor,
     getDeviceByBeneficiaryIdAccessor,

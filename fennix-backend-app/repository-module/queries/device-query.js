@@ -101,6 +101,32 @@ const getBeneficiaryIdByImeiQuery = (query) => {
     return deviceAggregator.find({imei: query, active: true}, {"_id": 1, "beneficiaryId": 1});
 };
 
+const getContainerIdByImeiQuery = (req) => {
+    return deviceAggregator.find({
+        $and: [
+            {
+                imei:req
+            },
+            {
+                containerId:{
+                    $exists:true
+                }
+            },
+            {
+                $or:[
+                    {
+                        beneficiaryId:null
+                    },
+                    {
+                        beneficiaryId: {
+                            $exists: false
+                        }
+                    }]
+            }
+        ]
+    });
+};
+
 const listDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
@@ -577,5 +603,6 @@ module.exports = {
     getDeviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsByDeviceIdQuery,
     updateLocationDeviceAttributeMasterQuery,
-    getTotalNoOfDevicesQuery
+    getTotalNoOfDevicesQuery,
+    getContainerIdByImeiQuery
 };

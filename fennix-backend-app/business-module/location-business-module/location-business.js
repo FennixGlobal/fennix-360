@@ -200,9 +200,11 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     console.log(deviceStatus);
     datalength = data.slice(16, 20);
     deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-    const containerResponse = await containerAccessor.getContainerForDeviceIdAccessor(deviceIMEIId);
-    if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
-        // let containerId = containerResponse['rows'][0]['container_id'];
+    const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+    if (containerResponse) {
+        console.log(containerResponse);
+        containerId = containerResponse['doc']['containerId'];
+        deviceId = containerResponse['doc']['_id'];
         location = {
             containerId: containerId,
             deviceId: deviceId,
