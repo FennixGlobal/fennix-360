@@ -296,8 +296,8 @@ const dataSplitter = async (data) => {
 const eLocksDataUpdateBusiness = async (data) => {
     let returnString = '', returnArray;
     let locationList = [], deviceAttributesList = [], dataSplitterResponse;
-    console.log('##########################');
-    console.log(data);
+    // console.log('##########################');
+    // console.log(data);
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
@@ -309,12 +309,15 @@ const eLocksDataUpdateBusiness = async (data) => {
             returnString = '(P46)';
             break;
     }
-
-    returnArray.gps.forEach((data) => {
-        dataSplitterResponse = dataSplitter(data);
-        locationList.push(dataSplitterResponse['location']);
-        deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
-    });
+    if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
+        returnArray.gps.forEach((data) => {
+            console.log('gps data');
+            console.log(data);
+            dataSplitterResponse = dataSplitter(data);
+            locationList.push(dataSplitterResponse['location']);
+            deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
+        });
+    }
 
     const updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     const updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
