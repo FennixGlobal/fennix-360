@@ -268,8 +268,8 @@ const eLocksDataUpdateBusiness = async (data) => {
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
         const masterData = {
-            containerId: dataSplitterResponse['containerId'],
-            deviceId: dataSplitterResponse['deviceId'],
+            containerId: dataSplitterResponse ? dataSplitterResponse['containerId'] : null,
+            deviceId: dataSplitterResponse ? dataSplitterResponse['deviceId'] : null,
             locationId: locationPrimaryId,
             eLockAttributeId: eLockAttributeId
         };
