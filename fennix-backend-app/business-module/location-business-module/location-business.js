@@ -312,13 +312,15 @@ const eLocksDataUpdateBusiness = async (data) => {
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
     }
+    returnString = returnString || dataSplitterResponse['returnString'];
     if (arrayNotEmptyCheck(locationList)) {
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
     }
-    returnString = returnString || dataSplitterResponse['returnString'];
+    console.log('++++++++++++++++++++++Return String+++++++++++++++++++');
+    console.log(returnString);
     return returnString;
 };
 const degreeConverter = async (minuteData, direction) => {
