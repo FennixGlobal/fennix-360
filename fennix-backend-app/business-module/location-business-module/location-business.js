@@ -352,8 +352,7 @@ const degreeConverter = async (minuteData, direction) => {
 };
 
 const dataIterator = (data, obj) => {
-    console.log(data);
-    console.log(typeof data);
+    data = typeof data === 'string' ? data.split('') : data;
     if (!obj) {
         obj = {
             gps: [],
@@ -362,21 +361,21 @@ const dataIterator = (data, obj) => {
         }
     }
     if (data.length > 0) {
-        switch (parseInt(data.slice(0, 2))) {
+        switch (parseInt(data.slice(0,2).join(''))) {
             case 24:
                 const gpsArray = [];
-                gpsArray.push(data.substring(0, 93));
+                gpsArray.push(data.splice(0, 98));
                 obj.gps.push(gpsArray);
                 break;
             case 28:
                 const alarmArray = [];
-                alarmArray.push(data.substring(0, 32));
+                alarmArray.push(data.splice(0, 32));
                 obj.alarm.push(alarmArray);
                 break;
             default:
         }
         if (data.length > 0) {
-            dataIterator(data, obj);
+            return dataIterator(data, obj);
         } else {
             return obj;
         }
