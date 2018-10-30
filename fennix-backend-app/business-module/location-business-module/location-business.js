@@ -242,7 +242,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
 };
 
 const eLocksDataUpdateBusiness = async (data) => {
-    let returnString = '', updateLoc, updateDevice, returnArray, locationList = [], deviceAttributesList = [],
+    let returnString = '', updateLoc, deviceId, containerId, returnValue, updateDevice, returnArray, locationList = [],
+        deviceAttributesList = [],
         dataSplitterResponse = null;
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
@@ -271,6 +272,9 @@ const eLocksDataUpdateBusiness = async (data) => {
             if (notNullCheck(dataSplitterResponse['location'])) {
                 locationList.push(dataSplitterResponse['location']);
             }
+            deviceId = deviceId || (dataSplitterResponse ? dataSplitterResponse['deviceId'] : null);
+            containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
+            returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
             if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
@@ -278,14 +282,14 @@ const eLocksDataUpdateBusiness = async (data) => {
         console.log('+++++++++++++dataSplitterResponse+++++++++++++');
         console.log(dataSplitterResponse);
         const masterData = {
-            containerId: dataSplitterResponse ? dataSplitterResponse['containerId'] : null,
-            deviceId: dataSplitterResponse ? dataSplitterResponse['deviceId'] : null,
+            containerId:containerId,
+            deviceId: deviceId,
             locationId: finalLocCount,
             eLockAttributeId: finalELockAttrCount
         };
         await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     }
-    returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
+    // returnString =
     if (arrayNotEmptyCheck(locationList)) {
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
