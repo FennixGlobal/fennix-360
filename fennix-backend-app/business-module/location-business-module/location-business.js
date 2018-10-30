@@ -192,19 +192,16 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     deviceAlertInfo = await hexToBinary(data.slice(72, 76));
     deviceIMEIId = data.slice(2, 12);//device Id
     protocol = data.slice(12, 14);// 17 being the protocol
-    console.log(protocol);
     deviceType = data.slice(14, 15);// 1 being rechargeable
-    console.log(deviceType);
     deviceStatus = data.slice(15, 16);// data type
-    console.log(deviceStatus);
     datalength = data.slice(16, 20);
     deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-    const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
-    console.log(containerResponse);
-    if (arrayNotEmptyCheck(containerResponse)) {
-        console.log(containerResponse);
-        containerId = containerResponse[0]['containerId'];
-        deviceId = containerResponse[0]['_id'];
+    // const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+    // console.log(containerResponse);
+    // if (arrayNotEmptyCheck(containerResponse)) {
+    //     console.log(containerResponse);
+    //     containerId = containerResponse[0]['containerId'];
+    //     deviceId = containerResponse[0]['_id'];
         location = {
             containerId: containerId,
             deviceId: deviceId,
@@ -241,7 +238,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         response['location'] = location;
         response['deviceAttributes'] = deviceAttributes;
         response['returnString'] = returnString;
-    }
+    // }
     return response;
 };
 
