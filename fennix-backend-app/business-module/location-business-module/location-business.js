@@ -335,14 +335,14 @@ const dataIterator = (data, obj) => {
     if (data.length > 0) {
         switch (parseInt(data.slice(0, 2).join(''))) {
             case 24:
-                const gpsArray = [];
-                gpsArray.push(data.splice(0, 98).join(''));
-                obj.gps.push(gpsArray);
+                // const gpsArray = [];
+                // gpsArray.push();
+                obj.gps.push(data.splice(0, 98).join(''));
                 break;
             case 28:
-                const alarmArray = [];
-                alarmArray.push(data.splice(0, 32).join(''));
-                obj.alarm.push(alarmArray);
+                // const alarmArray = [];
+                // alarmArray.push();
+                obj.alarm.push(data.splice(0, 32).join(''));
                 break;
             default:
         }
