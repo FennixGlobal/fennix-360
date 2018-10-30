@@ -230,7 +230,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             gsmQuality: data.slice(86, 88),
             geoFenceAlarm: data.slice(88, 90)
         };
-        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
+        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
             returnString = '(P35)';
         }
         response['deviceId'] = deviceId;
