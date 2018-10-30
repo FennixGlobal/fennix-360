@@ -88,13 +88,13 @@ const deviceCounterSchema = new Schema({
     counter: Number
 });
 
-const locationDeviceAttributeContainerMasterSchema = new Schema({
-    _id: Schema.Types.ObjectId,
-    containerId: Number,
-    locationId: Number,
-    deviceAttributeId: Number,
-    deviceId: Number
-});
+// const locationDeviceAttributeContainerMasterSchema = new Schema({
+//     _id: Schema.Types.ObjectId,
+//     containerId: Number,
+//     locationId: Number,
+//     deviceAttributeId: Number,
+//     deviceId: Number
+// });
 
 const deviceAggregator = mongoose.model('Device', deviceSchema, 'devices');
 
@@ -108,12 +108,12 @@ const devicesModel = mongoose.model('Device');
 
 const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
 
-const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
+// const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
 
 const LocationDeviceAttributeMasterModel = mongoose.model('LocationDeviceAttribute', locationDeviceAttributeMasterSchema, 'locationDeviceAttributeMaster');
 
 module.exports = {
-    LocationDeviceAttributeContainerMasterModel,
+    // LocationDeviceAttributeContainerMasterModel,
     deviceAggregator,
     deviceTypeModel,
     devicesModel,
