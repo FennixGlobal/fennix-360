@@ -199,7 +199,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
     console.log(containerResponse);
     if (arrayNotEmptyCheck(containerResponse)) {
-        console.log(containerResponse);
+        // console.log(containerResponse);
         containerId = containerResponse[0]['containerId'];
         deviceId = containerResponse[0]['_id'];
         location = {
@@ -281,7 +281,7 @@ const eLocksDataUpdateBusiness = async (data) => {
         };
         await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     }
-    returnString = returnString || dataSplitterResponse['returnString'];
+    returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
     if (arrayNotEmptyCheck(locationList)) {
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
