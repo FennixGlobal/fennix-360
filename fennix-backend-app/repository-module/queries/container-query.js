@@ -1,4 +1,4 @@
-const {ElocksDeviceAttributeModel} = require('../models/container-model');
+const {ElocksDeviceAttributeModel, ElocksLocationModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
 
@@ -18,11 +18,32 @@ const updateElockAttributeQuery = (req) => {
 
 const getContainerForDeviceIdQuery = 'select container_id from container where device_id = $1';
 
+const insertElocksLocationQuery = (req) => {
+    ElocksLocationModel.collection.insert(req, function (err, docs) {
+        if (err) {
+            return console.error(err);
+        } else {
+            return "Elocks location documents inserted to Collection";
+        }
+    });
+};
+
+const insertElocksDeviceAttributesQuery = (req) => {
+    ElocksDeviceAttributeModel.collection.insert(req, function (err, docs) {
+        if (err) {
+            return console.error(err);
+        } else {
+            return "Elocks device attributes documents inserted to Collection";
+        }
+    });
+};
 module.exports = {
     addContainerDetailsQuery,
     getContainerForDeviceIdQuery,
     listContainersQuery,
     updateElockAttributeQuery,
+    insertElocksLocationQuery,
+    insertElocksDeviceAttributesQuery,
     getTotalNoOfContainersQuery,
     listUnassignedContainersQuery
 };

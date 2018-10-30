@@ -32,7 +32,7 @@ socketIO.on('connection', (sock) => {
     sock.on('elock_data', async (newSockData) => {
         console.log(newSockData);
         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
-        if (responseData) {
+        if (responseData !== null && responseData !== undefined && responseData !== '') {
             sock.emit('server_data', responseData);
         }
     })

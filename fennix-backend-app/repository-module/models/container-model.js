@@ -7,11 +7,11 @@ const elocksLocationSchema = new Schema({
     containerId: String,
     deviceId: String,
     deviceDate: String,
-    latitude:SchemaType.Double,
+    latitude: SchemaType.Double,
     longitude: SchemaType.Double
 });
 
-const elocksLocationCounterSchema = new Schema({counter:Number});
+const elocksLocationCounterSchema = new Schema({counter: Number});
 
 const elocksDeviceAttributesSchema = new Schema({
     gps: Number,
@@ -25,37 +25,12 @@ const elocksDeviceAttributesSchema = new Schema({
     containerId: Number,
     deviceId: Number,
     cellId: Number,
-    // mcc: Number,
     lac: String,
-    // enableAlarmStatus: Boolean,
-    // buzzerStatus: Boolean,
-    // vibratorStatus: Boolean,
-    // serialNumber: String,
-    // hdop: Number,
     locationId: Number,
     speed: SchemaType.Double,
     gpsStatus: String,
-    // moveDistance: Number,
-    // alarmStatus: String,
-    // beltStatus: Number,
-    // batteryVoltage: SchemaType.Double,
-    // shellStatus: Number,
-    // chargeStatus: Number,
-    // connectingSession: String,
     serverDate: Date,
-    // course: Number,
-    // satelliteNumber: Number,
-    // gpsFixedStatus: Number,
     batteryPercentage: SchemaType.Double,
-    // gsmSignal: Number,
-    // lowPowerStatus: Number,
-    // dataLoggerStatus: Number,
-    // stillStatus: Number,
-    // rfConnectionStatus: Number,
-    // rfgSensorStatus: Number,
-    // rfPlugStatus: Number,
-    // restrictedAreaStatus: Number,
-    // restrictedPersonsStatus: Number,
     deviceUpdatedDate: Date
 });
 
@@ -65,17 +40,17 @@ const elocksDeviceAttributesCounterSchema = new Schema({
 });
 
 const elocksDeviceSchema = new Schema({
-    _id:  Number,
-    containerId:  Number,
-    deviceTypeId:  Number,
-    imei:  Number,
-    simCardId:  Number,
-    active:  Boolean,
+    _id: Number,
+    containerId: Number,
+    deviceTypeId: Number,
+    imei: Number,
+    simCardId: Number,
+    active: Boolean,
     online: String,
-    centerId:  Number,
-    firmwareVersion:  String,
-    createdDate:  Date,
-    updatedDate:  Date
+    centerId: Number,
+    firmwareVersion: String,
+    createdDate: Date,
+    updatedDate: Date
 });
 
 const elocksDeviceTypeSchema = new Schema({
@@ -97,7 +72,7 @@ const elocksDeviceTypeSchema = new Schema({
 });
 
 
-const ElocksLocationCounterModel = mongoose.model('ElocksLocationCounter',elocksLocationCounterSchema,'elocksLocationCounter');
+const ElocksLocationCounterModel = mongoose.model('ElocksLocationCounter', elocksLocationCounterSchema, 'elocksLocationCounter');
 const ElocksLocationModel = mongoose.model('ElocksLocation', elocksLocationSchema, 'elocksLocation');
 const ElocksDeviceAttributeModel = mongoose.model('ElocksDeviceAttributes', elocksDeviceAttributesSchema, 'elocksDeviceAttributes');
 const ElocksDeviceAttributesCounterModel = mongoose.model('ElocksDeviceAttributesCounter', elocksDeviceAttributesCounterSchema, 'elocksDeviceAttributesCounter');
