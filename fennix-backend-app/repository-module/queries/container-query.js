@@ -49,7 +49,7 @@ const updateElocksLocationDeviceAttributeMasterQuery = (req) => {
     return LocationDeviceAttributeContainerMasterModel.update({containerId: req.containerId}, {
         $set: {
             locationId: req.locationId,
-            deviceAttributeId: req.deviceAttributeId,
+            deviceAttributeId: req.eLockAttributeId,
             deviceId: req.deviceId
         }
     }, {upsert: true}).then(doc => {

@@ -258,8 +258,10 @@ const eLocksDataUpdateBusiness = async (data) => {
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
         let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) + 1;
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
-        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId + returnArray.gps.length + 1);
-        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId + returnArray.gps.length + 1);
+        let finalELockAttrCount = eLockAttributeId + returnArray.gps.length;
+        let finalLocCount = locationPrimaryId + returnArray.gps.length;
+        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(finalELockAttrCount);
+        await containerAccessor.updateNextLocationPrimaryKeyAccessor(finalLocCount);
         returnArray.gps.forEach(async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
@@ -270,22 +272,16 @@ const eLocksDataUpdateBusiness = async (data) => {
         const masterData = {
             containerId: dataSplitterResponse ? dataSplitterResponse['containerId'] : null,
             deviceId: dataSplitterResponse ? dataSplitterResponse['deviceId'] : null,
-            locationId: locationPrimaryId,
-            eLockAttributeId: eLockAttributeId
+            locationId: finalLocCount,
+            eLockAttributeId: finalELockAttrCount
         };
         await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     }
     returnString = returnString || dataSplitterResponse['returnString'];
     if (arrayNotEmptyCheck(locationList)) {
-        console.log('++++++++++++++++++++++Location+++++++++++++++++++');
-        console.log(locationList);
-        console.log('**********************____________+++++++++++++++++++++++++++');
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
-        console.log('++++++++++++++++++++++Device Attr+++++++++++++++++++');
-        console.log(deviceAttributesList);
-        console.log('++++++++++++++++++++++Device Attr2+++++++++++++++++++');
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
     }
     return returnString;
