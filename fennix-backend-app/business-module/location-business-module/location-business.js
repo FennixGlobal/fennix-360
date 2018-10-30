@@ -266,8 +266,8 @@ const eLocksDataUpdateBusiness = async (data) => {
         console.log('++++++++++++++++++++++++++++++');
         console.log(eLockAttributesPrimaryKeyResponse);
         console.log('============++++++++++++++++++++++++++++++=================');
-        let locationPrimaryId = parseInt(locationPrimaryKeyResponse['_doc']['counter']) - 1;
-        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse['_doc']['counter']) - 1;
+        let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) - 1;
+        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) - 1;
         returnArray.gps.forEach((data) => {
             locationPrimaryId++;
             eLockAttributeId++;
