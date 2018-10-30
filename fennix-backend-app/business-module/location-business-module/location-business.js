@@ -352,6 +352,7 @@ const degreeConverter = async (minuteData, direction) => {
 
 const dataIterator = (data, obj) => {
     console.log(data);
+    console.log(typeof data);
     if (!obj) {
         obj = {
             gps: [],
@@ -363,12 +364,12 @@ const dataIterator = (data, obj) => {
         switch (parseInt(data.slice(0, 2))) {
             case 24:
                 const gpsArray = [];
-                gpsArray.push(data.splice(0, 93));
+                gpsArray.push(data.substring(0, 93));
                 obj.gps.push(gpsArray);
                 break;
             case 28:
                 const alarmArray = [];
-                alarmArray.push(data.splice(0, 32));
+                alarmArray.push(data.substring(0, 32));
                 obj.alarm.push(alarmArray);
                 break;
             default:
