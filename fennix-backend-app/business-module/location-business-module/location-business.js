@@ -285,6 +285,8 @@ const eLocksDataUpdateBusiness = async (data) => {
     }
     returnString = returnString || dataSplitterResponse['returnString'];
     if (arrayNotEmptyCheck(locationList)) {
+        console.log(locationList);
+        console.log('**********************____________+++++++++++++++++++++++++++');
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
