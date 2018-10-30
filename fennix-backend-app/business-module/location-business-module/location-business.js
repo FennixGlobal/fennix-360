@@ -348,6 +348,7 @@ const degreeConverter = async (minuteData, direction) => {
 };
 
 const dataIterator = (data, obj) => {
+    console.log(data);
     if (!obj) {
         obj = {
             gps: [],
@@ -370,11 +371,12 @@ const dataIterator = (data, obj) => {
             default:
         }
         if (data.length > 0) {
-            dataIterator(data, obj);
+            return dataIterator(data, obj);
         } else {
             return obj;
         }
     }
+    return obj;
 };
 
 const hexToBinary = async (deviceStatus) => {
