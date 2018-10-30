@@ -30,8 +30,6 @@ socketIO.on('connection', (sock) => {
     let responseData;
     console.log('connected to elock');
     sock.on('elock_data', async (newSockData) => {
-        console.log(newSockData);
-        // sock.off('elock_data');
         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
         if (responseData !== null && responseData !== undefined && responseData !== '') {
             socketIO.emit('server_data', responseData);
