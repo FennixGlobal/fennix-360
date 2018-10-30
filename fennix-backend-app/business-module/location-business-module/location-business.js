@@ -187,8 +187,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
-        location = {}, response = {},
-        deviceAttributes = {};
+        location = null, response = {},
+        deviceAttributes = null;
     deviceAlertInfo = await hexToBinary(data.slice(72, 76));
     deviceIMEIId = data.slice(2, 12);//device Id
     protocol = data.slice(12, 14);// 17 being the protocol
@@ -196,48 +196,48 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     deviceStatus = data.slice(15, 16);// data type
     datalength = data.slice(16, 20);
     deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-    // const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
-    // console.log(containerResponse);
-    // if (arrayNotEmptyCheck(containerResponse)) {
-    //     console.log(containerResponse);
-    //     containerId = containerResponse[0]['containerId'];
-    //     deviceId = containerResponse[0]['_id'];
-    location = {
-        containerId: containerId,
-        deviceId: deviceId,
-        _id: locationPrimaryId,
-        latitude: await degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-        longitude: await degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
-    };
-    deviceAttributes = {
-        containerId: containerId,
-        deviceId: deviceId,
-        _id: elockDeviceAttributeId,
-        locationId: locationPrimaryId,
-        gps: data.slice(49, 50),
-        speed: data.slice(50, 52),
-        direction: data.slice(52, 54),
-        mileage: data.slice(54, 62),
-        gpsQuality: data.slice(62, 64),
-        vehicleId: data.slice(64, 72),
-        deviceStatus: deviceAlertInfo.returnValue,
-        serverDate: new Date(),
-        deviceUpdatedDate: deviceUpdatedDate,
-        batteryPercentage: data.slice(76, 78),
-        cellId: data.slice(78, 82),
-        lac: data.slice(82, 86),
-        gsmQuality: data.slice(86, 88),
-        geoFenceAlarm: data.slice(88, 90)
-    };
-    if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
-        returnString = '(P35)';
+    const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+    console.log(containerResponse);
+    if (arrayNotEmptyCheck(containerResponse)) {
+        console.log(containerResponse);
+        containerId = containerResponse[0]['containerId'];
+        deviceId = containerResponse[0]['_id'];
+        location = {
+            containerId: containerId,
+            deviceId: deviceId,
+            _id: locationPrimaryId,
+            latitude: await degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+            longitude: await degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+        };
+        deviceAttributes = {
+            containerId: containerId,
+            deviceId: deviceId,
+            _id: elockDeviceAttributeId,
+            locationId: locationPrimaryId,
+            gps: data.slice(49, 50),
+            speed: data.slice(50, 52),
+            direction: data.slice(52, 54),
+            mileage: data.slice(54, 62),
+            gpsQuality: data.slice(62, 64),
+            vehicleId: data.slice(64, 72),
+            deviceStatus: deviceAlertInfo.returnValue,
+            serverDate: new Date(),
+            deviceUpdatedDate: deviceUpdatedDate,
+            batteryPercentage: data.slice(76, 78),
+            cellId: data.slice(78, 82),
+            lac: data.slice(82, 86),
+            gsmQuality: data.slice(86, 88),
+            geoFenceAlarm: data.slice(88, 90)
+        };
+        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
+            returnString = '(P35)';
+        }
+        response['deviceId'] = deviceId;
+        response['containerId'] = containerId;
+        response['location'] = location;
+        response['deviceAttributes'] = deviceAttributes;
+        response['returnString'] = returnString;
     }
-    response['deviceId'] = deviceId;
-    response['containerId'] = containerId;
-    response['location'] = location;
-    response['deviceAttributes'] = deviceAttributes;
-    response['returnString'] = returnString;
-    // }
     return response;
 };
 
@@ -266,8 +266,12 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
-            locationList.push(dataSplitterResponse['location']);
-            deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
+            if (notNullCheck(dataSplitterResponse['location'])) {
+                locationList.push(dataSplitterResponse['location']);
+            }
+            if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
+                deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
+            }
         });
         const masterData = {
             containerId: dataSplitterResponse ? dataSplitterResponse['containerId'] : null,
@@ -286,6 +290,7 @@ const eLocksDataUpdateBusiness = async (data) => {
     }
     return returnString;
 };
+
 const degreeConverter = async (minuteData, direction) => {
     let degree, minute, total, loc;
     if (minuteData.length === 8) {
