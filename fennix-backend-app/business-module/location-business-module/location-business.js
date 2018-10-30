@@ -301,7 +301,9 @@ const eLocksDataUpdateBusiness = async (data) => {
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
-            returnArray = dataIterator(data, {});
+            returnArray = await dataIterator(data, {});
+            console.log('*************return Array***************');
+            console.log(returnArray);
             break;
         case 28:
             returnString = '(P46)';
