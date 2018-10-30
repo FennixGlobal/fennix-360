@@ -206,8 +206,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         containerId: containerId,
         deviceId: deviceId,
         _id: locationPrimaryId,
-        latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-        longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+        latitude: await degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+        longitude: await degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
     };
     // console.log(location);
     deviceAttributes = {
@@ -268,13 +268,13 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationList.push(dataSplitterResponse['location']);
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
-        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId);
-        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId);
+        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId++);
+        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId++);
         const masterData = {
             containerId: dataSplitterResponse['containerId'],
             deviceId: dataSplitterResponse['deviceId'],
-            locationId: locationPrimaryId - 1,
-            eLockAttributeId: eLockAttributeId - 1
+            locationId: locationPrimaryId,
+            eLockAttributeId: eLockAttributeId
         };
         await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     }
