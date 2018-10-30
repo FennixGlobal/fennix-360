@@ -1,4 +1,4 @@
-const {ElocksDeviceAttributeModel, LocationDeviceAttributeContainerMasterModel,ElocksLocationModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
+const {ElocksDeviceAttributeModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
 
@@ -58,7 +58,30 @@ const updateElocksLocationDeviceAttributeMasterQuery = (req) => {
         }
     });
 };
+
+const updateNextLocationPrimaryKeyQuery = (counter) => {
+    return ElocksLocationCounterModel.update({}, {
+        counter: counter
+    }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        }
+    });
+};
+
+const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
+    return ElocksDeviceAttributesCounterModel.update({}, {
+        counter: counter
+    }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        }
+    });
+};
+
 module.exports = {
+    updateNextLocationPrimaryKeyQuery,
+    updateNextDeviceAttributesPrimaryKeyQuery,
     addContainerDetailsQuery,
     getContainerForDeviceIdQuery,
     listContainersQuery,

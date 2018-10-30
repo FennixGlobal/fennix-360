@@ -183,67 +183,14 @@ const getGSMLevel = (gsmStatus) => {
     return gsmLevel;
 };
 
-// const dataSplitter = async (data) => {
-//     let deviceId, datalength, deviceAlertInfo, deviceType, protocol, deviceStatus, date, returnString = '',
-//         location = {},
-//         deviceAttributes = {};
-//     deviceAlertInfo = await hexToBinary(data.slice(72, 76));
-//     deviceId = data.slice(2, 12);//device Id
-//     console.log(deviceId);
-//     protocol = data.slice(12, 14);// 17 being the protocol
-//     console.log(protocol);
-//     deviceType = data.slice(14, 15);// 1 being rechargeable
-//     console.log(deviceType);
-//     deviceStatus = data.slice(15, 16);// data type
-//     console.log(deviceStatus);
-//     datalength = data.slice(16, 20);
-//     date = data.slice(20, 26);// data length
-//     console.log(date);
-//     let time = data.slice(26, 32);// time length
-//     const containerResponse = await containerAccessor.getContainerForDeviceIdAccessor(deviceId);
-//     if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
-//         location = {
-//             containerId: containerResponse['rows'][0]['container_id'],
-//             deviceId: deviceId,
-//             lat: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-//             lng: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
-//         };
-//         console.log(location);
-//         deviceAttributes = {
-//             containerId: containerResponse['rows'][0]['container_id'],
-//             deviceId: deviceId,
-//             gps: data.slice(49, 50),
-//             speed: data.slice(50, 52),
-//             direction: data.slice(52, 54),
-//             mileage: data.slice(54, 62),
-//             gpsQuality: data.slice(62, 64),
-//             vehicleId: data.slice(64, 72),
-//             deviceStatus: deviceAlertInfo.returnValue,
-//             serverDate: new Date(),
-//             deviceUpdatedDate: new Date(),
-//             batteryPercentage: data.slice(76, 78),
-//             cellId: data.slice(78, 82),
-//             LAC: data.slice(82, 86),
-//             gsmQuality: data.slice(86, 88),
-//             geoFenceAlarm: data.slice(88, 90)
-//         };
-//         if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
-//             returnString = '(P35)';
-//         }
-//         // const updateLoc = await containerAccessor.containerLocationUpdateAccessor(location);
-//         // const updateDeviceAttr = await containerAccessor.containerDeviceUpdateAccessor(deviceAttributes);
-//         // console.log(updateLoc);
-//         // console.log(updateDeviceAttr);
-//     }
-//     console.log(deviceAttributes);
-//     return returnString;
-// };
-const dataSplitter = async (data) => {
-    let deviceId, datalength, deviceAlertInfo, deviceType, protocol, deviceStatus, date, returnString = '',
+const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => {
+    let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
+        deviceUpdatedDate,
+        returnString = '',
         location = {}, response = {},
         deviceAttributes = {};
     deviceAlertInfo = await hexToBinary(data.slice(72, 76));
-    deviceId = data.slice(2, 12);//device Id
+    deviceIMEIId = data.slice(2, 12);//device Id
     console.log(deviceId);
     protocol = data.slice(12, 14);// 17 being the protocol
     console.log(protocol);
@@ -252,44 +199,48 @@ const dataSplitter = async (data) => {
     deviceStatus = data.slice(15, 16);// data type
     console.log(deviceStatus);
     datalength = data.slice(16, 20);
-    date = data.slice(20, 26);// data length
-    console.log(date);
-    let time = data.slice(26, 32);// time length
-    // const containerResponse = await containerAccessor.getContainerForDeviceIdAccessor(deviceId);
-    // if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
-    location = {
-        containerId: containerResponse['rows'][0]['container_id'],
-        deviceId: deviceId,
-        latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-        longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
-    };
-    console.log(location);
-    deviceAttributes = {
-        containerId: containerResponse['rows'][0]['container_id'],
-        deviceId: deviceId,
-        gps: data.slice(49, 50),
-        speed: data.slice(50, 52),
-        direction: data.slice(52, 54),
-        mileage: data.slice(54, 62),
-        gpsQuality: data.slice(62, 64),
-        vehicleId: data.slice(64, 72),
-        deviceStatus: deviceAlertInfo.returnValue,
-        serverDate: new Date(),
-        deviceUpdatedDate: new Date(),
-        batteryPercentage: data.slice(76, 78),
-        cellId: data.slice(78, 82),
-        lac: data.slice(82, 86),
-        gsmQuality: data.slice(86, 88),
-        geoFenceAlarm: data.slice(88, 90)
-    };
-    if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
-        returnString = '(P35)';
+    deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
+    const containerResponse = await containerAccessor.getContainerForDeviceIdAccessor(deviceIMEIId);
+    if (containerResponse && objectHasPropertyCheck(containerResponse, 'rows') && arrayNotEmptyCheck(containerResponse['rows'])) {
+        // let containerId = containerResponse['rows'][0]['container_id'];
+        location = {
+            containerId: containerId,
+            deviceId: deviceId,
+            _id: locationPrimaryId,
+            latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+            longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+        };
+        // console.log(location);
+        deviceAttributes = {
+            containerId: containerId,
+            deviceId: deviceId,
+            _id: elockDeviceAttributeId,
+            locationId: locationPrimaryId,
+            gps: data.slice(49, 50),
+            speed: data.slice(50, 52),
+            direction: data.slice(52, 54),
+            mileage: data.slice(54, 62),
+            gpsQuality: data.slice(62, 64),
+            vehicleId: data.slice(64, 72),
+            deviceStatus: deviceAlertInfo.returnValue,
+            serverDate: new Date(),
+            deviceUpdatedDate: deviceUpdatedDate,
+            batteryPercentage: data.slice(76, 78),
+            cellId: data.slice(78, 82),
+            lac: data.slice(82, 86),
+            gsmQuality: data.slice(86, 88),
+            geoFenceAlarm: data.slice(88, 90)
+        };
+        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue.split('')[14] === '1') {
+            returnString = '(P35)';
+        }
+        response['deviceId'] = deviceId;
+        response['containerId'] = containerId;
+        response['location'] = location;
+        response['deviceAttributes'] = deviceAttributes;
+        response['returnString'] = returnString;
     }
-    response['location'] = location;
-    response['deviceAttributes'] = deviceAttributes;
-    response['returnString'] = returnString;
-    // }
-    console.log(deviceAttributes);
+    // console.log(deviceAttributes);
     return response;
 };
 
@@ -306,11 +257,26 @@ const eLocksDataUpdateBusiness = async (data) => {
             break;
     }
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
+        const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
+        const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
+        let locationPrimaryId = parseInt(locationPrimaryKeyResponse['_doc']['counter']) - 1;
+        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse['_doc']['counter']) - 1;
         returnArray.gps.forEach((data) => {
-            dataSplitterResponse = dataSplitter(data.join(''));
+            locationPrimaryId++;
+            eLockAttributeId++;
+            dataSplitterResponse = dataSplitter(data.join(''), locationPrimaryId, eLockAttributeId);
             locationList.push(dataSplitterResponse['location']);
             deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
         });
+        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId);
+        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId);
+        const masterData = {
+            containerId: dataSplitterResponse['containerId'],
+            deviceId: dataSplitterResponse['deviceId'],
+            locationId: locationPrimaryId - 1,
+            eLockAttributeId: eLockAttributeId - 1
+        };
+        await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     }
     returnString = returnString || dataSplitterResponse['returnString'];
     if (arrayNotEmptyCheck(locationList)) {
@@ -319,8 +285,8 @@ const eLocksDataUpdateBusiness = async (data) => {
     if (arrayNotEmptyCheck(deviceAttributesList)) {
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
     }
-    console.log('++++++++++++++++++++++Return String+++++++++++++++++++');
-    console.log(returnString);
+    // console.log('++++++++++++++++++++++Return String+++++++++++++++++++');
+    // console.log(returnString);
     return returnString;
 };
 const degreeConverter = async (minuteData, direction) => {
