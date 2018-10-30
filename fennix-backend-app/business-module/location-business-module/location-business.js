@@ -376,7 +376,7 @@ const dataIterator = (data, obj) => {
             default:
         }
         if (data.length > 0) {
-            return dataIterator(data, obj);
+            dataIterator(data, obj);
         } else {
             return obj;
         }
