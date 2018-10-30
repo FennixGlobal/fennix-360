@@ -202,42 +202,42 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     //     console.log(containerResponse);
     //     containerId = containerResponse[0]['containerId'];
     //     deviceId = containerResponse[0]['_id'];
-        location = {
-            containerId: containerId,
-            deviceId: deviceId,
-            _id: locationPrimaryId,
-            latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-            longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
-        };
-        // console.log(location);
-        deviceAttributes = {
-            containerId: containerId,
-            deviceId: deviceId,
-            _id: elockDeviceAttributeId,
-            locationId: locationPrimaryId,
-            gps: data.slice(49, 50),
-            speed: data.slice(50, 52),
-            direction: data.slice(52, 54),
-            mileage: data.slice(54, 62),
-            gpsQuality: data.slice(62, 64),
-            vehicleId: data.slice(64, 72),
-            deviceStatus: deviceAlertInfo.returnValue,
-            serverDate: new Date(),
-            deviceUpdatedDate: deviceUpdatedDate,
-            batteryPercentage: data.slice(76, 78),
-            cellId: data.slice(78, 82),
-            lac: data.slice(82, 86),
-            gsmQuality: data.slice(86, 88),
-            geoFenceAlarm: data.slice(88, 90)
-        };
-        if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
-            returnString = '(P35)';
-        }
-        response['deviceId'] = deviceId;
-        response['containerId'] = containerId;
-        response['location'] = location;
-        response['deviceAttributes'] = deviceAttributes;
-        response['returnString'] = returnString;
+    location = {
+        containerId: containerId,
+        deviceId: deviceId,
+        _id: locationPrimaryId,
+        latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+        longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+    };
+    // console.log(location);
+    deviceAttributes = {
+        containerId: containerId,
+        deviceId: deviceId,
+        _id: elockDeviceAttributeId,
+        locationId: locationPrimaryId,
+        gps: data.slice(49, 50),
+        speed: data.slice(50, 52),
+        direction: data.slice(52, 54),
+        mileage: data.slice(54, 62),
+        gpsQuality: data.slice(62, 64),
+        vehicleId: data.slice(64, 72),
+        deviceStatus: deviceAlertInfo.returnValue,
+        serverDate: new Date(),
+        deviceUpdatedDate: deviceUpdatedDate,
+        batteryPercentage: data.slice(76, 78),
+        cellId: data.slice(78, 82),
+        lac: data.slice(82, 86),
+        gsmQuality: data.slice(86, 88),
+        geoFenceAlarm: data.slice(88, 90)
+    };
+    if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
+        returnString = '(P35)';
+    }
+    response['deviceId'] = deviceId;
+    response['containerId'] = containerId;
+    response['location'] = location;
+    response['deviceAttributes'] = deviceAttributes;
+    response['returnString'] = returnString;
     // }
     return response;
 };
@@ -257,15 +257,9 @@ const eLocksDataUpdateBusiness = async (data) => {
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
         const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
-        // console.log(locationPrimaryKeyResponse);
-        // console.log('++++++++++++++++++++++++++++++');
-        // console.log(eLockAttributesPrimaryKeyResponse);
-        // console.log('============++++++++++++++++++++++++++++++=================');
-        let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) - 1;
-        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) - 1;
-        // console.log(returnArray);
+        let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']);
+        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']);
         returnArray.gps.forEach(async (data) => {
-            // console.log(data);
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
