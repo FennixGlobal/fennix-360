@@ -13,6 +13,14 @@ const elocksLocationSchema = new Schema({
 
 const elocksLocationCounterSchema = new Schema({counter: Number});
 
+const locationDeviceAttributeContainerMasterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    containerId: Number,
+    locationId: Number,
+    deviceAttributeId: Number,
+    deviceId: Number
+});
+
 const elocksDeviceAttributesSchema = new Schema({
     _id: Number,
     gps: Number,
@@ -79,9 +87,11 @@ const ElocksDeviceAttributesCounterModel = mongoose.model('ElocksDeviceAttribute
 const ElocksDeviceModel = mongoose.model('ElocksDevice', elocksDeviceSchema, 'elocksDevices');
 const ElocksDeviceTypeModel = mongoose.model('ElocksDeviceType', elocksDeviceTypeSchema, 'elocksDeviceTypes');
 const ElocksDeviceCounter = mongoose.model('ElocksDeviceCounter', elocksDeviceAttributesCounterSchema, 'elocksDevicesCounter');
+const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
 
 module.exports = {
     ElocksLocationModel,
+    LocationDeviceAttributeContainerMasterModel,
     ElocksLocationCounterModel,
     ElocksDeviceAttributeModel,
     ElocksDeviceAttributesCounterModel,

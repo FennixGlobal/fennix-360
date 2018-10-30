@@ -94,9 +94,16 @@ const fetchNextDeviceAttributesPrimaryKeyAccessor = async () => {
     return returnObj;
 };
 
+const updateElocksLocationDeviceAttributeMasterAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.updateElocksLocationDeviceAttributeMasterQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     addContainerDetailsAccessor,
     listContainersAccessor,
+    updateElocksLocationDeviceAttributeMasterAccessor,
     fetchNextDeviceAttributesPrimaryKeyAccessor,
     fetchNextLocationPrimaryKeyAccessor,
     getTotalNoOfContainersAccessor,
