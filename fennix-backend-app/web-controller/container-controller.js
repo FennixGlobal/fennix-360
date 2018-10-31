@@ -50,7 +50,7 @@ router.get('/listUnAssignedContainer', function (req, res) {
     })
 });
 
-router.get('/showContainerMap', function (req, res) {
+router.post('showElockMap', function (req, res) {
     let returnObj;
     returnObj = containerBusiness.containerMapDataListBusiness(req);
     returnObj.then((response) => {

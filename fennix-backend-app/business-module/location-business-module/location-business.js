@@ -267,8 +267,8 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
-            console.log('+++++++++++++%%%%dataSplitterResponse  inSide%%%+++++++++++++');
-            console.log(dataSplitterResponse);
+            // console.log('+++++++++++++%%%%dataSplitterResponse  inSide%%%+++++++++++++');
+            // console.log(dataSplitterResponse);
             if (notNullCheck(dataSplitterResponse['location'])) {
                 locationList.push(dataSplitterResponse['location']);
             }
