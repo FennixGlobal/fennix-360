@@ -111,6 +111,7 @@ const containerMapDataListBusiness = async (req) => {
         containerReturnObj = {}, gridData = {}, locationObj = {},
         containerDevices = {}, containerListResponse, returnObj;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
