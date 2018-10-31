@@ -1,5 +1,5 @@
-const {LocationDeviceAttributeContainerMasterModel,deviceAggregator, LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
-
+const {deviceAggregator, LocationDeviceAttributeMasterModel, deviceTypeModel, DeviceCounter, DeviceAttributeModel, DeviceAttributesModelCounter} = require('../models/device-model');
+const {LocationDeviceAttributeContainerMasterModel} = require('../models/container-model');
 const userIdDeviceAggregatorQuery = (query) => {
     return deviceAggregator.aggregate().match({"beneficiaryId": {$in: query}})
         .group({
