@@ -1,7 +1,7 @@
 const containerAccessors = require('../../repository-module/data-accesors/container-accessor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 
