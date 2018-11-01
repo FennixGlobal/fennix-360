@@ -119,21 +119,17 @@ const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) =>
 
 const getBeneficiaryListByOwnerId = async (req) => {
     let returnObj, request = [], modifiedQuery,
-        extraQuery = ``, limit, offset;
+        extraQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, beneficiaryQueries.selectBeneficiaryListByOwnerUserIdQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [...req.userIdList, req.centerId, req.skip, req.limit];
+        request = [...req.userIdList, req.centerId];
         // extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true order by created_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
         extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
-        offset = req.userIdList.length + 2;
-        limit = req.userIdList.length + 3;
     } else {
-        request = [...req.userIdList, req.skip, req.limit];
+        request = [...req.userIdList];
         extraQuery = `and isactive = true`;
-        offset = req.userIdList.length + 1;
-        limit = req.userIdList.length + 2;
     }
-    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(offset,10), parseInt(limit,10))}`;
+    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip,10), parseInt(req.limit,10))}`;
     console.log(modifiedQuery);
     console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
