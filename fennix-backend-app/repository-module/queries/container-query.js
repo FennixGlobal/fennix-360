@@ -11,6 +11,7 @@ const listContainersQuery = 'select * from container where isactive = true and o
 const getTotalNoOfContainersQuery = 'select count(*) from container where isactive = true and owner_user_id IN ';
 
 const listUnassignedContainersQuery = 'select container_id, container_name,container_type,company_name from container where (device_id is null or device_id = 0) and isactive = true';
+const getTotalNoOfContainersForMapQuery = 'select count(*) from container where (device_id is null or device_id = 0) and isactive = true and owner_user_id IN ';
 
 
 const updateElockAttributeQuery = (req) => {
@@ -96,5 +97,6 @@ module.exports = {
     insertElocksLocationQuery,
     insertElocksDeviceAttributesQuery,
     getTotalNoOfContainersQuery,
-    listUnassignedContainersQuery
+    listUnassignedContainersQuery,
+    getTotalNoOfContainersForMapQuery
 };

@@ -274,7 +274,7 @@ const containerMapDataListBusiness = async (req) => {
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
-    totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
+    totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
     console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;

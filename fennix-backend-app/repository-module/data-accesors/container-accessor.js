@@ -35,6 +35,14 @@ const getTotalNoOfContainersAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
     return returnObj;
 };
+
+const getTotalNoOfContainersForMapAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersForMapQuery, false);
+    returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
+    return returnObj;
+};
+
 const listUnAssignedContainersAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.listUnassignedContainersQuery);
@@ -146,5 +154,6 @@ module.exports = {
     containerDeviceAttributesUpdateAccessor,
     // getContainerIdAccessor,
     getContainerForDeviceIdAccessor,
-    containerDeviceUpdateAccessor
+    containerDeviceUpdateAccessor,
+    getTotalNoOfContainersForMapAccessor
 };
