@@ -21,7 +21,9 @@ const addContainerDetailsAccessor = async (req) => {
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip,10), parseInt(req.limit,10))}`;
+    console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec([req.userIdList], finalQuery);
     return returnObj;
 };
