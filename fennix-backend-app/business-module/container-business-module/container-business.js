@@ -269,8 +269,9 @@ const assignContainerBusiness = async (req) => {
 const containerMapDataListBusiness = async (req) => {
     let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit:parseInt(req.body.limit)},
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
-        containerDevices = {}, containerListResponse, returnObj, userResponse;
-    userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+        containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
+    userRequest = {query:{userId: req.body.userId, languageId: req.body.languageId}};
+    userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
