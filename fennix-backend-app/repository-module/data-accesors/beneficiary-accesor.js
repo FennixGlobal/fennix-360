@@ -90,14 +90,14 @@ const getBeneifciaryIdList = async (req) => {
 const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) => {
     let extraQuery, modifiedQuery, finalQuery, returnObj, finalRequest;
     switch (nativeUserRole) {
-        case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPERVISOR || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_GLOBAL_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_MASTER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_SUPER_ADMIN || COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN: {
-            extraQuery = ` order by $${requestList.length + 1} desc nulls last offset $${requestList.length + 2} limit $${requestList.length + 3}`;
-            finalRequest = [...requestList, req.query.sort, req.query.skip, req.query.limit];
-            break;
-        }
         case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR: {
             extraQuery = ` and center_id = $${requestList.length + 1} order by $${requestList.length + 2} desc nulls last offset $${requestList.length + 3} limit $${requestList.length + 4}`;
             finalRequest = [...requestList, req.query.centerId, req.query.sort, req.query.skip, req.query.limit];
+            break;
+        }
+        default: {
+            extraQuery = ` order by $${requestList.length + 1} desc nulls last offset $${requestList.length + 2} limit $${requestList.length + 3}`;
+            finalRequest = [...requestList, req.query.sort, req.query.skip, req.query.limit];
         }
     }
     modifiedQuery = requestInModifier(requestList, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
@@ -129,7 +129,7 @@ const getBeneficiaryListByOwnerId = async (req) => {
         request = [...req.userIdList];
         extraQuery = `and isactive = true`;
     }
-    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip,10), parseInt(req.limit,10))}`;
+    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
     console.log(modifiedQuery);
     console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
@@ -204,13 +204,13 @@ const getBeneficiaryDocumentByBeneficiaryIdAccessor = async (req) => {
 };
 
 const updateBeneficiaryDocumentPathAccessor = async (beneficiaryId, categoryName, documentObj) => {
-    let returnObj,categoryDoc = {};
+    let returnObj, categoryDoc = {};
     categoryDoc[categoryName] = documentObj;
     returnObj = await beneficiaryDocumentQuery.updateBeneficiaryDocumentQuery(beneficiaryId, categoryDoc);
     return returnObj;
 };
 
-const getBeneficiaryDocumentDownloadListAccessor = async(beneficiaryId)=>{
+const getBeneficiaryDocumentDownloadListAccessor = async (beneficiaryId) => {
     let returnObj;
     returnObj = await beneficiaryDocumentQuery.getBeneficiaryDocumentsQuery(beneficiaryId);
     return returnObj;
