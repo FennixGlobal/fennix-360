@@ -32,7 +32,7 @@ const listContainersAccessor = async (req) => {
 const getTotalNoOfContainersAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersQuery, false);
-    returnObj = await connectionCheckAndQueryExec([req.userIdList], modifiedQuery);
+    returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
     return returnObj;
 };
 const listUnAssignedContainersAccessor = async (req) => {
