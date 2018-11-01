@@ -146,11 +146,135 @@ const assignContainerBusiness = async (req) => {
 // const listUnassignedELocksBusiness = async() => {
 //
 // };
+// const containerMapDataListBusiness = async (req) => {
+//     let request = [req.body.sort, parseInt(req.body.skip), parseInt(req.body.limit)],
+//         containerReturnObj = {}, gridData = {}, locationObj = {},
+//         containerDevices = {}, containerListResponse, returnObj;
+//     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+//     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
+//         let containerIdListAndDetailObj, containerDeviceArray;
+//         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
+//             init.containerIdArray.push(parseInt(item.container_id));
+//             init.containerDetailObj[item.container_id] = {
+//                 containerId: item['container_id'],
+//                 containerName: item['container_name'],
+//                 documentId: item['document_id'],
+//                 image: item['container_image']
+//             };
+//             return init;
+//         }, {containerIdArray: [], containerDetailObj: {}});
+//         containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
+//         containerDeviceArray.forEach((item) => {
+//             locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
+//             locationObj[item.containerId]['location'] = {
+//                 longitude: item.location.longitude,
+//                 latitude: item.location.latitude
+//             };
+//             containerIdListAndDetailObj['containerDetailObj'][item.containerId]['imei'] = item['device']['imei'];
+//             // locationObj[item.containerId]['roleId'] = containerIdListAndDetailObj['containerDetailObj'][item.containerId]['roleId'];
+//             const deviceDetails = {};
+//             let noOfViolations = 0;
+//             deviceDetails[item.containerId] = [];
+//             const GPS = {A: 'Valid', V: 'Invalid'};
+//             const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
+//             if (batteryPercentage['deviceStatus'] === 'violation') {
+//                 noOfViolations += 1;
+//             }
+//             if (item.deviceAttributes.beltStatus) {
+//                 noOfViolations += 1;
+//             }
+//             if (item.deviceAttributes.shellStatus) {
+//                 noOfViolations += 1;
+//             }
+//             deviceDetails[item.containerId].push({
+//                 text: 'Battery',
+//                 status: batteryPercentage['deviceStatus'],
+//                 key: 'batteryPercentage',
+//                 icon: 'battery_charging_full',
+//                 value: `${item.deviceAttributes.batteryPercentage}%`
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'Belt',
+//                 key: 'beltStatus',
+//                 icon: 'link',
+//                 status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
+//                 value: item.deviceAttributes.beltStatus === 1 ? 'belt' : 'OK'
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'Shell',
+//                 key: 'shellStatus',
+//                 icon: 'lock',
+//                 status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
+//                 value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'GSM',
+//                 key: 'gmsStatus',
+//                 icon: 'signal_cellular_4_bar',
+//                 status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
+//                 value: item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK'
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'RF Home',
+//                 key: 'rfConnectionStatus',
+//                 icon: 'home',
+//                 status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
+//                 value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'RFID',
+//                 key: 'rfPlugStatus',
+//                 icon: 'rss_feed',
+//                 status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
+//                 value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'SAT',
+//                 key: 'gpsStatus',
+//                 icon: 'gps_fixed',
+//                 status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
+//                 value: GPS[item.deviceAttributes.gpsStatus]
+//             });
+//             deviceDetails[item.containerId].push({
+//                 text: 'Speed',
+//                 key: 'speed',
+//                 icon: 'directions_run',
+//                 status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
+//                 value: Math.floor(item.deviceAttributes.speed)
+//             });
+//             containerDevices = {...deviceDetails};
+//             const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
+//             const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
+//             containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceUpdatedDate'] = modifiedDate;
+//             containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceDetails'] = deviceDetails[item.containerId];
+//             containerIdListAndDetailObj.containerDetailObj[item.containerId]['noOfViolations'] = {
+//                 text: 'Number of Violations',
+//                 value: noOfViolations
+//             };
+//             locationObj[item.containerId]['noOfViolations'] = noOfViolations;
+//             gridData[item.containerId] = {...containerIdListAndDetailObj.containerDetailObj[item.containerId]};
+//         });
+//         containerReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
+//         containerReturnObj['deviceDetails'] = containerDevices;
+//         containerReturnObj['deviceDetailsArray'] = Object.keys(containerDevices).map((device) => containerDevices[device]);
+//         containerReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
+//         containerReturnObj['markerDetails'] = gridData;
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', containerReturnObj);
+//     } else {
+//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
+//     }
+//     return returnObj;
+// };
+
 const containerMapDataListBusiness = async (req) => {
-    let request = [req.body.sort, parseInt(req.body.skip), parseInt(req.body.limit)],
-        containerReturnObj = {}, gridData = {}, locationObj = {},
-        containerDevices = {}, containerListResponse, returnObj;
+    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit:parseInt(req.body.limit)},
+        containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
+        containerDevices = {}, containerListResponse, returnObj, userResponse;
+    userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
+    console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
@@ -259,6 +383,7 @@ const containerMapDataListBusiness = async (req) => {
         containerReturnObj['deviceDetailsArray'] = Object.keys(containerDevices).map((device) => containerDevices[device]);
         containerReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
         containerReturnObj['markerDetails'] = gridData;
+        containerReturnObj['totalNoOfRecords'] = totalNoOfRecords;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', containerReturnObj);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);

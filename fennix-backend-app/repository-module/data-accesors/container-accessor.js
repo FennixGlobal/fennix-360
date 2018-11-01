@@ -56,10 +56,18 @@ const updateContainerAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
+// const getContainerIdListAccessor = async (req) => {
+//     let returnObj, extraQuery = 'order by $1 desc nulls last offset $2 limit $3', finalQuery;
+//     finalQuery = `${containerQueries.listContainersQuery} ${extraQuery}`;
+//     returnObj = await connectionCheckAndQueryExec(req, finalQuery);
+//     return returnObj;
+// };
+
 const getContainerIdListAccessor = async (req) => {
-    let returnObj, extraQuery = 'order by $1 desc nulls last offset $2 limit $3', finalQuery;
-    finalQuery = `${containerQueries.listContainersQuery} ${extraQuery}`;
-    returnObj = await connectionCheckAndQueryExec(req, finalQuery);
+    let returnObj, finalQuery, modifiedQuery;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit)}`;
+    returnObj = await connectionCheckAndQueryExec(req.userIdList, finalQuery);
     return returnObj;
 };
 
