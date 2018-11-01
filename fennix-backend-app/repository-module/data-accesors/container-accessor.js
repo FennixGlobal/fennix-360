@@ -1,6 +1,6 @@
 const containerQueries = require('../queries/container-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {insertQueryCreator} = require('../../util-module/request-validators');
+const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const {updateQueryCreator} = require('../../util-module/request-validators');
 
@@ -12,18 +12,26 @@ const addContainerDetailsAccessor = async (req) => {
     return returnObj;
 };
 
-const listContainersAccessor = async () => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec([], containerQueries.listContainersQuery);
+// const listContainersAccessor = async () => {
+//     let returnObj;
+//     returnObj = await connectionCheckAndQueryExec([], containerQueries.listContainersQuery);
+//     return returnObj;
+// };
+
+const listContainersAccessor = async (req) => {
+    let returnObj, modifiedQuery, finalQuery;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip,10), parseInt(req.limit,10))}`;
+    returnObj = await connectionCheckAndQueryExec([req.userIdList], finalQuery);
     return returnObj;
 };
 
-const getTotalNoOfContainersAccessor = async () => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec([], containerQueries.getTotalNoOfContainersQuery);
+const getTotalNoOfContainersAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersQuery, false);
+    returnObj = await connectionCheckAndQueryExec([req.userIdList], modifiedQuery);
     return returnObj;
 };
-
 const listUnAssignedContainersAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.listUnassignedContainersQuery);
