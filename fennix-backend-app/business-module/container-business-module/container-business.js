@@ -384,7 +384,7 @@ const containerMapDataListBusiness = async (req) => {
         containerReturnObj['deviceDetailsArray'] = Object.keys(containerDevices).map((device) => containerDevices[device]);
         containerReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
         containerReturnObj['markerDetails'] = gridData;
-        containerReturnObj['totalNoOfRecords'] = totalNoOfRecords;
+        containerReturnObj['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', containerReturnObj);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
