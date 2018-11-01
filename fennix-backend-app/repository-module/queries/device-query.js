@@ -554,7 +554,7 @@ const deviceDetailsByContainerIdQuery = (query) => {
         },
         {
             $lookup: {
-                from: "ElocksDeviceAttributeModel",
+                from: "elocksDeviceAttributes",
                 localField: "deviceAttributeId",
                 foreignField: "_id",
                 as: "deviceAttributes"
@@ -563,7 +563,7 @@ const deviceDetailsByContainerIdQuery = (query) => {
         {$unwind: "$deviceAttributes"},
         {
             $lookup: {
-                from: "ElocksLocationModel",
+                from: "elocksLocation",
                 localField: "locationId",
                 foreignField: "_id",
                 as: "location"
