@@ -241,9 +241,67 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     return response;
 };
 
+// const eLocksDataUpdateBusiness = async (data) => {
+//     let returnString = '', updateLoc, deviceId, containerId, returnValue, updateDevice, returnArray, locationList = [],
+//         deviceAttributesList = [],
+//         dataSplitterResponse = null;
+//     const eLockStatus = data.slice(0, 2);
+//     switch (parseInt(eLockStatus, 10)) {
+//         case 24:
+//             returnArray = await dataIterator(data, null);
+//             break;
+//         case 28:
+//             returnString = '(P46)';
+//             break;
+//     }
+//     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
+//         const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
+//         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
+//         let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) + 1;
+//         let finalLocCount = locationPrimaryId + returnArray.gps.length;
+//         await containerAccessor.updateNextLocationPrimaryKeyAccessor(finalLocCount + 1);
+//         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
+//         let finalELockAttrCount = eLockAttributeId + returnArray.gps.length;
+//         await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(finalELockAttrCount + 1);
+//         returnArray.gps.forEach(async (data) => {
+//             locationPrimaryId++;
+//             eLockAttributeId++;
+//             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
+//             // console.log('+++++++++++++%%%%dataSplitterResponse  inSide%%%+++++++++++++');
+//             // console.log(dataSplitterResponse);
+//             if (notNullCheck(dataSplitterResponse['location'])) {
+//                 locationList.push(dataSplitterResponse['location']);
+//             }
+//             deviceId = deviceId || (dataSplitterResponse ? dataSplitterResponse['deviceId'] : null);
+//             containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
+//             returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
+//             if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
+//                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
+//             }
+//         });
+//         console.log('+++++++++++++dataSplitterResponse+++++++++++++');
+//         console.log(dataSplitterResponse);
+//         const masterData = {
+//             containerId:containerId,
+//             deviceId: deviceId,
+//             locationId: finalLocCount,
+//             eLockAttributeId: finalELockAttrCount
+//         };
+//         await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
+//     }
+//     // returnString =
+//     if (arrayNotEmptyCheck(locationList)) {
+//         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
+//     }
+//     if (arrayNotEmptyCheck(deviceAttributesList)) {
+//         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+//     }
+//     return returnString;
+// };
+
 const eLocksDataUpdateBusiness = async (data) => {
-    let returnString = '', updateLoc, deviceId, containerId, returnValue, updateDevice, returnArray, locationList = [],
-        deviceAttributesList = [],
+    let returnString = '', updateLoc, deviceId, containerId, updateDevice, returnArray, locationList = [],
+        deviceAttributesList = [], masterData = {},
         dataSplitterResponse = null;
     const eLockStatus = data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
@@ -272,6 +330,7 @@ const eLocksDataUpdateBusiness = async (data) => {
             if (notNullCheck(dataSplitterResponse['location'])) {
                 locationList.push(dataSplitterResponse['location']);
             }
+            masterData = {deviceId: dataSplitterResponse['deviceId'], containerId: dataSplitterResponse['containerId']};
             deviceId = deviceId || (dataSplitterResponse ? dataSplitterResponse['deviceId'] : null);
             containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
             returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
@@ -281,21 +340,25 @@ const eLocksDataUpdateBusiness = async (data) => {
         });
         console.log('+++++++++++++dataSplitterResponse+++++++++++++');
         console.log(dataSplitterResponse);
-        const masterData = {
-            containerId:containerId,
-            deviceId: deviceId,
-            locationId: finalLocCount,
-            eLockAttributeId: finalELockAttrCount
-        };
-        await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
+
     }
-    // returnString =
+    let finalLocationId, finalDeviceAttrId;
     if (arrayNotEmptyCheck(locationList)) {
+        finalLocationId = locationList[locationList.length - 1]['_id'];
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
+        finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
     }
+    masterData = {
+        ...masterData,
+        locationId: finalLocationId,
+        eLockAttributeId: finalDeviceAttrId
+    };
+    await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
+    console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
+    console.log(returnString);
     return returnString;
 };
 
