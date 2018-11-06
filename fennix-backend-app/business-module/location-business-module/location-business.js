@@ -354,10 +354,14 @@ const eLocksDataUpdateBusiness = async (data) => {
     if (arrayNotEmptyCheck(locationList)) {
         finalLocationId = locationList[locationList.length - 1]['_id'];
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
+        console.log("updating location table for elocks");
+        console.log(updateLoc);
     }
     if (arrayNotEmptyCheck(deviceAttributesList)) {
         finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+        console.log("updating device table for elocks");
+        console.log(updateDevice);
     }
     masterData = {
         ...masterData,
