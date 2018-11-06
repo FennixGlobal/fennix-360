@@ -938,6 +938,27 @@ const addDeviceForBeneficiaryBusiness = async (req) => {
     return finalResponse;
 };
 
+const getBeneficiaryMapHistoryBusiness = async (req) => {
+    let request = {toDate: new Date(req.query.toDate).toISOString(), fromDate: new Date(req.query.fromDate).toISOString(), beneficiaryId: parseInt(req.query.beneficiaryId)}, response, finalResponse = {}, modifiedResponse = [];
+    response = await deviceAccessor.getBeneficiaryIdByImeiAccessor(request);
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let obj = {
+                beneficiaryId: item['beneficiaryId'],
+                latitude: item['latitude'],
+                longitude: item['longitude'],
+                deviceDate: item['deviceDate'],
+                locationId: item['_id']
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_LOCATION_EXISTS_FOR_GIVEN_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 module.exports = {
     addDeviceForBeneficiaryBusiness,
     beneficiaryAggregatorBusiness,

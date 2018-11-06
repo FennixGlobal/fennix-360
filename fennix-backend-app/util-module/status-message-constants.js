@@ -210,6 +210,13 @@ const statusCodes = {
             espMX: 'device already exists for given imei',
             espLA: 'device already exists for given imei'
         }
+    },
+    261: {
+        devMsg: 'no location exists for given id', userMsg: {
+            EN_US: 'no location exists for given id',
+            espMX: 'no location exists for given id',
+            espLA: 'no location exists for given id'
+        }
     }
 };
 

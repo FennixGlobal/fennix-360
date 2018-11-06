@@ -1,4 +1,4 @@
-const {getBeneficiaryLocationList, selectAllCountriesForGlobalAdminQuery, locationCounterQuery, locationDetailsUpdateQuery,getCountryCodeByLocationIdQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
+const {getBeneficiaryMapHistoryQuery,getBeneficiaryLocationList, selectAllCountriesForGlobalAdminQuery, locationCounterQuery, locationDetailsUpdateQuery,getCountryCodeByLocationIdQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {requestInModifier} = require('../../util-module/request-validators');
 
@@ -11,6 +11,12 @@ const mapMarkerQuery = async (req) => {
 const getCountryCodeByLocationIdAccessor = async(locationId)=>{
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(locationId, getCountryCodeByLocationIdQuery);
+    return returnObj;
+};
+
+const getBeneficiaryMapHistoryAccessor = async (req) => {
+    let returnObj;
+    returnObj = await getBeneficiaryMapHistoryQuery(req);
     return returnObj;
 };
 
@@ -63,5 +69,6 @@ module.exports = {
     getCenterIdsAccessor,
     updateLocation,
     getCountryCodeByLocationIdAccessor,
+    getBeneficiaryMapHistoryAccessor,
     getCenterIdsForLoggedInUserAndSubUsersAccessor
 };

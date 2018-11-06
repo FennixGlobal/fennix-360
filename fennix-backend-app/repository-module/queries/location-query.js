@@ -61,6 +61,11 @@ const selectAllCountriesForMasterAdminQuery = 'select (select localized_text fro
 //OPERATOR
 const selectCenterIdsForOperatorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from users where user_id = $1)';
 
+const getBeneficiaryMapHistoryQuery = (req) => {
+    return locationDetails.aggregate([{$match:{deviceDate:{$gte: req.fromDate,
+                $lte: req.toDate}, beneficiaryId: req.beneficiaryId}}]);
+};
+
 //SUPERVISOR
 // const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';
 // const selectCenterIdsForSupervisorQuery = 'select center_id as location_id, name as location_name from centers where center_id = (select center_id from users where user_id = $1)';
@@ -100,5 +105,6 @@ module.exports = {
     selectAllCountriesForMasterAdminQuery,
     selectCenterIdsForLoggedInUserAndSubUsersQuery,
     selectAllCountriesForGlobalAdminQuery,
-    selectAllCenterIdsForGlobalAdminQuery
+    selectAllCenterIdsForGlobalAdminQuery,
+    getBeneficiaryMapHistoryQuery
 };

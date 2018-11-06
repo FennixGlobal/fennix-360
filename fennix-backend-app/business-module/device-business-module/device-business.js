@@ -113,6 +113,12 @@ const listDevicesBusiness = async (req) => {
     return finalResponse;
 };
 
+const getBeneficiaryMapHistoryAccessor = async (req) => {
+    let returnObj;
+    returnObj = await getBeneficiaryMapHistoryQuery(req);
+    return returnObj;
+};
+
 // const listDevicesBusiness = async (req) => {
 //     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
 //         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [],
