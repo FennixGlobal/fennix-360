@@ -193,31 +193,24 @@ const containerMapDataListBusiness = async (req) => {
             });
             deviceDetails[item.containerId].push({
                 text: 'GSM',
-                key: 'gmsStatus',
+                key: 'gsmQuality',
                 icon: 'signal_cellular_4_bar',
-                status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
-                value: item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK'
+                status: item.deviceAttributes.gsmQuality < 2 ? 'violation' : 'safe',
+                value: item.deviceAttributes.gsmQuality < 2 ? 'Low' : 'OK'
             });
             deviceDetails[item.containerId].push({
-                text: 'RF Home',
-                key: 'rfConnectionStatus',
-                icon: 'home',
-                status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
-                value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
-            });
-            deviceDetails[item.containerId].push({
-                text: 'RFID',
-                key: 'rfPlugStatus',
-                icon: 'rss_feed',
-                status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
-                value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
+                text: 'Mileage',
+                key: 'mileage',
+                icon: 'directions_car',
+                status: item.deviceAttributes.mileage === 0 ? 'violation' : 'safe',
+                value: item.deviceAttributes.mileage === 0 ? 'Outdoor' : 'Home'
             });
             deviceDetails[item.containerId].push({
                 text: 'SAT',
-                key: 'gpsStatus',
+                key: 'gpsQuality',
                 icon: 'gps_fixed',
-                status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
-                value: GPS[item.deviceAttributes.gpsStatus]
+                status: item.deviceAttributes.gpsQuality === 'V' ? 'violation' : 'safe',
+                value: GPS[item.deviceAttributes.gpsQuality]
             });
             deviceDetails[item.containerId].push({
                 text: 'Speed',
