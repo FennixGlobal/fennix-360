@@ -74,6 +74,17 @@ const updateNextLocationPrimaryKeyQuery = (counter) => {
     });
 };
 
+const getContainerMapHistoryQuery = (req) => {
+    return ElocksLocationModel.aggregate([{
+        $match: {
+            deviceDate: {
+                $gte: req.fromDate,
+                $lte: req.toDate
+            }, containerId: req.containerId
+        }
+    }]);
+};
+
 const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
     return ElocksDeviceAttributesCounterModel.update({}, {
         counter: counter
@@ -97,6 +108,7 @@ module.exports = {
     insertElocksLocationQuery,
     insertElocksDeviceAttributesQuery,
     getTotalNoOfContainersQuery,
+    getContainerMapHistoryQuery,
     listUnassignedContainersQuery,
     getTotalNoOfContainersForMapQuery
 };

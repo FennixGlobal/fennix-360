@@ -339,8 +339,6 @@ const eLocksDataUpdateBusiness = async (data) => {
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
             if (notNullCheck(dataSplitterResponse['location'])) {
-                console.log('data Splitter response');
-                console.log(dataSplitterResponse['location']);
                 locationList.push(dataSplitterResponse['location']);
             }
             masterData = {deviceId: dataSplitterResponse['deviceId'], containerId: dataSplitterResponse['containerId']};
@@ -348,31 +346,17 @@ const eLocksDataUpdateBusiness = async (data) => {
             containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
             returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
             if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
-                console.log('data Splitter response');
-                console.log(dataSplitterResponse['deviceAttributes']);
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
         });
-// });
-        //     await returnArray.gps.forEach(async (data) => {
-        //
-        // }
         let finalLocationId, finalDeviceAttrId;
-        console.log('location list');
-        console.log(locationList);
         if (arrayNotEmptyCheck(locationList)) {
             finalLocationId = locationList[locationList.length - 1]['_id'];
             updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
-            console.log("updating location table for elocks");
-            console.log(updateLoc);
         }
-        console.log('device attribute list');
-        console.log(deviceAttributesList);
         if (arrayNotEmptyCheck(deviceAttributesList)) {
             finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
             updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
-            console.log("updating device table for elocks");
-            console.log(updateDevice);
         }
         masterData = {
             ...masterData,
@@ -417,8 +401,6 @@ const degreeConverter = (minuteData, direction) => {
             locCode = direction[2] === 1 ? 'N' : 'S';
         }
     }
-    console.log('location');
-    console.log(loc);
     return {loc, locCode};
 };
 

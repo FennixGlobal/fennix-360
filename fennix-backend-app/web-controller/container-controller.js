@@ -57,6 +57,23 @@ router.post('/showElockMap', function (req, res) {
         res.send(response);
     })
 });
+
+router.get('/unlockElock', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.unlockElockBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/getContainerMapHistory', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.getContainerMapHistoryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/listUnAssignedELocks', function (req, res) {
     let returnObj;
     returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();

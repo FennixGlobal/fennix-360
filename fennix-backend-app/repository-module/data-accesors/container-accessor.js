@@ -22,7 +22,7 @@ const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
     console.log(modifiedQuery);
-    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip,10), parseInt(req.limit,10))}`;
+    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
     console.log(finalQuery);
     console.log(req.userIdList);
     returnObj = await connectionCheckAndQueryExec([...req.userIdList], finalQuery);
@@ -33,6 +33,12 @@ const getTotalNoOfContainersAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersQuery, false);
     returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
+    return returnObj;
+};
+
+const getContainerMapHistoryAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.getContainerMapHistoryQuery(req);
     return returnObj;
 };
 
@@ -155,5 +161,6 @@ module.exports = {
     // getContainerIdAccessor,
     getContainerForDeviceIdAccessor,
     containerDeviceUpdateAccessor,
+    getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor
 };
