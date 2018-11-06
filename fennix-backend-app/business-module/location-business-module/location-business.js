@@ -183,7 +183,7 @@ const getGSMLevel = (gsmStatus) => {
     return gsmLevel;
 };
 
-const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => {
+const dataSplitter = (data, locationPrimaryId, elockDeviceAttributeId) => {
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
@@ -196,7 +196,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     deviceStatus = data.slice(15, 16);// data type
     datalength = data.slice(16, 20);
     deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-    const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+    const containerResponse = await
+    deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
     if (arrayNotEmptyCheck(containerResponse)) {
         containerId = containerResponse[0]['containerId'];
         deviceId = containerResponse[0]['_id'];
@@ -242,6 +243,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         response['deviceAttributes'] = deviceAttributes;
         response['returnString'] = returnString;
     }
+    console.log('response of data splitter');
+    console.log(response);
     return response;
 };
 
@@ -337,7 +340,9 @@ const eLocksDataUpdateBusiness = async (data) => {
         returnArray.gps.forEach(async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
-            dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
+            dataSplitterResponse = dataSplitter(data, locationPrimaryId, eLockAttributeId);
+            console.log('data Splitter response');
+            console.log(dataSplitterResponse);
             if (notNullCheck(dataSplitterResponse['location'])) {
                 locationList.push(dataSplitterResponse['location']);
             }
