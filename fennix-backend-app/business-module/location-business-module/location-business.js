@@ -197,17 +197,21 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     datalength = data.slice(16, 20);
     deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
     const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
-    console.log(containerResponse);
     if (arrayNotEmptyCheck(containerResponse)) {
-        // console.log(containerResponse);
         containerId = containerResponse[0]['containerId'];
         deviceId = containerResponse[0]['_id'];
+        let processedLoc = {
+            latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+            longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+        };
         location = {
             containerId: containerId,
             deviceId: deviceId,
             _id: locationPrimaryId,
-            latitude: await degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-            longitude: await degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+            latitude: processedLoc.latitude.loc,
+            latitudeDirection: processedLoc.latitude.locCode,
+            longitude: processedLoc.longitude.loc,
+            longitudeDirection: processedLoc.longitude.locCode
         };
         deviceAttributes = {
             containerId: containerId,
@@ -223,7 +227,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             deviceStatus: deviceAlertInfo.returnValue,
             serverDate: new Date(),
             deviceUpdatedDate: deviceUpdatedDate,
-            batteryPercentage: data.slice(76, 78),
+            batteryPercentage: eLockBatteryPercentCalculator(data.slice(76, 78)),
             cellId: data.slice(78, 82),
             lac: data.slice(82, 86),
             gsmQuality: data.slice(86, 88),
@@ -298,7 +302,16 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
 //     }
 //     return returnString;
 // };
-
+const eLockBatteryPercentCalculator = (hexValue) => {
+    let batteryPercent = 0, decimalValue;
+    decimalValue = parseInt(hexValue, 16);
+    if (decimalValue !== 255 && decimalValue > 100) {
+        batteryPercent = 100;
+    } else {
+        batteryPercent = decimalValue;
+    }
+    return batteryPercent;
+}
 const eLocksDataUpdateBusiness = async (data) => {
     let returnString = '', updateLoc, deviceId, containerId, updateDevice, returnArray, locationList = [],
         deviceAttributesList = [], masterData = {},
@@ -309,7 +322,7 @@ const eLocksDataUpdateBusiness = async (data) => {
             returnArray = await dataIterator(data, null);
             break;
         case 28:
-            returnString = '(P46)';
+            returnString = 'P45';
             break;
     }
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
@@ -362,28 +375,32 @@ const eLocksDataUpdateBusiness = async (data) => {
     return returnString;
 };
 
-const degreeConverter = async (minuteData, direction) => {
-    let degree, minute, total, loc;
+const degreeConverter = (minuteData, direction) => {
+    let degree, minute, total, loc, locCode;
     if (minuteData.length === 8) {
-        degree = minuteData.slice(0, 2);
+        degree = parseInt(minuteData.slice(0, 2));
         minute = (parseFloat('' + minuteData.slice(2, 4) + '.' + minuteData.slice(4, 8))) / 60;
         total = degree + minute;
         if (direction.toString() === '1111' || direction.toString() === '1110') {
-            loc = '' + total + 'W';
+            loc = -1 * total;
+            locCode = 'W';
         } else {
-            loc = direction[2] === 1 ? '' + total + 'E' : '' + total + 'W';
+            loc = direction[2] === 1 ? total : -1 * total;
+            locCode = direction[2] === 1 ? 'E' : 'W';
         }
     } else {
-        degree = minuteData.slice(0, 3);
+        degree = parseInt(minuteData.slice(0, 3));
         minute = (parseFloat('' + minuteData.slice(3, 5) + '.' + minuteData.slice(5, 9))) / 60;
         total = degree + minute;
         if (direction.toString() === '1111' || direction.toString() === '1110') {
             loc = '' + total + 'N';
+            locCode = 'N';
         } else {
-            loc = direction[2] === 1 ? '' + total + 'N' : '' + total + 'S';
+            loc = direction[2] === 1 ? total : -1 * total;
+            locCode = direction[2] === 1 ? 'N' : 'S';
         }
     }
-    return loc;
+    return {loc, locCode};
 };
 
 const dataIterator = (data, obj) => {
@@ -398,13 +415,9 @@ const dataIterator = (data, obj) => {
     if (data.length > 0) {
         switch (parseInt(data.slice(0, 2).join(''))) {
             case 24:
-                // const gpsArray = [];
-                // gpsArray.push();
                 obj.gps.push(data.splice(0, 98).join(''));
                 break;
             case 28:
-                // const alarmArray = [];
-                // alarmArray.push();
                 obj.alarm.push(data.splice(0, 32).join(''));
                 break;
             default:
