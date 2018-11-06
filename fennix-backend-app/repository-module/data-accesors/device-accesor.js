@@ -140,7 +140,14 @@ const deviceByContainerAccessor = async (req) => {
     return returnObj;
 };
 
+const checkIfDeviceIsPresentAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.checkIfDeviceIsPresentQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    checkIfDeviceIsPresentAccessor,
     unlinkDeviceForContainerAccessor,
     deviceByContainerAccessor,
     unlinkLocationMasterForContainerAccessor,

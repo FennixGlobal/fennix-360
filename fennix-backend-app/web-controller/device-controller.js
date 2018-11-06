@@ -65,4 +65,12 @@ router.get('/getDeviceDetailsByBeneficiaryId', function (req, res) {
     })
 });
 
+router.get('/checkIfDevicePresent', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.checkIfDeviceIsPresentBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

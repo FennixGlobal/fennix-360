@@ -340,10 +340,17 @@ const unlinkDeviceForContainerBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
 
+const checkIfDeviceIsPresentBusiness = async (req) => {
+    let response;
+    response = await deviceAccessor.checkIfDeviceIsPresentAccessor(parseInt(req.query.imei));
+    return response === 0 ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []) : fennixResponse(statusCodeConstants.STATUS_DEVICE_ALREADY_EXISTS_FOR_GIVEN_IMEI, 'EN_US', []);
+};
+
 module.exports = {
     deviceAggregatorDashboard,
     listDevicesBusiness,
     insertDeviceBusiness,
+    checkIfDeviceIsPresentBusiness,
     getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness,
     listUnAssignedDevicesBusiness,

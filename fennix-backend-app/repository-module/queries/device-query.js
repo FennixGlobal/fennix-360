@@ -582,10 +582,15 @@ const deviceDetailsByContainerIdQuery = (query) => {
     ]);
 };
 
+const checkIfDeviceIsPresentQuery = (req) => {
+    return deviceAggregator.count({imei:req});
+};
+
 module.exports = {
     getDeviceDetailsForListOfContainersQuery,
     updateDeviceWithContainerIdQuery,
     unlinkDeviceForContainerQuery,
+    checkIfDeviceIsPresentQuery,
     unlinkLocationMasterForContainerQuery,
     listUnAssignedDevicesForContainerQuery,
     userIdDeviceAggregatorQuery,

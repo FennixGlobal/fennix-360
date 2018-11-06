@@ -203,6 +203,13 @@ const statusCodes = {
     },
     900: {
         devMsg: 'Status code is not a number'
+    },
+    260: {
+        devMsg: 'device already exists for given imei', userMsg: {
+            EN_US: 'device already exists for given imei',
+            espMX: 'device already exists for given imei',
+            espLA: 'device already exists for given imei'
+        }
     }
 };
 
