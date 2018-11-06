@@ -334,7 +334,7 @@ const eLocksDataUpdateBusiness = async (data) => {
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
         let finalELockAttrCount = eLockAttributeId + returnArray.gps.length;
         await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(finalELockAttrCount + 1);
-        await returnArray.gps.forEach(async (data) => {
+        await asyncForEach(returnArray.gps, async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
@@ -353,33 +353,43 @@ const eLocksDataUpdateBusiness = async (data) => {
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
         });
+// });
+        //     await returnArray.gps.forEach(async (data) => {
+        //
+        // }
+        let finalLocationId, finalDeviceAttrId;
+        console.log('location list');
+        console.log(locationList);
+        if (arrayNotEmptyCheck(locationList)) {
+            finalLocationId = locationList[locationList.length - 1]['_id'];
+            updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
+            console.log("updating location table for elocks");
+            console.log(updateLoc);
+        }
+        console.log('device attribute list');
+        console.log(deviceAttributesList);
+        if (arrayNotEmptyCheck(deviceAttributesList)) {
+            finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
+            updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+            console.log("updating device table for elocks");
+            console.log(updateDevice);
+        }
+        masterData = {
+            ...masterData,
+            locationId: finalLocationId,
+            eLockAttributeId: finalDeviceAttrId
+        };
     }
-    let finalLocationId, finalDeviceAttrId;
-    console.log('location list');
-    console.log(locationList);
-    if (arrayNotEmptyCheck(locationList)) {
-        finalLocationId = locationList[locationList.length - 1]['_id'];
-        updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
-        console.log("updating location table for elocks");
-        console.log(updateLoc);
-    }
-    console.log('device attribute list');
-    console.log(deviceAttributesList);
-    if (arrayNotEmptyCheck(deviceAttributesList)) {
-        finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
-        updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
-        console.log("updating device table for elocks");
-        console.log(updateDevice);
-    }
-    masterData = {
-        ...masterData,
-        locationId: finalLocationId,
-        eLockAttributeId: finalDeviceAttrId
-    };
     await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
     console.log(returnString);
     return returnString;
+};
+
+const asyncForEach = async (array, callback) => {
+    for (let index = 0; index < array.length; index++) {
+        await callback(array[index], index, array)
+    }
 };
 
 const degreeConverter = (minuteData, direction) => {
@@ -392,8 +402,6 @@ const degreeConverter = (minuteData, direction) => {
             loc = total;
             locCode = 'W';
         } else {
-            console.log("latitude");
-            console.log(direction);
             loc = direction[1] === 1 ? -1 * total : total;
             locCode = direction[1] === 1 ? 'E' : 'W';
         }
@@ -405,8 +413,6 @@ const degreeConverter = (minuteData, direction) => {
             loc = total;
             locCode = 'N';
         } else {
-            console.log("longitude");
-            console.log(direction);
             loc = direction[2] === 1 ? total : -1 * total;
             locCode = direction[2] === 1 ? 'N' : 'S';
         }
