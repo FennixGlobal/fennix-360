@@ -400,6 +400,8 @@ const degreeConverter = (minuteData, direction) => {
             locCode = direction[2] === 1 ? 'N' : 'S';
         }
     }
+    console.log('location');
+    console.log(loc);
     return {loc, locCode};
 };
 
