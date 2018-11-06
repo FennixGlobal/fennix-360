@@ -311,7 +311,7 @@ const eLockBatteryPercentCalculator = (hexValue) => {
         batteryPercent = decimalValue;
     }
     return batteryPercent;
-}
+};
 const eLocksDataUpdateBusiness = async (data) => {
     let returnString = '', updateLoc, deviceId, containerId, updateDevice, returnArray, locationList = [],
         deviceAttributesList = [], masterData = {},
@@ -338,8 +338,6 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
-            // console.log('+++++++++++++%%%%dataSplitterResponse  inSide%%%+++++++++++++');
-            // console.log(dataSplitterResponse);
             if (notNullCheck(dataSplitterResponse['location'])) {
                 locationList.push(dataSplitterResponse['location']);
             }
@@ -351,9 +349,6 @@ const eLocksDataUpdateBusiness = async (data) => {
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
         });
-        console.log('+++++++++++++dataSplitterResponse+++++++++++++');
-        console.log(dataSplitterResponse);
-
     }
     let finalLocationId, finalDeviceAttrId;
     if (arrayNotEmptyCheck(locationList)) {
@@ -382,20 +377,24 @@ const degreeConverter = (minuteData, direction) => {
         minute = (parseFloat('' + minuteData.slice(2, 4) + '.' + minuteData.slice(4, 8))) / 60;
         total = degree + minute;
         if (direction.toString() === '1111' || direction.toString() === '1110') {
-            loc = -1 * total;
+            loc = total;
             locCode = 'W';
         } else {
-            loc = direction[2] === 1 ? total : -1 * total;
-            locCode = direction[2] === 1 ? 'E' : 'W';
+            console.log("latitude");
+            console.log(direction);
+            loc = direction[1] === 1 ? -1 * total : total;
+            locCode = direction[1] === 1 ? 'E' : 'W';
         }
     } else {
         degree = parseInt(minuteData.slice(0, 3));
         minute = (parseFloat('' + minuteData.slice(3, 5) + '.' + minuteData.slice(5, 9))) / 60;
         total = degree + minute;
         if (direction.toString() === '1111' || direction.toString() === '1110') {
-            loc = '' + total + 'N';
+            loc = total;
             locCode = 'N';
         } else {
+            console.log("longitude");
+            console.log(direction);
             loc = direction[2] === 1 ? total : -1 * total;
             locCode = direction[2] === 1 ? 'N' : 'S';
         }
