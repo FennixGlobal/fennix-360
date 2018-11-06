@@ -432,7 +432,7 @@ const dataIterator = (data, obj) => {
     return obj;
 };
 
-const hexToBinary = async (deviceStatus) => {
+const hexToBinary = (deviceStatus) => {
     let ret = '', returnValue = {flag: false, returnArray: ''},
         lookupTable = {
             '0': '0000', '1': '0001', '2': '0010', '3': '0011', '4': '0100',
