@@ -351,11 +351,26 @@ const checkIfDeviceIsPresentBusiness = async (req) => {
     response = await deviceAccessor.checkIfDeviceIsPresentAccessor(parseInt(req.query.imei));
     return response === 0 ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []) : fennixResponse(statusCodeConstants.STATUS_DEVICE_ALREADY_EXISTS_FOR_GIVEN_IMEI, 'EN_US', []);
 };
+const getPhoneNoForContainerBusiness = async (req) => {
+    let request = parseInt(req.query.containerId), response, finalResponse, obj;
+    response = await deviceAccessor.getPhoneNoForContainerAccessor(request);
+    if (arrayNotEmptyCheck(response)) {
+        obj = {
+            phoneNo: response[0]['simcards']['phoneNo'],
+            containerId: response[0]['containerId']
+        };
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', obj);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
 
 module.exports = {
     deviceAggregatorDashboard,
     listDevicesBusiness,
     insertDeviceBusiness,
+    getPhoneNoForContainerBusiness,
     checkIfDeviceIsPresentBusiness,
     getDeviceByDeviceIdBusiness,
     listDeviceTypesBusiness,

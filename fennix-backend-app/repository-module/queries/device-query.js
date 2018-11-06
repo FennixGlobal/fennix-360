@@ -585,12 +585,34 @@ const deviceDetailsByContainerIdQuery = (query) => {
 const checkIfDeviceIsPresentQuery = (req) => {
     return deviceAggregator.count({imei:req});
 };
+const getPhoneNoForContainerQuery = (req) => {
+    return deviceAggregator.aggregate([
+        {
+            $match: {containerId: req, active: true}
+        },
+        {
+            $lookup: {
+                from:"simcards",
+                localField:"simCardId",
+                foreignField:"_id",
+                as :"simcards"
+            }
+        },{$unwind:"$simcards"},
+        {
+            $project: {
+                "containerId":1,
+                "simcards.phoneNo":1
+            }
+        }
+    ])
+};
 
 module.exports = {
     getDeviceDetailsForListOfContainersQuery,
     updateDeviceWithContainerIdQuery,
     unlinkDeviceForContainerQuery,
     checkIfDeviceIsPresentQuery,
+    getPhoneNoForContainerQuery,
     unlinkLocationMasterForContainerQuery,
     listUnAssignedDevicesForContainerQuery,
     userIdDeviceAggregatorQuery,

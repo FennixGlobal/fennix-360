@@ -146,6 +146,12 @@ const checkIfDeviceIsPresentAccessor = async (req) => {
     return returnObj;
 };
 
+const getPhoneNoForContainerAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getPhoneNoForContainerQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     checkIfDeviceIsPresentAccessor,
     unlinkDeviceForContainerAccessor,
@@ -156,6 +162,7 @@ module.exports = {
     listUnAssignedDevicesForContainerAccessor,
     unlinkLocationMasterForBeneficiaryAccessor,
     deviceAggregator,
+    getPhoneNoForContainerAccessor,
     listDeviceTypesAccessor,
     deviceBybeneficiaryQuery,
     getDeviceDetailsForListOfBeneficiariesAccessor,

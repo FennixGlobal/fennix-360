@@ -66,6 +66,14 @@ router.get('/unlockElock', function (req, res) {
     })
 });
 
+router.get('/getPhoneNoForContainer', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.getPhoneNoForContainerBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/getContainerMapHistory', function (req, res) {
     let returnObj;
     returnObj = containerBusiness.getContainerMapHistoryBusiness(req);
