@@ -183,7 +183,7 @@ const getGSMLevel = (gsmStatus) => {
     return gsmLevel;
 };
 
-const dataSplitter = async(data, locationPrimaryId, elockDeviceAttributeId) => {
+const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => {
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
@@ -340,9 +340,9 @@ const eLocksDataUpdateBusiness = async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
-            console.log('data Splitter response');
-            console.log(dataSplitterResponse);
             if (notNullCheck(dataSplitterResponse['location'])) {
+                console.log('data Splitter response');
+                console.log(dataSplitterResponse['location']);
                 locationList.push(dataSplitterResponse['location']);
             }
             masterData = {deviceId: dataSplitterResponse['deviceId'], containerId: dataSplitterResponse['containerId']};
@@ -350,17 +350,23 @@ const eLocksDataUpdateBusiness = async (data) => {
             containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
             returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
             if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
+                console.log('data Splitter response');
+                console.log(dataSplitterResponse['deviceAttributes']);
                 deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
             }
         });
     }
     let finalLocationId, finalDeviceAttrId;
+    console.log('location list');
+    console.log(locationList);
     if (arrayNotEmptyCheck(locationList)) {
         finalLocationId = locationList[locationList.length - 1]['_id'];
         updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
         console.log("updating location table for elocks");
         console.log(updateLoc);
     }
+    console.log('device attribute list');
+    console.log(deviceAttributesList);
     if (arrayNotEmptyCheck(deviceAttributesList)) {
         finalDeviceAttrId = deviceAttributesList[deviceAttributesList.length - 1]['_id'];
         updateDevice = await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
