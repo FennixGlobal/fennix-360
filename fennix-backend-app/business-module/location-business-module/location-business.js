@@ -242,8 +242,6 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         response['deviceAttributes'] = deviceAttributes;
         response['returnString'] = returnString;
     }
-    console.log('response of data splitter');
-    console.log(response);
     return response;
 };
 
@@ -336,7 +334,7 @@ const eLocksDataUpdateBusiness = async (data) => {
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
         let finalELockAttrCount = eLockAttributeId + returnArray.gps.length;
         await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(finalELockAttrCount + 1);
-        returnArray.gps.forEach(async (data) => {
+        await returnArray.gps.forEach(async (data) => {
             locationPrimaryId++;
             eLockAttributeId++;
             dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
