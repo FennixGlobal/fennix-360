@@ -189,7 +189,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         returnString = '',
         location = null, response = {},
         deviceAttributes = null;
-    deviceAlertInfo = await hexToBinary(data.slice(72, 76));
+    deviceAlertInfo = hexToBinary(data.slice(72, 76));
     deviceIMEIId = data.slice(2, 12);//device Id
     protocol = data.slice(12, 14);// 17 being the protocol
     deviceType = data.slice(14, 15);// 1 being rechargeable
