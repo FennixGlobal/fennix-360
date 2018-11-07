@@ -633,12 +633,14 @@ const widgetMapElementCreator = (widgetElementItem) => {
         case 'marker':
             widgetElementData = {
                 ...widgetElementData,
+                elementSubType: widgetElementItem['element_subtype'],
                 markerMappingKey: widgetElementItem['request_mapping_key']
             };
             break;
         case 'marker-details':
             widgetElementData = {
                 ...widgetElementData,
+                elementSubType: widgetElementItem['element_subtype'],
                 markerPrimaryDetails: widgetElementItem['default_key__accent_value'],
                 markerDetailModalId: widgetElementItem['element_modal_id']
             };
@@ -646,6 +648,7 @@ const widgetMapElementCreator = (widgetElementItem) => {
         case 'history':
             widgetElementData = {
                 ...widgetElementData,
+                elementSubType: widgetElementItem['element_subtype'],
                 markerPrimaryDetails: widgetElementItem['default_key__accent_value'],
                 markerDetailModalId: widgetElementItem['element_modal_id']
             };
