@@ -214,7 +214,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
     deviceType = data.slice(14, 15);// 1 being rechargeable
     deviceStatus = data.slice(15, 16);// data type
     datalength = data.slice(16, 20);
-    deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), data.slice(22, 24), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
+    deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
     const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
     if (arrayNotEmptyCheck(containerResponse)) {
         containerId = containerResponse[0]['containerId'];
