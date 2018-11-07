@@ -15,7 +15,7 @@ const server = http.createServer(socketExpress);
 server.listen(3150);
 const socketIO = io(server);
 var bodyParser = require('body-parser');
-
+module.exports = socketIO;
 const net = require('net');
 // const eNet = require('net');
 
