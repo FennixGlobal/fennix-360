@@ -6,16 +6,16 @@ var path = require('path');
 const cors = require('cors');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-// const socket = require('socket.io');
+const socket = require('socket.io');
 const httpExpress = require('express');
 const http = require('http');
-// const io = require('socket.io');
-// const socketExpress = httpExpress();
-// const server = http.createServer(socketExpress);
-// server.listen(3150);
-// const socketIO = io(server);
+const io = require('socket.io');
+const socketExpress = httpExpress();
+const server = http.createServer(socketExpress);
+server.listen(3150);
+const socketIO = io(server);
 var bodyParser = require('body-parser');
-// module.exports = socketIO;
+module.exports = socketIO;
 const net = require('net');
 // const eNet = require('net');
 
@@ -26,16 +26,16 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
 });
 
 const TCPServer = net.createServer();
-// socketIO.on('connection', (sock) => {
-//     let responseData;
-//     console.log('connected to elock');
-//     sock.on('elock_data', async (newSockData) => {
-//         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
-//         if (responseData !== null && responseData !== undefined && responseData !== '') {
-//             socketIO.emit('server_data', responseData);
-//         }
-//     })
-// });
+socketIO.on('connection', (sock) => {
+    let responseData;
+    console.log('connected to elock');
+    sock.on('elock_data', async (newSockData) => {
+        responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
+        if (responseData !== null && responseData !== undefined && responseData !== '') {
+            socketIO.emit('server_data', responseData);
+        }
+    })
+});
 // const ELockServer = eNet.createServer();
 
 TCPServer.listen(3100);
