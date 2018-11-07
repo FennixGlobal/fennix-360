@@ -6,7 +6,7 @@ const elocksLocationSchema = new Schema({
     _id: Number,
     containerId: String,
     deviceId: String,
-    deviceDate: String,
+    deviceDate: Date,
     latitude: SchemaType.Double,
     longitude: SchemaType.Double
 });
