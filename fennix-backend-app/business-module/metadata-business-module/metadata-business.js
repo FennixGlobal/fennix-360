@@ -643,6 +643,13 @@ const widgetMapElementCreator = (widgetElementItem) => {
                 markerDetailModalId: widgetElementItem['element_modal_id']
             };
             break;
+        case 'history':
+            widgetElementData = {
+                ...widgetElementData,
+                markerPrimaryDetails: widgetElementItem['default_key__accent_value'],
+                markerDetailModalId: widgetElementItem['element_modal_id']
+            };
+            break;
     }
     return widgetElementData;
 };

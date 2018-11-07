@@ -5,13 +5,13 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMap
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
-
+const socketIO =require('../../../app');
 const addContainerDetailsBusiness = async (req) => {
     let request = req.body;
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
-    console.log(request);
+    // console.log(request);
     await containerAccessors.addContainerDetailsAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
@@ -148,7 +148,7 @@ const containerMapDataListBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
-    console.log(containerListResponse);
+    // console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
@@ -244,7 +244,8 @@ const containerMapDataListBusiness = async (req) => {
     return returnObj;
 };
 const unlockElockBusiness = async(req)=>{
-    const containerId = req.query.containerId
+    const containerId = req.query.containerId;
+    socketIO.emit('unlock_device',true);
 };
 
 const getContainerMapHistoryBusiness = async (req) => {
