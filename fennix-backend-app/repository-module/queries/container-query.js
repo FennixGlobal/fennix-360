@@ -74,13 +74,14 @@ const updateNextLocationPrimaryKeyQuery = (counter) => {
     });
 };
 
+            // deviceDate: {
+            //     $gte: req.fromDate,
+            //     $lte: req.toDate
+            // },
 const getContainerMapHistoryQuery = (req) => {
     return ElocksLocationModel.aggregate([{
         $match: {
-            deviceDate: {
-                $gte: req.fromDate,
-                $lte: req.toDate
-            }, containerId: req.containerId
+            containerId: req.containerId
         }
     }]);
 };
