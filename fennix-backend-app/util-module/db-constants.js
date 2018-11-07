@@ -116,7 +116,9 @@ const dbTableColMap = {
         field3: 'field3',
         dropboxBasePath: 'dropbox_base_path',
         containerImage: 'container_image',
-        isActive: 'isactive'
+        isActive: 'isactive',
+        startAddress: 'start_address',
+        endAddress: 'end_address'
     },
     accounting: {
         creditCard: 'credit_card',
