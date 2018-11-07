@@ -519,7 +519,10 @@ const listUnAssignedDevicesForContainerQuery = () => {
                     },
                     {
                         "active":true
-                    }
+                    },
+                    {
+                        "beneficiaryId":{$exists:false}
+                     }
                 ]}},
         {
             $lookup: {
