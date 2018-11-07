@@ -5,7 +5,7 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMap
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
-const socketIO =require('../../../app');
+const socketIO = require('../../../app');
 const addContainerDetailsBusiness = async (req) => {
     let request = req.body;
     request.createdDate = new Date();
@@ -53,7 +53,8 @@ const addContainerDetailsBusiness = async (req) => {
 // };
 
 const listContainerBusiness = async (req) => {
-    let returnObj, totalNoOfRecords, userResponse,  finalResponse = {}, containerListResponse, containerIds = [], finalReturnObj = {}, request = {sortBy: req.query.sort, skip:req.query.skip, limit: req.query.limit};
+    let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
+        finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
@@ -140,10 +141,10 @@ const assignContainerBusiness = async (req) => {
 };
 
 const containerMapDataListBusiness = async (req) => {
-    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit:parseInt(req.body.limit)},
+    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
-    userRequest = {query:{userId: req.body.userId, languageId: req.body.languageId}};
+    userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
@@ -243,17 +244,22 @@ const containerMapDataListBusiness = async (req) => {
     }
     return returnObj;
 };
-const unlockElockBusiness = async(req)=>{
+const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
-    socketIO.emit('unlock_device',true);
+    socketIO.emit('unlock_device', true);
 };
 
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date();
     //Note: Hardcoding with 10 days
     fromDate.setDate(toDate.getDate() - 10);
-    let request = {toDate: toDate.toISOString(), fromDate: fromDate.toISOString(), containerId: parseInt(req.query.containerId)}, response, finalResponse = {}, modifiedResponse = [];
+    let request = {
+        toDate: toDate.toISOString(),
+        fromDate: fromDate.toISOString(),
+        containerId: parseInt(req.query.containerId)
+    }, response, finalResponse = {}, modifiedResponse = [];
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
+    console.log(response);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
