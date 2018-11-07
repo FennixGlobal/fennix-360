@@ -82,7 +82,7 @@ const getContainerMapHistoryQuery = (req) => {
     return ElocksLocationModel.aggregate([{
         $match: {
             containerId: req.containerId,
-            locationId:{
+            _id:{
                 $gte:50000
             }
         }
