@@ -9,14 +9,14 @@ var logger = require('morgan');
 // const socket = require('socket.io');
 const httpExpress = require('express');
 const http = require('http');
-const io = require('socket.io');
-const socketExpress = httpExpress();
-const server = http.createServer(socketExpress);
-server.listen(3150);
-const socketIO = io(server);
+// const io = require('socket.io');
+// const socketExpress = httpExpress();
+// const server = http.createServer(socketExpress);
+// server.listen(3150);
+// const socketIO = io(server);
 var bodyParser = require('body-parser');
-module.exports = socketIO;
-const net = require('net');
+// module.exports = socketIO;
+// const net = require('net');
 const eNet = require('net');
 
 const mongoose = require('mongoose');
@@ -25,17 +25,17 @@ mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
     console.log(err);
 });
 
-const TCPServer = net.createServer();
-socketIO.on('connection', (sock) => {
-    let responseData;
-    console.log('connected to elock');
-    sock.on('elock_data', async (newSockData) => {
-        responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
-        if (responseData !== null && responseData !== undefined && responseData !== '') {
-            socketIO.emit('server_data', responseData);
-        }
-    })
-});
+// const TCPServer = net.createServer();
+// socketIO.on('connection', (sock) => {
+//     let responseData;
+//     console.log('connected to elock');
+//     sock.on('elock_data', async (newSockData) => {
+//         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
+//         if (responseData !== null && responseData !== undefined && responseData !== '') {
+//             socketIO.emit('server_data', responseData);
+//         }
+//     })
+// });
 const ELockServer = eNet.createServer();
 
 // TCPServer.listen(3100);
@@ -78,7 +78,6 @@ ELockServer.on("connection", (socket) => {
         console.log('in elocks');
         console.log('error occurred');
         console.log(err.stack);
-        // throw err;
     });
     socket.on('end', () => {
         console.log('end connection');
