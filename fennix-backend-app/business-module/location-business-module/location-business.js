@@ -227,6 +227,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             containerId: containerId,
             deviceId: deviceId,
             _id: locationPrimaryId,
+            deviceUpdatedDate: deviceUpdatedDate,
             latitude: processedLoc.latitude.loc,
             latitudeDirection: processedLoc.latitude.locCode,
             longitude: processedLoc.longitude.loc,
