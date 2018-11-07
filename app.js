@@ -17,7 +17,7 @@ const socketIO = io(server);
 var bodyParser = require('body-parser');
 module.exports = socketIO;
 const net = require('net');
-// const eNet = require('net');
+const eNet = require('net');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
@@ -36,59 +36,58 @@ socketIO.on('connection', (sock) => {
         }
     })
 });
-// const ELockServer = eNet.createServer();
+const ELockServer = eNet.createServer();
 
-TCPServer.listen(3100);
-// ELockServer.listen(3150);
+// TCPServer.listen(3100);
+ELockServer.listen(3150);
 
-TCPServer.on("connection", (socket) => {
-    console.log('IN TCP');
-    socket.setEncoding('utf8');
-    console.log('connected');
-    socket.on('data', async (data) => {
-        const returnValue = await locationBusiness.locationUpdateBusiness(data);
-        console.log(returnValue);
-        socket.write(returnValue);
-    });
-    socket.on('error', (err) => {
-        console.log('error occurred');
-        console.log(err);
-    });
-    socket.on('end', () => {
-        console.log('end connection');
-    });
-    socket.on('close', (flag) => {
-        console.log(flag);
-    });
-});
-// socketIO.on("connection")
-// ELockServer.on("connection", (socket) => {
-//     console.log('IN ELock TCP');
-//     socket.setEncoding('hex');
-//     // socket.write('P01');
+// TCPServer.on("connection", (socket) => {
+//     console.log('IN TCP');
+//     socket.setEncoding('utf8');
 //     console.log('connected');
 //     socket.on('data', async (data) => {
-//
+//         const returnValue = await locationBusiness.locationUpdateBusiness(data);
 //         console.log(returnValue);
-//         if (returnValue) {
-//             socket.write('P35');
-//         }
-//         console.log(data);
+//         socket.write(returnValue);
 //     });
 //     socket.on('error', (err) => {
-//         console.log('in elocks');
 //         console.log('error occurred');
-//         console.log(err.stack);
-//         // throw err;
+//         console.log(err);
 //     });
 //     socket.on('end', () => {
 //         console.log('end connection');
 //     });
 //     socket.on('close', (flag) => {
-//         console.log('socket closed due to error');
 //         console.log(flag);
 //     });
 // });
+// socketIO.on("connection")
+ELockServer.on("connection", (socket) => {
+    console.log('IN ELock TCP');
+    socket.setEncoding('hex');
+    // socket.write('P01');
+    console.log('connected');
+    socket.on('data', async (data) => {
+        // console.log(returnValue);
+        // if (returnValue) {
+        //     socket.write('P35');
+        // }
+        console.log(data);
+    });
+    socket.on('error', (err) => {
+        console.log('in elocks');
+        console.log('error occurred');
+        console.log(err.stack);
+        // throw err;
+    });
+    socket.on('end', () => {
+        console.log('end connection');
+    });
+    socket.on('close', (flag) => {
+        console.log('socket closed due to error');
+        console.log(flag);
+    });
+});
 
 var carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
 var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
