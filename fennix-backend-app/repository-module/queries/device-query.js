@@ -447,12 +447,17 @@ const getDeviceDetailsForListOfContainersQuery = (query) => {
             "deviceType.name": 1
         });
 };
+
 const updateDeviceWithContainerIdQuery = async (req) => {
     console.log(req);
     return deviceAggregator.update({_id: req.deviceId},
         {
             $set : {
-                containerId: req.containerId
+                containerId: req.containerId,
+                'startAddress.latitude' : req.startAddress['latitude'],
+                'startAddress.longitude' : req.startAddress['longitude'],
+                'endAddress.latitude' : req.endAddress['latitude'],
+                'endAddress.longitude' : req.endAddress['longitude']
             }
         }).then(doc => {
         if (!doc) {

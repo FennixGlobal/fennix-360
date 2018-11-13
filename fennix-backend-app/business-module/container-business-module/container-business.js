@@ -125,20 +125,20 @@ const deactivateContainerBusiness = async (req) => {
     }
     return finalResponse;
 };
-
-const assignContainerBusiness = async (req) => {
-    let request, finalResponse;
-    req.body.startDate = new Date();
-    req.body.deviceAssignedBy = req.body.userId;
-    await containerAccessors.updateContainerAccessor(req.body);
-    request = {
-        containerId: parseInt(req.body.containerId, 10),
-        deviceId: parseInt(req.body.deviceId, 10)
-    };
-    await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
-    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
-    return finalResponse;
-};
+//
+// const assignContainerBusiness = async (req) => {
+//     let request, finalResponse;
+//     req.body.startDate = new Date();
+//     req.body.deviceAssignedBy = req.body.userId;
+//     await containerAccessors.updateContainerAccessor(req.body);
+//     request = {
+//         containerId: parseInt(req.body.containerId, 10),
+//         deviceId: parseInt(req.body.deviceId, 10)
+//     };
+//     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
+//     finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
+//     return finalResponse;
+// };
 
 const containerMapDataListBusiness = async (req) => {
     let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
@@ -248,7 +248,27 @@ const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
     socketIO.emit('unlock_device', true);
 };
-
+const assignContainerBusiness = async (req) => {
+    let request, finalResponse;
+    req.body.startDate = new Date();
+    req.body.deviceAssignedBy = req.body.userId;
+    await containerAccessors.updateContainerAccessor(req.body);
+    request = {
+        containerId: parseInt(req.body.containerId, 10),
+        deviceId: parseInt(req.body.deviceId, 10),
+        startAddress: {
+            latitude: req.body.startAddress['lat'],
+            longitude: req.body.startAddress['lng'],
+        },
+        endAddress: {
+            latitude: req.body.endAddress['lat'],
+            longitude: req.body.endAddress['lng'],
+        }
+    };
+    await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
+    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
+    return finalResponse;
+};
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date();
     //Note: Hardcoding with 10 days
@@ -271,6 +291,9 @@ const getContainerMapHistoryBusiness = async (req) => {
             };
             modifiedResponse.push(obj);
         });
+        if (arrayNotEmptyCheck(modifiedResponse)) {
+            modifiedResponse.sort((prev, next) => prev.deviceDate - next.deviceDate);
+        }
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);

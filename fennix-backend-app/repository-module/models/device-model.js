@@ -11,6 +11,28 @@ const locationDeviceAttributeMasterSchema = new Schema({
     deviceId: Number
 });
 
+const deviceSchema = new Schema({
+    _id:  Number,
+    beneficiaryId:  Number,
+    containerId: Number,
+    deviceTypeId:  Number,
+    imei:  Number,
+    simCardId:  Number,
+    active:  Boolean,
+    online: String,
+    centerId:  Number,
+    firmwareVersion:  String,
+    startAddress: {
+        latitude: SchemaType.Double,
+        longitude: SchemaType.Double
+    },
+    endAddress: {
+        latitude: SchemaType.Double,
+        longitude: SchemaType.Double
+    },
+    createdDate:  Date,
+    updatedDate:  Date
+});
 
 const deviceTypeSchema = new Schema({
     _id: Number,
@@ -29,20 +51,20 @@ const deviceTypeSchema = new Schema({
     createdDate: Date,
     updatedDate: Date
 });
-const deviceSchema = new Schema({
-    _id:  Number,
-    beneficiaryId:  Number,
-    containerId: Number,
-    deviceTypeId:  Number,
-    imei:  Number,
-    simCardId:  Number,
-    active:  Boolean,
-    online: String,
-    centerId:  Number,
-    firmwareVersion:  String,
-    createdDate:  Date,
-    updatedDate:  Date
-});
+// const deviceSchema = new Schema({
+//     _id:  Number,
+//     beneficiaryId:  Number,
+//     containerId: Number,
+//     deviceTypeId:  Number,
+//     imei:  Number,
+//     simCardId:  Number,
+//     active:  Boolean,
+//     online: String,
+//     centerId:  Number,
+//     firmwareVersion:  String,
+//     createdDate:  Date,
+//     updatedDate:  Date
+// });
 
 const deviceAttributesSchema = new Schema({
     _id: Number,
