@@ -18,8 +18,8 @@ const statusCodes = {
         userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}
     },
     254: {devMsg: 'Device added Successfully', userMsg: {EN_US: 'Device added Successfully'}},
-    255: {devMsg: 'Sim Card added Successfully', userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}},
-    256: {devMsg: 'Carrier added Successfully', userMsg: {EN_US: 'Beneficiary Document uploaded Successfully'}},
+    255: {devMsg: 'Sim Card added Successfully', userMsg: {EN_US: 'Sim Card added Successfully'}},
+    256: {devMsg: 'Carrier added Successfully', userMsg: {EN_US: 'Carrier added Successfully'}},
     257: {
         devMsg: 'Device is now assigned to the Beneficiary',
         userMsg: {EN_US: 'Device is now assigned to the Beneficiary'}
