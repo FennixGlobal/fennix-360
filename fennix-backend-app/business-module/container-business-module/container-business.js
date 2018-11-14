@@ -270,13 +270,30 @@ const assignContainerBusiness = async (req) => {
     return finalResponse;
 };
 const getContainerMapHistoryBusiness = async (req) => {
-    let toDate = new Date(), fromDate = new Date();
+    let toDate = new Date(), fromDate = new Date(), id;
     //Note: Hardcoding with 10 days
-    fromDate.setDate(toDate.getDate() - 10);
+    if (req.query.dateRange) {
+        switch (parseInt(req.query.dateRange)) {
+            case 2:
+                id = 61000;
+                break;
+            case 1:
+                id = 63000;
+                break;
+            case 5:
+                id = 60000;
+                break;
+        }
+        fromDate.setTime(toDate.getTime() - req.query.dateRange);
+    } else {
+        id = 50000;
+        fromDate.setDate(toDate.getDate() - 10);
+    }
     let request = {
         toDate: toDate.toISOString(),
         fromDate: fromDate.toISOString(),
-        containerId: parseInt(req.query.containerId)
+        containerId: parseInt(req.query.containerId),
+        id: id
     }, response, finalResponse = {}, modifiedResponse = [];
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
     console.log(response);
