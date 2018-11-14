@@ -261,6 +261,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
                 returnString = '(P35)';
             }
+            response = {};
             response['deviceId'] = deviceId;
             response['containerId'] = containerId;
             response['location'] = location;
