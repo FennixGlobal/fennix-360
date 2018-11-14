@@ -295,6 +295,7 @@ const getContainerMapHistoryBusiness = async (req) => {
         containerId: parseInt(req.query.containerId),
         id: id
     }, response, finalResponse = {}, modifiedResponse = [];
+    console.log(request);
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
     console.log(response);
     if (arrayNotEmptyCheck(response)) {

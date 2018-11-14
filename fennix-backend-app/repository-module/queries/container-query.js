@@ -79,11 +79,12 @@ const updateNextLocationPrimaryKeyQuery = (counter) => {
             //     $lte: req.toDate
             // },
 const getContainerMapHistoryQuery = (req) => {
+    console.log(req);
     return ElocksLocationModel.aggregate([{
         $match: {
             containerId: req.containerId,
             _id:{
-                $gte:req.id
+                $gte:parseInt(req.id)
             }
         }
     }]);
