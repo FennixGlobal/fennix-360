@@ -284,7 +284,7 @@ const getContainerMapHistoryBusiness = async (req) => {
                 id = 60000;
                 break;
         }
-        fromDate.setTime(toDate.getTime() - req.query.dateRange);
+        // fromDate.setTime(toDate.getTime() - req.query.dateRange);
     } else {
         id = 50000;
         fromDate.setDate(toDate.getDate() - 10);
