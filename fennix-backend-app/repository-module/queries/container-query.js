@@ -84,7 +84,7 @@ const getContainerMapHistoryQuery = (req) => {
         $match: {
             containerId: req.containerId,
             _id:{
-                $gte:parseInt(req.id)
+                $gte:50000
             }
         }
     }]);
