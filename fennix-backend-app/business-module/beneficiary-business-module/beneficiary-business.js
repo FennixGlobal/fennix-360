@@ -87,28 +87,10 @@ const addBeneficiaryBusiness = async (req) => {
             const newReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
-                // documentId: `PAT${countryCode}J-${fullDate}`,
                 baseFolderPath: fileLocations.folderBasePath
             };
             let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
         }
-        // if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
-        //     primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
-        //     restrictionRequest = {
-        //         _id: primaryKeyResponse['_doc']['counter'],
-        //         beneficiaryId: response.rows[0]['beneficiaryid'],
-        //         restrictionName: request['geoFence']['mapTitle'],
-        //         restrictionType: request['geoFence']['mapRestrictionType'],
-        //         startDate: request['geoFence']['startDate'],
-        //         finishDate: request['geoFence']['finishDate'],
-        //         repeatRules: request['geoFence']['restrictionDays'],
-        //         onAlert: request['geoFence']['onAlert'],
-        //         isActive: true,
-        //         locationDetails: request['geoFence']['mapLocation']
-        //     };
-        //     await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest);
-        // }
-
         if (objectHasPropertyCheck(request, 'geoFence') && arrayNotEmptyCheck(request['geoFence'])) {
             request['geoFence'].forEach((item) => {
                 let obj = {
@@ -147,24 +129,6 @@ const updateBeneficiaryBusiness = async (req) => {
         imageUpload = request.image;
         delete request.image;
     }
-    // if (objectHasPropertyCheck(request, 'geoFence') && notNullCheck(request['geoFence'])) {
-    //     primaryKeyResponse = await restrictionAccessor.fetchLocRestrictionNextPrimaryKeyAccessor();
-    //     restrictionRequest = {
-    //         // primaryKeyResponse['_doc']['counter'],
-    //         beneficiaryId: request['beneficiaryId'],
-    //         restrictionName: request['geoFence']['mapTitle'],
-    //         restrictionType: request['geoFence']['mapRestrictionType'],
-    //         startDate: request['geoFence']['startDate'],
-    //         finishDate: request['geoFence']['finishDate'],
-    //         repeatRules: request['geoFence']['restrictionDays'],
-    //         onAlert: request['geoFence']['onAlert'],
-    //         isActive: true,
-    //         locationDetails: request['geoFence']['mapLocation']
-    //     };
-    //     console.log(restrictionRequest);
-    //     console.log(primaryKeyResponse['_doc']['counter']);
-    //     await restrictionAccessor.addLocationRestrictionAccessor(restrictionRequest, primaryKeyResponse['_doc']['counter']);
-    // }
     if (objectHasPropertyCheck(request, 'geoFence') && arrayNotEmptyCheck(request['geoFence'])) {
         request['geoFence'].forEach((item) => {
             let obj = {

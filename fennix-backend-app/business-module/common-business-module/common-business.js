@@ -170,7 +170,6 @@ const mailModifier = (email, roleName) => {
     urlName = roleMailBody[roleName.toLowerCase()].urlName;
     header = roleMailBody[roleName.toLowerCase()].header;
     returnMailBody = roleHTMLCreator(header, body, urlName, url);
-    // console.log(returnMailBody);
     return returnMailBody;
 };
 getLocationCodeBusiness = async (locationId) => {
@@ -189,14 +188,3 @@ module.exports = {
     getContainerCheckboxMetadataBusiness,
     getDropdownNameFromKeyBusiness
 };
-// await dropBoxItem.filesCreateFolderV2({path: `${folderBasePath}/profile`})
-// && (notNullCheck(profileResponse) && objectHasPropertyCheck(profileResponse, 'metadata') && objectHasPropertyCheck(profileResponse['metadata'], 'path_lower')
-// fileFormat = imageUpload.match(/:(.*?);/)[1].split('/')[1];
-// imageUpload = dataURLtoFile(imageUpload);
-// const fileName = `${folderName}.${fileFormat}`;
-// let imageUploadResponse = await dropBoxItem.filesUpload({
-//     path: `${profileResponse['metadata']['path_lower']}/${fileName}`,
-//     contents: imageUpload
-// }).catch((err) => {
-//     console.log(err)
-// });

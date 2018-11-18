@@ -56,7 +56,7 @@ const deviceDetailsByBeneficiaryId = (query) => {
                 foreignField: "_id",
                 as: "device"
             }
-         },
+        },
         {$unwind: "$device"}
     ]);
 };
@@ -84,10 +84,10 @@ const unlinkLocationMasterForBeneficiaryQuery = async (req) => {
             beneficiaryId: req
         },
         {
-            $unset: {beneficiaryId:1}
+            $unset: {beneficiaryId: 1}
         },
         {
-            multi:true
+            multi: true
         }).then(doc => {
         if (!doc) {
             console.log('error');
@@ -105,20 +105,20 @@ const getContainerIdByImeiQuery = (req) => {
     return deviceAggregator.find({
         $and: [
             {
-                imei:req
+                imei: req
             },
             {
-                active:true
+                active: true
             },
             {
-                containerId:{
-                    $exists:true
+                containerId: {
+                    $exists: true
                 }
             },
             {
-                $or:[
+                $or: [
                     {
-                        beneficiaryId:null
+                        beneficiaryId: null
                     },
                     {
                         beneficiaryId: {
@@ -138,7 +138,7 @@ const listDevicesQuery = (req) => {
             }
         },
         {$sort: {"createdDate": -1}},
-        {$skip: req.skip}, {$limit:req.limit},
+        {$skip: req.skip}, {$limit: req.limit},
         {
             $lookup: {
                 from: "deviceTypes",
@@ -190,10 +190,10 @@ const unlinkDeviceForBeneficiaryQuery = async (req) => {
             $and: [{beneficiaryId: req}, {active: true}]
         },
         {
-            $unset: {beneficiaryId:1}
+            $unset: {beneficiaryId: 1}
         },
         {
-            multi:true
+            multi: true
         }).then(doc => {
         if (!doc) {
             console.log('error');
@@ -204,7 +204,7 @@ const unlinkDeviceForBeneficiaryQuery = async (req) => {
 };
 
 const getTotalNoOfDevicesQuery = (query) => {
-    return deviceAggregator.count({centerId: {$in : query}});
+    return deviceAggregator.count({centerId: {$in: query}});
 };
 
 const updateDeviceAttributeQuery = (req) => {
@@ -215,7 +215,7 @@ const updateDeviceAttributeQuery = (req) => {
 };
 
 const getDeviceAttributeCounterQuery = () => {
-    return DeviceAttributesModelCounter.findOneAndUpdate({}, {$inc:{counter:1}});
+    return DeviceAttributesModelCounter.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 
 // const updateDeviceCounterQuery = (req) => {
@@ -287,47 +287,51 @@ const insertDeviceQuery = (req) => {
 const listUnAssignedDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
-            $match :{
-                $and : [
+            $match: {
+                $and: [
                     {
-                        $or : [
+                        $or: [
                             {
-                                "beneficiaryId": { $eq:null }
+                                "beneficiaryId": {$eq: null}
                             },
                             {
-                                "beneficiaryId": { $eq:0 }
+                                "beneficiaryId": {$eq: 0}
                             },
-                            {"beneficiaryId":{$exists:false}}
+                            {"beneficiaryId": {$exists: false}}
                         ]
                     },
                     {
-                        "active":true
+                        "active": true
                     },
                     {
                         "centerId": req.centerId
                     }
-                ]}},
+                ]
+            }
+        },
         {
             $lookup: {
                 from: "deviceTypes",
                 localField: "deviceTypeId",
                 foreignField: "_id",
-                as : "deviceTypes"
+                as: "deviceTypes"
             }
-        },{$unwind: "$deviceTypes"},
-        {$match: {"deviceTypes.name":{$in:["Celular","Grillete"]}}},
-        {$lookup: {
-                from:"simcards",
-                localField:"simCardId",
-                foreignField:"_id",
+        }, {$unwind: "$deviceTypes"},
+        {$match: {"deviceTypes.name": {$in: ["Celular", "Grillete"]}}},
+        {
+            $lookup: {
+                from: "simcards",
+                localField: "simCardId",
+                foreignField: "_id",
                 as: "simcards"
-            }},{$unwind:"$simcards"},
+            }
+        }, {$unwind: "$simcards"},
         {
             $project: {
-                "imei":1,
-                "deviceTypes.name":1,
-                "simcards.phoneNo":1,
-                "active":1
+                "imei": 1,
+                "deviceTypes.name": 1,
+                "simcards.phoneNo": 1,
+                "active": 1
             }
         }
     ]);
@@ -386,12 +390,12 @@ const getDeviceDetailsByDeviceIdQuery = (req) => {
     ])
 };
 const fetchNextPrimaryKeyQuery = () => {
-    return DeviceCounter.findOneAndUpdate({}, {$inc:{counter:1}});
+    return DeviceCounter.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 const getDeviceDetailsByBeneficiaryIdQuery = (req) => {
     return LocationDeviceAttributeMasterModel.aggregate([
         {
-            $match: {"beneficiaryId":  req.beneficiaryId}
+            $match: {"beneficiaryId": req.beneficiaryId}
         },
         {
             $lookup: {
@@ -418,7 +422,7 @@ const updateDeviceWithBeneficiaryIdQuery = async (req) => {
     console.log(req);
     return deviceAggregator.update({_id: req.deviceId},
         {
-            $set : {
+            $set: {
                 beneficiaryId: req.beneficiaryId
             }
         }).then(doc => {
@@ -449,15 +453,10 @@ const getDeviceDetailsForListOfContainersQuery = (query) => {
 };
 
 const updateDeviceWithContainerIdQuery = async (req) => {
-    console.log(req);
     return deviceAggregator.update({_id: req.deviceId},
         {
-            $set : {
-                containerId: req.containerId,
-                'startAddress.latitude' : req.startAddress['latitude'],
-                'startAddress.longitude' : req.startAddress['longitude'],
-                'endAddress.latitude' : req.endAddress['latitude'],
-                'endAddress.longitude' : req.endAddress['longitude']
+            $set: {
+                containerId: req.containerId
             }
         }).then(doc => {
         if (!doc) {
@@ -474,10 +473,10 @@ const unlinkDeviceForContainerQuery = async (req) => {
             $and: [{containerId: req}, {active: true}]
         },
         {
-            $unset: {containerId:1}
+            $unset: {containerId: 1}
         },
         {
-            multi:true
+            multi: true
         }).then(doc => {
         if (!doc) {
             console.log('error');
@@ -493,10 +492,10 @@ const unlinkLocationMasterForContainerQuery = async (req) => {
             containerId: req
         },
         {
-            $unset: {containerId:1}
+            $unset: {containerId: 1}
         },
         {
-            multi:true
+            multi: true
         }).then(doc => {
         if (!doc) {
             console.log('error');
@@ -509,47 +508,51 @@ const unlinkLocationMasterForContainerQuery = async (req) => {
 const listUnAssignedDevicesForContainerQuery = () => {
     return deviceAggregator.aggregate([
         {
-            $match :{
-                $and : [
+            $match: {
+                $and: [
                     {
-                        $or : [
+                        $or: [
                             {
-                                "containerId": { $eq:null }
+                                "containerId": {$eq: null}
                             },
                             {
-                                "containerId": { $eq:0 }
+                                "containerId": {$eq: 0}
                             },
-                            {"containerId":{$exists:false}}
+                            {"containerId": {$exists: false}}
                         ]
                     },
                     {
-                        "active":true
+                        "active": true
                     },
                     {
-                        "beneficiaryId":{$exists:false}
-                     }
-                ]}},
+                        "beneficiaryId": {$exists: false}
+                    }
+                ]
+            }
+        },
         {
             $lookup: {
                 from: "deviceTypes",
                 localField: "deviceTypeId",
                 foreignField: "_id",
-                as : "deviceTypes"
+                as: "deviceTypes"
             }
-        },{$unwind: "$deviceTypes"},
-        {$match: {"deviceTypes.name":{$in:["E-Locks"]}}},
-        {$lookup: {
-                from:"simcards",
-                localField:"simCardId",
-                foreignField:"_id",
+        }, {$unwind: "$deviceTypes"},
+        {$match: {"deviceTypes.name": {$in: ["E-Locks"]}}},
+        {
+            $lookup: {
+                from: "simcards",
+                localField: "simCardId",
+                foreignField: "_id",
                 as: "simcards"
-            }},{$unwind:"$simcards"},
+            }
+        }, {$unwind: "$simcards"},
         {
             $project: {
-                "imei":1,
-                "deviceTypes.name":1,
-                "simcards.phoneNo":1,
-                "active":1
+                "imei": 1,
+                "deviceTypes.name": 1,
+                "simcards.phoneNo": 1,
+                "active": 1
             }
         }
     ]);
@@ -591,7 +594,7 @@ const deviceDetailsByContainerIdQuery = (query) => {
 };
 
 const checkIfDeviceIsPresentQuery = (req) => {
-    return deviceAggregator.count({imei:req});
+    return deviceAggregator.count({imei: req});
 };
 const getPhoneNoForContainerQuery = (req) => {
     return deviceAggregator.aggregate([
@@ -600,16 +603,16 @@ const getPhoneNoForContainerQuery = (req) => {
         },
         {
             $lookup: {
-                from:"simcards",
-                localField:"simCardId",
-                foreignField:"_id",
-                as :"simcards"
+                from: "simcards",
+                localField: "simCardId",
+                foreignField: "_id",
+                as: "simcards"
             }
-        },{$unwind:"$simcards"},
+        }, {$unwind: "$simcards"},
         {
             $project: {
-                "containerId":1,
-                "simcards.phoneNo":1
+                "containerId": 1,
+                "simcards.phoneNo": 1
             }
         }
     ])

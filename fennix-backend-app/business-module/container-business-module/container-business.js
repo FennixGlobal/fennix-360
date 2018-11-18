@@ -6,51 +6,46 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const socketIO = require('../../../app');
+const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
+
+const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
+
 const addContainerDetailsBusiness = async (req) => {
-    let request = req.body;
+    let request = req.body, imageUpload, countryCode, response;
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
-    // console.log(request);
-    await containerAccessors.addContainerDetailsAccessor(request);
+    const date = new Date();
+    const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    if (objectHasPropertyCheck(request, 'containerImage')) {
+        imageUpload = request.containerImage;
+        delete request.containerImage;
+    }
+    // set the container to active if the beneficiary is not active
+    request.isActive = notNullCheck(request.isActive) ? request.isActive : true;
+    // getting country code for the given location id
+    countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
+    countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
+    countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
+    request.documentId = `PAT${countryCode}L-${fullDate}`;
+    response = await containerAccessors.addContainerDetailsAccessor(request);
+    console.log(response);
+    // if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+    //     const folderName = `CONTAINERS_${response.rows[0]['beneficiaryid']}_${fullDate}`;
+    //     const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
+    //     // adding image to the dropbox
+    //     const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
+    //     if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
+    //         const newReq = {
+    //             beneficiaryId: response.rows[0]['beneficiaryid'],
+    //             image: fileLocations.sharePath,
+    //             baseFolderPath: fileLocations.folderBasePath
+    //         };
+    //         // let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
+    //     }
+    // }
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
-
-// const listContainerBusiness = async () => {
-//     let returnObj, totalNoOfRecords, finalResponse = {}, containerListResponse, containerIds = [], finalReturnObj = {};
-//     containerListResponse = await containerAccessors.listContainersAccessor();
-//     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor();
-//     finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
-//     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
-//         containerListResponse.rows.forEach(item => {
-//             finalReturnObj[item['container_id']] = {
-//                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
-//                 containerId: item['container_id'],
-//                 containerType: item['container_type'],
-//                 containerName: item['container_name'],
-//                 companyName: item['company_name'],
-//                 image: item['container_image']
-//             };
-//             containerIds.push(item['container_id']);
-//         });
-//         let deviceDetailsResponse = await deviceAccessors.getDeviceDetailsForListOfContainersAccessor(containerIds);
-//         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
-//             deviceDetailsResponse.forEach(device => {
-//                 finalReturnObj[device['containerId']] = {
-//                     ...finalReturnObj[device['containerId']],
-//                     deviceId: device['_id'],
-//                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-//                     deviceType: objectHasPropertyCheck(device, 'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name'] : 'No Device Type'
-//                 };
-//             });
-//         }
-//         finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
-//     }
-//     return returnObj;
-// };
 
 const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
@@ -149,7 +144,6 @@ const containerMapDataListBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
-    // console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
@@ -170,7 +164,6 @@ const containerMapDataListBusiness = async (req) => {
                 latitude: item.location.latitude
             };
             containerIdListAndDetailObj['containerDetailObj'][item.containerId]['imei'] = item['device']['imei'];
-            // locationObj[item.containerId]['roleId'] = containerIdListAndDetailObj['containerDetailObj'][item.containerId]['roleId'];
             const deviceDetails = {};
             let noOfViolations = 0;
             deviceDetails[item.containerId] = [];
@@ -270,32 +263,12 @@ const assignContainerBusiness = async (req) => {
     return finalResponse;
 };
 const getContainerMapHistoryBusiness = async (req) => {
-    let toDate = new Date(), fromDate = new Date(), id;
-    //Note: Hardcoding with 10 days
-    if (req.query.dateRange) {
-        switch (parseInt(req.query.dateRange)) {
-            case 2:
-                id = 61000;
-                break;
-            case 1:
-                id = 63000;
-                break;
-            case 5:
-                id = 60000;
-                break;
-        }
-        // fromDate.setTime(toDate.getTime() - req.query.dateRange);
-    } else {
-        id = 50000;
-        fromDate.setDate(toDate.getDate() - 10);
-    }
-    console.log(req.query.id);
-    console.log(id);
+    let toDate = new Date(), fromDate = new Date();
+    fromDate.setDate(toDate.getDate() - 10);
     let request = {
         toDate: toDate.toISOString(),
         fromDate: fromDate.toISOString(),
         containerId: parseInt(req.query.containerId),
-        id: id
     }, response, finalResponse = {}, modifiedResponse = [];
     console.log(request);
     response = await containerAccessors.getContainerMapHistoryAccessor(request);

@@ -22,14 +22,6 @@ const deviceSchema = new Schema({
     online: String,
     centerId:  Number,
     firmwareVersion:  String,
-    startAddress: {
-        latitude: SchemaType.Double,
-        longitude: SchemaType.Double
-    },
-    endAddress: {
-        latitude: SchemaType.Double,
-        longitude: SchemaType.Double
-    },
     createdDate:  Date,
     updatedDate:  Date
 });
@@ -51,21 +43,6 @@ const deviceTypeSchema = new Schema({
     createdDate: Date,
     updatedDate: Date
 });
-// const deviceSchema = new Schema({
-//     _id:  Number,
-//     beneficiaryId:  Number,
-//     containerId: Number,
-//     deviceTypeId:  Number,
-//     imei:  Number,
-//     simCardId:  Number,
-//     active:  Boolean,
-//     online: String,
-//     centerId:  Number,
-//     firmwareVersion:  String,
-//     createdDate:  Date,
-//     updatedDate:  Date
-// });
-
 const deviceAttributesSchema = new Schema({
     _id: Number,
     beneficiaryId: Number,
@@ -110,14 +87,6 @@ const deviceCounterSchema = new Schema({
     counter: Number
 });
 
-// const locationDeviceAttributeContainerMasterSchema = new Schema({
-//     _id: Schema.Types.ObjectId,
-//     containerId: Number,
-//     locationId: Number,
-//     deviceAttributeId: Number,
-//     deviceId: Number
-// });
-
 const deviceAggregator = mongoose.model('Device', deviceSchema, 'devices');
 
 const deviceTypeModel = mongoose.model('DeviceType', deviceTypeSchema, 'deviceTypes');
@@ -130,12 +99,9 @@ const devicesModel = mongoose.model('Device');
 
 const DeviceCounter = mongoose.model('DeviceCounter', deviceCounterSchema, 'devicesCounter');
 
-// const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
-
 const LocationDeviceAttributeMasterModel = mongoose.model('LocationDeviceAttribute', locationDeviceAttributeMasterSchema, 'locationDeviceAttributeMaster');
 
 module.exports = {
-    // LocationDeviceAttributeContainerMasterModel,
     deviceAggregator,
     deviceTypeModel,
     devicesModel,

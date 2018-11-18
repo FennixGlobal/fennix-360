@@ -117,8 +117,8 @@ const dbTableColMap = {
         dropboxBasePath: 'dropbox_base_path',
         containerImage: 'container_image',
         isActive: 'isactive',
-        startAddress: 'start_address',
-        endAddress: 'end_address'
+        country: 'country',
+        center: 'center'
     },
     accounting: {
         creditCard: 'credit_card',
@@ -176,7 +176,7 @@ const tableKeyMap = {
     tickets: {key: 'ticketId'},
     family_info: {key: 'family_info_id'},
     accounting: {key: 'accounting_id'},
-    container:{key:'container_id'}
+    container: {key: 'container_id'}
 };
 
 module.exports = {
@@ -184,7 +184,6 @@ module.exports = {
     TABLE_LOCATION,
     TABLE_ROLES,
     TABLE_USERS,
-    // TABLE_CONTAINER,
     TABLE_CONTAINER,
     TABLE_FAMILY_INFO,
     TABLE_ACCOUNTING,

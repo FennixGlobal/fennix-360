@@ -73,23 +73,16 @@ const updateNextLocationPrimaryKeyQuery = (counter) => {
         }
     });
 };
-
-            // deviceDate: {
-            //     $gte: req.fromDate,
-            //     $lte: req.toDate
-            // },
 const getContainerMapHistoryQuery = (req) => {
-    console.log(req);
     return ElocksLocationModel.aggregate([{
         $match: {
-            containerId: req.containerId,
-            _id:{
-                $gte:50000
-            }
+            deviceDate: {
+                $gte: new Date(`${req.fromDate}`),
+                $lte: new Date(`${req.toDate}`)
+            }, containerId: req.containerId
         }
     }]);
 };
-
 const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
     return ElocksDeviceAttributesCounterModel.update({}, {
         counter: counter
@@ -98,6 +91,39 @@ const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
             console.log('error');
         }
     });
+};
+
+const getMasterDumpDateQuery = () => {
+    return ElocksDumpMasterModel.find();
+};
+
+const updateMasterDumpDateQuery = (field, data) => {
+    return ElocksDumpMasterModel.update({}, {
+        $set: {[field]: data}
+    }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        }
+    });
+};
+
+const insertElocksDumpDataQuery = (req) => {
+    return ElocksDumpDataModel.collection.insert(req, function (err, docs) {
+        if (err) {
+            return console.error(err);
+        } else {
+            return "Elocks dump data inserted to collection";
+        }
+    });
+};
+
+//TODO: need to add limit check
+const getSortedDumpDataQuery = () => {
+    return ElocksDumpDataModel.find().sort({"elocksDeviceDate": -1});
+};
+
+const deleteSortedDumpDataQuery = (req) => {
+    return ElocksDumpDataModel.find({_id: {$in: req}}).remove().exec();
 };
 
 module.exports = {
