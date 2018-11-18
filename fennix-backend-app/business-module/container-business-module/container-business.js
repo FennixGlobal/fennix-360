@@ -30,20 +30,21 @@ const addContainerDetailsBusiness = async (req) => {
     request.documentId = `PAT${countryCode}L-${fullDate}`;
     response = await containerAccessors.addContainerDetailsAccessor(request);
     console.log(response);
-    // if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-    //     const folderName = `CONTAINERS_${response.rows[0]['beneficiaryid']}_${fullDate}`;
-    //     const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
-    //     // adding image to the dropbox
-    //     const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
-    //     if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
-    //         const newReq = {
-    //             beneficiaryId: response.rows[0]['beneficiaryid'],
-    //             image: fileLocations.sharePath,
-    //             baseFolderPath: fileLocations.folderBasePath
-    //         };
-    //         // let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
-    //     }
-    // }
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        const folderName = `CONTAINERS_${response.rows[0]['container_id']}_${fullDate}`;
+        const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
+        // adding image to the dropbox
+        const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
+        if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
+            const newReq = {
+                beneficiaryId: response.rows[0]['container_id'],
+                containerImage: fileLocations.sharePath,
+                baseFolderPath: fileLocations.folderBasePath
+            };
+            let imageUpdateForContainerIdResponse = await containerAccessors.updateContainerAccessor(newReq);
+            console.log(imageUpdateForContainerIdResponse);
+        }
+    }
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
 
