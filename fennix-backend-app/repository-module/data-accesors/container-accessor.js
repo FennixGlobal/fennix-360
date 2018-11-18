@@ -91,6 +91,12 @@ const containerDeviceUpdateAccessor = async (data) => {
 //     return returnObj;
 // };
 
+const getContainerDocumentByContainerIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerDocumentByContainerIdQuery);
+    return returnObj;
+};
+
 const containerLocationUpdateAccessor = async (data) => {
     let returnObj;
     returnObj = await containerQueries.insertElocksLocationQuery(data);
@@ -184,6 +190,7 @@ module.exports = {
     insertElocksDumpDataAccessor,
     updateMasterDumpDateAccessor,
     getMasterDumpDateAccessor,
+    getContainerDocumentByContainerIdAccessor,
     getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor
 };

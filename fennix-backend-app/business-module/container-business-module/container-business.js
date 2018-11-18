@@ -122,6 +122,53 @@ const deactivateContainerBusiness = async (req) => {
     return finalResponse;
 };
 
+const uploadBeneficiaryDocumentsBusiness = async (req) => {
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
+    const date = new Date(),
+        fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
+    const request = req.body, postgresReq = [req.body.containerId];
+    beneficiaryResponse = await containerAccessors.getContainerDocumentByContainerIdAccessor(postgresReq);
+    const documentReq = [request.documentType];
+    const documentNameResponse = await getDropdownNameFromKeyBusiness(documentReq);
+    if (objectHasPropertyCheck(documentNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(documentNameResponse.rows)) {
+        documentName = notNullCheck(documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value']) ? documentNameResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropdown_value'] : 'Document';
+    }
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        countryCode = notNullCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code']) ? beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['location_code'] : 'OO';
+        countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
+        if (objectHasPropertyCheck(beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0], 'dropbox_base_path')) {
+            uploadResponse = await uploadToDropboxBusiness(`${beneficiaryResponse[COMMON_CONSTANTS.FENNIX_ROWS][0]['dropbox_base_path']}/${documentName}`, request.document.fileData, request.documentName);
+        } else {
+            let folderName = `CONTAINER_${req.body.beneficiaryId}_${fullDate}`,
+                folderBasePath = `/pat-l/${countryCode}/${folderName}`;
+            createResponse = await createDropboxFolderBusiness(folderBasePath, documentName);
+            if (createResponse) {
+                uploadResponse = await uploadToDropboxBusiness(createResponse.folderLocation, request.document.fileData, request.documentName);
+            }
+        }
+    }
+    if (objectHasPropertyCheck(uploadResponse, 'uploadSuccessFlag') && uploadResponse['uploadSuccessFlag']) {
+        const shareResponse = await shareDropboxLinkBusiness(uploadResponse.docUploadResponse.path_lower, false);
+        const downloadPath = shareResponse.replace('?dl=0', '?dl=1');
+        const fileFormat = request.document.fileType.split('/')[1];
+        const documentObj = {
+            documentId: `container_${req.body.beneficiaryId}_${documentName}_${fullDate}`,
+            documentType: fileFormat,
+            documentSize: request.document.fileSize,
+            documentLink: downloadPath,
+            documentName: request.documentName,
+            documentOriginalName: request.document.fileName,
+            createdDate: new Date(),
+            createdByUser: request.document.createdBy
+        };
+        // dropboxShareResponse = await updateBeneficiaryDocumentPathBusiness(req.body.beneficiaryId, documentName.toLowerCase(), documentObj);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_DOC_UPLOAD_SUCCESS, 'EN_US', []);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const containerMapDataListBusiness = async (req) => {
     let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
@@ -290,6 +337,5 @@ module.exports = {
     unlockElockBusiness,
     getContainerMapHistoryBusiness,
     containerMapDataListBusiness,
-    //delinkContainerBusiness,
-    //listUnassignedELocksBusiness,
+    uploadBeneficiaryDocumentsBusiness
 };

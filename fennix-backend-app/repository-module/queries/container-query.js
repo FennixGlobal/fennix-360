@@ -119,8 +119,10 @@ const deleteSortedDumpDataQuery = (req) => {
     return ElocksDumpDataModel.find({_id: {$in: req}}).remove().exec();
 };
 
+const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
 module.exports = {
     updateNextLocationPrimaryKeyQuery,
+    getContainerDocumentByContainerIdQuery,
     updateNextDeviceAttributesPrimaryKeyQuery,
     addContainerDetailsQuery,
     getContainerForDeviceIdQuery,

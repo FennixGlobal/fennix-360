@@ -60,8 +60,8 @@ const getTimeZoneDetailsBusiness = async () => {
 };
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body, restrictionRequest, countryCode, response, primaryKeyResponse, imageUpload,
-        restrictionRequestList = [], finalRestrictionObj;
+    let request = req.body, countryCode, response, imageUpload, restrictionRequestList = [], finalRestrictionObj,
+        latArray = [], lngArray = [];
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.createdDate = new Date();
@@ -103,11 +103,17 @@ const addBeneficiaryBusiness = async (req) => {
                     isActive: true,
                     locationDetails: item['mapLocation']
                 };
+                item['mapLocation'].forEach((map) => {
+                    latArray.push(map['lat']);
+                    lngArray.push(map['lng']);
+                });
                 restrictionRequestList.push(obj);
             });
             finalRestrictionObj = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
-                restrictions: restrictionRequestList
+                restrictions: restrictionRequestList,
+                latArray: latArray,
+                lngArray: lngArray
             };
             await restrictionAccessor.addLocationRestrictionAccessor(finalRestrictionObj);
         }
@@ -625,7 +631,11 @@ const addDeviceForBeneficiaryBusiness = async (req) => {
 };
 
 const getBeneficiaryMapHistoryBusiness = async (req) => {
-    let request = {toDate: new Date(req.query.toDate).toISOString(), fromDate: new Date(req.query.fromDate).toISOString(), beneficiaryId: parseInt(req.query.beneficiaryId)}, response, finalResponse = {}, modifiedResponse = [];
+    let request = {
+        toDate: new Date(req.query.toDate).toISOString(),
+        fromDate: new Date(req.query.fromDate).toISOString(),
+        beneficiaryId: parseInt(req.query.beneficiaryId)
+    }, response, finalResponse = {}, modifiedResponse = [];
     response = await deviceAccessor.getBeneficiaryIdByImeiAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
