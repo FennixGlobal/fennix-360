@@ -39,7 +39,7 @@ const addContainerDetailsBusiness = async (req) => {
             const newReq = {
                 containerId: response.rows[0]['container_id'],
                 containerImage: fileLocations.sharePath,
-                baseFolderPath: fileLocations.folderBasePath
+                dropboxBasePath: fileLocations.folderBasePath
             };
             let imageUpdateForContainerIdResponse = await containerAccessors.updateContainerAccessor(newReq);
             console.log(imageUpdateForContainerIdResponse);

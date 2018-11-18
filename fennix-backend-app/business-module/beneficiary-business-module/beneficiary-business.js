@@ -241,7 +241,6 @@ const getBenficiaryDocumentDownloadListBusiness = async (req) => {
     returnObj = await beneficiaryAccessor.getBeneficiaryDocumentDownloadListAccessor(beneficiaryId);
     returnObj = arrayNotEmptyCheck(returnObj) ? returnObj[0] : [];
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnObj);
-    // return returnObj;
 };
 
 const updateBeneficiaryDocumentPathBusiness = async (beneficiaryId, categoryName, documentObj) => {
@@ -405,131 +404,6 @@ const beneficiaryMapDataList = async (req) => {
     return returnObj;
 };
 
-// const beneficiaryMapDataList = async (req) => {
-//     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
-//         beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
-//         beneficiaryDevices = {}, beneficiaryListResponse, returnObj;
-//     beneficiaryListResponse = await beneficiaryAccessor.getBeneifciaryIdList(request);
-//     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-//         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
-//         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
-//             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
-//             init.beneficiaryDetailObj[item.beneficiaryid] = {
-//                 beneficiaryId: item['beneficiaryid'],
-//                 firstName: item['firstname'],
-//                 documentId: item['document_id'],
-//                 mobileNo: item['mobileno'],
-//                 image: item['image'],
-//                 emailId: item['emailid'],
-//                 roleName: item['role'],
-//                 beneficiaryRoleId: item['role_id'],
-//                 gender: item['gender']
-//             };
-//             return init;
-//         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-//         beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
-//         beneficiaryDeviceArray.forEach((item) => {
-//             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
-//             locationObj[item.beneficiaryId]['location'] = {
-//                 longitude: item.location.longitude,
-//                 latitude: item.location.latitude
-//             };
-//             beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['imei'] = item['device']['imei'];
-//             locationObj[item.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['roleId'];
-//             const deviceDetails = {};
-//             let noOfViolations = 0;
-//             deviceDetails[item.beneficiaryId] = [];
-//             const GPS = {A: 'Valid', V: 'Invalid'};
-//             const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
-//             if (batteryPercentage['deviceStatus'] === 'violation') {
-//                 noOfViolations += 1;
-//             }
-//             if (item.deviceAttributes.beltStatus) {
-//                 noOfViolations += 1;
-//             }
-//             if (item.deviceAttributes.shellStatus) {
-//                 noOfViolations += 1;
-//             }
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'Battery',
-//                 status: batteryPercentage['deviceStatus'],
-//                 key: 'batteryPercentage',
-//                 icon: 'battery_charging_full',
-//                 value: `${item.deviceAttributes.batteryPercentage}%`
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'Belt',
-//                 key: 'beltStatus',
-//                 icon: 'link',
-//                 status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
-//                 value: item.deviceAttributes.beltStatus === 1 ? 'belt' : 'OK'
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'Shell',
-//                 key: 'shellStatus',
-//                 icon: 'lock',
-//                 status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
-//                 value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'GSM',
-//                 key: 'gmsStatus',
-//                 icon: 'signal_cellular_4_bar',
-//                 status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
-//                 value: item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK'
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'RF Home',
-//                 key: 'rfConnectionStatus',
-//                 icon: 'home',
-//                 status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
-//                 value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'RFID',
-//                 key: 'rfPlugStatus',
-//                 icon: 'rss_feed',
-//                 status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
-//                 value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'SAT',
-//                 key: 'gpsStatus',
-//                 icon: 'gps_fixed',
-//                 status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
-//                 value: GPS[item.deviceAttributes.gpsStatus]
-//             });
-//             deviceDetails[item.beneficiaryId].push({
-//                 text: 'Speed',
-//                 key: 'speed',
-//                 icon: 'directions_run',
-//                 status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
-//                 value: Math.floor(item.deviceAttributes.speed)
-//             });
-//             beneficiaryDevices = {...deviceDetails};
-//             const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-//             const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
-//             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = modifiedDate;
-//             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
-//             beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
-//                 text: 'Number of Violations',
-//                 value: noOfViolations
-//             };
-//             locationObj[item.beneficiaryId]['noOfViolations'] = noOfViolations;
-//             gridData[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]};
-//         });
-//         beneficiaryReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
-//         beneficiaryReturnObj['deviceDetails'] = beneficiaryDevices;
-//         beneficiaryReturnObj['deviceDetailsArray'] = Object.keys(beneficiaryDevices).map((device) => beneficiaryDevices[device]);
-//         beneficiaryReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
-//         beneficiaryReturnObj['markerDetails'] = gridData;
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryReturnObj);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
-//     }
-//     return returnObj;
-// };
-
 const getBeneficiaryDetailsBusiness = async (req) => {
     let request = [req.query.beneficiaryId, req.query.languageId], response, finalResponse;
     response = await beneficiaryAccessor.getBeneficiaryByBeneficiaryIdAccesor(request);
@@ -552,59 +426,6 @@ const getBeneficiaryDetailsBusiness = async (req) => {
     }
     return finalResponse;
 };
-
-// const beneficiaryListByOwnerUserId = async (req) => {
-//     let request = {
-//             userId: req.query.userId,
-//             centerId: req.query.centerId,
-//             skip: req.query.skip,
-//             limit: req.query.limit
-//         }, beneficiaryListResponse, finalReturnObj = {}, returnObj, totalNoOfRecords, beneficiaryIds = [],
-//         finalResponse = {}, userIdList;
-//     // console.log(req);
-//     // console.log(userIdList);
-//     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-//     request.userIdList = userIdList;
-//     beneficiaryListResponse = await beneficiaryAccessor.getBeneficiaryListByOwnerId(request);
-//     totalNoOfRecords = await beneficiaryAccessor.getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(request);
-//     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
-//     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-//         beneficiaryListResponse.rows.forEach(item => {
-//             finalReturnObj[item['beneficiaryid']] = {
-//                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
-//                 beneficiaryId: item['beneficiaryid'],
-//                 beneficiaryRole: item['role_name'],
-//                 beneficiaryRoleId: item['beneficiary_role'],
-//                 beneficiaryGender: item['gender'],
-//                 beneficiaryName: item['full_name'],
-//                 emailId: item['emailid'],
-//                 mobileNo: item['mobileno'],
-//                 image: item['image'],
-//                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
-//                 crimeDetails: item['crime_id'],
-//             };
-//             beneficiaryIds.push(item['beneficiaryid']);
-//         });
-//
-//         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
-//         if (arrayNotEmptyCheck(deviceDetailsResponse)) {
-//             deviceDetailsResponse.forEach(device => {
-//                 finalReturnObj[device['beneficiaryId']] = {
-//                     ...finalReturnObj[device['beneficiaryId']],
-//                     deviceId: device['_id'],
-//                     imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-//                     deviceType: objectHasPropertyCheck(device, 'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name'] : 'No Device Type'
-//                 };
-//             });
-//         }
-//
-//         finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
-//     }
-//     return returnObj;
-// };
 
 const beneficiaryListByOwnerUserId = async (req) => {
     let sortedArray = [], request = {
@@ -676,53 +497,6 @@ const listBeneficiariesForAddTicketBusiness = async (req) => {
     return finalResponse;
 };
 
-// const beneficiaryListByOwnerUserId = async (req) => {
-//     let request = [req.query.userId, req.query.centerId, req.query.skip, req.query.limit], beneficiaryListResponse,
-//         returnObj, totalNoOfRecords, modifiedResponse = [], beneficiaryIds = [], deviceDetailsMap = {},
-//         finalResponse = {}, reqToGetTotalRecords = [req.query.userId, req.query.centerId];
-//     beneficiaryListResponse = await getBeneficiaryListByOwnerId(request);
-//     totalNoOfRecords = await getTotalRecordsBasedOnOwnerUserIdAndCenterAccessor(reqToGetTotalRecords);
-//     finalResponse['totalNoOfRecords'] = totalNoOfRecords.rows[0]['count'];
-//     if (objectHasPropertyCheck(beneficiaryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryListResponse.rows)) {
-//         beneficiaryListResponse.rows.forEach(item => {
-//             beneficiaryIds.push(`${item['beneficiaryid']}`);
-//         });
-//
-//         let deviceDetailsResponse = await getDeviceDetailsForListOfBeneficiariesAccessor(beneficiaryIds);
-//         deviceDetailsResponse.forEach(device => {
-//             const obj = {
-//                 deviceId: device['_id'],
-//                 imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
-//                 deviceType: device['deviceType'][0]['name']
-//             };
-//             deviceDetailsMap[device['beneficiaryId']] = obj;
-//         });
-//
-//         beneficiaryListResponse.rows.forEach(item => {
-//             const res = {
-//                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
-//                 beneficiaryId: item['beneficiaryid'],
-//                 beneficiaryRole: item['role_name'],
-//                 beneficiaryRoleId: item['beneficiary_role'],
-//                 beneficiaryGender: item['gender'],
-//                 beneficiaryName: item['full_name'],
-//                 emailId: item['emailid'],
-//                 mobileNo: item['mobileno'],
-//                 center: objectHasPropertyCheck(item, 'center_name') && notNullCheck(item['center_name']) ? item['center_name'] : 'Center Not Assigned',
-//                 crimeDetails: item['crime_id'],
-//                 imei: deviceDetailsMap[item['beneficiaryid']]['imei'],
-//                 deviceType: deviceDetailsMap[item['beneficiaryid']]['deviceType'],
-//                 deviceId: deviceDetailsMap[item['beneficiaryid']]['deviceId']
-//             };
-//             modifiedResponse.push(res);
-//         });
-//         finalResponse['gridData'] = modifiedResponse;
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
-//     } else {
-//         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
-//     }
-//     return returnObj;
-// };
 
 const downloadBeneficiariesBusiness = async (req) => {
     let request = {}, colsKeysResponse, rowsIdsResponse, workbook = new Excel.Workbook(), userIdList,
@@ -835,58 +609,6 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     }
     return finalResponse;
 };
-//
-// const getAllBeneficiaryDetailsBusiness = async (req) => {
-//     let request = [req.query.beneficiaryId], response, modifiedResponse, benResponse, finalResponse;
-//     response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
-//     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-//         benResponse = response.rows[0];
-//         console.log(benResponse);
-//         modifiedResponse = {
-//             beneficiaryId: benResponse['beneficiaryid'],
-//             firstName: benResponse['firstname'],
-//             middleName: benResponse['middle_name'],
-//             lastName: benResponse['first_last_name'],
-//             secondName: benResponse['second_last_name'],
-//             role: benResponse['beneficiary_role'],
-//             gender: benResponse['gender'],
-//             image: benResponse['image'],
-//             emailId: benResponse['emailid'],
-//             mobileNo: benResponse['mobileno'],
-//             dob: benResponse['dob'],
-//             address: benResponse['address1'],
-//             crimeId: benResponse['crime_id'],
-//             hasHouseArrest: benResponse['hashousearrest'],
-//             weight: benResponse['weight'],
-//             height: benResponse['height'],
-//             eyeColor: benResponse['eye_color'],
-//             hairColor: benResponse['hair_color'],
-//             scar: benResponse['scars_marks_tatoos'],
-//             riskId: benResponse['risk_id'],
-//             ethnicityId: benResponse['ethnicity_id'],
-//             zipCode: benResponse['postal_code'],
-//             center: benResponse['center_id'],
-//             operatorId: benResponse['owner_user_id'],
-//             isActive: benResponse['isactive'],
-//             comments: benResponse['comments'],
-//             timeZone: benResponse['time_zone'],
-//             languageId: benResponse['language_id'],
-//             whatsAppNo: benResponse['whatsapp_number'],
-//             sentenceLawyerId: benResponse['lawyer_id'],
-//             sentenceTutorId: benResponse['tutor_id'],
-//             sentenceDistrictAttorney: benResponse['district_attorney'],
-//             sentenceJudge: benResponse['judge'],
-//             sentenceCourtHouse: benResponse['court_house'],
-//             sentenceCountry: benResponse['sentence_country'],
-//             sentenceCity: benResponse['sentence_city'],
-//             country: benResponse['location_3']
-//         };
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-//     } else {
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARY_FOR_ID, 'EN_US', []);
-//     }
-//     return finalResponse;
-// };
 
 const addDeviceForBeneficiaryBusiness = async (req) => {
     let request, finalResponse;
