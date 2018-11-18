@@ -37,7 +37,7 @@ const addContainerDetailsBusiness = async (req) => {
         const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
         if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
             const newReq = {
-                beneficiaryId: response.rows[0]['container_id'],
+                containerId: response.rows[0]['container_id'],
                 containerImage: fileLocations.sharePath,
                 baseFolderPath: fileLocations.folderBasePath
             };

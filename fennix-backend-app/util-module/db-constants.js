@@ -118,7 +118,9 @@ const dbTableColMap = {
         containerImage: 'container_image',
         isActive: 'isactive',
         country: 'country',
-        center: 'center'
+        center: 'center',
+        documentId: 'document_id',
+        containerId: 'container_id'
     },
     accounting: {
         creditCard: 'credit_card',
