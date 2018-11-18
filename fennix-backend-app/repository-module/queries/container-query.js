@@ -1,15 +1,8 @@
-const {ElocksDeviceAttributeModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
+const {ElocksDeviceAttributeModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel,ElocksDumpDataModel,ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
-
-// const listContainersQuery = 'select * from container where isactive = true';
-//
-// const getTotalNoOfContainersQuery = 'select count(*) from container where isactive = true';
-
 const listContainersQuery = 'select * from container where isactive = true and owner_user_id IN ';
-
 const getTotalNoOfContainersQuery = 'select count(*) from container where isactive = true and owner_user_id IN ';
-
 const listUnassignedContainersQuery = 'select container_id, container_name,container_type,company_name from container where (device_id is null or device_id = 0) and isactive = true';
 const getTotalNoOfContainersForMapQuery = 'select count(*) from container where (device_id is null or device_id = 0) and isactive = true and owner_user_id IN ';
 
@@ -73,26 +66,6 @@ const updateNextLocationPrimaryKeyQuery = (counter) => {
         }
     });
 };
-const getContainerMapHistoryQuery = (req) => {
-    return ElocksLocationModel.aggregate([{
-        $match: {
-            deviceDate: {
-                $gte: new Date(`${req.fromDate}`),
-                $lte: new Date(`${req.toDate}`)
-            }, containerId: req.containerId
-        }
-    }]);
-};
-const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
-    return ElocksDeviceAttributesCounterModel.update({}, {
-        counter: counter
-    }, {upsert: true}).then(doc => {
-        if (!doc) {
-            console.log('error');
-        }
-    });
-};
-
 const getMasterDumpDateQuery = () => {
     return ElocksDumpMasterModel.find();
 };
@@ -113,6 +86,26 @@ const insertElocksDumpDataQuery = (req) => {
             return console.error(err);
         } else {
             return "Elocks dump data inserted to collection";
+        }
+    });
+};
+
+const getContainerMapHistoryQuery = (req) => {
+    return ElocksLocationModel.aggregate([{
+        $match: {
+            deviceDate: {
+                $gte: new Date(`${req.fromDate}`),
+                $lte: new Date(`${req.toDate}`)
+            }, containerId: req.containerId
+        }
+    }]);
+};
+const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
+    return ElocksDeviceAttributesCounterModel.update({}, {
+        counter: counter
+    }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
         }
     });
 };
@@ -139,7 +132,12 @@ module.exports = {
     insertElocksLocationQuery,
     insertElocksDeviceAttributesQuery,
     getTotalNoOfContainersQuery,
+    getSortedDumpDataQuery,
     getContainerMapHistoryQuery,
     listUnassignedContainersQuery,
+    getMasterDumpDateQuery,
+    updateMasterDumpDateQuery,
+    deleteSortedDumpDataQuery,
+    insertElocksDumpDataQuery,
     getTotalNoOfContainersForMapQuery
 };

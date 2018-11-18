@@ -12,12 +12,6 @@ const addContainerDetailsAccessor = async (req) => {
     return returnObj;
 };
 
-// const listContainersAccessor = async () => {
-//     let returnObj;
-//     returnObj = await connectionCheckAndQueryExec([], containerQueries.listContainersQuery);
-//     return returnObj;
-// };
-
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
@@ -70,12 +64,6 @@ const updateContainerAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
-// const getContainerIdListAccessor = async (req) => {
-//     let returnObj, extraQuery = 'order by $1 desc nulls last offset $2 limit $3', finalQuery;
-//     finalQuery = `${containerQueries.listContainersQuery} ${extraQuery}`;
-//     returnObj = await connectionCheckAndQueryExec(req, finalQuery);
-//     return returnObj;
-// };
 
 const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery;
@@ -144,6 +132,36 @@ const updateNextLocationPrimaryKeyAccessor = async (req) => {
     return returnObj;
 };
 
+const getMasterDumpDateAccessor = async () => {
+    let returnObj;
+    returnObj = await containerQueries.getMasterDumpDateQuery();
+    return returnObj;
+};
+
+const updateMasterDumpDateAccessor = async (field, data) => {
+    let returnObj;
+    returnObj = await containerQueries.updateMasterDumpDateQuery(field, data);
+    return returnObj;
+};
+
+const insertElocksDumpDataAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.insertElocksDumpDataQuery(req);
+    return returnObj;
+};
+
+const getSortedDumpDataAccessor = async () => {
+    let returnObj;
+    returnObj = await containerQueries.getSortedDumpDataQuery();
+    return returnObj;
+};
+
+const deleteSortedDumpDataAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.deleteSortedDumpDataQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     updateNextLocationPrimaryKeyAccessor,
     updateNextDeviceAttributesPrimaryKeyAccessor,
@@ -161,6 +179,11 @@ module.exports = {
     // getContainerIdAccessor,
     getContainerForDeviceIdAccessor,
     containerDeviceUpdateAccessor,
+    getSortedDumpDataAccessor,
+    deleteSortedDumpDataAccessor,
+    insertElocksDumpDataAccessor,
+    updateMasterDumpDateAccessor,
+    getMasterDumpDateAccessor,
     getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor
 };
