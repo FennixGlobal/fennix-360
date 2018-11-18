@@ -121,20 +121,6 @@ const deactivateContainerBusiness = async (req) => {
     }
     return finalResponse;
 };
-//
-// const assignContainerBusiness = async (req) => {
-//     let request, finalResponse;
-//     req.body.startDate = new Date();
-//     req.body.deviceAssignedBy = req.body.userId;
-//     await containerAccessors.updateContainerAccessor(req.body);
-//     request = {
-//         containerId: parseInt(req.body.containerId, 10),
-//         deviceId: parseInt(req.body.deviceId, 10)
-//     };
-//     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
-//     finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
-//     return finalResponse;
-// };
 
 const containerMapDataListBusiness = async (req) => {
     let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
