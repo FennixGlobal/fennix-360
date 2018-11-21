@@ -1,7 +1,6 @@
 const {Client} = require('pg');
 const {statusCodes} = require('../status-message-constants');
 const {postgresDBDev, postgresDBLocal, postgresSofiaDev} = require('../connection-constants');
-const postgresClient = new Client(postgresSofiaDev);
 
 const fennixResponse = (status, language, data) => {
     let returnObj = {};
@@ -19,6 +18,7 @@ const fennixResponse = (status, language, data) => {
 };
 
 const connectionCheckAndQueryExec = async (req, query) => {
+    const postgresClient = new Client(postgresSofiaDev);
     let returnObj;
     await postgresClient.connect();
     returnObj = await postgresClient.query(query, req);
