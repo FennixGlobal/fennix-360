@@ -36,6 +36,12 @@ const getContainerMapHistoryAccessor = async (req) => {
     return returnObj;
 };
 
+const getActiveTripDetailsByContainerIdAccessor = async (req) => {
+   let returnObj;
+   returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
+   return returnObj;
+};
+
 const getTotalNoOfContainersForMapAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersForMapQuery, false);
@@ -205,5 +211,6 @@ module.exports = {
     getMasterDumpDateAccessor,
     getContainerDocumentByContainerIdAccessor,
     getContainerMapHistoryAccessor,
-    getTotalNoOfContainersForMapAccessor
+    getTotalNoOfContainersForMapAccessor,
+    getActiveTripDetailsByContainerIdAccessor
 };

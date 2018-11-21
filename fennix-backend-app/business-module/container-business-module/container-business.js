@@ -328,38 +328,41 @@ const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
     socketIO.emit('unlock_device', true);
 };
-// const assignContainerBusiness = async (req) => {
-//     let request, finalResponse;
-//     req.body.startDate = new Date();
-//     req.body.deviceAssignedBy = req.body.userId;
-//     await containerAccessors.updateContainerAccessor(req.body);
-//     request = {
-//         containerId: parseInt(req.body.containerId, 10),
-//         deviceId: parseInt(req.body.deviceId, 10),
-//         startAddress: {
-//             latitude: req.body.startAddress['lat'],
-//             longitude: req.body.startAddress['lng'],
-//         },
-//         endAddress: {
-//             latitude: req.body.endAddress['lat'],
-//             longitude: req.body.endAddress['lng'],
-//         }
-//     };
-//     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
-//     finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
-//     return finalResponse;
-// };
 const getContainerMapHistoryBusiness = async (req) => {
-    let toDate = new Date(), fromDate = new Date();
-    fromDate.setDate(toDate.getDate() - 10);
-    let request = {
+    let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
+        finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse,historyDetails;
+    //Note: Hard coding with 10 days
+    if (notNullCheck(req.query.dateRange)) {
+        switch (req.query.dateRange) {
+            case '1hr':
+                fromDate.setDate(toDate.getTime() - 1);
+                break;
+            case '2hr':
+                fromDate.setDate(toDate.getTime() - 2);
+                break;
+            case '5hr':
+                fromDate.setDate(toDate.getTime() - 5);
+                break;
+            case '1day':
+                fromDate.setDate(toDate.getDate() - 1);
+                break;
+            case '2day':
+                fromDate.setDate(toDate.getDate() - 2);
+                break;
+            case '7day':
+                fromDate.setDate(toDate.getDate() - 7);
+                break;
+        }
+    } else {
+        fromDate.setDate(toDate.getDate() - 10);
+    }
+    request = {
         toDate: toDate.toISOString(),
         fromDate: fromDate.toISOString(),
-        containerId: parseInt(req.query.containerId),
-    }, response, finalResponse = {}, modifiedResponse = [];
-    console.log(request);
+        containerId: parseInt(req.query.containerId)
+    };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
-    console.log(response);
+    tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
@@ -369,17 +372,59 @@ const getContainerMapHistoryBusiness = async (req) => {
                 deviceDate: item['deviceDate'],
                 locationId: item['_id']
             };
-            modifiedResponse.push(obj);
+            mapResponseArray.push(obj);
         });
-        if (arrayNotEmptyCheck(modifiedResponse)) {
-            modifiedResponse.sort((prev, next) => prev.deviceDate - next.deviceDate);
+        if (arrayNotEmptyCheck(tripResponse)) {
+            startAddress = tripResponse[0]['startAddress'];
+            endAddress = tripResponse[0]['endAddress'];
+            historyDetails = tripResponse[0];
+            geoFence = {
+                lat:tripResponse[0]['latArray'],
+                lng:tripResponse[0]['lngArray']
+            };
         }
+        modifiedResponse = {
+            startAddress,
+            endAddress,
+            geoFence,
+            historyDetails,
+            mapHistory: mapResponseArray
+        };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
+// const getContainerMapHistoryBusiness = async (req) => {
+//     let toDate = new Date(), fromDate = new Date();
+//     fromDate.setDate(toDate.getDate() - 10);
+//     let request = {
+//         toDate: toDate.toISOString(),
+//         fromDate: fromDate.toISOString(),
+//         containerId: parseInt(req.query.containerId),
+//     }, response, finalResponse = {}, modifiedResponse = [];
+//     response = await containerAccessors.getContainerMapHistoryAccessor(request);
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let obj = {
+//                 containerId: item['containerId'],
+//                 latitude: item['latitude'],
+//                 longitude: item['longitude'],
+//                 deviceDate: item['deviceDate'],
+//                 locationId: item['_id']
+//             };
+//             modifiedResponse.push(obj);
+//         });
+//         if (arrayNotEmptyCheck(modifiedResponse)) {
+//             modifiedResponse.sort((prev, next) => prev.deviceDate - next.deviceDate);
+//         }
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 module.exports = {
     addContainerDetailsBusiness,

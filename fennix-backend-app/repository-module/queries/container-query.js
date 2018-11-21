@@ -1,4 +1,4 @@
-const {ElocksDeviceAttributeModel,ElocksTripDataModel,ElocksTripCounterModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel,ElocksDumpDataModel,ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
+const {ElocksDeviceAttributeModel, ElocksTripDataModel, ElocksTripCounterModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel, ElocksDumpDataModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
 const listContainersQuery = 'select * from container where isactive = true and owner_user_id IN ';
@@ -90,16 +90,36 @@ const insertElocksDumpDataQuery = (req) => {
     });
 };
 
-const getContainerMapHistoryQuery = (req) => {
-    return ElocksLocationModel.aggregate([{
-        $match: {
-            deviceDate: {
-                $gte: new Date(`${req.fromDate}`),
-                $lte: new Date(`${req.toDate}`)
-            }, containerId: req.containerId
-        }
-    }]);
+const getActiveTripDetailsByContainerIdQuery = (req) => {
+    return ElocksTripDataModel.find({
+       containerId: req.containerId,
+       isTripActive: true
+    });
 };
+
+const getContainerMapHistoryQuery = (req) => {
+    return ElocksLocationModel.aggregate([
+        {
+            $match: {
+                deviceDate: {
+                    $gte: new Date(`${req.fromDate}`),
+                    $lte: new Date(`${req.toDate}`)
+                }, containerId: req.containerId
+            }
+        }
+        // ,
+        // {
+        //     $lookup: {
+        //         from: 'devices',
+        //         localField: 'deviceId',
+        //         foreignField: '_id',
+        //         as: 'devices'
+        //     }
+        // },
+        // {$unwind: '$devices'}
+    ]);
+};
+
 const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {
     return ElocksDeviceAttributesCounterModel.update({}, {
         counter: counter
@@ -119,7 +139,7 @@ const deleteSortedDumpDataQuery = (req) => {
     return ElocksDumpDataModel.find({_id: {$in: req}}).remove().exec();
 };
 const fetchNextElockTripPrimaryKeyQuery = () => {
-    return ElocksTripCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
+    return ElocksTripCounterModel.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 
 const insertElockTripDataQuery = (req) => {
@@ -155,5 +175,6 @@ module.exports = {
     updateMasterDumpDateQuery,
     deleteSortedDumpDataQuery,
     insertElocksDumpDataQuery,
-    getTotalNoOfContainersForMapQuery
+    getTotalNoOfContainersForMapQuery,
+    getActiveTripDetailsByContainerIdQuery
 };
