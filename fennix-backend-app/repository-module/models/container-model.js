@@ -46,46 +46,6 @@ const elocksDeviceAttributesCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,
     counter: Number
 });
-const elocksDumpDataSchema = new Schema({
-    containerId: String,
-    elocksDeviceDate: Date,
-    latitude: SchemaType.Double,
-    longitude: SchemaType.Double,
-    deviceId: Number,
-    cellId: String,
-    mcc: Number,
-    lac: String,
-    enableAlarmStatus: Boolean,
-    buzzerStatus: Boolean,
-    vibratorStatus: Boolean,
-    serialNumber: String,
-    hdop: Number,
-    locationId: Number,
-    speed: SchemaType.Double,
-    gpsStatus: String,
-    moveDistance: Number,
-    alarmStatus: String,
-    beltStatus: Number,
-    batteryVoltage: SchemaType.Double,
-    shellStatus: Number,
-    chargeStatus: Number,
-    connectingSession: String,
-    serverDate: Date,
-    course: Number,
-    satelliteNumber: Number,
-    gpsFixedStatus: Number,
-    batteryPercentage: SchemaType.Double,
-    gsmSignal: Number,
-    lowPowerStatus: Number,
-    dataLoggerStatus: Number,
-    stillStatus: Number,
-    rfConnectionStatus: Number,
-    rfgSensorStatus: Number,
-    rfPlugStatus: Number,
-    restrictedAreaStatus: Number,
-    restrictedPersonsStatus: Number,
-    deviceUpdatedDate: Date
-});
 
 const elocksDumpMasterSchema = new Schema({
     masterDate: Date, // default: 1970 -> location master date
@@ -123,6 +83,72 @@ const elocksDeviceTypeSchema = new Schema({
     createdDate: Date,
     updatedDate: Date
 });
+const elockTripDataSchema = new Schema({
+    tripId: Number,
+    containerId: Number,
+    deviceId: Number,
+    startDate: Date,
+    endDate: Date,
+    expectedStartDate: Date,
+    expectedEndDate: Date,
+    isTripActive: Boolean,
+    startAddress: {
+        lat: SchemaType.Double,
+        lng: SchemaType.Double
+    },
+    endAddress: {
+        lat: SchemaType.Double,
+        lng: SchemaType.Double
+    },
+    restrictions: [
+        {
+            restrictionName: String,
+            restrictionType: String,
+            startDate: Date,
+            finishDate: Date,
+            repeatRules: [String],
+            onAlert: Boolean,
+            isActive: Boolean,
+            locationDetails: [
+                {
+                    lat: SchemaType.Double,
+                    lng: SchemaType.Double
+                }
+            ]
+        }
+    ],
+    latArray: [SchemaType.Double],
+    lngArray: [SchemaType.Double]
+});
+
+const elockTripCounterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    counter: Number
+});
+const elocksDumpDataSchema = new Schema({
+    containerId: String,
+    deviceId: Number,
+    locationId: Number,
+    gps:Number,
+    speed: SchemaType.Double,
+    direction: String,
+    mileage: String,
+    gpsQuality: String,
+    vehicleId: String,
+    deviceStatus: String,
+    serverDate: Date,
+    deviceUpdatedDate: Date,
+    batteryPercentage: SchemaType.Double,
+    cellId: String,
+    lac: String,
+    gsmQuality: String,
+    geoFenceAlarm: String,
+    deviceDate: Date,
+    latitude: SchemaType.Double,
+    latitudeDirection: SchemaType.Double,
+    longitude: SchemaType.Double,
+    longitudeDirection: SchemaType.Double
+});
 
 
 const ElocksLocationCounterModel = mongoose.model('ElocksLocationCounter', elocksLocationCounterSchema, 'elocksLocationCounter');
@@ -135,8 +161,12 @@ const ElocksDeviceCounter = mongoose.model('ElocksDeviceCounter', elocksDeviceAt
 const LocationDeviceAttributeContainerMasterModel = mongoose.model('LocationDeviceContainerAttribute', locationDeviceAttributeContainerMasterSchema, 'locationDeviceAttributeContainerMaster');
 const ElocksDumpMasterModel = mongoose.model('ElocksDumpMaster', elocksDumpMasterSchema, 'elocksDumpMaster');
 const ElocksDumpDataModel = mongoose.model('ElocksDumpData', elocksDumpDataSchema, 'elocksDumpData');
+const ElocksTripDataModel = mongoose.model('ElocksTripData', elockTripDataSchema, 'elockTripData');
+const ElocksTripCounterModel = mongoose.model('ElocksTripCounter', elockTripCounterSchema, 'elockTripCounter');
 
 module.exports = {
+    ElocksTripDataModel,
+    ElocksTripCounterModel,
     ElocksLocationModel,
     ElocksDumpMasterModel,
     ElocksDumpDataModel,

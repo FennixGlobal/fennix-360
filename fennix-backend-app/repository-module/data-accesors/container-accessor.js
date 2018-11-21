@@ -167,8 +167,21 @@ const deleteSortedDumpDataAccessor = async (req) => {
     returnObj = await containerQueries.deleteSortedDumpDataQuery(req);
     return returnObj;
 };
+const fetchNextElockTripPrimaryKeyAccessor = async () => {
+    let returnObj;
+    returnObj = await containerQueries.fetchNextElockTripPrimaryKeyQuery();
+    return returnObj;
+};
 
+
+const insertElockTripDataAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.insertElockTripDataQuery(req);
+    return returnObj;
+};
 module.exports = {
+    fetchNextElockTripPrimaryKeyAccessor,
+    insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,
     updateNextDeviceAttributesPrimaryKeyAccessor,
     addContainerDetailsAccessor,

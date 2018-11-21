@@ -123,7 +123,8 @@ const deactivateContainerBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
+        dropboxShareResponse;
     const date = new Date(),
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.containerId];
@@ -169,6 +170,58 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
     return finalResponse;
 };
 
+const assignContainerBusiness = async (req) => {
+    let request, finalResponse, tripRequest, latArray = [], lngArray = [], restrictionRequestList = [],
+        elockTripPrimaryKeyResponse;
+    req.body.startDate = new Date();
+    req.body.deviceAssignedBy = req.body.userId;
+    await containerAccessors.updateContainerAccessor(req.body);
+    elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
+    let elockTripPrimaryId = parseInt(elockTripPrimaryKeyResponse[0]['counter']);
+    request = {
+        containerId: parseInt(req.body.containerId, 10),
+        deviceId: parseInt(req.body.deviceId, 10)
+    };
+    await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
+    tripRequest = {
+        tripId: elockTripPrimaryId,
+        containerId: parseInt(req.body.containerId, 10),
+        deviceId: parseInt(req.body.deviceId, 10),
+        startAddress: req.body.startAddress,
+        endAddress: req.body.endAddress,
+        startDate: req.body.startDate,
+        endDate: req.body.endDate,
+        isTripActive: true
+    };
+    if (objectHasPropertyCheck(req.body, 'geoFence') && arrayNotEmptyCheck(req.body['geoFence'])) {
+        req.body['geoFence'].forEach((item) => {
+            let obj = {
+                restrictionName: item['mapTitle'],
+                restrictionType: item['mapRestrictionType'],
+                startDate: item['startDate'],
+                finishDate: item['finishDate'],
+                repeatRules: item['restrictionDays'],
+                onAlert: item['onAlert'],
+                isActive: true,
+                locationDetails: item['mapLocation']
+            };
+            item['mapLocation'].forEach((map) => {
+                latArray.push(map['lat']);
+                lngArray.push(map['lng']);
+            });
+            restrictionRequestList.push(obj);
+        });
+        tripRequest = {
+            ...tripRequest,
+            restrictions: restrictionRequestList,
+            latArray: latArray,
+            lngArray: lngArray
+        }
+    }
+    await containerAccessors.insertElockTripDataAccessor(tripRequest);
+    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
+    return finalResponse;
+};
 const containerMapDataListBusiness = async (req) => {
     let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
@@ -275,27 +328,27 @@ const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
     socketIO.emit('unlock_device', true);
 };
-const assignContainerBusiness = async (req) => {
-    let request, finalResponse;
-    req.body.startDate = new Date();
-    req.body.deviceAssignedBy = req.body.userId;
-    await containerAccessors.updateContainerAccessor(req.body);
-    request = {
-        containerId: parseInt(req.body.containerId, 10),
-        deviceId: parseInt(req.body.deviceId, 10),
-        startAddress: {
-            latitude: req.body.startAddress['lat'],
-            longitude: req.body.startAddress['lng'],
-        },
-        endAddress: {
-            latitude: req.body.endAddress['lat'],
-            longitude: req.body.endAddress['lng'],
-        }
-    };
-    await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
-    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
-    return finalResponse;
-};
+// const assignContainerBusiness = async (req) => {
+//     let request, finalResponse;
+//     req.body.startDate = new Date();
+//     req.body.deviceAssignedBy = req.body.userId;
+//     await containerAccessors.updateContainerAccessor(req.body);
+//     request = {
+//         containerId: parseInt(req.body.containerId, 10),
+//         deviceId: parseInt(req.body.deviceId, 10),
+//         startAddress: {
+//             latitude: req.body.startAddress['lat'],
+//             longitude: req.body.startAddress['lng'],
+//         },
+//         endAddress: {
+//             latitude: req.body.endAddress['lat'],
+//             longitude: req.body.endAddress['lng'],
+//         }
+//     };
+//     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
+//     finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
+//     return finalResponse;
+// };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date();
     fromDate.setDate(toDate.getDate() - 10);
