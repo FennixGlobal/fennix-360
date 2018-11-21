@@ -98,6 +98,7 @@ const getActiveTripDetailsByContainerIdQuery = (req) => {
 };
 
 const getContainerMapHistoryQuery = (req) => {
+    console.log(req);
     return ElocksLocationModel.find(
         {
             deviceDate: {
