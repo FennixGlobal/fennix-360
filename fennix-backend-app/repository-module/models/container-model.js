@@ -4,8 +4,8 @@ require('mongoose-double')(mongoose);
 let SchemaType = mongoose.Schema.Types;
 const elocksLocationSchema = new Schema({
     _id: Number,
-    containerId: String,
-    deviceId: String,
+    containerId: Number,
+    deviceId: Number,
     deviceDate: Date,
     latitude: SchemaType.Double,
     longitude: SchemaType.Double
