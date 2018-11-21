@@ -367,6 +367,7 @@ const getContainerMapHistoryBusiness = async (req) => {
     };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
     tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
+    console.log(response);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
