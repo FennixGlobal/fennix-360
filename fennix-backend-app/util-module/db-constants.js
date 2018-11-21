@@ -82,7 +82,7 @@ const dbTableColMap = {
         deviceAssignedBy: 'device_assigned_by',
         customsId: 'customs_id',
         appType: 'app_type',
-        appCode: 'app_code
+        appCode: 'app_code'
     },
     family_info: {
         familyPrimaryName: 'primary_name',
