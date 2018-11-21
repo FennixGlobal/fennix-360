@@ -346,10 +346,160 @@ const eLocksDataUpdateBusiness = async (data) => {
     return returnString;
 };
 
-const dumpBusiness = async () => {
-
+//To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
+cron.schedule('* 2 * * *', () => {
+    eLocksDataDumpToMasterInsertBusiness();
+});
+const eLocksDataDumpToMasterInsertBusiness = async () => {
+    let dumpDataResponse, locationList = [], deviceAttributesList = [], sortedDumpIdList = [], masterLocationDeviceAttrObj;
+    dumpDataResponse = await containerAccessor.getSortedDumpDataAccessor();
+    if (arrayNotEmptyCheck(dumpDataResponse)) {
+        const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
+        const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
+        let locationPrimaryId = parseInt(locationPrimaryKeyResponse[0]['counter']) + 1;
+        let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
+        dumpDataResponse.forEach((item) => {
+            let locationObj = {
+                _id: locationPrimaryId,
+                containerId: item['containerId'],
+                deviceId: item['deviceId'],
+                deviceDate: item['deviceDate'],
+                latitude: item['latitude'],
+                latitudeDirection: processedLoc.latitude.locCode,
+                longitude: processedLoc.longitude.loc,
+                longitudeDirection: processedLoc.longitude.locCode,
+            };
+            let deviceAttributesObj = {
+                _id: eLockAttributeId,
+                containerId: item['containerId'],
+                deviceId: item['deviceId'],
+                locationId: locationPrimaryId,
+                gps: item['gps'],
+                speed: item['speed'],
+                direction: item['direction'],
+                mileage: item['mileage'],
+                gpsQuality: item['gpsQuality'],
+                vehicleId: item['vehicleId'],
+                deviceStatus: item['deviceStatus'],
+                serverDate: item['serverDate'],
+                deviceUpdatedDate: item['deviceDate'],
+                batteryPercentage: item['batteryPercentage'],
+                cellId: item['cellId'],
+                lac: item['lac'],
+                gsmQuality: item['gsmQuality'],
+                geoFenceAlarm: item['geoFenceAlarm']
+            };
+            sortedDumpIdList.push(`ObjectId(${item['_id']})`);
+            locationPrimaryId++;
+            eLockAttributeId++;
+            locationList.push(locationObj);
+            deviceAttributesList.push(deviceAttributesObj);
+        });
+        let latestData = locationList.pop();
+        masterLocationDeviceAttrObj = {
+            containerId: latestData['containerId'],
+            deviceId: latestData['deviceId'],
+            locationId: locationPrimaryId,
+            deviceAttributeId: eLockAttributeId,
+        };
+        await containerAccessor.deleteSortedDumpDataAccessor(sortedDumpIdList);
+        await containerAccessor.updateNextLocationPrimaryKeyAccessor(locationPrimaryId);
+        await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(eLockAttributeId);
+        await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterLocationDeviceAttrObj);
+        await containerAccessor.containerLocationUpdateAccessor(locationList);
+        await containerAccessor.containerDeviceAttributesUpdateAccessor(deviceAttributesList);
+    }
 };
 
+const dataSplitterDump = async (data, masterDate) => {
+    let deviceIMEIId, datalength, dumpData, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
+        deviceUpdatedDate,
+        returnString = '',
+        response = {};
+    deviceAlertInfo = hexToBinary(data.slice(72, 76));
+    deviceIMEIId = data.slice(2, 12);//device Id
+    protocol = data.slice(12, 14);// 17 being the protocol
+    deviceType = data.slice(14, 15);// 1 being rechargeable
+    deviceStatus = data.slice(15, 16);// data type
+    datalength = data.slice(16, 20);
+    deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
+    if (deviceUpdatedDate > masterDate) {
+        const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+        if (arrayNotEmptyCheck(containerResponse)) {
+            containerId = containerResponse[0]['containerId'];
+            deviceId = containerResponse[0]['_id'];
+            let processedLoc = {
+                latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+                longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+            };
+            dumpData = {
+                containerId: containerId,
+                deviceId: deviceId,
+                deviceDate: deviceUpdatedDate,
+                latitude: processedLoc.latitude.loc,
+                latitudeDirection: processedLoc.latitude.locCode,
+                longitude: processedLoc.longitude.loc,
+                longitudeDirection: processedLoc.longitude.locCode,
+                gps: data.slice(49, 50),
+                speed: data.slice(50, 52),
+                direction: data.slice(52, 54),
+                mileage: data.slice(54, 62),
+                gpsQuality: data.slice(62, 64),
+                vehicleId: data.slice(64, 72),
+                deviceStatus: deviceAlertInfo.returnValue,
+                serverDate: new Date(),
+                deviceUpdatedDate: deviceUpdatedDate,
+                batteryPercentage: eLockBatteryPercentCalculator(data.slice(76, 78)),
+                cellId: data.slice(78, 82),
+                lac: data.slice(82, 86),
+                gsmQuality: data.slice(86, 88),
+                geoFenceAlarm: data.slice(88, 90)
+            };
+            if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
+                returnString = '(P35)';
+            }
+            response['deviceId'] = deviceId;
+            response['containerId'] = containerId;
+            response['returnString'] = returnString;
+            response['dumpData'] = dumpData;
+        }
+    }
+    return response;
+};
+//This method is used to insert elocks data obtained from device into elocksDumpData collection
+// and updating elocksMasterDump collection with the latest dump date
+const eLocksDataUpdateDumpBusiness = async (data) => {
+    let returnString = '', updateLoc, deviceId, containerId, updateDevice, returnArray,
+        dumpDataList = [], masterDateResponse = {}, masterDate,
+        dataSplitterResponse = null, response;
+    const eLockStatus = data.slice(0, 2);
+    switch (parseInt(eLockStatus, 10)) {
+        case 24:
+            returnArray = await dataIterator(data, null);
+            break;
+        case 28:
+            returnString = 'P45';
+            break;
+    }
+    if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
+        masterDateResponse = await containerAccessor.getMasterDumpDateAccessor();
+        masterDate = arrayNotEmptyCheck(masterDateResponse) ? masterDateResponse[0]['masterDate'] : null;
+        await asyncForEach(returnArray.gps, async (data) => {
+            dataSplitterResponse = await dataSplitterDump(data, masterDate);
+            returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
+            if (notNullCheck(dataSplitterResponse['dumpData'])) {
+                dumpDataList.push(dataSplitterResponse['dumpData']);
+            }
+        });
+        if (arrayNotEmptyCheck(dumpDataList)) {
+            response  = containerAccessor.insertElocksDumpDataAccessor(dumpDataList);
+            let res = containerAccessor.updateMasterDumpDateAccessor('dumpDate', dumpDataList.pop()['deviceDate']);
+        }
+    }
+    console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
+    console.log(returnString);
+    return returnString;
+};
 
 const asyncForEach = async (array, callback) => {
     for (let index = 0; index < array.length; index++) {
