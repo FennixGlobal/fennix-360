@@ -80,7 +80,9 @@ const dbTableColMap = {
         updatedBy: 'updated_by',
         createdBy: 'created_by',
         deviceAssignedBy: 'device_assigned_by',
-        customsId: 'customs_id'
+        customsId: 'customs_id',
+        appType: 'app_type',
+        appCode: 'app_code
     },
     family_info: {
         familyPrimaryName: 'primary_name',
