@@ -79,7 +79,8 @@ const dbTableColMap = {
         deactivatedBy: 'deactivated_by',
         updatedBy: 'updated_by',
         createdBy: 'created_by',
-        deviceAssignedBy: 'device_assigned_by'
+        deviceAssignedBy: 'device_assigned_by',
+        customsId: 'customs_id'
     },
     family_info: {
         familyPrimaryName: 'primary_name',
