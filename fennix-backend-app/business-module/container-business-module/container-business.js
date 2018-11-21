@@ -333,16 +333,15 @@ const getContainerMapHistoryBusiness = async (req) => {
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
     //Note: Hard coding with 10 days
     if (notNullCheck(req.query.dateRange)) {
-        console.log('in if');
         switch (req.query.dateRange) {
             case '1hr':
-                fromDate.setDate(toDate.getTime() - 1);
+                fromDate.setTime(toDate.getTime() - 1);
                 break;
             case '2hr':
-                fromDate.setDate(toDate.getTime() - 2);
+                fromDate.setTime(toDate.getTime() - 2);
                 break;
             case '5hr':
-                fromDate.setDate(toDate.getTime() - 5);
+                fromDate.setTime(toDate.getTime() - 5);
                 break;
             case '1day':
                 fromDate.setDate(toDate.getDate() - 1);
@@ -357,7 +356,6 @@ const getContainerMapHistoryBusiness = async (req) => {
                 fromDate.setDate(toDate.getDate() - 14);
         }
     } else {
-        console.log('in else');
         fromDate.setDate(toDate.getDate() - 14);
     }
     request = {
@@ -367,7 +365,6 @@ const getContainerMapHistoryBusiness = async (req) => {
     };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
     tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
-    console.log(response);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
@@ -401,36 +398,6 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     return finalResponse;
 };
-// const getContainerMapHistoryBusiness = async (req) => {
-//     let toDate = new Date(), fromDate = new Date();
-//     fromDate.setDate(toDate.getDate() - 10);
-//     let request = {
-//         toDate: toDate.toISOString(),
-//         fromDate: fromDate.toISOString(),
-//         containerId: parseInt(req.query.containerId),
-//     }, response, finalResponse = {}, modifiedResponse = [];
-//     response = await containerAccessors.getContainerMapHistoryAccessor(request);
-//     if (arrayNotEmptyCheck(response)) {
-//         response.forEach((item) => {
-//             let obj = {
-//                 containerId: item['containerId'],
-//                 latitude: item['latitude'],
-//                 longitude: item['longitude'],
-//                 deviceDate: item['deviceDate'],
-//                 locationId: item['_id']
-//             };
-//             modifiedResponse.push(obj);
-//         });
-//         if (arrayNotEmptyCheck(modifiedResponse)) {
-//             modifiedResponse.sort((prev, next) => prev.deviceDate - next.deviceDate);
-//         }
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-//     } else {
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
-//     }
-//     return finalResponse;
-// };
-
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
