@@ -4,7 +4,7 @@ const locationAccessor = require('../../repository-module/data-accesors/location
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
 const {deviceValidator} = require('../../util-module/device-validations');
-
+const cron = require('cron');
 
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
@@ -347,8 +347,8 @@ const eLocksDataUpdateBusiness = async (data) => {
 };
 
 //To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
-cron.schedule('* 2 * * *', () => {
-    eLocksDataDumpToMasterInsertBusiness();
+cron.schedule('* 2 * * *', async() => {
+    await eLocksDataDumpToMasterInsertBusiness();
 });
 const eLocksDataDumpToMasterInsertBusiness = async () => {
     let dumpDataResponse, locationList = [], deviceAttributesList = [], sortedDumpIdList = [], masterLocationDeviceAttrObj;
