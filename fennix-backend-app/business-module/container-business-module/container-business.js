@@ -333,6 +333,7 @@ const getContainerMapHistoryBusiness = async (req) => {
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
     //Note: Hard coding with 10 days
     if (notNullCheck(req.query.dateRange)) {
+        console.log('in if');
         switch (req.query.dateRange) {
             case '1hr':
                 fromDate.setDate(toDate.getTime() - 1);
@@ -352,8 +353,11 @@ const getContainerMapHistoryBusiness = async (req) => {
             case '7day':
                 fromDate.setDate(toDate.getDate() - 7);
                 break;
+            default:
+                fromDate.setDate(toDate.getDate() - 14);
         }
     } else {
+        console.log('in else');
         fromDate.setDate(toDate.getDate() - 14);
     }
     request = {
