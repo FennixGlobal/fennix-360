@@ -92,32 +92,20 @@ const insertElocksDumpDataQuery = (req) => {
 
 const getActiveTripDetailsByContainerIdQuery = (req) => {
     return ElocksTripDataModel.find({
-       containerId: req.containerId,
-       isTripActive: true
+        containerId: req.containerId,
+        isTripActive: true
     });
 };
 
 const getContainerMapHistoryQuery = (req) => {
-    return ElocksLocationModel.aggregate([
+    return ElocksLocationModel.find(
         {
-            $match: {
-                deviceDate: {
-                    $gte: new Date(`${req.fromDate}`),
-                    $lte: new Date(`${req.toDate}`)
-                }, containerId: req.containerId
-            }
-        }
-        // ,
-        // {
-        //     $lookup: {
-        //         from: 'devices',
-        //         localField: 'deviceId',
-        //         foreignField: '_id',
-        //         as: 'devices'
-        //     }
-        // },
-        // {$unwind: '$devices'}
-    ]);
+            deviceDate: {
+                $gte: new Date(`${req.fromDate}`),
+                $lte: new Date(`${req.toDate}`)
+            },
+            containerId: req.containerId
+        });
 };
 
 const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {

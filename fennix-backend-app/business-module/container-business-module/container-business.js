@@ -330,7 +330,7 @@ const unlockElockBusiness = async (req) => {
 };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
-        finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse,historyDetails;
+        finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
     //Note: Hard coding with 10 days
     if (notNullCheck(req.query.dateRange)) {
         switch (req.query.dateRange) {
@@ -354,7 +354,7 @@ const getContainerMapHistoryBusiness = async (req) => {
                 break;
         }
     } else {
-        fromDate.setDate(toDate.getDate() - 10);
+        fromDate.setDate(toDate.getDate() - 14);
     }
     request = {
         toDate: toDate.toISOString(),
@@ -379,8 +379,8 @@ const getContainerMapHistoryBusiness = async (req) => {
             endAddress = tripResponse[0]['endAddress'];
             historyDetails = tripResponse[0];
             geoFence = {
-                lat:tripResponse[0]['latArray'],
-                lng:tripResponse[0]['lngArray']
+                lat: tripResponse[0]['latArray'],
+                lng: tripResponse[0]['lngArray']
             };
         }
         modifiedResponse = {
