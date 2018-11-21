@@ -628,7 +628,15 @@ const widgetDetailElementCreator = (widgetElementItem) => {
     return widgetElementData;
 };
 const widgetMapElementCreator = (widgetElementItem) => {
-    let widgetElementData = {};
+    let widgetElementData = {
+        elementColumnId: widgetElementItem['widget_col_count'],
+        attributeId: widgetElementItem['role_card_widget_attribute_id'],
+        elementType: widgetElementItem['element_type'],
+        elementSubType: widgetElementItem['element_subtype'],
+        elementTitle: widgetElementItem['element_title'],
+        valueMappingKey: widgetElementItem['request_mapping_key'],
+        elementWidth: widgetElementItem['attribute_width']
+    };
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'marker':
             widgetElementData = {

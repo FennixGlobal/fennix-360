@@ -345,11 +345,15 @@ const unlinkDeviceForContainerBusiness = async (req) => {
     await deviceAccessor.unlinkLocationMasterForContainerAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
-
+/**
+ * @description Checking if the device is present by checking if the IMEI is Uniques as IMEI must be unique for a device
+ * @param req:IMEI as a part of request query
+ * @return Promise of boolean
+ */
 const checkIfDeviceIsPresentBusiness = async (req) => {
     let response;
     response = await deviceAccessor.checkIfDeviceIsPresentAccessor(parseInt(req.query.imei));
-    return response === 0 ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []) : fennixResponse(statusCodeConstants.STATUS_DEVICE_ALREADY_EXISTS_FOR_GIVEN_IMEI, 'EN_US', []);
+    return response === 0 ? fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', response) : fennixResponse(statusCodeConstants.STATUS_DEVICE_ALREADY_EXISTS_FOR_GIVEN_IMEI, 'EN_US', []);
 };
 const getPhoneNoForContainerBusiness = async (req) => {
     let request = parseInt(req.query.containerId), response, finalResponse, obj;
