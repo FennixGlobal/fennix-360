@@ -664,6 +664,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         fromDate: fromDate.toISOString(),
         beneficiaryId: parseInt(req.query.beneficiaryId)
     };
+    console.log(request);
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
     geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
     if (arrayNotEmptyCheck(historyDetails)) {
