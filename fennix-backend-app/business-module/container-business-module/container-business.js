@@ -177,7 +177,7 @@ const assignContainerBusiness = async (req) => {
     req.body.deviceAssignedBy = req.body.userId;
     await containerAccessors.updateContainerAccessor(req.body);
     elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
-    let elockTripPrimaryId = parseInt(elockTripPrimaryKeyResponse[0]['counter']);
+    let elockTripPrimaryId = parseInt(elockTripPrimaryKeyResponse['_doc']['counter']);
     request = {
         containerId: parseInt(req.body.containerId, 10),
         deviceId: parseInt(req.body.deviceId, 10)
