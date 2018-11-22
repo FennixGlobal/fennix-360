@@ -1,4 +1,4 @@
-const checkUserEmailQuery = 'select  user_id,user_role as role, (select role_name from roles where role_id = u.user_role) as native_user_role, concat(first_name, \' \', last_name) as full_name FROM users where email_id=$1';
+const checkUserEmailQuery = 'select  user_id,user_role as role, (select role_name from roles where role_id = u.user_role) as native_user_role, concat(first_name, \' \', last_name) as full_name FROM users u where email_id=$1';
 
 const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no\n' +
     '    , u.address1\n' +
