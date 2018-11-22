@@ -193,8 +193,8 @@ const assignContainerBusiness = async (req) => {
         endDate: req.body.endDate,
         isTripActive: true
     };
-    if (objectHasPropertyCheck(req.body, 'geoFence') && arrayNotEmptyCheck(req.body['geoFence'])) {
-        req.body['geoFence'].forEach((item) => {
+    if (objectHasPropertyCheck(req.body, 'elockGeoFence') && arrayNotEmptyCheck(req.body['elockGeoFence'])) {
+        req.body['elockGeoFence'].forEach((item) => {
             let obj = {
                 restrictionName: item['mapTitle'],
                 restrictionType: item['mapRestrictionType'],
