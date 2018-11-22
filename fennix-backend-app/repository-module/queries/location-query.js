@@ -36,6 +36,17 @@ const locationCounterQuery = () => {
     return locationCounter.findOneAndUpdate({}, {$inc:{counter:1}});
 };
 
+const getBeneficiaryMapHistoryQuery = (req) => {
+    return locationDetails.find(
+        {
+            deviceDate: {
+                $gte: new Date(`${req.fromDate}`),
+                $lte: new Date(`${req.toDate}`)
+            },
+            beneficiaryId: req.beneficiaryId
+        });
+};
+
 const locationDetailsUpdateQuery = (req) => {
     let location = new locationDetails({
         _id: req._id,
@@ -60,11 +71,6 @@ const selectAllCountriesForMasterAdminQuery = 'select (select localized_text fro
 
 //OPERATOR
 const selectCenterIdsForOperatorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from users where user_id = $1)';
-
-const getBeneficiaryMapHistoryQuery = (req) => {
-    return locationDetails.aggregate([{$match:{deviceDate:{$gte: req.fromDate,
-                $lte: req.toDate}, beneficiaryId: req.beneficiaryId}}]);
-};
 
 //SUPERVISOR
 // const selectCenterIdsForSupervisorQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))';

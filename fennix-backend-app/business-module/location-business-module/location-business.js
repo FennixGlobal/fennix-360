@@ -35,30 +35,6 @@ const processData = (loginString) => {
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), deviceCommandConstants.cmdLoginResponse) : loginString; // '#SB'
     return returnString;
 };
-const getBeneficiaryMapHistoryBusiness = async (req) => {
-    let request = {
-        toDate: new Date(req.query.toDate).toISOString(),
-        fromDate: new Date(req.query.fromDate).toISOString(),
-        beneficiaryId: parseInt(req.query.beneficiaryId)
-    }, response, finalResponse = {}, modifiedResponse = [];
-    response = await deviceAccessor.getBeneficiaryIdByImeiAccessor(request);
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
-            let obj = {
-                beneficiaryId: item['beneficiaryId'],
-                latitude: item['latitude'],
-                longitude: item['longitude'],
-                deviceDate: item['deviceDate'],
-                locationId: item['_id']
-            };
-            modifiedResponse.push(obj);
-        });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_LOCATION_EXISTS_FOR_GIVEN_ID, 'EN_US', []);
-    }
-    return finalResponse;
-};
 
 const processLocation = async (location) => {
     let ticketResponse;
@@ -106,6 +82,7 @@ const processLocation = async (location) => {
         locationObj = {
             longitude: longitude,
             latitude: latitude,
+            speed: ((parseInt(vel.substr(0, 3), 10) + parseFloat(vel.substr(4, 1)) / 10) * NudosToKm).toFixed(2),
             beneficiaryId: parseInt(beneficiaryResponse[0]['beneficiaryId']),
             deviceDate: dateTime
         };
@@ -232,6 +209,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             location = {
                 containerId: containerId,
                 deviceId: deviceId,
+                // TODO add speed logic
+                // speed: data.slice(50, 52),
                 _id: locationPrimaryId,
                 deviceDate: deviceUpdatedDate,
                 latitude: processedLoc.latitude.loc,
@@ -588,6 +567,5 @@ const hexToBinary = (deviceStatus) => {
 
 module.exports = {
     locationUpdateBusiness,
-    eLocksDataUpdateBusiness,
-    getBeneficiaryMapHistoryBusiness
+    eLocksDataUpdateBusiness
 };

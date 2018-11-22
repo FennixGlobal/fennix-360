@@ -7,7 +7,7 @@ const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor}
 const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
-const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const {getCountryCodeByLocationIdAccessor, getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -631,14 +631,43 @@ const addDeviceForBeneficiaryBusiness = async (req) => {
 };
 
 const getBeneficiaryMapHistoryBusiness = async (req) => {
-    let request = {
-        toDate: new Date(req.query.toDate).toISOString(),
-        fromDate: new Date(req.query.fromDate).toISOString(),
+    let toDate = new Date(), fromDate = new Date(), request,
+        finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
+    if (notNullCheck(req.query.dateRange)) {
+        switch (req.query.dateRange) {
+            case '1hr':
+                fromDate.setTime(toDate.getTime() - 1);
+                break;
+            case '2hr':
+                fromDate.setTime(toDate.getTime() - 2);
+                break;
+            case '5hr':
+                fromDate.setTime(toDate.getTime() - 5);
+                break;
+            case '1day':
+                fromDate.setDate(toDate.getDate() - 1);
+                break;
+            case '2day':
+                fromDate.setDate(toDate.getDate() - 2);
+                break;
+            case '7day':
+                fromDate.setDate(toDate.getDate() - 7);
+                break;
+            default:
+                fromDate.setDate(toDate.getDate() - 14);
+        }
+    } else {
+        fromDate.setDate(toDate.getDate() - 14);
+    }
+    request = {
+        toDate: toDate.toISOString(),
+        fromDate: fromDate.toISOString(),
         beneficiaryId: parseInt(req.query.beneficiaryId)
-    }, response, finalResponse = {}, modifiedResponse = [];
-    response = await deviceAccessor.getBeneficiaryIdByImeiAccessor(request);
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
+    };
+    historyDetails = await getBeneficiaryMapHistoryAccessor(request);
+    geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
+    if (arrayNotEmptyCheck(historyDetails)) {
+        historyDetails.forEach((item) => {
             let obj = {
                 beneficiaryId: item['beneficiaryId'],
                 latitude: item['latitude'],
@@ -646,15 +675,24 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
                 deviceDate: item['deviceDate'],
                 locationId: item['_id']
             };
-            modifiedResponse.push(obj);
+            mapResponseArray.push(obj);
         });
+        if (arrayNotEmptyCheck(geoFenceDetails) && objectHasPropertyCheck(geoFenceDetails, 'latArray') && objectHasPropertyCheck(geoFenceDetails, 'lngArray')) {
+            geoFence = {
+                lat: geoFenceDetails[0]['latArray'],
+                lng: geoFenceDetails[0]['lngArray']
+            };
+        }
+        modifiedResponse = {
+            geoFence: geoFence,
+            mapHistory: mapResponseArray
+        };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_LOCATION_EXISTS_FOR_GIVEN_ID, 'EN_US', []);
     }
     return finalResponse;
 };
-
 module.exports = {
     addDeviceForBeneficiaryBusiness,
     beneficiaryAggregatorBusiness,
@@ -670,5 +708,6 @@ module.exports = {
     getAllBeneficiaryDetailsBusiness,
     getBenficiaryDocumentDownloadListBusiness,
     uploadBeneficiaryDocumentsBusiness,
-    getTimeZoneDetailsBusiness
+    getTimeZoneDetailsBusiness,
+    getBeneficiaryMapHistoryBusiness
 };

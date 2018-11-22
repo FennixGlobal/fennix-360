@@ -7,6 +7,7 @@ const elocksLocationSchema = new Schema({
     containerId: Number,
     deviceId: Number,
     deviceDate: Date,
+    speed: SchemaType.Double,
     latitude: SchemaType.Double,
     longitude: SchemaType.Double
 });
@@ -129,7 +130,7 @@ const elocksDumpDataSchema = new Schema({
     containerId: String,
     deviceId: Number,
     locationId: Number,
-    gps:Number,
+    gps: Number,
     speed: SchemaType.Double,
     direction: String,
     mileage: String,
