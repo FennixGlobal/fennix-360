@@ -5,7 +5,7 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMap
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
-const socketIO = require('../../../app');
+const {socket} = require('../../../app');
 const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
@@ -326,8 +326,10 @@ const containerMapDataListBusiness = async (req) => {
 };
 const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
-    console.log(socketIO);
-    socketIO.emit('unlock_device', true);
+    console.log(socket);
+    console.log(socket.io);
+    console.log(socket.server);
+    socket.emit('unlock_device', true);
 };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
@@ -399,6 +401,16 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+// const unlockPassword = (sock)=>{
+//         var socket = sock;
+//         this.unlock = function (msg) {
+//             socket.emit('refresh', { message: msg });
+//         };
+//         this.lock = function (msg) {
+//             socket.emit('lock', { message: msg });
+//         } ;
+// };
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
