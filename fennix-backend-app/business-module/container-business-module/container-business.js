@@ -326,9 +326,9 @@ const containerMapDataListBusiness = async (req) => {
 };
 const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
-    console.log(socket);
-    console.log(socket.Servers);
-    console.log(socket.server);
+    // console.log(socket);
+    // console.log(socket.Servers);
+    // console.log(socket.server);
     socket.socketIO.emit('unlock_device', true);
 };
 const getContainerMapHistoryBusiness = async (req) => {
