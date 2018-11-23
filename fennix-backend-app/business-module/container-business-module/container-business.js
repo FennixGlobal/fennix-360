@@ -329,7 +329,7 @@ const unlockElockBusiness = async (req) => {
     console.log(socket);
     console.log(socket.Servers);
     console.log(socket.server);
-    socket.emit('unlock_device', true);
+    socket.socketIO.emit('unlock_device', true);
 };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
