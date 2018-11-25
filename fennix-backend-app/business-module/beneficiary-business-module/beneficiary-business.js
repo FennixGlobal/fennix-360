@@ -675,7 +675,8 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
                 latitude: item['latitude'],
                 longitude: item['longitude'],
                 deviceDate: item['deviceDate'],
-                locationId: item['_id']
+                locationId: item['_id'],
+                speed: item['speed']
             };
             mapResponseArray.push(obj);
         });
