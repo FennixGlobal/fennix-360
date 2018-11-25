@@ -53,7 +53,8 @@ const locationDetailsUpdateQuery = (req) => {
         beneficiaryId: req.beneficiaryId,
         deviceDate: req.deviceDate,
         latitude: req.latitude,
-        longitude: req.longitude
+        longitude: req.longitude,
+        speed: req.speed
     });
     location.save(function (err) {
         if (err) return console.error(err);
