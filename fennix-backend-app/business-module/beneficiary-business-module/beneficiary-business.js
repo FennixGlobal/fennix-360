@@ -1,4 +1,5 @@
 const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
+const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
@@ -8,7 +9,6 @@ const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, 
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
 const Excel = require('exceljs');
 const {getCountryCodeByLocationIdAccessor, getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
-const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
@@ -25,19 +25,11 @@ const beneficiaryAggregatorBusiness = async (req) => {
             victim: {key: 'victims', value: '', color: '', legend: 'VICTIM'},
             offender: {key: 'offenders', value: '', color: '', legend: 'OFFENDER'},
         };
-        //TODO: commented below to test the flow
-        // if (beneficiaryResponse.rows.length === 1) {
-        //     let propName = beneficiaryResponse.rows[0]['role_name'].toLowerCase();
-        //     let propName2 = propName.toLowerCase() === 'victim' ? 'victim' : "offender";
-        //     beneficiaryObj[propName]['value'] = beneficiaryResponse.rows[0]['count'];
-        //     beneficiaryObj[propName2]['value'] = 0;
-        // } else {
         beneficiaryResponse.rows.forEach((item) => {
             if (notNullCheck(item['role_name'])) {
                 beneficiaryObj[item['role_name'].toLowerCase()]['value'] = item['count'];
             }
         });
-        // }
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', beneficiaryObj);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
@@ -664,7 +656,6 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         fromDate: fromDate.toISOString(),
         beneficiaryId: parseInt(req.query.beneficiaryId)
     };
-    console.log(request);
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
     geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
     if (arrayNotEmptyCheck(historyDetails)) {

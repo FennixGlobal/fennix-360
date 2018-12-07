@@ -711,7 +711,29 @@ const childRouteCreator = (item) => {
     };
     return childItem;
 };
-
+const getCountryListGridBusiness = async (req) => {
+    let request = {userId: req.query.userId, languageId: req.query.languageId}, userDetailsResponse,
+        countryListResponse, finalResponse, countryIdList = {gridData: []};
+    userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
+        request.userRole = userDetailsResponse.rows[0]['native_user_role'];
+        countryListResponse = await getCountryListAccessor(request);
+    }
+    if (objectHasPropertyCheck(countryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryListResponse.rows)) {
+        countryListResponse.rows.forEach(item => {
+            let obj = {
+                countryId: item['location_id'],
+                countryName: item['country_name']
+            };
+            countryIdList.gridData.push(obj);
+        });
+        countryIdList.totalNoOfRecords = countryListResponse.rows.length;
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', countryIdList);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COUNTRIES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
 module.exports = {
     getFilterMetadataBusiness,
     getBaseMetadataBusiness,
@@ -724,5 +746,6 @@ module.exports = {
     getLanguageListGridBusiness,
     getRolesForAdminBusiness,
     getCountryListBusiness,
+    getCountryListGridBusiness,
     getRolesForNonAdminsBusiness
 };

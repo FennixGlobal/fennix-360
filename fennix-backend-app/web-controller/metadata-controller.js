@@ -114,4 +114,12 @@ router.get(METADATA_CONTROLLER.METADATA_LIST_LANGUAGES_FOR_GRID, (req, res) => {
     })
 });
 
+router.get(METADATA_CONTROLLER.METADATA_LIST_COUNTRIES_FOR_GRID, (req, res) => {
+    let returnObj;
+    returnObj = metadataBusiness.getCountryListGridBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

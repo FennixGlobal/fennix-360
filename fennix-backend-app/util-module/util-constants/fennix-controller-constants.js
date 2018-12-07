@@ -34,6 +34,7 @@ const METADATA_CONTROLLER = {
     METADATA_LIST_COUNTRIES: '/listCountries',
     METADATA_LIST_CENTERS: '/listCenters',
     METADATA_ALL_ROLES: '/roles',
+    METADATA_LIST_COUNTRIES_FOR_GRID:'/listCountriesForGrid',
     METADATA_ALL_ROLES_FOR_ADMIN: '/getRolesForAdmin',
     METADATA_ALL_ROLES_FOR_NON_ADMIN: '/getRolesForNonAdmin'
 };

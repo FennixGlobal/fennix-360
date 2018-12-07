@@ -134,7 +134,8 @@ const listDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
             $match: {
-                "centerId": {$in: req.centerIds}
+                "centerId": {$in: req.centerIds},
+                "beneficiaryId":{$exists:true,$not: null}
             }
         },
         {$sort: {"createdDate": -1}},

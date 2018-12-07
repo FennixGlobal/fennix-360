@@ -172,7 +172,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
 
 const assignContainerBusiness = async (req) => {
     let request, finalResponse, tripRequest, latArray = [], lngArray = [], restrictionRequestList = [],
-        elockTripPrimaryKeyResponse;
+        elockTripPrimaryKeyResponse,masterPasswordResponse;
     req.body.startDate = new Date();
     req.body.deviceAssignedBy = req.body.userId;
     await containerAccessors.updateContainerAccessor(req.body);
@@ -193,6 +193,10 @@ const assignContainerBusiness = async (req) => {
         endDate: req.body.endDate,
         isTripActive: true
     };
+    masterPasswordResponse = await containerAccessors.getMasterPasswordAccessor(request);
+    if(objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)){
+
+    }
     if (objectHasPropertyCheck(req.body, 'elockGeoFence') && arrayNotEmptyCheck(req.body['elockGeoFence'])) {
         req.body['elockGeoFence'].forEach((item) => {
             let obj = {
