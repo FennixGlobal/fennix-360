@@ -320,17 +320,17 @@ const eLocksDataUpdateBusiness = async (data) => {
         };
     }
     await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
-    // console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
-    // console.log(returnString);
     return returnString;
 };
 
 //To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
 const newJob = new cronJob('* 2 * * *', async () => {
-    await eLocksDataDumpToMasterInsertBusiness();
+    console.log('cron Job started');
+    await $eLocksDataDumpToMasterCronJobBusiness();
 });
 newJob.start();
-const eLocksDataDumpToMasterInsertBusiness = async () => {
+
+const $eLocksDataDumpToMasterCronJobBusiness = async () => {
     let dumpDataResponse, locationList = [], deviceAttributesList = [], sortedDumpIdList = [],
         masterLocationDeviceAttrObj;
     dumpDataResponse = await containerAccessor.getSortedDumpDataAccessor();
@@ -346,9 +346,9 @@ const eLocksDataDumpToMasterInsertBusiness = async () => {
                 deviceId: item['deviceId'],
                 deviceDate: item['deviceDate'],
                 latitude: item['latitude'],
-                latitudeDirection: processedLoc.latitude.locCode,
-                longitude: processedLoc.longitude.loc,
-                longitudeDirection: processedLoc.longitude.locCode,
+                latitudeDirection: item['latitudeDirection'],
+                longitude: item['longitude'],
+                longitudeDirection: item['longitudeDirection'],
             };
             let deviceAttributesObj = {
                 _id: eLockAttributeId,
@@ -403,46 +403,48 @@ const dataSplitterDump = async (data, masterDate) => {
     deviceType = data.slice(14, 15);// 1 being rechargeable
     deviceStatus = data.slice(15, 16);// data type
     datalength = data.slice(16, 20);
-    deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-    if (deviceUpdatedDate > masterDate) {
-        const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
-        if (arrayNotEmptyCheck(containerResponse)) {
-            containerId = containerResponse[0]['containerId'];
-            deviceId = containerResponse[0]['_id'];
-            let processedLoc = {
-                latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
-                longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
-            };
-            dumpData = {
-                containerId: containerId,
-                deviceId: deviceId,
-                deviceDate: deviceUpdatedDate,
-                latitude: processedLoc.latitude.loc,
-                latitudeDirection: processedLoc.latitude.locCode,
-                longitude: processedLoc.longitude.loc,
-                longitudeDirection: processedLoc.longitude.locCode,
-                gps: data.slice(49, 50),
-                speed: data.slice(50, 52),
-                direction: data.slice(52, 54),
-                mileage: data.slice(54, 62),
-                gpsQuality: data.slice(62, 64),
-                vehicleId: data.slice(64, 72),
-                deviceStatus: deviceAlertInfo.returnValue,
-                serverDate: new Date(),
-                deviceUpdatedDate: deviceUpdatedDate,
-                batteryPercentage: eLockBatteryPercentCalculator(data.slice(76, 78)),
-                cellId: data.slice(78, 82),
-                lac: data.slice(82, 86),
-                gsmQuality: data.slice(86, 88),
-                geoFenceAlarm: data.slice(88, 90)
-            };
-            if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
-                returnString = '(P35)';
+    let processedLoc = {
+        latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
+        longitude: degreeConverter(data.slice(40, 49), hexToBinary(data.slice(49, 50)))
+    };
+    if (processedLoc.longitude.loc !== 0 && processedLoc.latitude.loc !== 0) {
+        deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
+        if (deviceUpdatedDate > masterDate) {
+            const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+            if (arrayNotEmptyCheck(containerResponse)) {
+                containerId = containerResponse[0]['containerId'];
+                deviceId = containerResponse[0]['_id'];
+                dumpData = {
+                    containerId: containerId,
+                    deviceId: deviceId,
+                    deviceDate: deviceUpdatedDate,
+                    latitude: processedLoc.latitude.loc,
+                    latitudeDirection: processedLoc.latitude.locCode,
+                    longitude: processedLoc.longitude.loc,
+                    longitudeDirection: processedLoc.longitude.locCode,
+                    gps: data.slice(49, 50),
+                    speed: data.slice(50, 52),
+                    direction: data.slice(52, 54),
+                    mileage: data.slice(54, 62),
+                    gpsQuality: data.slice(62, 64),
+                    vehicleId: data.slice(64, 72),
+                    deviceStatus: deviceAlertInfo.returnValue,
+                    serverDate: new Date(),
+                    deviceUpdatedDate: deviceUpdatedDate,
+                    batteryPercentage: eLockBatteryPercentCalculator(data.slice(76, 78)),
+                    cellId: data.slice(78, 82),
+                    lac: data.slice(82, 86),
+                    gsmQuality: data.slice(86, 88),
+                    geoFenceAlarm: data.slice(88, 90)
+                };
+                if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
+                    returnString = '(P35)';
+                }
+                response['deviceId'] = deviceId;
+                response['containerId'] = containerId;
+                response['returnString'] = returnString;
+                response['dumpData'] = dumpData;
             }
-            response['deviceId'] = deviceId;
-            response['containerId'] = containerId;
-            response['returnString'] = returnString;
-            response['dumpData'] = dumpData;
         }
     }
     return response;
@@ -459,7 +461,7 @@ const eLocksDataUpdateDumpBusiness = async (data) => {
             returnArray = await dataIterator(data, null);
             break;
         case 28:
-            returnString = 'P45';
+            returnString = '(P46)';
             break;
     }
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
@@ -473,8 +475,8 @@ const eLocksDataUpdateDumpBusiness = async (data) => {
             }
         });
         if (arrayNotEmptyCheck(dumpDataList)) {
-            response = containerAccessor.insertElocksDumpDataAccessor(dumpDataList);
-            let res = containerAccessor.updateMasterDumpDateAccessor('dumpDate', dumpDataList.pop()['deviceDate']);
+            containerAccessor.insertElocksDumpDataAccessor(dumpDataList);
+            containerAccessor.updateMasterDumpDateAccessor('dumpDate', dumpDataList.pop()['deviceDate']);
         }
     }
     console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
@@ -567,5 +569,6 @@ const hexToBinary = (deviceStatus) => {
 
 module.exports = {
     locationUpdateBusiness,
-    eLocksDataUpdateBusiness
+    eLocksDataUpdateBusiness,
+    eLocksDataUpdateDumpBusiness
 };
