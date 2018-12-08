@@ -205,7 +205,7 @@ const unlinkDeviceForBeneficiaryQuery = async (req) => {
 };
 
 const getTotalNoOfDevicesQuery = (query) => {
-    return deviceAggregator.count({centerId: {$in: query}});
+    return deviceAggregator.count({centerId: {$in: query},beneficiaryId:{$exists:true,$ne: null}});
 };
 
 const updateDeviceAttributeQuery = (req) => {
