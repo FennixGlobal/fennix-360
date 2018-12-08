@@ -135,7 +135,7 @@ const listDevicesQuery = (req) => {
         {
             $match: {
                 "centerId": {$in: req.centerIds},
-                "beneficiaryId":{$exists:true,$not: null}
+                "beneficiaryId":{$exists:true,$ne: null}
             }
         },
         {$sort: {"createdDate": -1}},
