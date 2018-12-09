@@ -260,9 +260,17 @@ const updateTripStatusAccessor = async(req)=>{
     let returnObj;
     returnObj = await containerQueries.updateTripStatusQuery(req);
     return returnObj;
-}
+};
+
+const getContainerMasterPasswordAcessor  = async(req)=>{
+    let returnObj;
+    returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     fetchTripDetailsAccessor,
+    getContainerMasterPasswordAcessor,
     updateTripStatusAccessor,
     setContainerLockStatusAccessor,
     getNotificationEmailsForTripIdAccesssor,

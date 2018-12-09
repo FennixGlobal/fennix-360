@@ -182,7 +182,11 @@ const assignContainerBusiness = async (req) => {
     req.body.deviceAssignedBy = req.body.userId;
     activePasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerActivePasswordCounter');
     if (arrayNotEmptyCheck(activePasswordResponse)) {
+        let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
         req.body.activePassword = activePasswordResponse[0]['containerActivePasswordCounter'];
+        if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
+            socket.socketIO.emit('set_active_password', masterPasswordResponse.rows[0]['master_password'], activePasswordResponse[0]['active_password']);
+        }
     }
     await containerAccessors.updateContainerAccessor(req.body);
     elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
@@ -336,9 +340,13 @@ const containerMapDataListBusiness = async (req) => {
 const unlockElockBusiness = async (req) => {
     const containerId = parseInt(req.query.containerId, 10);
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
+    let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
         containerAccessors.setContainerLockStatusAccessor([containerId, false]);
         socket.socketIO.emit('unlock_device', activePasswordResponse.rows[0]['active_password']);
+    }
+    if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
+        socket.socketIO.emit('reset_device_password', activePasswordResponse.rows[0]['active_password'], masterPasswordResponse.rows[0]['master_password']);
     }
 };
 const getContainerMapHistoryBusiness = async (req) => {

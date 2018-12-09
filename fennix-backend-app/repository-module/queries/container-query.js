@@ -172,7 +172,7 @@ const getNotificationEmailsForTripIdQuery = (req) => {
 };
 const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
 
-const setContainerLockStatusQuery = 'update containers set container_lock_status =$2 where container_id =$1';
+const setContainerLockStatusQuery = 'update container set container_lock_status =$2 where container_id =$1';
 
 const updateTripStatusQuery = (req)=>{
     return ElocksTripDataModel.update({tripId: req.tripId}, {
@@ -185,7 +185,10 @@ const updateTripStatusQuery = (req)=>{
         }
     });
 };
+
+const getContainerMasterPasswordQuery = 'select master_password from container where container_id = $1';
 module.exports = {
+    getContainerMasterPasswordQuery,
     fetchNextElockTripPrimaryKeyQuery,
     updateNextLocationPrimaryKeyQuery,
     fetchTripDetailsQuery,
