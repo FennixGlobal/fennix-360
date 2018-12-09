@@ -378,6 +378,7 @@ const getContainerMapHistoryBusiness = async (req) => {
     if (arrayNotEmptyCheck(tripResponse)) {
         tripResponse.forEach((item) => tripIds.push(item['tripId']));
     }
+    console.log(tripIds);
     request = {
         // toDate: toDate.toISOString(),
         // fromDate: fromDate.toISOString(),
