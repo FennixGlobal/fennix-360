@@ -634,6 +634,7 @@ const widgetMapElementCreator = (widgetElementItem) => {
         elementType: widgetElementItem['element_type'],
         elementSubType: widgetElementItem['element_subtype'],
         elementTitle: widgetElementItem['element_title'],
+        elementLabel: widgetElementItem['element_label'],
         valueMappingKey: widgetElementItem['request_mapping_key'],
         elementWidth: widgetElementItem['attribute_width']
     };
