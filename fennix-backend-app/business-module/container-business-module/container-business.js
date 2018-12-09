@@ -233,6 +233,8 @@ const containerMapDataListBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    console.log('container Id list');
+    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
@@ -246,6 +248,8 @@ const containerMapDataListBusiness = async (req) => {
             };
             return init;
         }, {containerIdArray: [], containerDetailObj: {}});
+        console.log('container Id list and details for the data respectively');
+        console.log(containerIdListAndDetailObj);
         containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
         containerDeviceArray.forEach((item) => {
             locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
