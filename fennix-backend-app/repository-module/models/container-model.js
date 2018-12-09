@@ -96,6 +96,7 @@ const elockTripDataSchema = new Schema({
     startTime: SchemaType.Double,
     endTime: SchemaType.Double,
     tripName: String,
+    tripStatus: String,
     tripDuration: SchemaType.Double,
     expectedStartDate: Date,
     expectedEndDate: Date,
@@ -105,11 +106,13 @@ const elockTripDataSchema = new Schema({
     notificationEmail1: String,
     startAddress: {
         lat: SchemaType.Double,
-        lng: SchemaType.Double
+        lng: SchemaType.Double,
+        name: String
     },
     endAddress: {
         lat: SchemaType.Double,
-        lng: SchemaType.Double
+        lng: SchemaType.Double,
+        name: String
     },
     restrictions: [
         {

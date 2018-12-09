@@ -125,7 +125,8 @@ const dbTableColMap = {
         documentId: 'document_id',
         containerId: 'container_id',
         masterPassword: 'master_password',
-        activePassword: 'active_password'
+        activePassword: 'active_password',
+        containerLockStatus: 'container_lock_status'
     },
     accounting: {
         creditCard: 'credit_card',
@@ -187,12 +188,12 @@ const tableKeyMap = {
 };
 
 const tableDefaultSortMap = {
-    beneficiaries: {sortBy: 'beneficiaryid',sortOrder:'desc'},
-    users: {sortBy: 'user_id',sortOrder:'desc'},
-    tickets: {sortBy: 'ticketId',sortOrder:'desc'},
-    family_info: {sortBy: 'family_info_id',sortOrder:'desc'},
-    accounting: {sortBy: 'accounting_id',sortOrder:'desc'},
-    container: {sortBy: 'start_date',sortOrder:'desc'}
+    beneficiaries: {sortBy: 'beneficiaryid', sortOrder: 'desc'},
+    users: {sortBy: 'user_id', sortOrder: 'desc'},
+    tickets: {sortBy: 'ticketId', sortOrder: 'desc'},
+    family_info: {sortBy: 'family_info_id', sortOrder: 'desc'},
+    accounting: {sortBy: 'accounting_id', sortOrder: 'desc'},
+    container: {sortBy: 'start_date', sortOrder: 'desc'}
 };
 module.exports = {
     tableDefaultSortMap,

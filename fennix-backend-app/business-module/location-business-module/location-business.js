@@ -229,6 +229,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
                 deviceId: deviceId,
                 _id: elockDeviceAttributeId,
                 locationId: locationPrimaryId,
+                tripId: containerResponse[0]['trips']['tripId'],
                 gps: data.slice(49, 50),
                 speed: data.slice(50, 52),
                 direction: data.slice(52, 54),

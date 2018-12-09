@@ -45,9 +45,9 @@ const getContainerMapHistoryAccessor = async (req) => {
 };
 
 const getActiveTripDetailsByContainerIdAccessor = async (req) => {
-   let returnObj;
-   returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
-   return returnObj;
+    let returnObj;
+    returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
+    return returnObj;
 };
 
 const getTotalNoOfContainersForMapAccessor = async (req) => {
@@ -91,7 +91,7 @@ const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [...req.userIdList, parseInt(req.centerId,10)];
+        request = [...req.userIdList, parseInt(req.centerId, 10)];
         extraQuery = `and center_id = $${req.userIdList.length + 1}`;
     } else {
         request = [...req.userIdList];
@@ -217,7 +217,7 @@ const listContainersAccessor = async (req) => {
         request = [...req.userIdList];
     }
     console.log(modifiedQuery);
-    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10),TABLE_CONTAINER)}`;
+    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10), TABLE_CONTAINER)}`;
     console.log(finalQuery);
     console.log(req.userIdList);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
@@ -246,9 +246,26 @@ const fetchTripDetailsAccessor = async (req) => {
     returnObj = await containerQueries.fetchTripDetailsQuery(req);
     return returnObj;
 };
-
+const getNotificationEmailsForTripIdAccesssor = async (req) => {
+        let returnObj;
+        returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
+        return returnObj;
+    };
+const setContainerLockStatusAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.setContainerLockStatusQuery(req);
+    return returnObj;
+};
+const updateTripStatusAccessor = async(req)=>{
+    let returnObj;
+    returnObj = await containerQueries.updateTripStatusQuery(req);
+    return returnObj;
+}
 module.exports = {
     fetchTripDetailsAccessor,
+    updateTripStatusAccessor,
+    setContainerLockStatusAccessor,
+    getNotificationEmailsForTripIdAccesssor,
     fetchNextElockTripPrimaryKeyAccessor,
     insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,

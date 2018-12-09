@@ -66,6 +66,22 @@ router.get('/listTripDetails', function (req, res) {
     })
 });
 
+router.get('/startTrip', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.startTripBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/endTrip', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.endTripBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/unlockElock', function (req, res) {
     let returnObj;
     returnObj = containerBusiness.unlockElockBusiness(req);
@@ -100,8 +116,6 @@ router.get('/listUnAssignedELocks', function (req, res) {
 
 router.post('/fetchELocksData', function (req, res) {
     let returnObj;
-    console.log('data in container');
-    console.log(req.body);
     returnObj = locationBusiness.eLocksDataUpdateBusiness(req.body['data']);
     // returnObj = deviceBusiness.listUnAssignedDevicesForContainerBusiness();
     returnObj.then((response) => {

@@ -157,7 +157,7 @@ const insertElockTripDataQuery = (req) => {
 };
 
 const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
-    return ContainerPasswordCounterModel.findOneAndUpdate({}, {$inc : {[password] : 1}});
+    return ContainerPasswordCounterModel.findOneAndUpdate({}, {$inc: {[password]: 1}});
 };
 
 const getActivePasswordForContainerIdQuery = 'select active_password from container where container_id = $1';
@@ -167,12 +167,31 @@ const fetchTripDetailsQuery = (req) => {
         containerId: req.containerId
     });
 };
-
+const getNotificationEmailsForTripIdQuery = (req) => {
+    return ElocksTripDataModel.find({tripId: req.tripId})
+};
 const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
+
+const setContainerLockStatusQuery = 'update containers set container_lock_status =$2 where container_id =$1';
+
+const updateTripStatusQuery = (req)=>{
+    return ElocksTripDataModel.update({tripId: req.tripId}, {
+        $set: {
+            tripStatus:req.status
+        }
+    }, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        }
+    });
+};
 module.exports = {
     fetchNextElockTripPrimaryKeyQuery,
     updateNextLocationPrimaryKeyQuery,
     fetchTripDetailsQuery,
+    updateTripStatusQuery,
+    setContainerLockStatusQuery,
+    getNotificationEmailsForTripIdQuery,
     getContainerDocumentByContainerIdQuery,
     updateNextDeviceAttributesPrimaryKeyQuery,
     addContainerDetailsQuery,

@@ -203,6 +203,7 @@ const assignContainerBusiness = async (req) => {
         tripName: req.body.tripName,
         startTime: req.body.expectedStartTime,
         endTime: req.body.expectedEndTime,
+        tripStatus: 'NOT_STARTED',
         notificationEmail1: req.body.notificationEmail1,
         notificationEmail2: req.body.notificationEmail2,
         notificationEmail3: req.body.notificationEmail3,
@@ -244,6 +245,7 @@ const containerMapDataListBusiness = async (req) => {
                 containerId: item['container_id'],
                 containerName: item['container_name'],
                 documentId: item['document_id'],
+                containerLockStatus: item['container_lock_status'],
                 image: item['container_image']
             };
             return init;
@@ -332,9 +334,10 @@ const containerMapDataListBusiness = async (req) => {
     return returnObj;
 };
 const unlockElockBusiness = async (req) => {
-    const containerId = req.query.containerId;
+    const containerId = parseInt(req.query.containerId, 10);
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
+        containerAccessors.setContainerLockStatusAccessor([containerId, false]);
         socket.socketIO.emit('unlock_device', activePasswordResponse.rows[0]['active_password']);
     }
 };
@@ -421,96 +424,53 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     return finalResponse;
 };
-// const getContainerMapHistoryBusiness = async (req) => {
-//     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
-//         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
-//     //Note: Hard coding with 10 days
-//     if (notNullCheck(req.query.dateRange)) {
-//         switch (req.query.dateRange) {
-//             case '1hr':
-//                 fromDate.setTime(toDate.getTime() - 1);
-//                 break;
-//             case '2hr':
-//                 fromDate.setTime(toDate.getTime() - 2);
-//                 break;
-//             case '5hr':
-//                 fromDate.setTime(toDate.getTime() - 5);
-//                 break;
-//             case '1day':
-//                 fromDate.setDate(toDate.getDate() - 1);
-//                 break;
-//             case '2day':
-//                 fromDate.setDate(toDate.getDate() - 2);
-//                 break;
-//             case '7day':
-//                 fromDate.setDate(toDate.getDate() - 7);
-//                 break;
-//             default:
-//                 fromDate.setDate(toDate.getDate() - 14);
-//         }
-//     } else {
-//         fromDate.setDate(toDate.getDate() - 14);
-//     }
-//     request = {
-//         toDate: toDate.toISOString(),
-//         fromDate: fromDate.toISOString(),
-//         containerId: parseInt(req.query.containerId)
-//     };
-//     response = await containerAccessors.getContainerMapHistoryAccessor(request);
-//     tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
-//     if (arrayNotEmptyCheck(response)) {
-//         response.forEach((item) => {
-//             let obj = {
-//                 containerId: item['containerId'],
-//                 latitude: item['latitude'],
-//                 longitude: item['longitude'],
-//                 deviceDate: item['deviceDate'],
-//                 locationId: item['_id'],
-//                 speed: item['speed']
-//             };
-//             mapResponseArray.push(obj);
-//         });
-//         if (arrayNotEmptyCheck(tripResponse)) {
-//             startAddress = tripResponse[0]['startAddress'];
-//             endAddress = tripResponse[0]['endAddress'];
-//             historyDetails = tripResponse[0];
-//             geoFence = {
-//                 lat: tripResponse[0]['latArray'],
-//                 lng: tripResponse[0]['lngArray']
-//             };
-//         }
-//         modifiedResponse = {
-//             startAddress,
-//             endAddress,
-//             geoFence,
-//             historyDetails,
-//             mapHistory: mapResponseArray
-//         };
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-//     } else {
-//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
-//     }
-//     return finalResponse;
-// };
-
-// const unlockPassword = (sock)=>{
-//         var socket = sock;
-//         this.unlock = function (msg) {
-//             socket.emit('refresh', { message: msg });
-//         };
-//         this.lock = function (msg) {
-//             socket.emit('lock', { message: msg });
-//         } ;
-// };
 const fetchTripDetailsBusiness = async (req) => {
-    let request = {status: ["INPROGRESS", "NOT_STARTED"], containerId: parseInt(req.query.containerId)}, response,
+    let userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}}, request = {},
+        containerListResponse,
+        mongoRequest = {status: ["IN_PROGRESS", "NOT_STARTED"], containerId: {$in: []}}, response,
         tripResponse = {gridData: []};
-    response = await containerAccessors.fetchTripDetailsAccessor(request);
-    if (arrayNotEmptyCheck(response)) {
-        tripResponse.gridData = response;
-        tripResponse.totalNoOfRecords = response.length;
+    let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    request.userIdList = userResponse.userIdsList;
+    request.nativeUserRole = userResponse.nativeUserRole;
+    containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    if (this.objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
+        containerListResponse.forEach((item) => {
+            mongoRequest.containerId.$in.push(item['container_id']);
+        });
+        response = await containerAccessors.fetchTripDetailsAccessor(mongoRequest);
+        if (arrayNotEmptyCheck(response)) {
+            tripResponse.gridData = response;
+            tripResponse.totalNoOfRecords = response.length;
+        }
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
+};
+
+const endTripBusiness = async (req) => {
+    let response, notificationsResponse;
+    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
+    if (notNullCheck(notificationsResponse)) {
+        containerAccessors.updateTripStatusAccessor({tripId: req.query.tripId, status: 'COMPLETED'});
+        emailSendBusiness(notificationsResponse.notificationEmail1, null);
+        emailSendBusiness(notificationsResponse.notificationEmail2, null);
+        emailSendBusiness(notificationsResponse.notificationEmail3, null);
+    }
+
+
+};
+
+const startTripBusiness = async (req) => {
+    let response, notificationsResponse;
+    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
+    if (notNullCheck(notificationsResponse)) {
+        containerAccessors.setContainerLockStatusAccessor([notificationsResponse.containerId, true]);
+        containerAccessors.updateTripStatusAccessor({tripId: req.query.tripId, status: 'IN_PROGRESS'});
+        emailSendBusiness(notificationsResponse.notificationEmail1, null);
+        emailSendBusiness(notificationsResponse.notificationEmail2, null);
+        emailSendBusiness(notificationsResponse.notificationEmail3, null);
+    }
+
+
 };
 module.exports = {
     addContainerDetailsBusiness,
@@ -520,6 +480,8 @@ module.exports = {
     listContainerBusiness,
     fetchTripDetailsBusiness,
     unlockElockBusiness,
+    endTripBusiness,
+    startTripBusiness,
     getContainerMapHistoryBusiness,
     containerMapDataListBusiness,
     uploadBeneficiaryDocumentsBusiness
