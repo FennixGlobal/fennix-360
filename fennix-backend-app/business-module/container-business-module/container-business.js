@@ -185,7 +185,10 @@ const assignContainerBusiness = async (req) => {
         let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
         req.body.activePassword = activePasswordResponse[0]['containerActivePasswordCounter'];
         if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
-            socket.socketIO.emit('set_active_password', masterPasswordResponse.rows[0]['master_password'], activePasswordResponse[0]['active_password']);
+            socket.socketIO.emit('set_active_password', {
+                newPassword: activePasswordResponse[0]['active_password'],
+                oldPassword: masterPasswordResponse.rows[0]['master_password']
+            });
         }
     }
     await containerAccessors.updateContainerAccessor(req.body);
@@ -346,7 +349,10 @@ const unlockElockBusiness = async (req) => {
         socket.socketIO.emit('unlock_device', activePasswordResponse.rows[0]['active_password']);
     }
     if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
-        socket.socketIO.emit('reset_device_password', activePasswordResponse.rows[0]['active_password'], masterPasswordResponse.rows[0]['master_password']);
+        socket.socketIO.emit('reset_device_password', {
+            newPassword: masterPasswordResponse.rows[0]['master_password'],
+            oldPassword: activePasswordResponse.rows[0]['active_password']
+        });
     }
 };
 const getContainerMapHistoryBusiness = async (req) => {
