@@ -97,7 +97,9 @@ const getContainerMapHistoryQuery = (req) => {
             $match: {
                 containerId: req.containerId,
                 tripId: {$in: req.tripId}
-            },
+            }
+        },
+        {
             $group: {
                 _id: "$tripId",
                 trips: {$push: "$$ROOT"}
