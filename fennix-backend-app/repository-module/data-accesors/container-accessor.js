@@ -25,9 +25,16 @@ const addContainerDetailsAccessor = async (req) => {
 // };
 
 const getTotalNoOfContainersAccessor = async (req) => {
-    let returnObj, modifiedQuery;
+    let returnObj, modifiedQuery, request, extraQuery = ``, finalQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersQuery, false);
-    returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId];
+        extraQuery = ` and center_id = $${req.userIdList.length + 1}`;
+    } else {
+        request = [...req.userIdList];
+    }
+    finalQuery = `${modifiedQuery} ${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
 
@@ -44,9 +51,16 @@ const getActiveTripDetailsByContainerIdAccessor = async (req) => {
 };
 
 const getTotalNoOfContainersForMapAccessor = async (req) => {
-    let returnObj, modifiedQuery;
+    let returnObj, modifiedQuery, extraQuery = ``, request, finalQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.getTotalNoOfContainersForMapQuery, false);
-    returnObj = await connectionCheckAndQueryExec([...req.userIdList], modifiedQuery);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId];
+        extraQuery = ` and center_id = $${req.userIdList.length + 1}`;
+    } else {
+        request = [...req.userIdList];
+    }
+    finalQuery = `${modifiedQuery} ${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
 
@@ -74,10 +88,16 @@ const updateContainerAccessor = async (req) => {
 };
 
 const getContainerIdListAccessor = async (req) => {
-    let returnObj, finalQuery, modifiedQuery;
+    let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
-    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit,TABLE_CONTAINER)}`;
-    returnObj = await connectionCheckAndQueryExec(req.userIdList, finalQuery);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId];
+        extraQuery = `and center_id = $${req.userIdList.length + 1}`;
+    } else {
+        request = [...req.userIdList];
+    }
+    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit)}`;
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
 
@@ -209,6 +229,18 @@ const getContainerMasterPasswordAccessor = async (req) => {
     return returnObj;
 };
 
+const fetchAndUpdateContainerPasswordCounterAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.fetchAndUpdateContainerPasswordCounterQuery(req);
+    return returnObj;
+};
+
+const getActivePasswordForContainerIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.getActivePasswordForContainerIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     getContainerMasterPasswordAccessor,
     fetchNextElockTripPrimaryKeyAccessor,
@@ -237,5 +269,7 @@ module.exports = {
     getContainerDocumentByContainerIdAccessor,
     getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor,
-    getActiveTripDetailsByContainerIdAccessor
+    getActiveTripDetailsByContainerIdAccessor,
+    fetchAndUpdateContainerPasswordCounterAccessor,
+    getActivePasswordForContainerIdAccessor
 };

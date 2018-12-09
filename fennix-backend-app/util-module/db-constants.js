@@ -123,7 +123,9 @@ const dbTableColMap = {
         country: 'country',
         centerId: 'center_id',
         documentId: 'document_id',
-        containerId: 'container_id'
+        containerId: 'container_id',
+        masterPassword: 'master_password',
+        activePassword: 'active_password'
     },
     accounting: {
         creditCard: 'credit_card',

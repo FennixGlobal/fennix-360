@@ -1,4 +1,4 @@
-const {ElocksDeviceAttributeModel, ElocksTripDataModel, ElocksTripCounterModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel, ElocksDumpDataModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
+const {ContainerPasswordCounterModel, ElocksDeviceAttributeModel, ElocksTripDataModel, ElocksTripCounterModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel, ElocksDumpDataModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
 const listContainersQuery = 'select * from container where isactive = true and owner_user_id IN ';
@@ -153,6 +153,12 @@ const insertElockTripDataQuery = (req) => {
         }
     });
 };
+
+const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
+    return ContainerPasswordCounterModel.findOneAndUpdate({}, {$inc : {[password] : 1}});
+};
+
+const getActivePasswordForContainerIdQuery = 'select active_password from container where container_id = $1';
 const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
 module.exports = {
     fetchNextElockTripPrimaryKeyQuery,
@@ -178,5 +184,7 @@ module.exports = {
     deleteSortedDumpDataQuery,
     insertElocksDumpDataQuery,
     getTotalNoOfContainersForMapQuery,
-    getActiveTripDetailsByContainerIdQuery
+    getActiveTripDetailsByContainerIdQuery,
+    fetchAndUpdateContainerPasswordCounterQuery,
+    getActivePasswordForContainerIdQuery
 };

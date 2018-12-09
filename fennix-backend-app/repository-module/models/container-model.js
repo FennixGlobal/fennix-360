@@ -157,7 +157,13 @@ const elocksDumpDataSchema = new Schema({
     longitudeDirection: SchemaType.Double
 });
 
+const containerPasswordCounterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    containerMasterPasswordCounter: Number,
+    containerActivePasswordCounter: Number
+});
 
+const ContainerPasswordCounterModel = mongoose.model('ContainerPasswordCounter', containerPasswordCounterSchema, 'containerMasterPasswordCounter');
 const ElocksLocationCounterModel = mongoose.model('ElocksLocationCounter', elocksLocationCounterSchema, 'elocksLocationCounter');
 const ElocksLocationModel = mongoose.model('ElocksLocation', elocksLocationSchema, 'elocksLocation');
 const ElocksDeviceAttributeModel = mongoose.model('ElocksDeviceAttributes', elocksDeviceAttributesSchema, 'elocksDeviceAttributes');
@@ -182,5 +188,6 @@ module.exports = {
     ElocksDeviceAttributeModel,
     ElocksDeviceAttributesCounterModel,
     ElocksDeviceModel,
-    ElocksDeviceTypeModel
+    ElocksDeviceTypeModel,
+    ContainerPasswordCounterModel
 };

@@ -11,7 +11,7 @@ const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, 
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 
 const addContainerDetailsBusiness = async (req) => {
-    let request = req.body, imageUpload, countryCode, response;
+    let request = req.body, imageUpload, countryCode, response, masterPasswordResponse;
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
@@ -28,6 +28,10 @@ const addContainerDetailsBusiness = async (req) => {
     countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     request.documentId = `PAT${countryCode}L-${fullDate}`;
+    masterPasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerMasterPasswordCounter');
+    if (arrayNotEmptyCheck(masterPasswordResponse)) {
+        request.masterPassword = masterPasswordResponse[0]['containerMasterPasswordCounter'];
+    }
     response = await containerAccessors.addContainerDetailsAccessor(request);
     console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
@@ -172,9 +176,14 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
 
 const assignContainerBusiness = async (req) => {
     let request, finalResponse, tripRequest, latArray = [], lngArray = [], restrictionRequestList = [],
-        elockTripPrimaryKeyResponse,masterPasswordResponse;
+        activePasswordResponse,
+        elockTripPrimaryKeyResponse;
     req.body.startDate = new Date();
     req.body.deviceAssignedBy = req.body.userId;
+    activePasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerActivePasswordCounter');
+    if (arrayNotEmptyCheck(activePasswordResponse)) {
+        req.body.activePassword = activePasswordResponse[0]['containerActivePasswordCounter'];
+    }
     await containerAccessors.updateContainerAccessor(req.body);
     elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
     let elockTripPrimaryId = parseInt(elockTripPrimaryKeyResponse['_doc']['counter']);
@@ -193,10 +202,6 @@ const assignContainerBusiness = async (req) => {
         endDate: req.body.endDate,
         isTripActive: true
     };
-    masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAccessor(request);
-    if(objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)){
-
-    }
     if (objectHasPropertyCheck(req.body, 'elockGeoFence') && arrayNotEmptyCheck(req.body['elockGeoFence'])) {
         req.body['elockGeoFence'].forEach((item) => {
             let obj = {
@@ -331,10 +336,10 @@ const containerMapDataListBusiness = async (req) => {
 };
 const unlockElockBusiness = async (req) => {
     const containerId = req.query.containerId;
-    // console.log(socket);
-    // console.log(socket.Servers);
-    // console.log(socket.server);
-    socket.socketIO.emit('unlock_device', true);
+    const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
+    if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
+        socket.socketIO.emit('unlock_device', activePasswordResponse.rows[0]['active_password']);
+    }
 };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
