@@ -121,7 +121,7 @@ const dbTableColMap = {
         containerImage: 'container_image',
         isActive: 'isactive',
         country: 'country',
-        center: 'center',
+        centerId: 'center_id',
         documentId: 'document_id',
         containerId: 'container_id'
     },
