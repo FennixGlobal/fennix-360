@@ -368,9 +368,10 @@ const getContainerMapHistoryBusiness = async (req) => {
     // } else {
     //     fromDate.setDate(toDate.getDate() - 14);
     // }
+    let tripLimit = notNullCheck(req.query.limit) ? req.query.limit : 5;
     let tripRequest = {
         containerId: parseInt(req.query.containerId),
-        tripLimit: req.limit
+        tripLimit: tripLimit
     };
     tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(tripRequest);
     let tripIds = [];
@@ -501,7 +502,8 @@ const getContainerMapHistoryBusiness = async (req) => {
 //         } ;
 // };
 const fetchTripDetailsBusiness = async (req) => {
-    let request = {status: ["INPROGRESS", "COMPLETED"], containerId: parseInt(req.query.containerId)}, response, tripResponse = {gridData: []};
+    let request = {status: ["INPROGRESS", "NOT_STARTED"], containerId: parseInt(req.query.containerId)}, response,
+        tripResponse = {gridData: []};
     response = await containerAccessors.fetchTripDetailsAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         tripResponse.gridData = response;
