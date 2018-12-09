@@ -389,13 +389,13 @@ const getContainerMapHistoryBusiness = async (req) => {
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
-                containerId: item['containerId'],
-                latitude: item['latitude'],
-                longitude: item['longitude'],
-                deviceDate: item['deviceDate'],
-                locationId: item['_id'],
-                tripId: item['tripId'],
-                speed: item['speed']
+                containerId: item['trips'][0]['containerId'],
+                latitude: item['trips'][0]['latitude'],
+                longitude: item['trips'][0]['longitude'],
+                deviceDate: item['trips'][0]['deviceDate'],
+                locationId: item['trips'][0]['_id'],
+                tripId: item['_id'],
+                speed: item['trips'][0]['speed']
             };
             mapResponseArray.push(obj);
         });
