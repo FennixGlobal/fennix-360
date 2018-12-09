@@ -500,12 +500,22 @@ const getContainerMapHistoryBusiness = async (req) => {
 //             socket.emit('lock', { message: msg });
 //         } ;
 // };
+const fetchTripDetailsBusiness = async (req) => {
+    let request = {status: ["INPROGRESS", "COMPLETED"], containerId: parseInt(req.query.containerId)}, response, tripResponse = {gridData: []};
+    response = await containerAccessors.fetchTripDetailsAccessor(request);
+    if (arrayNotEmptyCheck(response)) {
+        tripResponse.gridData = response;
+        tripResponse.totalNoOfRecords = response.length;
+    }
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
+};
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
     deactivateContainerBusiness,
     listUnassignedContainerBusiness,
     listContainerBusiness,
+    fetchTripDetailsBusiness,
     unlockElockBusiness,
     getContainerMapHistoryBusiness,
     containerMapDataListBusiness,

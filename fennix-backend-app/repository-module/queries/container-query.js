@@ -159,10 +159,18 @@ const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
 };
 
 const getActivePasswordForContainerIdQuery = 'select active_password from container where container_id = $1';
+const fetchTripDetailsQuery = (req) => {
+    return ElocksTripDataModel.find({
+        tripStatus: {$in: req.status},
+        containerId: req.containerId
+    });
+};
+
 const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
 module.exports = {
     fetchNextElockTripPrimaryKeyQuery,
     updateNextLocationPrimaryKeyQuery,
+    fetchTripDetailsQuery,
     getContainerDocumentByContainerIdQuery,
     updateNextDeviceAttributesPrimaryKeyQuery,
     addContainerDetailsQuery,

@@ -241,8 +241,14 @@ const getActivePasswordForContainerIdAccessor = async (req) => {
     return returnObj;
 };
 
+const fetchTripDetailsAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.fetchTripDetailsQuery(req);
+    return returnObj;
+};
+
 module.exports = {
-    getContainerMasterPasswordAccessor,
+    fetchTripDetailsAccessor,
     fetchNextElockTripPrimaryKeyAccessor,
     insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,
