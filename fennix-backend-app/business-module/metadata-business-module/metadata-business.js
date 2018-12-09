@@ -486,6 +486,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'input':
                 widgetElementData = {
                     ...widgetElementData, ...{
+                        elementLabel: widgetElementItem['element_label'],
                         defaultValue: widgetElementItem['default_value__hover_value'],
                         elementTitle: widgetElementItem['element_title'],
                         requestMappingKey: widgetElementItem['request_mapping_key']
