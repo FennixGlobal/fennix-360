@@ -186,7 +186,15 @@ const insertElockTripDataAccessor = async (req) => {
     returnObj = await containerQueries.insertElockTripDataQuery(req);
     return returnObj;
 };
+
+const getContainerMasterPasswordAccessor = async (req) => {
+    let returnObj;
+    returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    getContainerMasterPasswordAccessor,
     fetchNextElockTripPrimaryKeyAccessor,
     insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,

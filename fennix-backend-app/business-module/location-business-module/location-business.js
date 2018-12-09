@@ -183,6 +183,11 @@ const getGSMLevel = (gsmStatus) => {
     }
     return gsmLevel;
 };
+//To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
+const newJob = new cronJob('* 2 * * *', async () => {
+    console.log('cron Job started');
+    await $eLocksDataDumpToMasterCronJobBusiness();
+});
 
 const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => {
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
@@ -208,6 +213,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             deviceId = containerResponse[0]['_id'];
             location = {
                 containerId: containerId,
+                tripId: containerResponse[0]['trips']['tripId'],
                 deviceId: deviceId,
                 // TODO add speed logic
                 // speed: data.slice(50, 52),
@@ -320,15 +326,9 @@ const eLocksDataUpdateBusiness = async (data) => {
         };
     }
     await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
+    newJob.start();
     return returnString;
 };
-
-//To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
-const newJob = new cronJob('* 2 * * *', async () => {
-    console.log('cron Job started');
-    await $eLocksDataDumpToMasterCronJobBusiness();
-});
-newJob.start();
 
 const $eLocksDataDumpToMasterCronJobBusiness = async () => {
     let dumpDataResponse, locationList = [], deviceAttributesList = [], sortedDumpIdList = [],
@@ -343,6 +343,7 @@ const $eLocksDataDumpToMasterCronJobBusiness = async () => {
             let locationObj = {
                 _id: locationPrimaryId,
                 containerId: item['containerId'],
+                tripId: item['tripId'],
                 deviceId: item['deviceId'],
                 deviceDate: item['deviceDate'],
                 latitude: item['latitude'],
@@ -354,6 +355,7 @@ const $eLocksDataDumpToMasterCronJobBusiness = async () => {
                 _id: eLockAttributeId,
                 containerId: item['containerId'],
                 deviceId: item['deviceId'],
+                tripId: item['tripId'],
                 locationId: locationPrimaryId,
                 gps: item['gps'],
                 speed: item['speed'],
@@ -423,6 +425,7 @@ const dataSplitterDump = async (data, masterDate) => {
                     longitude: processedLoc.longitude.loc,
                     longitudeDirection: processedLoc.longitude.locCode,
                     gps: data.slice(49, 50),
+                    tripId: containerResponse[0]['trips']['tripId'],
                     speed: data.slice(50, 52),
                     direction: data.slice(52, 54),
                     mileage: data.slice(54, 62),

@@ -5,6 +5,7 @@ let SchemaType = mongoose.Schema.Types;
 const elocksLocationSchema = new Schema({
     _id: Number,
     containerId: Number,
+    tripId: Number,
     deviceId: Number,
     deviceDate: Date,
     speed: SchemaType.Double,
@@ -25,6 +26,7 @@ const locationDeviceAttributeContainerMasterSchema = new Schema({
 const elocksDeviceAttributesSchema = new Schema({
     _id: Number,
     gps: Number,
+    tripId: Number,
     direction: Number,
     mileage: Number,
     gpsQuality: Number,
@@ -84,12 +86,17 @@ const elocksDeviceTypeSchema = new Schema({
     createdDate: Date,
     updatedDate: Date
 });
+
 const elockTripDataSchema = new Schema({
     tripId: Number,
     containerId: Number,
     deviceId: Number,
     startDate: Date,
     endDate: Date,
+    startTime: SchemaType.Double,
+    endTime: SchemaType.Double,
+    tripName: String,
+    tripDuration: SchemaType.Double,
     expectedStartDate: Date,
     expectedEndDate: Date,
     isTripActive: Boolean,
@@ -118,10 +125,8 @@ const elockTripDataSchema = new Schema({
             ]
         }
     ],
-    latArray: [SchemaType.Double],
-    lngArray: [SchemaType.Double]
+    createdDate: Date
 });
-
 const elockTripCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,
     counter: Number
@@ -131,6 +136,7 @@ const elocksDumpDataSchema = new Schema({
     deviceId: Number,
     locationId: Number,
     gps: Number,
+    tripId: Number,
     speed: SchemaType.Double,
     direction: String,
     mileage: String,

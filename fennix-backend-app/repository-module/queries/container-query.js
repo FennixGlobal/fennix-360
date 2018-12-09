@@ -90,23 +90,36 @@ const insertElocksDumpDataQuery = (req) => {
     });
 };
 
-const getActiveTripDetailsByContainerIdQuery = (req) => {
-    return ElocksTripDataModel.find({
-        containerId: req.containerId,
-        isTripActive: true
-    });
-};
-
 const getContainerMapHistoryQuery = (req) => {
     console.log(req);
-    return ElocksLocationModel.find(
+    return ElocksLocationModel.aggregate([
         {
-            deviceDate: {
-                $gte: new Date(`${req.fromDate}`),
-                $lte: new Date(`${req.toDate}`)
+            $match: {
+                containerId: req.containerId,
+                tripId: {$in: req.tripId}
             },
-            containerId: req.containerId
-        });
+            $group: {
+                _id: "$tripId",
+                trips: {$push: "$$ROOT"}
+            }
+        }]);
+};
+const getActiveTripDetailsByContainerIdQuery = (req) => {
+    return ElocksTripDataModel.aggregate([
+        {
+            $match: {
+                containerId: req.containerId
+            }
+        },
+        {
+            $sort: {
+                createdDate: -1
+            }
+        },
+        {
+            $limit: req.tripLimit
+        }
+    ]);
 };
 
 const updateNextDeviceAttributesPrimaryKeyQuery = (counter) => {

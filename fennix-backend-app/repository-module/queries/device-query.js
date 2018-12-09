@@ -102,32 +102,42 @@ const getBeneficiaryIdByImeiQuery = (query) => {
 };
 
 const getContainerIdByImeiQuery = (req) => {
-    return deviceAggregator.find({
-        $and: [
-            {
-                imei: req
-            },
-            {
-                active: true
-            },
-            {
-                containerId: {
-                    $exists: true
-                }
-            },
-            {
-                $or: [
+    return deviceAggregator.aggregate([
+        {$match:{
+                $and: [
                     {
-                        beneficiaryId: null
+                        imei: req
                     },
                     {
-                        beneficiaryId: {
-                            $exists: false
+                        active: true
+                    },
+                    {
+                        containerId: {
+                            $exists: true
                         }
-                    }]
+                    },
+                    {
+                        $or: [
+                            {
+                                beneficiaryId: null
+                            },
+                            {
+                                beneficiaryId: {
+                                    $exists: false
+                                }
+                            }]
+                    }
+                ]
+            }},
+        {
+            $lookup: {
+                from: "elockTripData",
+                localField: "_id",
+                foreignField: "deviceId",
+                as: "trips"
             }
-        ]
-    });
+        },
+        {$unwind: "$trips"},{$match: {"trips.isTripActive":true}}]);
 };
 
 const listDevicesQuery = (req) => {

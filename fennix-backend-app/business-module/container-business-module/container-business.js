@@ -193,7 +193,7 @@ const assignContainerBusiness = async (req) => {
         endDate: req.body.endDate,
         isTripActive: true
     };
-    masterPasswordResponse = await containerAccessors.getMasterPasswordAccessor(request);
+    masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAccessor(request);
     if(objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)){
 
     }
@@ -219,7 +219,8 @@ const assignContainerBusiness = async (req) => {
             ...tripRequest,
             restrictions: restrictionRequestList,
             latArray: latArray,
-            lngArray: lngArray
+            lngArray: lngArray,
+            createdDate: new Date()
         }
     }
     await containerAccessors.insertElockTripDataAccessor(tripRequest);
@@ -339,39 +340,48 @@ const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
     //Note: Hard coding with 10 days
-    if (notNullCheck(req.query.dateRange)) {
-        switch (req.query.dateRange) {
-            case '1hr':
-                fromDate.setTime(toDate.getTime() - 1);
-                break;
-            case '2hr':
-                fromDate.setTime(toDate.getTime() - 2);
-                break;
-            case '5hr':
-                fromDate.setTime(toDate.getTime() - 5);
-                break;
-            case '1day':
-                fromDate.setDate(toDate.getDate() - 1);
-                break;
-            case '2day':
-                fromDate.setDate(toDate.getDate() - 2);
-                break;
-            case '7day':
-                fromDate.setDate(toDate.getDate() - 7);
-                break;
-            default:
-                fromDate.setDate(toDate.getDate() - 14);
-        }
-    } else {
-        fromDate.setDate(toDate.getDate() - 14);
+    // if (notNullCheck(req.query.dateRange)) {
+    //     switch (req.query.dateRange) {
+    //         case '1hr':
+    //             fromDate.setTime(toDate.getTime() - 1);
+    //             break;
+    //         case '2hr':
+    //             fromDate.setTime(toDate.getTime() - 2);
+    //             break;
+    //         case '5hr':
+    //             fromDate.setTime(toDate.getTime() - 5);
+    //             break;
+    //         case '1day':
+    //             fromDate.setDate(toDate.getDate() - 1);
+    //             break;
+    //         case '2day':
+    //             fromDate.setDate(toDate.getDate() - 2);
+    //             break;
+    //         case '7day':
+    //             fromDate.setDate(toDate.getDate() - 7);
+    //             break;
+    //         default:
+    //             fromDate.setDate(toDate.getDate() - 14);
+    //     }
+    // } else {
+    //     fromDate.setDate(toDate.getDate() - 14);
+    // }
+    let tripRequest = {
+        containerId: parseInt(req.query.containerId),
+        tripLimit: req.limit
+    };
+    tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(tripRequest);
+    let tripIds = [];
+    if (arrayNotEmptyCheck(tripResponse)) {
+        tripResponse.forEach((item) => tripIds.push(item['tripId']));
     }
     request = {
-        toDate: toDate.toISOString(),
-        fromDate: fromDate.toISOString(),
-        containerId: parseInt(req.query.containerId)
+        // toDate: toDate.toISOString(),
+        // fromDate: fromDate.toISOString(),
+        containerId: parseInt(req.query.containerId),
+        tripId: tripIds
     };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
-    tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
@@ -380,6 +390,7 @@ const getContainerMapHistoryBusiness = async (req) => {
                 longitude: item['longitude'],
                 deviceDate: item['deviceDate'],
                 locationId: item['_id'],
+                tripId: item['tripId'],
                 speed: item['speed']
             };
             mapResponseArray.push(obj);
@@ -406,6 +417,77 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     return finalResponse;
 };
+// const getContainerMapHistoryBusiness = async (req) => {
+//     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
+//         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
+//     //Note: Hard coding with 10 days
+//     if (notNullCheck(req.query.dateRange)) {
+//         switch (req.query.dateRange) {
+//             case '1hr':
+//                 fromDate.setTime(toDate.getTime() - 1);
+//                 break;
+//             case '2hr':
+//                 fromDate.setTime(toDate.getTime() - 2);
+//                 break;
+//             case '5hr':
+//                 fromDate.setTime(toDate.getTime() - 5);
+//                 break;
+//             case '1day':
+//                 fromDate.setDate(toDate.getDate() - 1);
+//                 break;
+//             case '2day':
+//                 fromDate.setDate(toDate.getDate() - 2);
+//                 break;
+//             case '7day':
+//                 fromDate.setDate(toDate.getDate() - 7);
+//                 break;
+//             default:
+//                 fromDate.setDate(toDate.getDate() - 14);
+//         }
+//     } else {
+//         fromDate.setDate(toDate.getDate() - 14);
+//     }
+//     request = {
+//         toDate: toDate.toISOString(),
+//         fromDate: fromDate.toISOString(),
+//         containerId: parseInt(req.query.containerId)
+//     };
+//     response = await containerAccessors.getContainerMapHistoryAccessor(request);
+//     tripResponse = await containerAccessors.getActiveTripDetailsByContainerIdAccessor(request);
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let obj = {
+//                 containerId: item['containerId'],
+//                 latitude: item['latitude'],
+//                 longitude: item['longitude'],
+//                 deviceDate: item['deviceDate'],
+//                 locationId: item['_id'],
+//                 speed: item['speed']
+//             };
+//             mapResponseArray.push(obj);
+//         });
+//         if (arrayNotEmptyCheck(tripResponse)) {
+//             startAddress = tripResponse[0]['startAddress'];
+//             endAddress = tripResponse[0]['endAddress'];
+//             historyDetails = tripResponse[0];
+//             geoFence = {
+//                 lat: tripResponse[0]['latArray'],
+//                 lng: tripResponse[0]['lngArray']
+//             };
+//         }
+//         modifiedResponse = {
+//             startAddress,
+//             endAddress,
+//             geoFence,
+//             historyDetails,
+//             mapHistory: mapResponseArray
+//         };
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 // const unlockPassword = (sock)=>{
 //         var socket = sock;
