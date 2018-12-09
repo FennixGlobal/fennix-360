@@ -2,6 +2,7 @@ const containerQueries = require('../queries/container-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {updateQueryCreator} = require('../../util-module/request-validators');
 
 const addContainerDetailsAccessor = async (req) => {
@@ -12,16 +13,16 @@ const addContainerDetailsAccessor = async (req) => {
     return returnObj;
 };
 
-const listContainersAccessor = async (req) => {
-    let returnObj, modifiedQuery, finalQuery;
-    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
-    console.log(modifiedQuery);
-    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
-    console.log(finalQuery);
-    console.log(req.userIdList);
-    returnObj = await connectionCheckAndQueryExec([...req.userIdList], finalQuery);
-    return returnObj;
-};
+// const listContainersAccessor = async (req) => {
+//     let returnObj, modifiedQuery, finalQuery;
+//     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+//     console.log(modifiedQuery);
+//     finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
+//     console.log(finalQuery);
+//     console.log(req.userIdList);
+//     returnObj = await connectionCheckAndQueryExec([...req.userIdList], finalQuery);
+//     return returnObj;
+// };
 
 const getTotalNoOfContainersAccessor = async (req) => {
     let returnObj, modifiedQuery;
@@ -186,7 +187,23 @@ const insertElockTripDataAccessor = async (req) => {
     returnObj = await containerQueries.insertElockTripDataQuery(req);
     return returnObj;
 };
-
+const listContainersAccessor = async (req) => {
+    let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId];
+        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
+    } else {
+        request = [...req.userIdList];
+        extraQuery = `and isactive = true`;
+    }
+    console.log(modifiedQuery);
+    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
+    console.log(finalQuery);
+    console.log(req.userIdList);
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
+    return returnObj;
+};
 const getContainerMasterPasswordAccessor = async (req) => {
     let returnObj;
     returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
