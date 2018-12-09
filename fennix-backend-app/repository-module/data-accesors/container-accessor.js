@@ -91,7 +91,7 @@ const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [...req.userIdList, req.centerId];
+        request = [...req.userIdList, parseInt(req.centerId,10)];
         extraQuery = `and center_id = $${req.userIdList.length + 1}`;
     } else {
         request = [...req.userIdList];
