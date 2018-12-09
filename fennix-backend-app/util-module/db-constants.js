@@ -184,7 +184,16 @@ const tableKeyMap = {
     container: {key: 'container_id'}
 };
 
+const tableDefaultSortMap = {
+    beneficiaries: {sortBy: 'beneficiaryid',sortOrder:'desc'},
+    users: {sortBy: 'user_id',sortOrder:'desc'},
+    tickets: {sortBy: 'ticketId',sortOrder:'desc'},
+    family_info: {sortBy: 'family_info_id',sortOrder:'desc'},
+    accounting: {sortBy: 'accounting_id',sortOrder:'desc'},
+    container: {sortBy: 'start_date',sortOrder:'desc'}
+};
 module.exports = {
+    tableDefaultSortMap,
     TABLE_BENEFICIARIES,
     TABLE_LOCATION,
     TABLE_ROLES,

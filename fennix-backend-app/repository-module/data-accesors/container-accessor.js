@@ -76,7 +76,7 @@ const updateContainerAccessor = async (req) => {
 const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
-    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit)}`;
+    finalQuery = `${modifiedQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit,TABLE_CONTAINER)}`;
     returnObj = await connectionCheckAndQueryExec(req.userIdList, finalQuery);
     return returnObj;
 };
@@ -192,13 +192,12 @@ const listContainersAccessor = async (req) => {
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
         request = [...req.userIdList, req.centerId];
-        extraQuery = `and center_id = $${req.userIdList.length + 1} and isactive = true`;
+        extraQuery = `and center_id = $${req.userIdList.length + 1}`;
     } else {
         request = [...req.userIdList];
-        extraQuery = `and isactive = true`;
     }
     console.log(modifiedQuery);
-    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
+    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10),TABLE_CONTAINER)}`;
     console.log(finalQuery);
     console.log(req.userIdList);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);

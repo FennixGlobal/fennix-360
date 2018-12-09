@@ -1,4 +1,4 @@
-const {dbTableColMap, dbDownloadTableMapper, tableKeyMap} = require("../util-module/db-constants");
+const {dbTableColMap, dbDownloadTableMapper, tableKeyMap, tableDefaultSortMap} = require("../util-module/db-constants");
 const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../util-module/data-validators');
 const {getDownloadMapperAccessor} = require('../repository-module/data-accesors/common-accessor');
 
@@ -67,7 +67,7 @@ const insertQueryCreator = (req, tableName, insertQuery) => {
 };
 
 const updateQueryCreator = (table, fields, whereCondition) => {
-    let responseObj,query = `update ${table} set `, presentFields = [];
+    let responseObj, query = `update ${table} set `, presentFields = [];
     fields.forEach((field) => {
         if (notNullCheck(dbTableColMap[table][field])) {
             presentFields.push(field);
@@ -82,7 +82,7 @@ const updateQueryCreator = (table, fields, whereCondition) => {
         }
     });
     responseObj = {
-      presentFields,query
+        presentFields, query
     };
     console.log(responseObj);
     return responseObj;
@@ -122,8 +122,12 @@ const excelRowsCreator = (list, table, keysArray) => {
     return finalResponse;
 };
 
-const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit) => {
+const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit, table) => {
     let query;
+    offset = offset || 0;
+    limit = limit || 10;
+    sortBy = notNullCheck(sortBy) ? sortBy : tableDefaultSortMap[table].sortBy;
+    sortOrder = notNullCheck(sortOrder) ? sortOrder : tableDefaultSortMap[table].sortOrder;
     query = `order by ${sortBy} ${sortOrder} nulls last offset ${offset} limit ${limit}`;
     return query;
 };

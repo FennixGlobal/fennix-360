@@ -129,7 +129,7 @@ const getBeneficiaryListByOwnerId = async (req) => {
         request = [...req.userIdList];
         extraQuery = `and isactive = true`;
     }
-    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10))}`;
+    modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10),TABLE_BENEFICIARIES)}`;
     console.log(modifiedQuery);
     console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
