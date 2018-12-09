@@ -196,38 +196,27 @@ const assignContainerBusiness = async (req) => {
         tripId: elockTripPrimaryId,
         containerId: parseInt(req.body.containerId, 10),
         deviceId: parseInt(req.body.deviceId, 10),
-        startAddress: req.body.startAddress,
-        endAddress: req.body.endAddress,
+        startAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.startAddress : '',
+        endAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.endAddress : '',
         startDate: req.body.startDate,
         endDate: req.body.endDate,
+        notificationEmail1: req.body.notificationEmail1,
+        notificationEmail2: req.body.notificationEmail2,
+        notificationEmail3: req.body.notificationEmail3,
         isTripActive: true
     };
-    if (objectHasPropertyCheck(req.body, 'elockGeoFence') && arrayNotEmptyCheck(req.body['elockGeoFence'])) {
-        req.body['elockGeoFence'].forEach((item) => {
-            let obj = {
-                restrictionName: item['mapTitle'],
-                restrictionType: item['mapRestrictionType'],
-                startDate: item['startDate'],
-                finishDate: item['finishDate'],
-                repeatRules: item['restrictionDays'],
-                onAlert: item['onAlert'],
-                isActive: true,
-                locationDetails: item['mapLocation']
-            };
-            item['mapLocation'].forEach((map) => {
-                latArray.push(map['lat']);
-                lngArray.push(map['lng']);
-            });
-            restrictionRequestList.push(obj);
-        });
-        tripRequest = {
-            ...tripRequest,
-            restrictions: restrictionRequestList,
-            latArray: latArray,
-            lngArray: lngArray,
-            createdDate: new Date()
-        }
-    }
+    restrictionRequestList = objectHasPropertyCheck(req.body, 'address') && objectHasPropertyCheck(req.body.address, 'restriction') && arrayNotEmptyCheck(req.body.address['restriction']) ? req.body.address['restriction'] : [];
+    restrictionRequestList.forEach(item => {
+        latArray.push(item['lat']);
+        lngArray.push(item['lng']);
+    });
+    tripRequest = {
+        ...tripRequest,
+        restrictions: restrictionRequestList,
+        latArray: latArray,
+        lngArray: lngArray,
+        createdDate: new Date()
+    };
     await containerAccessors.insertElockTripDataAccessor(tripRequest);
     finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
     return finalResponse;

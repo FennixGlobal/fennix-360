@@ -100,6 +100,9 @@ const elockTripDataSchema = new Schema({
     expectedStartDate: Date,
     expectedEndDate: Date,
     isTripActive: Boolean,
+    notificationEmail2: String,
+    notificationEmail3: String,
+    notificationEmail1: String,
     startAddress: {
         lat: SchemaType.Double,
         lng: SchemaType.Double
@@ -110,21 +113,12 @@ const elockTripDataSchema = new Schema({
     },
     restrictions: [
         {
-            restrictionName: String,
-            restrictionType: String,
-            startDate: Date,
-            finishDate: Date,
-            repeatRules: [String],
-            onAlert: Boolean,
-            isActive: Boolean,
-            locationDetails: [
-                {
-                    lat: SchemaType.Double,
-                    lng: SchemaType.Double
-                }
-            ]
+            lat: SchemaType.Double,
+            lng: SchemaType.Double
         }
     ],
+    latArray: [SchemaType.Double],
+    lngArray: [SchemaType.Double],
     createdDate: Date
 });
 const elockTripCounterSchema = new Schema({
