@@ -446,7 +446,7 @@ const fetchTripDetailsBusiness = async (req) => {
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
-        containerListResponse.forEach((item) => {
+        containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
         });
         response = await containerAccessors.fetchTripDetailsAccessor(mongoRequest);
