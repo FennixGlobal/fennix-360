@@ -383,7 +383,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'modal-pill':
         case 'device-list':
-        case 'duration-text':
+        case 'destination-text':
         case 'status-indicator':
         case 'progress-indicator':
         case 'duration':
