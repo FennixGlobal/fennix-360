@@ -187,7 +187,7 @@ const assignContainerBusiness = async (req) => {
         if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
             socket.socketIO.emit('set_active_password', {
                 newPassword: activePasswordResponse[0]['active_password'],
-                oldPassword: masterPasswordResponse.rows[0]['master_password']
+                oldPassword: '123456'
             });
         }
     }
@@ -247,8 +247,6 @@ const containerMapDataListBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
-    console.log('container Id list');
-    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
@@ -263,8 +261,6 @@ const containerMapDataListBusiness = async (req) => {
             };
             return init;
         }, {containerIdArray: [], containerDetailObj: {}});
-        console.log('container Id list and details for the data respectively');
-        console.log(containerIdListAndDetailObj);
         containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
         containerDeviceArray.forEach((item) => {
             locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
@@ -454,13 +450,6 @@ const getTripDuration = (dateTime, timeFlag) => {
     return Math.abs(startDate.getTime() - endDate.getTime());
 };
 
-const timeMillisecondToHourConverter = (milliseconds) => {
-    let minutes = Math.ceil(parseInt((milliseconds / (1000 * 60)) % 60)),
-        hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24);
-    hours = (hours < 10) ? "0" + hours : hours;
-    minutes = (minutes < 10) ? "0" + minutes : minutes;
-    return hours + ":" + minutes;
-};
 getDateTimeStamp = (date, time) => {
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time), actualDate = new Date(date);
     actualDate.setTime(timeInMilliSeconds);
@@ -495,7 +484,7 @@ const fetchTripDetailsBusiness = async (req) => {
                     tripEndAddress: item['endAddress']['name'],
                     tripStartTime: item['startDate'],
                     tripEndTime: item['endDate'],
-                    tripStatus: item['tripStatus'],
+                    tripStatus: getTripStatusName(item['tripStatus']),
                     tripDuration: item['tripDuration'] ? item['tripDuration'] : '-',
                     tripActualStartDateTime: item['actualStartDate'] ? item['actualStartDate'] : '-',
                     tripActualEndDateTime: item['actualEndDate'] ? item['actualEndDate'] : '-',
@@ -509,7 +498,10 @@ const fetchTripDetailsBusiness = async (req) => {
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
-
+const getTripStatusName = (tripStatus) => {
+    const tripStatusMap = {NOT_STARTED: 'Not Started', IN_PROGRESS: 'In Progress', COMPLETED: 'Completed'};
+    return tripStatusMap[tripStatus];
+};
 const endTripBusiness = async (req) => {
     let response, notificationsResponse;
     notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
@@ -540,6 +532,13 @@ const startTripBusiness = async (req) => {
             status: 'IN_PROGRESS',
             tripActualStartTime: new Date()
         });
+        const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([notificationsResponse.containerId]);
+        if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
+            socket.socketIO.emit('set_active_password', {
+                newPassword: activePasswordResponse[0]['active_password'],
+                oldPassword: '123456'
+            });
+        }
         emailSendBusiness(notificationsResponse.notificationEmail1, null);
         emailSendBusiness(notificationsResponse.notificationEmail2, null);
         emailSendBusiness(notificationsResponse.notificationEmail3, null);

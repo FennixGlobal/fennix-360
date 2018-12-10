@@ -225,7 +225,7 @@ const listContainersAccessor = async (req) => {
 };
 const getContainerMasterPasswordAccessor = async (req) => {
     let returnObj;
-    returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerMasterPasswordQuery);
     return returnObj;
 };
 
@@ -237,7 +237,7 @@ const fetchAndUpdateContainerPasswordCounterAccessor = async (req) => {
 
 const getActivePasswordForContainerIdAccessor = async (req) => {
     let returnObj;
-    returnObj = await containerQueries.getActivePasswordForContainerIdQuery(req);
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.getActivePasswordForContainerIdQuery);
     return returnObj;
 };
 
@@ -253,7 +253,7 @@ const getNotificationEmailsForTripIdAccesssor = async (req) => {
 };
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
-    returnObj = await containerQueries.setContainerLockStatusQuery(req);
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.setContainerLockStatusQuery);
     return returnObj;
 };
 const updateTripStatusAccessor = async (req) => {
@@ -267,7 +267,7 @@ const updateTripStatusAccessor = async (req) => {
 
 const getContainerMasterPasswordAcessor = async (req) => {
     let returnObj;
-    returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
+    returnObj = await connectionCheckAndQueryExec(req,containerQueries.getContainerMasterPasswordQuery);
     return returnObj;
 };
 // TODO:Move this to commons

@@ -160,7 +160,7 @@ const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
     return ContainerPasswordCounterModel.findOneAndUpdate({}, {$inc: {[password]: 1}});
 };
 
-const getActivePasswordForContainerIdQuery = 'select active_password from container where container_id = $1';
+
 const fetchTripDetailsQuery = (req) => {
     return ElocksTripDataModel.find({
         tripStatus: {$in: req.status},
@@ -185,6 +185,8 @@ const updateTripStatusQuery = (req) => {
 };
 
 const getContainerMasterPasswordQuery = 'select master_password from container where container_id = $1';
+const getActivePasswordForContainerIdQuery = 'select active_password from container where container_id = $1';
+
 module.exports = {
     getContainerMasterPasswordQuery,
     fetchNextElockTripPrimaryKeyQuery,
