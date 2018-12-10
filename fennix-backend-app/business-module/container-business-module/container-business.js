@@ -399,25 +399,25 @@ const getContainerMapHistoryBusiness = async (req) => {
     if (arrayNotEmptyCheck(tripResponse)) {
         tripResponse.forEach((item) => tripIds.push(item['tripId']));
     }
-    console.log(tripIds);
     request = {
         containerId: parseInt(req.query.containerId),
         tripId: tripIds
     };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
     if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
-            let obj = {
-                containerId: item['trips'][0]['containerId'],
-                latitude: item['trips'][0]['latitude'],
-                longitude: item['trips'][0]['longitude'],
-                deviceDate: item['trips'][0]['deviceDate'],
-                locationId: item['trips'][0]['_id'],
-                tripId: item['_id'],
-                speed: item['trips'][0]['speed']
-            };
-            mapResponseArray.push(obj);
-        });
+        mapResponseArray = response;
+        // response.forEach((item) => {
+        //     let obj = {
+        //         containerId: item['trips'][0]['containerId'],
+        //         latitude: item['trips'][0]['latitude'],
+        //         longitude: item['trips'][0]['longitude'],
+        //         deviceDate: item['trips'][0]['deviceDate'],
+        //         locationId: item['trips'][0]['_id'],
+        //         tripId: item['_id'],
+        //         speed: item['trips'][0]['speed']
+        //     };
+        //     mapResponseArray.push(obj);
+        // });
         if (arrayNotEmptyCheck(tripResponse)) {
             startAddress = tripResponse[0]['startAddress'];
             endAddress = tripResponse[0]['endAddress'];

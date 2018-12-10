@@ -282,6 +282,8 @@ const eLocksDataUpdateBusiness = async (data) => {
             returnString = '(P46)';
             break;
     }
+    console.log('GPS and alarm data');
+    console.log(returnArray);
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
         const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
@@ -306,6 +308,8 @@ const eLocksDataUpdateBusiness = async (data) => {
                 deviceId = deviceId || (dataSplitterResponse ? dataSplitterResponse['deviceId'] : null);
                 containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
                 returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
+                console.log('data splitter rfesponse');
+                console.log(dataSplitterResponse);
                 if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
                     deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
                 }
@@ -534,6 +538,8 @@ const dataIterator = (data, obj) => {
         }
     }
     if (data.length > 0) {
+        console.log('data in data Iterator');
+        console.log(data);
         switch (parseInt(data.slice(0, 2).join(''))) {
             case 24:
                 obj.gps.push(data.splice(0, 98).join(''));
