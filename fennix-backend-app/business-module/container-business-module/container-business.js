@@ -348,7 +348,8 @@ const unlockElockBusiness = async (req) => {
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
         containerAccessors.setContainerLockStatusAccessor([containerId, false]);
-        socket.socketIO.emit('unlock_device', activePasswordResponse.rows[0]['active_password']);
+        // activePasswordResponse.rows[0]['active_password']
+        socket.socketIO.emit('unlock_device', '100000');
     }
     if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
         socket.socketIO.emit('reset_device_password', {
