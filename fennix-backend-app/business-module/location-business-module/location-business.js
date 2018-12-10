@@ -466,7 +466,7 @@ const eLocksDataUpdateDumpBusiness = async (data) => {
         dumpDataList = [], masterDateResponse = {}, masterDate,
         dataSplitterResponse = null, response;
     const eLockStatus = data.slice(0, 2);
-    console.log(eLockStatus);
+    console.log('elock Status');
     console.log(eLockStatus);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
