@@ -515,9 +515,9 @@ const endTripBusiness = async (req) => {
             tripActualEndTime: endDateTime,
             tripActualDuration: tripDuration
         });
-        emailSendBusiness(notificationsResponse.notificationEmail1, null);
-        emailSendBusiness(notificationsResponse.notificationEmail2, null);
-        emailSendBusiness(notificationsResponse.notificationEmail3, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail1, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail2, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail3, null);
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };
@@ -539,9 +539,9 @@ const startTripBusiness = async (req) => {
                 oldPassword: '123456'
             });
         }
-        emailSendBusiness(notificationsResponse.notificationEmail1, null);
-        emailSendBusiness(notificationsResponse.notificationEmail2, null);
-        emailSendBusiness(notificationsResponse.notificationEmail3, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail1, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail2, null);
+        // emailSendBusiness(notificationsResponse.notificationEmail3, null);
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };
