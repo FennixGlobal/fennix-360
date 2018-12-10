@@ -532,13 +532,14 @@ const startTripBusiness = async (req) => {
             status: 'IN_PROGRESS',
             tripActualStartTime: new Date()
         });
-        const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([notificationsResponse.containerId]);
-        if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
+        // activePasswordResponse[0]['active_password']
+        // const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([notificationsResponse.containerId]);
+        // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
             socket.socketIO.emit('set_active_password', {
-                newPassword: activePasswordResponse[0]['active_password'],
+                newPassword: '213456',
                 oldPassword: '123456'
             });
-        }
+        // }
         // emailSendBusiness(notificationsResponse.notificationEmail1, null);
         // emailSendBusiness(notificationsResponse.notificationEmail2, null);
         // emailSendBusiness(notificationsResponse.notificationEmail3, null);
