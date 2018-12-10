@@ -397,8 +397,6 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     console.log(tripIds);
     request = {
-        // toDate: toDate.toISOString(),
-        // fromDate: fromDate.toISOString(),
         containerId: parseInt(req.query.containerId),
         tripId: tripIds
     };
@@ -439,7 +437,7 @@ const getContainerMapHistoryBusiness = async (req) => {
     return finalResponse;
 };
 const fetchTripDetailsBusiness = async (req) => {
-    let userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}}, request = {},
+    let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
         containerListResponse,
         mongoRequest = {status: ["IN_PROGRESS", "NOT_STARTED"], containerId: {$in: []}}, response,
         tripResponse = {gridData: []};
