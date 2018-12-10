@@ -489,6 +489,7 @@ const fetchTripDetailsBusiness = async (req) => {
             let formattedArray = [];
             response.forEach((item) => {
                 const obj = {
+                    tripId: item['tripId'],
                     tripName: item['tripName'],
                     tripStartAddress: item['startAddress']['name'],
                     tripEndAddress: item['endAddress']['name'],
