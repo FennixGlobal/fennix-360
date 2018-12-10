@@ -174,11 +174,9 @@ const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select
 
 const setContainerLockStatusQuery = 'update container set container_lock_status =$2 where container_id =$1';
 
-const updateTripStatusQuery = (req)=>{
+const updateTripStatusQuery = (req) => {
     return ElocksTripDataModel.update({tripId: req.tripId}, {
-        $set: {
-            tripStatus:req.status
-        }
+        $set: req.setFields
     }, {upsert: true}).then(doc => {
         if (!doc) {
             console.log('error');

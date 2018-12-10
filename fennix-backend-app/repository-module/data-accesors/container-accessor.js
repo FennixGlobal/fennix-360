@@ -247,27 +247,36 @@ const fetchTripDetailsAccessor = async (req) => {
     return returnObj;
 };
 const getNotificationEmailsForTripIdAccesssor = async (req) => {
-        let returnObj;
-        returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
-        return returnObj;
-    };
+    let returnObj;
+    returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
+    return returnObj;
+};
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
     returnObj = await containerQueries.setContainerLockStatusQuery(req);
     return returnObj;
 };
-const updateTripStatusAccessor = async(req)=>{
-    let returnObj;
-    returnObj = await containerQueries.updateTripStatusQuery(req);
+const updateTripStatusAccessor = async (req) => {
+    let returnObj, newReq = {};
+    newReq['tripId'] = req.tripId;
+    newReq['setFields'] = getSetFields(req, 'tripId');
+    console.log(newReq);
+    returnObj = await containerQueries.updateTripStatusQuery(newReq);
     return returnObj;
 };
 
-const getContainerMasterPasswordAcessor  = async(req)=>{
+const getContainerMasterPasswordAcessor = async (req) => {
     let returnObj;
     returnObj = await containerQueries.getContainerMasterPasswordQuery(req);
     return returnObj;
 };
-
+// TODO:Move this to commons
+const getSetFields = (setFields, skipValue) => {
+    if (notNullCheck(setFields)) {
+        delete setFields[skipValue];
+    }
+    return setFields;
+};
 module.exports = {
     fetchTripDetailsAccessor,
     getContainerMasterPasswordAcessor,

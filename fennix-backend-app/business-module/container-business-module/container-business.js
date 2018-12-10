@@ -495,10 +495,10 @@ const fetchTripDetailsBusiness = async (req) => {
                     tripStartTime: item['startDate'],
                     tripEndTime: item['endDate'],
                     tripStatus: item['tripStatus'],
-                    tripDuration: item['tripDuration'],
-                    tripActualStartDateTime: item['actualStartDate'],
-                    tripActualEndDateTime: item['actualEndDate'],
-                    tripActualDuration: item['actualDuration']
+                    tripDuration: item['tripDuration'] ? item['tripDuration'] : '-',
+                    tripActualStartDateTime: item['actualStartDate'] ? item['actualStartDate'] : '-',
+                    tripActualEndDateTime: item['actualEndDate'] ? item['actualEndDate'] : '-',
+                    tripActualDuration: item['actualDuration'] ? item['actualDuration'] : '-'
                 };
                 formattedArray.push(obj);
             });
@@ -513,13 +513,20 @@ const endTripBusiness = async (req) => {
     let response, notificationsResponse;
     notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
     if (notNullCheck(notificationsResponse)) {
-        containerAccessors.updateTripStatusAccessor({tripId: req.query.tripId, status: 'COMPLETED'});
+        let startDateTime = new Date(notificationsResponse['tripActualStartTime']);
+        let endDateTime = new Date();
+        let tripDuration = Math.abs(endDateTime.getTime() - startDateTime.getTime());
+        containerAccessors.updateTripStatusAccessor({
+            tripId: req.query.tripId,
+            status: 'COMPLETED',
+            tripActualEndTime: endDateTime,
+            tripActualDuration: tripDuration
+        });
         emailSendBusiness(notificationsResponse.notificationEmail1, null);
         emailSendBusiness(notificationsResponse.notificationEmail2, null);
         emailSendBusiness(notificationsResponse.notificationEmail3, null);
     }
-
-
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };
 
 const startTripBusiness = async (req) => {
@@ -527,14 +534,18 @@ const startTripBusiness = async (req) => {
     notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
     if (notNullCheck(notificationsResponse)) {
         containerAccessors.setContainerLockStatusAccessor([notificationsResponse.containerId, true]);
-        containerAccessors.updateTripStatusAccessor({tripId: req.query.tripId, status: 'IN_PROGRESS'});
+        containerAccessors.updateTripStatusAccessor({
+            tripId: req.query.tripId,
+            status: 'IN_PROGRESS',
+            tripActualStartTime: new Date()
+        });
         emailSendBusiness(notificationsResponse.notificationEmail1, null);
         emailSendBusiness(notificationsResponse.notificationEmail2, null);
         emailSendBusiness(notificationsResponse.notificationEmail3, null);
     }
-
-
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };
+
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
