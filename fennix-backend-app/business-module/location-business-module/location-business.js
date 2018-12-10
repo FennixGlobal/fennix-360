@@ -312,6 +312,8 @@ const eLocksDataUpdateBusiness = async (data) => {
             }
         });
         let finalLocationId, finalDeviceAttrId;
+        console.log(locationList.length);
+        console.log(deviceAttributesList.length);
         if (arrayNotEmptyCheck(locationList)) {
             finalLocationId = locationList[locationList.length - 1]['_id'];
             updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
