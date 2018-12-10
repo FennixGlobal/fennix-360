@@ -4,6 +4,7 @@ const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = 
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {updateQueryCreator} = require('../../util-module/request-validators');
+const {notNullCheck} = require('../../util-module/data-validators');
 
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
