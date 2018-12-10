@@ -383,6 +383,11 @@ const widgetGridElementCreator = (widgetElementItem) => {
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'modal-pill':
         case 'device-list':
+        case 'duration-text':
+        case 'status-indicator':
+        case 'progress-indicator':
+        case 'duration':
+        case 'time-duration':
             returnObj = {
                 ...returnObj,
                 primaryValue: widgetElementItem['element_primary_value__validation'],
@@ -391,6 +396,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 accentValue: widgetElementItem['default_key__accent_value'],
                 iconValue: widgetElementItem['element_icon_value'],
                 gridModalId: widgetElementItem['element_modal_id'],
+                elementTitle: widgetElementItem['element_title'],
                 gridModalDataKey: widgetElementItem['request_mapping_key']
             };
             break;
