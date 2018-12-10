@@ -448,6 +448,7 @@ const fetchTripDetailsBusiness = async (req) => {
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
+            console.log(mongoRequest);
         });
         response = await containerAccessors.fetchTripDetailsAccessor(mongoRequest);
         if (arrayNotEmptyCheck(response)) {
