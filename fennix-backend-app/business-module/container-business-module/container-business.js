@@ -205,11 +205,17 @@ const assignContainerBusiness = async (req) => {
         deviceId: parseInt(req.body.deviceId, 10),
         startAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.startAddress : '',
         endAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.endAddress : '',
-        startDate: req.body.expectedStartDate,
-        endDate: req.body.expectedEndDate,
+        startDate: getDateTimeStamp(req.body.expectedStartDate, req.body.expectedStartTime),
+        endDate: getDateTimeStamp(req.body.expectedEndDate, req.body.expectedEndTime),
         tripName: req.body.tripName,
         startTime: req.body.expectedStartTime,
         endTime: req.body.expectedEndTime,
+        tripDuration: getTripDuration({
+            startDate: req.body.expectedStartDate,
+            startTime: req.body.expectedStartTime,
+            endDate: req.body.expectedEndDate,
+            endTime: req.body.expectedEndTime
+        }),
         tripStatus: 'NOT_STARTED',
         notificationEmail1: req.body.notificationEmail1,
         notificationEmail2: req.body.notificationEmail2,
@@ -436,6 +442,34 @@ const getContainerMapHistoryBusiness = async (req) => {
     }
     return finalResponse;
 };
+const getTripDuration = (dateTime, timeFlag) => {
+    let startTime = dateTime.startTime, endTime = dateTime.endTime, startDate = new Date(dateTime.startDate),
+        endDate = new Date(dateTime.endDate);
+    if (timeFlag) {
+        startTime = timeHoursToMillisecondConverter(startTime);
+        endTime = timeHoursToMillisecondConverter(endTime);
+        startDate.setTime(startTime);
+        endDate.setTime(endTime);
+    }
+    return Math.abs(startDate.getTime() - endDate.getTime());
+};
+
+const timeMillisecondToHourConverter = (milliseconds) => {
+    let minutes = Math.ceil(parseInt((milliseconds / (1000 * 60)) % 60)),
+        hours = parseInt((milliseconds / (1000 * 60 * 60)) % 24);
+    hours = (hours < 10) ? "0" + hours : hours;
+    minutes = (minutes < 10) ? "0" + minutes : minutes;
+    return hours + ":" + minutes;
+};
+getDateTimeStamp = (date, time) => {
+    let timeInMilliSeconds = timeHoursToMillisecondConverter(time), actualDate = new Date(date);
+    actualDate.setTime(timeInMilliSeconds);
+    return actualDate;
+};
+const timeHoursToMillisecondConverter = (time) => {
+    let splitTime = time.split(':');
+    return ((splitTime[0] * (60000 * 60)) + (splitTime[1] * 60000));
+};
 const fetchTripDetailsBusiness = async (req) => {
     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
         containerListResponse,
@@ -452,7 +486,23 @@ const fetchTripDetailsBusiness = async (req) => {
         });
         response = await containerAccessors.fetchTripDetailsAccessor(mongoRequest);
         if (arrayNotEmptyCheck(response)) {
-            tripResponse.gridData = response;
+            let formattedArray = [];
+            response.forEach((item) => {
+                const obj = {
+                    tripName: item['tripName'],
+                    tripStartAddress: item['startAddress']['name'],
+                    tripEndAddress: item['endAddress']['name'],
+                    tripStartTime: item['startDate'],
+                    tripEndTime: item['endDate'],
+                    tripStatus: item['tripStatus'],
+                    tripDuration: item['tripDuration'],
+                    tripActualStartDateTime: item['actualStartDate'],
+                    tripActualEndDateTime: item['actualEndDate'],
+                    tripActualDuration: item['actualDuration']
+                };
+                formattedArray.push(obj);
+            });
+            tripResponse.gridData = formattedArray;
             tripResponse.totalNoOfRecords = response.length;
         }
     }
