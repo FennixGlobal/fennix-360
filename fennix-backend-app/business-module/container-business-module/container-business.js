@@ -535,10 +535,11 @@ const startTripBusiness = async (req) => {
         // activePasswordResponse[0]['active_password']
         // const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([notificationsResponse.containerId]);
         // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-            socket.socketIO.emit('set_active_password', {
-                newPassword: '213456',
-                oldPassword: '123456'
-            });
+        console.log(socket.socketIO);
+        socket.socketIO.emit('set_active_password', {
+            newPassword: '213456',
+            oldPassword: '123456'
+        });
         // }
         // emailSendBusiness(notificationsResponse.notificationEmail1, null);
         // emailSendBusiness(notificationsResponse.notificationEmail2, null);
