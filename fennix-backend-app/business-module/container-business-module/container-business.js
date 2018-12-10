@@ -537,7 +537,7 @@ const startTripBusiness = async (req) => {
         // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
         console.log(socket.socketIO);
         socket.socketIO.emit('set_active_password', {
-            newPassword: '7860503666',
+            newPassword: '123456',
             oldPassword: '213456'
         });
         // }
