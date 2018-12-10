@@ -187,6 +187,13 @@ const statusCodes = {
             espLA: 'El servidor está caído'
         }
     },
+    240: {
+        devMsg: 'Device Unlocked successfully', userMsg: {
+            EN_US: 'Device Unlocked successfully',
+            espMX: 'Device Unlocked successfully',
+            espLA: 'Device Unlocked successfully'
+        }
+    },
     701: {
         devMsg: 'mongoDB is not getting connected', userMsg: {
             EN_US: 'Server is down',

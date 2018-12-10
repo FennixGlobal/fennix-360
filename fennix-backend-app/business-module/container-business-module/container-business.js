@@ -357,6 +357,7 @@ const unlockElockBusiness = async (req) => {
             oldPassword: activePasswordResponse.rows[0]['active_password']
         });
     }
+    return fennixResponse(statusCodeConstants.STATUS_DEVICE_UNLOCKED, 'EN_US', []);
 };
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
@@ -539,7 +540,7 @@ const startTripBusiness = async (req) => {
         console.log(socket.socketIO);
         socket.socketIO.emit('set_active_password', {
             newPassword: '100000',
-            oldPassword: '123456'
+            oldPassword: '100000'
         });
         // }
         // emailSendBusiness(notificationsResponse.notificationEmail1, null);
