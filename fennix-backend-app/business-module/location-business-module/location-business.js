@@ -539,11 +539,7 @@ const dataIterator = (data, obj) => {
             others: []
         }
     }
-    console.log('data outside length check data Iterator');
-    console.log(data);
     if (data.length > 0) {
-        console.log('data in data Iterator');
-        console.log(data);
         switch (parseInt(data.slice(0, 2).join(''))) {
             case 24:
                 obj.gps.push(data.splice(0, 98).join(''));

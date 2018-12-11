@@ -320,8 +320,11 @@ const containerMapDataListBusiness = async (req) => {
             });
             containerDevices = {...deviceDetails};
             const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-            const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
+            const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString('es')}`;
+            const serverDate = new Date(`${item.deviceAttributes.serverDate}`);
+            const modifiedServerDate = `${serverDate.toLocaleDateString('es')} ${serverDate.toLocaleTimeString('es')}`;
             containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceUpdatedDate'] = modifiedDate;
+            containerIdListAndDetailObj.containerDetailObj[item.containerId]['serverDate'] = modifiedServerDate;
             containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceDetails'] = deviceDetails[item.containerId];
             containerIdListAndDetailObj.containerDetailObj[item.containerId]['noOfViolations'] = {
                 text: 'Number of Violations',
