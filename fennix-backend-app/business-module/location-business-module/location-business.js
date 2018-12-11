@@ -5,6 +5,7 @@ const deviceAccessor = require('../../repository-module/data-accesors/device-acc
 const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
 const {deviceValidator} = require('../../util-module/device-validations');
 const cronJob = require('cron').CronJob;
+const {notificationEmailBusiness} = require('../../business-module/common-business-module/common-business');
 
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data) => {
@@ -447,6 +448,15 @@ const dataSplitterDump = async (data, masterDate) => {
                     gsmQuality: data.slice(86, 88),
                     geoFenceAlarm: data.slice(88, 90)
                 };
+                let latArray = containerResponse[0]['trips']['latArray'];
+                let lngArray = containerResponse[0]['trips']['lngArray'];
+                latArray = latArray ? latArray.sort() : [];
+                lngArray = lngArray ? lngArray.sort() : [];
+                if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'],'geo_fence');
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'],'geo_fence');
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'],'geo_fence');
+                }
                 if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
                     returnString = '(P35)';
                 }

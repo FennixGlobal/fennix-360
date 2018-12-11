@@ -6,7 +6,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {socket} = require('../../../app');
-const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
+const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, notificationEmailBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 
@@ -520,9 +520,9 @@ const endTripBusiness = async (req) => {
             tripActualEndTime: endDateTime,
             tripActualDuration: tripDuration
         });
-        // emailSendBusiness(notificationsResponse.notificationEmail1, null);
-        // emailSendBusiness(notificationsResponse.notificationEmail2, null);
-        // emailSendBusiness(notificationsResponse.notificationEmail3, null);
+        notificationEmailBusiness(notificationsResponse.notificationEmail1, 'end_trip');
+        notificationEmailBusiness(notificationsResponse.notificationEmail2, 'end_trip');
+        notificationEmailBusiness(notificationsResponse.notificationEmail3, 'end_trip');
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };
@@ -540,15 +540,14 @@ const startTripBusiness = async (req) => {
         // activePasswordResponse[0]['active_password']
         // const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([notificationsResponse.containerId]);
         // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-        console.log(socket.socketIO);
         socket.socketIO.emit('set_active_password', {
             newPassword: '100000',
             oldPassword: '100000'
         });
         // }
-        // emailSendBusiness(notificationsResponse.notificationEmail1, null);
-        // emailSendBusiness(notificationsResponse.notificationEmail2, null);
-        // emailSendBusiness(notificationsResponse.notificationEmail3, null);
+        notificationEmailBusiness(notificationsResponse.notificationEmail1, 'start_trip');
+        notificationEmailBusiness(notificationsResponse.notificationEmail2, 'start_trip');
+        notificationEmailBusiness(notificationsResponse.notificationEmail3, 'start_trip');
     }
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 };

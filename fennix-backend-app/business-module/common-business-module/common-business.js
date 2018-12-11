@@ -163,6 +163,46 @@ const emailSendBusiness = async (emailId, roleId) => {
     });
 };
 
+const notificationEmailBusiness = async (emailId, notificationType) => {
+    const subject = 'Status Update on E-Lock Trip';
+    let body;
+    body = notificationModifier(notificationType);
+    const transporter = nodeMailer.createTransport({
+        port: 465,
+        host: 'smtp.gmail.com',
+        service: 'gmail',
+        auth: {
+            user: 'fennixtest@gmail.com',
+            pass: 'Fennix@gmail'
+        },
+    });
+
+    const mailOptions = {
+        from: 'fennixtest@gmail.com',
+        to: emailId,
+        subject: subject,
+        html: body
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            // console.log(info);
+        }
+    });
+};
+
+const notificationModifier = (notificationType) => {
+    const notificationBodyMap = {
+        start_trip: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your Trip has started</p>`,
+        end_trip: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your Trip has Ended</p>`,
+        unlock_device: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your device ha been unlocked</p>`,
+        geo_fence: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">There has been a geofence violation on the trip</p>`
+    };
+    return notificationBodyMap[notificationType];
+};
+
 const mailModifier = (email, roleName) => {
     let body, url, urlName, header, returnMailBody;
     url = `${roleMailBody[roleName.toLowerCase()].url}?emailId=${email}`;
@@ -185,6 +225,7 @@ module.exports = {
     uploadToDropboxBusiness,
     getLocationCodeBusiness,
     shareDropboxLinkBusiness,
+    notificationEmailBusiness,
     getContainerCheckboxMetadataBusiness,
     getDropdownNameFromKeyBusiness
 };
