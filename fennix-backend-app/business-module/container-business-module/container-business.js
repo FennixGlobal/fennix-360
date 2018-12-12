@@ -488,7 +488,7 @@ const endTripBusiness = async (req) => {
         let tripDuration = Math.abs(endDateTime.getTime() - startDateTime.getTime());
         containerAccessors.updateTripStatusAccessor({
             tripId: req.query.tripId,
-            status: 'COMPLETED',
+            tripStatus: 'COMPLETED',
             tripActualEndTime: endDateTime,
             tripActualDuration: tripDuration
         });
@@ -506,7 +506,7 @@ const startTripBusiness = async (req) => {
         containerAccessors.setContainerLockStatusAccessor([parseInt(notificationsResponse[0].containerId), true]);
         containerAccessors.updateTripStatusAccessor({
             tripId: req.query.tripId,
-            status: 'IN_PROGRESS',
+            tripStatus: 'IN_PROGRESS',
             tripActualStartTime: new Date()
         });
         // activePasswordResponse[0]['active_password']
