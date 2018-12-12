@@ -214,10 +214,6 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             let lngArray = containerResponse[0]['trips']['lngArray'];
             latArray = latArray ? latArray.sort() : [];
             lngArray = lngArray ? lngArray.sort() : [];
-            console.log(containerResponse[0]);
-            console.log(processedLoc);
-            console.log(latArray);
-            console.log(lngArray);
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');

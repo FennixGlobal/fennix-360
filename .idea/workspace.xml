@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
@@ -33,12 +32,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="18353" />
+          <entry key="js" value="18354" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="18353" />
+          <entry key="JavaScript" value="18354" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -118,8 +117,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="194">
-              <caret line="218" column="13" selection-start-line="218" selection-start-column="13" selection-end-line="218" selection-end-column="13" />
+            <state relative-caret-position="23">
+              <caret line="203" column="36" lean-forward="true" selection-start-line="203" selection-start-column="36" selection-end-line="203" selection-end-column="36" />
             </state>
           </provider>
         </entry>
@@ -429,12 +428,12 @@
       <workItem from="1543236706796" duration="1910000" />
       <workItem from="1544186210116" duration="2947000" />
       <workItem from="1544251543808" duration="66520000" />
-      <workItem from="1544629730456" duration="815000" />
+      <workItem from="1544629730456" duration="1062000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1474692000" />
+    <option name="totallyTimeSpent" value="1474939000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -447,7 +446,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.21848185" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1350,8 +1348,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="194">
-          <caret line="218" column="13" selection-start-line="218" selection-start-column="13" selection-end-line="218" selection-end-column="13" />
+        <state relative-caret-position="23">
+          <caret line="203" column="36" lean-forward="true" selection-start-line="203" selection-start-column="36" selection-end-line="203" selection-end-column="36" />
         </state>
       </provider>
     </entry>
