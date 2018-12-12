@@ -32,12 +32,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="18232" />
+          <entry key="js" value="18244" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="18232" />
+          <entry key="JavaScript" value="18244" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -81,8 +81,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="326">
-              <caret line="530" column="28" lean-forward="true" selection-start-line="530" selection-start-column="28" selection-end-line="530" selection-end-column="28" />
+            <state relative-caret-position="303">
+              <caret line="523" column="58" selection-start-line="523" selection-start-column="58" selection-end-line="523" selection-end-column="58" />
             </state>
           </provider>
         </entry>
@@ -110,7 +110,7 @@
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="179">
-              <caret line="251" column="45" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
+              <caret line="251" column="50" lean-forward="true" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -437,12 +437,12 @@
       <workItem from="1542822848896" duration="13020000" />
       <workItem from="1543236706796" duration="1910000" />
       <workItem from="1544186210116" duration="2947000" />
-      <workItem from="1544251543808" duration="65299000" />
+      <workItem from="1544251543808" duration="65487000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1472656000" />
+    <option name="totallyTimeSpent" value="1472844000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,6 +455,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.21848185" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1354,7 +1355,7 @@
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
-          <caret line="251" column="45" selection-start-line="251" selection-start-column="45" selection-end-line="251" selection-end-column="45" />
+          <caret line="251" column="50" lean-forward="true" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="50" />
         </state>
       </provider>
     </entry>
@@ -1367,8 +1368,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="326">
-          <caret line="530" column="28" lean-forward="true" selection-start-line="530" selection-start-column="28" selection-end-line="530" selection-end-column="28" />
+        <state relative-caret-position="303">
+          <caret line="523" column="58" selection-start-line="523" selection-start-column="58" selection-end-line="523" selection-end-column="58" />
         </state>
       </provider>
     </entry>
