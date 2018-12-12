@@ -254,8 +254,8 @@ const getNotificationEmailsForTripIdAccesssor = async (req) => {
 };
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
-    console.log(req);
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.setContainerLockStatusQuery);
+    console.log(returnObj);
     return returnObj;
 };
 const updateTripStatusAccessor = async (req) => {
@@ -268,7 +268,7 @@ const updateTripStatusAccessor = async (req) => {
 
 const getContainerMasterPasswordAcessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req,containerQueries.getContainerMasterPasswordQuery);
+    returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerMasterPasswordQuery);
     return returnObj;
 };
 // TODO:Move this to commons

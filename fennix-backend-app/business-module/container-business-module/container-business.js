@@ -449,7 +449,6 @@ const fetchTripDetailsBusiness = async (req) => {
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
-            console.log(mongoRequest);
         });
         response = await containerAccessors.fetchTripDetailsAccessor(mongoRequest);
         if (arrayNotEmptyCheck(response)) {
@@ -518,7 +517,6 @@ const startTripBusiness = async (req) => {
             oldPassword: '100000'
         });
         // }
-        console.log(notificationsResponse);
         notificationEmailBusiness(notificationsResponse[0].notificationEmail1, 'start_trip');
         notificationEmailBusiness(notificationsResponse[0].notificationEmail2, 'start_trip');
         notificationEmailBusiness(notificationsResponse[0].notificationEmail3, 'start_trip');
