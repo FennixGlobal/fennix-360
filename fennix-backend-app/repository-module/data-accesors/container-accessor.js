@@ -261,7 +261,6 @@ const updateTripStatusAccessor = async (req) => {
     let returnObj, newReq = {};
     newReq['tripId'] = req.tripId;
     newReq['setFields'] = getSetFields(req, 'tripId');
-    console.log(newReq);
     returnObj = await containerQueries.updateTripStatusQuery(newReq);
     return returnObj;
 };

@@ -365,33 +365,6 @@ const unlockElockBusiness = async (req) => {
 const getContainerMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
-    //Note: Hard coding with 10 days
-    // if (notNullCheck(req.query.dateRange)) {
-    //     switch (req.query.dateRange) {
-    //         case '1hr':
-    //             fromDate.setTime(toDate.getTime() - 1);
-    //             break;
-    //         case '2hr':
-    //             fromDate.setTime(toDate.getTime() - 2);
-    //             break;
-    //         case '5hr':
-    //             fromDate.setTime(toDate.getTime() - 5);
-    //             break;
-    //         case '1day':
-    //             fromDate.setDate(toDate.getDate() - 1);
-    //             break;
-    //         case '2day':
-    //             fromDate.setDate(toDate.getDate() - 2);
-    //             break;
-    //         case '7day':
-    //             fromDate.setDate(toDate.getDate() - 7);
-    //             break;
-    //         default:
-    //             fromDate.setDate(toDate.getDate() - 14);
-    //     }
-    // } else {
-    //     fromDate.setDate(toDate.getDate() - 14);
-    // }
     let tripLimit = notNullCheck(req.query.limit) ? req.query.limit : 5;
     let tripRequest = {
         containerId: parseInt(req.query.containerId),
