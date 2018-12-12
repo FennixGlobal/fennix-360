@@ -350,9 +350,9 @@ const unlockElockBusiness = async (req) => {
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-        containerAccessors.setContainerLockStatusAccessor([containerId, false]);
-        // activePasswordResponse.rows[0]['active_password']
-        socket.socketIO.emit('unlock_device', '100000');
+    containerAccessors.setContainerLockStatusAccessor([containerId, false]);
+    // activePasswordResponse.rows[0]['active_password']
+    socket.socketIO.emit('unlock_device', '100000');
     // }
     if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
         socket.socketIO.emit('reset_device_password', {
@@ -518,6 +518,7 @@ const startTripBusiness = async (req) => {
             oldPassword: '100000'
         });
         // }
+        console.log(notificationsResponse);
         notificationEmailBusiness(notificationsResponse.notificationEmail1, 'start_trip');
         notificationEmailBusiness(notificationsResponse.notificationEmail2, 'start_trip');
         notificationEmailBusiness(notificationsResponse.notificationEmail3, 'start_trip');
