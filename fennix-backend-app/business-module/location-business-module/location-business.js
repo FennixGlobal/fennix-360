@@ -210,6 +210,19 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
         if (arrayNotEmptyCheck(containerResponse)) {
+            let latArray = containerResponse[0]['trips']['latArray'];
+            let lngArray = containerResponse[0]['trips']['lngArray'];
+            latArray = latArray ? latArray.sort() : [];
+            lngArray = lngArray ? lngArray.sort() : [];
+            console.log(containerResponse[0]);
+            console.log(processedLoc);
+            console.log(latArray);
+            console.log(lngArray);
+            if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
+                notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
+                notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
+                notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
+            }
             containerId = containerResponse[0]['containerId'];
             deviceId = containerResponse[0]['_id'];
             location = {
@@ -448,19 +461,6 @@ const dataSplitterDump = async (data, masterDate) => {
                     gsmQuality: data.slice(86, 88),
                     geoFenceAlarm: data.slice(88, 90)
                 };
-                let latArray = containerResponse[0]['trips']['latArray'];
-                let lngArray = containerResponse[0]['trips']['lngArray'];
-                latArray = latArray ? latArray.sort() : [];
-                lngArray = lngArray ? lngArray.sort() : [];
-                console.log(containerResponse[0]);
-                console.log(processedLoc);
-                console.log(latArray);
-                console.log(lngArray);
-                if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
-                }
                 if (deviceAlertInfo.flag && deviceAlertInfo.returnValue && deviceAlertInfo.returnValue.split('')[14] === '1') {
                     returnString = '(P35)';
                 }
