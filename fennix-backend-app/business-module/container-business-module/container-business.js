@@ -502,7 +502,7 @@ const endTripBusiness = async (req) => {
 
 const startTripBusiness = async (req) => {
     let response, notificationsResponse;
-    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor(req.query.tripId);
+    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor({tripId: req.query.tripId});
     if (notNullCheck(notificationsResponse)) {
         containerAccessors.setContainerLockStatusAccessor([notificationsResponse.containerId, true]);
         containerAccessors.updateTripStatusAccessor({
