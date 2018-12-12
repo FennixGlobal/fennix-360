@@ -504,7 +504,7 @@ const startTripBusiness = async (req) => {
     let response, notificationsResponse;
     notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor({tripId: req.query.tripId});
     if (notNullCheck(notificationsResponse)) {
-        containerAccessors.setContainerLockStatusAccessor([notificationsResponse[0].containerId, true]);
+        containerAccessors.setContainerLockStatusAccessor([parseInt(notificationsResponse[0].containerId), true]);
         containerAccessors.updateTripStatusAccessor({
             tripId: req.query.tripId,
             status: 'IN_PROGRESS',

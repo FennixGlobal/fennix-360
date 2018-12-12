@@ -2,7 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/request-validators.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/request-validators.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -32,12 +36,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="js" value="18244" />
+          <entry key="js" value="18293" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JavaScript" value="18244" />
+          <entry key="JavaScript" value="18293" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -78,11 +82,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="523" column="58" selection-start-line="523" selection-start-column="58" selection-end-line="523" selection-end-column="58" />
+            <state relative-caret-position="234">
+              <caret line="506" column="48" lean-forward="true" selection-start-line="506" selection-start-column="48" selection-end-line="506" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -91,7 +95,7 @@
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="23">
-              <caret line="157" column="20" lean-forward="true" selection-start-line="157" selection-start-column="20" selection-end-line="157" selection-end-column="20" />
+              <caret line="171" column="6" lean-forward="true" selection-start-line="171" selection-start-column="6" selection-end-line="171" selection-end-column="6" />
               <folding>
                 <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
@@ -106,11 +110,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="179">
-              <caret line="251" column="50" lean-forward="true" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="50" />
+              <caret line="256" column="21" selection-start-line="256" selection-start-column="21" selection-end-line="256" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -127,8 +131,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="361" column="16" lean-forward="true" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="16" />
+            <state relative-caret-position="239">
+              <caret line="460" column="43" lean-forward="true" selection-start-line="460" selection-start-column="43" selection-end-line="460" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -153,8 +157,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>getContainerMasterPasswordAccessor</find>
-      <find>addcon</find>
       <find>getcontaineridlis</find>
       <find>gettotalnoof</find>
       <find>cro</find>
@@ -182,6 +184,8 @@
       <find>masterPasswordResponse</find>
       <find>emailSendBusiness</find>
       <find>notificationEmailBusiness</find>
+      <find>getNotificationEmailsForTripIdAccesssor</find>
+      <find>notif</find>
       <find>unlo</find>
     </findStrings>
     <replaceStrings>
@@ -270,8 +274,8 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-message-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
       </list>
     </option>
   </component>
@@ -322,7 +326,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="SearchEverywhereHistoryKey" value="setFi&#9;null&#9;null&#10;app&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/app.js&#10;loc&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;mapHistory&#9;null&#9;null&#10;unlock&#9;null&#9;null&#10;metada&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;unlo&#9;null&#9;null&#10;db&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/db-constants.js&#10;container&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/container-model.js&#10;loca&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;contai&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/container-controller.js&#10;dropdown&#9;null&#9;null&#10;metadata&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;DB&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/db-constants.js&#10;contain&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/data-accesors/container-accessor.js&#10;getActiveT&#9;null&#9;null&#10;elockL&#9;null&#9;null&#10;app.js&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/app.js&#10;location&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;&quot;&#9;null&#9;null&#10;listDevice&#9;null&#9;null&#10;metadata-con&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/metadata-controller.js&#10;met&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/queries/metadata-query.js&#10;meta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;listDe&#9;null&#9;null&#10;bene&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js&#10;ass&#9;null&#9;null&#10;benef&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/beneficiary-controller.js&#10;restr&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/restriction-model.js&#10;assign&#9;null&#9;null&#10;auth&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/auth-business-module/auth-business.js&#10;device&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/device-model.js&#10;connect&#9;null&#9;null&#10;addBe&#9;null&#9;null&#10;addConta&#9;null&#9;null&#10;eLocks&#9;null&#9;null&#10;sta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-message-constants.js&#10;lo&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;benefici&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/beneficiary-controller.js&#10;status-c&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-message-constants.js&#10;status&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-code-constants.js&#10;container-con&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/container-controller.js&#10;listDevices&#9;null&#9;null&#10;deviceModel&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/device-model.js&#10;devi&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/queries/device-query.js&#10;conta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/data-accesors/container-accessor.js&#10;listUnassigned&#9;null&#9;null&#10;listUnas&#9;null&#9;null&#10;common&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/common-controller.js&#10;listUnassign&#9;null&#9;null" />
+    <property name="SearchEverywhereHistoryKey" value="locat&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;setFi&#9;null&#9;null&#10;app&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/app.js&#10;loc&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;mapHistory&#9;null&#9;null&#10;unlock&#9;null&#9;null&#10;metada&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;unlo&#9;null&#9;null&#10;db&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/db-constants.js&#10;container&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/container-model.js&#10;loca&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;contai&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/container-controller.js&#10;dropdown&#9;null&#9;null&#10;metadata&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;DB&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/db-constants.js&#10;contain&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/data-accesors/container-accessor.js&#10;getActiveT&#9;null&#9;null&#10;elockL&#9;null&#9;null&#10;app.js&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/app.js&#10;location&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;&quot;&#9;null&#9;null&#10;listDevice&#9;null&#9;null&#10;metadata-con&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/metadata-controller.js&#10;met&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/queries/metadata-query.js&#10;meta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/metadata-business-module/metadata-business.js&#10;listDe&#9;null&#9;null&#10;bene&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js&#10;ass&#9;null&#9;null&#10;benef&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/beneficiary-controller.js&#10;restr&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/restriction-model.js&#10;assign&#9;null&#9;null&#10;auth&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/auth-business-module/auth-business.js&#10;device&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/device-model.js&#10;connect&#9;null&#9;null&#10;addBe&#9;null&#9;null&#10;addConta&#9;null&#9;null&#10;eLocks&#9;null&#9;null&#10;sta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-message-constants.js&#10;lo&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/business-module/location-business-module/location-business.js&#10;benefici&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/beneficiary-controller.js&#10;status-c&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-message-constants.js&#10;status&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/util-module/status-code-constants.js&#10;container-con&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/container-controller.js&#10;listDevices&#9;null&#9;null&#10;deviceModel&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/models/device-model.js&#10;devi&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/queries/device-query.js&#10;conta&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/repository-module/data-accesors/container-accessor.js&#10;listUnassigned&#9;null&#9;null&#10;listUnas&#9;null&#9;null&#10;common&#9;FILE&#9;file://E:/FENNIX_ALL_CODE/final working code/fennix-backend/fennix-backend-app/web-controller/common-controller.js" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/inffrd" />
     <property name="node.js.detected.package.prettier" value="true" />
@@ -437,12 +441,12 @@
       <workItem from="1542822848896" duration="13020000" />
       <workItem from="1543236706796" duration="1910000" />
       <workItem from="1544186210116" duration="2947000" />
-      <workItem from="1544251543808" duration="65487000" />
+      <workItem from="1544251543808" duration="65904000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1472844000" />
+    <option name="totallyTimeSpent" value="1473261000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -455,7 +459,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.21848185" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1328,17 +1331,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="169" column="6" selection-start-line="169" selection-start-column="6" selection-end-line="169" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="361" column="16" lean-forward="true" selection-start-line="361" selection-start-column="16" selection-end-line="361" selection-end-column="16" />
+        <state relative-caret-position="239">
+          <caret line="460" column="43" lean-forward="true" selection-start-line="460" selection-start-column="43" selection-end-line="460" selection-end-column="43" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="23">
-          <caret line="157" column="20" lean-forward="true" selection-start-line="157" selection-start-column="20" selection-end-line="157" selection-end-column="20" />
+          <caret line="171" column="6" lean-forward="true" selection-start-line="171" selection-start-column="6" selection-end-line="171" selection-end-column="6" />
           <folding>
             <element signature="n#style#0;n#p#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#p#1;n#!!top" expanded="true" />
@@ -1352,24 +1362,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="234">
+          <caret line="506" column="48" lean-forward="true" selection-start-line="506" selection-start-column="48" selection-end-line="506" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="179">
-          <caret line="251" column="50" lean-forward="true" selection-start-line="251" selection-start-column="50" selection-end-line="251" selection-end-column="50" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="169" column="6" selection-start-line="169" selection-start-column="6" selection-end-line="169" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="523" column="58" selection-start-line="523" selection-start-column="58" selection-end-line="523" selection-end-column="58" />
+          <caret line="256" column="21" selection-start-line="256" selection-start-column="21" selection-end-line="256" selection-end-column="21" />
         </state>
       </provider>
     </entry>

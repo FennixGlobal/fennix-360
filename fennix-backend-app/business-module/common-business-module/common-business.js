@@ -183,12 +183,11 @@ const notificationEmailBusiness = async (emailId, notificationType) => {
         subject: subject,
         html: body
     };
-    console.log(mailOptions);
     transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
             console.log(error);
         } else {
-            console.log(info);
+            // console.log(info);
         }
     });
 };

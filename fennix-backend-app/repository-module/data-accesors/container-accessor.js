@@ -254,6 +254,7 @@ const getNotificationEmailsForTripIdAccesssor = async (req) => {
 };
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
+    console.log(req);
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.setContainerLockStatusQuery);
     return returnObj;
 };

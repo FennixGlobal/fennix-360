@@ -126,17 +126,8 @@ const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit, table)
     let query;
     offset = offset || 0;
     limit = limit || 10;
-    console.log(sortBy);
-    console.log(tableDefaultSortMap);
-    console.log(table);
     sortBy = notNullCheck(sortBy) ? sortBy : tableDefaultSortMap[table].sortBy;
     sortOrder = notNullCheck(sortOrder) ? sortOrder : tableDefaultSortMap[table].sortOrder;
-    console.log('sort null check');
-    console.log(notNullCheck(sortBy));
-    console.log('after null check');
-    console.log(sortBy);
-    console.log('table with sort param');
-    console.log(tableDefaultSortMap[table]);
     query = `order by ${sortBy} ${sortOrder} nulls last offset ${offset} limit ${limit}`;
     return query;
 };
