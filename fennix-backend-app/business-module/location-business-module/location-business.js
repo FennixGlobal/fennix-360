@@ -216,6 +216,10 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
+               setTimeout(()=>{
+
+
+               },100);
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
             }
@@ -272,7 +276,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
 const eLockBatteryPercentCalculator = (hexValue) => {
     let batteryPercent = 0, decimalValue;
     decimalValue = parseInt(hexValue, 16);
-    if (decimalValue !== 255 && decimalValue > 100) {
+    // decimalValue !== 255 &&
+    if (decimalValue > 100) {
         batteryPercent = 100;
     } else {
         batteryPercent = decimalValue;
