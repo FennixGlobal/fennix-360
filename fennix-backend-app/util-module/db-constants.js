@@ -126,7 +126,8 @@ const dbTableColMap = {
         containerId: 'container_id',
         masterPassword: 'master_password',
         activePassword: 'active_password',
-        containerLockStatus: 'container_lock_status'
+        containerLockStatus: 'container_lock_status',
+        containerUniqueId: 'container_unique_id'
     },
     accounting: {
         creditCard: 'credit_card',
