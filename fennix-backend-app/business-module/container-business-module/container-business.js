@@ -579,6 +579,7 @@ module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
     deactivateContainerBusiness,
+    fetchCompletedTripDetailsBusiness,
     listUnassignedContainerBusiness,
     listContainerBusiness,
     fetchTripDetailsBusiness,

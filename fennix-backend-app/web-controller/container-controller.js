@@ -82,6 +82,14 @@ router.get('/endTrip', function (req, res) {
     })
 });
 
+router.get('/listCompletedTripDetails', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.fetchCompletedTripDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/unlockElock', function (req, res) {
     let returnObj;
     returnObj = containerBusiness.unlockElockBusiness(req);
