@@ -30,8 +30,10 @@ const addContainerDetailsBusiness = async (req) => {
     request.documentId = `PAT${countryCode}L-${fullDate}`;
     masterPasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerMasterPasswordCounter');
     console.log(masterPasswordResponse);
-    if (arrayNotEmptyCheck(masterPasswordResponse)) {
-        request.masterPassword = masterPasswordResponse[0]['containerMasterPasswordCounter'];
+    console.log('array');
+    console.log(masterPasswordResponse[0]);
+    if (notNullCheck(masterPasswordResponse)) {
+        request.masterPassword = masterPasswordResponse['containerMasterPasswordCounter'];
     }
     response = await containerAccessors.addContainerDetailsAccessor(request);
     console.log(response);
