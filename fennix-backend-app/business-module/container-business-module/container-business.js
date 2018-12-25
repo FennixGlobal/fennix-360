@@ -29,6 +29,7 @@ const addContainerDetailsBusiness = async (req) => {
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     request.documentId = `PAT${countryCode}L-${fullDate}`;
     masterPasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerMasterPasswordCounter');
+    console.log(masterPasswordResponse);
     if (arrayNotEmptyCheck(masterPasswordResponse)) {
         request.masterPassword = masterPasswordResponse[0]['containerMasterPasswordCounter'];
     }
@@ -181,16 +182,18 @@ const assignContainerBusiness = async (req) => {
     req.body.startDate = new Date();
     req.body.deviceAssignedBy = req.body.userId;
     activePasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerActivePasswordCounter');
-    if (arrayNotEmptyCheck(activePasswordResponse)) {
-        let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
+    // if (arrayNotEmptyCheck(activePasswordResponse)) {
+    console.log(activePasswordResponse);
+    let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
+    console.log(masterPasswordResponse);
         req.body.activePassword = activePasswordResponse[0]['containerActivePasswordCounter'];
         if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
-            socket.socketIO.emit('set_active_password', {
-                newPassword: activePasswordResponse[0]['active_password'],
-                oldPassword: '123456'
-            });
+            // socket.socketIO.emit('set_active_password', {
+            //     newPassword: activePasswordResponse[0]['active_password'],
+            //     oldPassword: '123456'
+            // });
         }
-    }
+    // }
     await containerAccessors.updateContainerAccessor(req.body);
     elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
     let elockTripPrimaryId = parseInt(elockTripPrimaryKeyResponse['_doc']['counter']);
@@ -354,7 +357,7 @@ const unlockElockBusiness = async (req) => {
     // activePasswordResponse.rows[0]['active_password']
     socket.socketIO.emit('unlock_device', '100000');
     }
-    console.log(masterPasswordResponse);
+    // console.log(masterPasswordResponse);
     // if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
         // socket.socketIO.emit('reset_device_password', {
         //     newPassword: masterPasswordResponse.rows[0]['master_password'],
