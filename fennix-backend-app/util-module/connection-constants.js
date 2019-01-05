@@ -18,7 +18,8 @@ const postgresSofiaDev = {
     host: '172.31.23.177',
     database: 'sofia_prod_aug16',
     password: 'zVCf58zMDNfF',
-    port: 5432
+    port: 5432,
+    max: 1000
 };
 const imageLocalLocation = 'E:/DB/';
 

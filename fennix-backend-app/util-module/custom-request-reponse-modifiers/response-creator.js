@@ -1,7 +1,7 @@
-const {Client} = require('pg');
+const {Client, Pool} = require('pg');
 const {statusCodes} = require('../status-message-constants');
 const {postgresDBDev, postgresDBLocal, postgresSofiaDev} = require('../connection-constants');
-
+const pool = new Pool(postgresSofiaDev);
 const fennixResponse = (status, language, data) => {
     let returnObj = {};
     if (typeof status !== "number") {
@@ -18,12 +18,16 @@ const fennixResponse = (status, language, data) => {
 };
 
 const connectionCheckAndQueryExec = async (req, query) => {
-    const postgresClient = new Client(postgresSofiaDev);
-    let returnObj;
-    await postgresClient.connect();
-    returnObj = await postgresClient.query(query, req);
-    await postgresClient.end();
-    return returnObj;
+    let returnQuery;
+    const start = Date.now();
+    returnQuery = await pool.query(query, req);
+    const duration = Date.now() - start;
+    console.log(`query - ${query} took : ${duration}`);
+    // const postgresClient = new Client(postgresSofiaDev);
+    // await postgresClient.connect();
+    // returnObj = await postgresClient.query(query, req);
+    // await postgresClient.end();
+    return returnQuery;
 };
 
 const dropdownCreator = (dropdownKey, dropdownValue, isDisabledFlag) => {
