@@ -1,18 +1,26 @@
 const companyAccessors = require('../../repository-module/data-accesors/comapny-accessor');
+const routeBusiness = require('../route-business-module/route-business');
 const {COMMON_CONSTANTS} = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const addCompanyBusiness = async (req) => {
-    let request = req.body, response;
+    let request = req.body, response, routeResponse, finalResponse;
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
     response = await companyAccessors.addCompanyAccessor(request);
     console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-
+        routeResponse = await routeBusiness.insertCompanyRouteBusiness(req);
+        if (notNullCheck(routeResponse)) {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
+            console.log('added company route successfully');
+        } else {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+            console.log('error while adding company routes');
+        }
     }
-    return fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
+    return finalResponse;
 };
 
 const editCompanyBusiness = async (req) => {
