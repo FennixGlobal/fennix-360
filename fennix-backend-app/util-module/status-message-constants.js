@@ -1,4 +1,25 @@
 const statusCodes = {
+    262: {
+        devMsg: 'company added successfully', userMsg: {
+            EN_US: 'company added successfully',
+            espMX: 'company added successfully',
+            espLA: 'company added successfully'
+        }
+    },
+    263: {
+        devMsg: 'company edited successfully', userMsg: {
+            EN_US: 'company edited successfully',
+            espMX: 'company edited successfully',
+            espLA: 'company edited successfully'
+        }
+    },
+    223: {
+        devMsg: 'company edit failed', userMsg: {
+            EN_US: 'company edit failed',
+            espMX: 'company edit failed',
+            espLA: 'company edit failed'
+        }
+    },
     200: {
         devMsg: 'OK', userMsg: {
             EN_US: 'OK',

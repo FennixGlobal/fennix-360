@@ -62,49 +62,35 @@ TCPServer.on("connection", (socket) => {
         console.log(flag);
     });
 });
-// socketIO.on("connection")
-// ELockServer.on("connection", (socket) => {
-//     console.log('IN ELock TCP');
-//     socket.setEncoding('hex');
-//     // socket.write('P01');
-//     console.log('connected');
-//     socket.on('data', async (data) => {
-//         // console.log(returnValue);
-//         // if (returnValue) {
-//         //     socket.write('P35');
-//         // }
-//         console.log(data);
-//     });
-//     socket.on('error', (err) => {
-//         console.log('in elocks');
-//         console.log('error occurred');
-//         console.log(err.stack);
-//     });
-//     socket.on('end', () => {
-//         console.log('end connection');
-//     });
-//     socket.on('close', (flag) => {
-//         console.log('socket closed due to error');
-//         console.log(flag);
-//     });
-// });
 
-var carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
-var simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
-var authRouter = require('./fennix-backend-app/web-controller/auth-controller');
-var deviceRouter = require('./fennix-backend-app/web-controller/device-controller');
-var userRouter = require('./fennix-backend-app/web-controller/user-controller');
-var ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
-var metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
-var beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary-controller');
-var commonRouter = require('./fennix-backend-app/web-controller/common-controller');
-var indexRouter = require('./routes/index');
-var groupRouter = require('./fennix-backend-app/web-controller/group-controller');
-var containerRouter = require('./fennix-backend-app/web-controller/container-controller');
-var liteUserRouter = require('./fennix-backend-app/web-controller/lite-user-controller');
-var liteTicketRouter = require('./fennix-backend-app/web-controller/lite-ticket-controller');
-var liteDeviceRouter = require('./fennix-backend-app/web-controller/lite-device-controller');
-var liteUserTrackingRouter = require('./fennix-backend-app/web-controller/lite-user-tracking-controller');
+// metadata related controller
+const commonRouter = require('./fennix-backend-app/web-controller/common-controller');
+const metadataRouter = require('./fennix-backend-app/web-controller/metadata-controller');
+
+//beneficiary controller
+const userRouter = require('./fennix-backend-app/web-controller/user-controller');
+const beneficiaryRouter = require('./fennix-backend-app/web-controller/beneficiary-controller');
+const groupRouter = require('./fennix-backend-app/web-controller/group-controller');
+
+// E - Locks controller
+const containerRouter = require('./fennix-backend-app/web-controller/container-controller');
+const tripRouter = require('./fennix-backend-app/web-controller/trip-controller');
+const companyRouter = require('./fennix-backend-app/web-controller/company-controller');
+
+// Lite controllers
+const liteUserRouter = require('./fennix-backend-app/web-controller/lite-user-controller');
+const liteTicketRouter = require('./fennix-backend-app/web-controller/lite-ticket-controller');
+const liteDeviceRouter = require('./fennix-backend-app/web-controller/lite-device-controller');
+const liteUserTrackingRouter = require('./fennix-backend-app/web-controller/lite-user-tracking-controller');
+
+// Common Controllers
+const carrierRouter = require('./fennix-backend-app/web-controller/carrier-controller');
+const simcardRouter = require('./fennix-backend-app/web-controller/simcard-controller');
+const authRouter = require('./fennix-backend-app/web-controller/auth-controller');
+const deviceRouter = require('./fennix-backend-app/web-controller/device-controller');
+const ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
+
+const indexRouter = require('./routes/index');
 
 var app = express();
 app.use(bodyParser.json());
@@ -162,6 +148,8 @@ app.use('/ticket', ticketRouter);
 app.use('/device', deviceRouter);
 app.use('/beneficiary', beneficiaryRouter);
 app.use('/common', commonRouter);
+app.use('/company',companyRouter);
+app.use('/trip',tripRouter);
 app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);

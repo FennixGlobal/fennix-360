@@ -29,14 +29,10 @@ const addContainerDetailsBusiness = async (req) => {
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     request.documentId = `PAT${countryCode}L-${fullDate}`;
     masterPasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerMasterPasswordCounter');
-    console.log(masterPasswordResponse);
-    console.log('array');
-    console.log(masterPasswordResponse[0]);
     if (notNullCheck(masterPasswordResponse)) {
         request.masterPassword = masterPasswordResponse['containerMasterPasswordCounter'];
     }
     response = await containerAccessors.addContainerDetailsAccessor(request);
-    console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         const folderName = `CONTAINERS_${response.rows[0]['container_id']}_${fullDate}`;
         const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
@@ -49,7 +45,6 @@ const addContainerDetailsBusiness = async (req) => {
                 dropboxBasePath: fileLocations.folderBasePath
             };
             let imageUpdateForContainerIdResponse = await containerAccessors.updateContainerAccessor(newReq);
-            console.log(imageUpdateForContainerIdResponse);
         }
     }
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
@@ -178,8 +173,7 @@ const uploadBeneficiaryDocumentsBusiness = async (req) => {
 };
 
 const assignContainerBusiness = async (req) => {
-    let request, finalResponse, tripRequest, latArray = [], lngArray = [], restrictionRequestList = [],
-        activePasswordResponse,
+    let request, finalResponse, tripRequest, latArray = [], lngArray = [], activePasswordResponse,
         elockTripPrimaryKeyResponse;
     req.body.startDate = new Date();
     req.body.deviceAssignedBy = req.body.userId;
@@ -188,13 +182,13 @@ const assignContainerBusiness = async (req) => {
     console.log(activePasswordResponse);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
     console.log(masterPasswordResponse);
-        req.body.activePassword = activePasswordResponse[0]['containerActivePasswordCounter'];
-        if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
-            // socket.socketIO.emit('set_active_password', {
-            //     newPassword: activePasswordResponse[0]['active_password'],
-            //     oldPassword: '123456'
-            // });
-        }
+    req.body.activePassword = activePasswordResponse['containerActivePasswordCounter'];
+    if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
+        // socket.socketIO.emit('set_active_password', {
+        //     newPassword: activePasswordResponse['active_password'],
+        //     oldPassword: '123456'
+        // });
+    }
     // }
     await containerAccessors.updateContainerAccessor(req.body);
     elockTripPrimaryKeyResponse = await containerAccessors.fetchNextElockTripPrimaryKeyAccessor();
@@ -355,16 +349,16 @@ const unlockElockBusiness = async (req) => {
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-    containerAccessors.setContainerLockStatusAccessor([containerId, false]);
-    // activePasswordResponse.rows[0]['active_password']
-    socket.socketIO.emit('unlock_device', '100000');
+        containerAccessors.setContainerLockStatusAccessor([containerId, false]);
+        // activePasswordResponse.rows[0]['active_password']
+        socket.socketIO.emit('unlock_device', '100000');
     }
     // console.log(masterPasswordResponse);
     // if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
-        // socket.socketIO.emit('reset_device_password', {
-        //     newPassword: masterPasswordResponse.rows[0]['master_password'],
-        //     oldPassword: activePasswordResponse.rows[0]['active_password']
-        // });
+    // socket.socketIO.emit('reset_device_password', {
+    //     newPassword: masterPasswordResponse.rows[0]['master_password'],
+    //     oldPassword: activePasswordResponse.rows[0]['active_password']
+    // });
     // }
     return fennixResponse(statusCodeConstants.STATUS_DEVICE_UNLOCKED, 'EN_US', []);
 };
@@ -487,7 +481,7 @@ const getTripStatusName = (tripStatus) => {
 };
 const endTripBusiness = async (req) => {
     let response, notificationsResponse;
-    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor({tripId:req.query.tripId});
+    notificationsResponse = await containerAccessors.getNotificationEmailsForTripIdAccesssor({tripId: req.query.tripId});
     if (notNullCheck(notificationsResponse)) {
         let startDateTime = new Date(notificationsResponse[0]['tripActualStartTime']);
         let endDateTime = new Date();

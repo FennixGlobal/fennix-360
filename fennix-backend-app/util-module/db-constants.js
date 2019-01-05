@@ -1,10 +1,11 @@
 const TABLE_USERS = 'users';
 const TABLE_BENEFICIARIES = 'beneficiaries';
-const TABLE_LOCATION = 'location';
-const TABLE_ROLES = 'roles';
 const TABLE_FAMILY_INFO = 'family_info';
 const TABLE_ACCOUNTING = 'accounting';
+const TABLE_ROLES = 'roles';
+const TABLE_LOCATION = 'location';
 const TABLE_CONTAINER = 'container';
+const TABLE_COMPANY = 'company';
 
 const dbTableColMap = {
     users: {
@@ -21,7 +22,20 @@ const dbTableColMap = {
         role: 'user_role',
         userId: 'owner_user_id'
     },
-
+    company: {
+        companyId: 'company_id',
+        companyName: 'company_name',
+        companyType: 'company_type',
+        consignmentType: 'consignment_type',
+        companyAddress: 'company_address',
+        companyPhone: 'company_phone',
+        customsId: 'customs_id',
+        isActive: 'isactive',
+        createdBy: 'created_by',
+        createdDate: 'created_date',
+        updatedDate: 'updated_date',
+        updatedBy: 'updated_by'
+    },
     beneficiaries: {
         firstName: 'firstname',
         middleName: 'middle_name',
@@ -197,15 +211,16 @@ const tableDefaultSortMap = {
     container: {sortBy: 'start_date', sortOrder: 'desc'}
 };
 module.exports = {
-    tableDefaultSortMap,
     TABLE_BENEFICIARIES,
     TABLE_LOCATION,
     TABLE_ROLES,
     TABLE_USERS,
     TABLE_CONTAINER,
+    TABLE_COMPANY,
     TABLE_FAMILY_INFO,
     TABLE_ACCOUNTING,
     dbTableColMap,
     tableKeyMap,
+    tableDefaultSortMap,
     dbDownloadTableMapper
 };
