@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+require('mongoose-double')(mongoose);
+const Schema = mongoose.Schema;
+let SchemaType = mongoose.Schema.Types;
 
 const addressSchema = {
     lat: SchemaType.Double,
