@@ -5,6 +5,7 @@ const {fennixResponse, dropdownCreator} = require('../../util-module/custom-requ
 const STATUS_CODE_CONSTANTS = require('../../util-module/status-code-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-validators');
+const crypto = require('crypto-js');
 
 const fetchUserDetailsBusiness = async (req) => {
     let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
@@ -95,6 +96,8 @@ const addUserBusiness = async (req) => {
     request.image = await imageStorageBusiness(request.image, 'USER');
     request.updated_date = new Date();
     request.created_date = new Date();
+    request.isActive = true;
+    request.password = crypto['AES'].encrypt('P@ssw0rd');
     await userAccessors.addUserAccessor(request);
     emailSendBusiness(request.emailId, 'USER');
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
@@ -104,7 +107,7 @@ const updateUserBusiness = async (req) => {
     let response, finalResponse;
     response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK,  'EN_US', 'Updated user data successfully');
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', 'Updated user data successfully');
     } else {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID)
     }
@@ -115,7 +118,7 @@ const deleteUserBusiness = async (req) => {
     let response, finalResponse;
     response = await userAccessors.updateUserAccessor(req);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK,  'EN_US', 'Deleted user data successfully');
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', 'Deleted user data successfully');
     } else {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID)
     }
