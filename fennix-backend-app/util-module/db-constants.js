@@ -16,17 +16,18 @@ const dbTableColMap = {
         firstName: 'first_name',
         lastName: 'last_name',
         emailId: 'email_id',
+        password:'password',
         phoneNo: 'mobile_no',
         gender: 'gender',
         image: 'image',
         role: 'user_role',
+        isActive:'isactive',
         userId: 'owner_user_id'
     },
     company: {
         companyId: 'company_id',//state,country,telephone,tax_id,city,addr1,addr2
         companyName: 'company_name',
         companyType: 'company_type',
-        consignmentType: 'consignment_type',
         companyAddress: 'company_address',
         companyPhone: 'company_phone',
         customsId: 'customs_id',
