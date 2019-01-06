@@ -12,6 +12,28 @@ const insertCompanyRoutesQuery = (req) => {
     return response;
 };
 
+const fetchAndUpdateCompanyRoutePrimaryKeyQuery = () => {
+    return CompanyRouteModel.findOneAndUpdate({}, {$inc: {counter: 1}});
+};
+
+const editCompanyRoutesQuery = (routeId, req) => {
+    let response = null;
+    CompanyRouteModel.update({
+            routeId: routeId
+        },
+        {$set: req}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            response = 'edited company route successfully';
+        }
+    });
+    return response;
+};
+
+
 module.exports = {
-    insertCompanyRoutesQuery
+    insertCompanyRoutesQuery,
+    editCompanyRoutesQuery,
+    fetchAndUpdateCompanyRoutePrimaryKeyQuery
 };

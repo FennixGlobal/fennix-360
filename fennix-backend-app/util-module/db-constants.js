@@ -23,7 +23,7 @@ const dbTableColMap = {
         userId: 'owner_user_id'
     },
     company: {
-        companyId: 'company_id',
+        companyId: 'company_id',//state,country,telephone,tax_id,city,addr1,addr2
         companyName: 'company_name',
         companyType: 'company_type',
         consignmentType: 'consignment_type',

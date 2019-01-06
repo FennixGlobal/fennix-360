@@ -24,11 +24,12 @@ const addCompanyBusiness = async (req) => {
 };
 
 const editCompanyBusiness = async (req) => {
-    let request = req.body, response, finalResponse;
+    let request = req.body, response, finalResponse, routeResponse;
     request.updatedBy = request.userId;
     request.updatedDate = new Date();
     response = await companyAccessors.editCompanyAccessor(request);
-    if (notNullCheck(response) && response['rowCount'] !== 0) {
+    routeResponse = await routeBusiness.editCompanyRoutesBusiness(req);
+    if (notNullCheck(response) && response['rowCount'] !== 0 && notNullCheck(routeResponse)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_EDIT_SUCCESS, 'EN_US', 'Updated company data successfully');
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', '');
@@ -37,8 +38,10 @@ const editCompanyBusiness = async (req) => {
 };
 
 const deleteCompanyBusiness = async (req) => {
-    let request = req.body, response, finalResponse;
-    return finalResponse;
+    let request = {companyId: req.body.companyId, isActive: false, updatedBy: req.body.userId, updatedDate: new Date()};
+    await companyAccessors.editCompanyAccessor(request);
+    await routeBusiness.deleteCompanyRoutesBusiness(req);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');
 };
 
 const listCompanyBusiness = async (req) => {

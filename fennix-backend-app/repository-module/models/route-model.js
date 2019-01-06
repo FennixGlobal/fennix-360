@@ -15,7 +15,13 @@ const stoppagePointSchema = {
     timeUnit: String
 };
 
+const companyRoutesCounterSchema = new Schema({
+    _id: Schema.Types.ObjectId,
+    counter: Number
+});
+
 const companyRoutesSchema = new Schema({
+    routeId: Number,
     companyId: Number,
     companyAddress: addressSchema,
     primaryWarehouseAddress: addressSchema,
@@ -25,8 +31,9 @@ const companyRoutesSchema = new Schema({
     wayPoints: [addressSchema],
     stoppagePoints: [stoppagePointSchema]
 });
-
+const CompanyRouteCounterModel = mongoose.model('companyRouteCounterSchema', companyRoutesCounterSchema, 'companyRouteCounter');
 const CompanyRouteModel = mongoose.model('companyRouteSchema', companyRoutesSchema, 'companyRoute');
 module.exports = {
-    CompanyRouteModel
+    CompanyRouteModel,
+    CompanyRouteCounterModel
 };
