@@ -60,6 +60,7 @@ const authenticateUser = async (req) => {
         req.body.language
     ];
     businessResponse = await authenticateUserDetails(request);
+    console.log(businessResponse);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {

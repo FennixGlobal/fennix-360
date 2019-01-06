@@ -22,7 +22,7 @@ const connectionCheckAndQueryExec = async (req, query) => {
     const start = Date.now();
     returnQuery = await pool.query(query, req);
     const duration = Date.now() - start;
-    console.log(`query - ${query} took : ${duration}`);
+    console.log(`query  took : ${duration}`);
     // const postgresClient = new Client(postgresSofiaDev);
     // await postgresClient.connect();
     // returnObj = await postgresClient.query(query, req);
