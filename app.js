@@ -49,6 +49,7 @@ TCPServer.on("connection", (socket) => {
     console.log('connected');
     socket.on('data', async (data) => {
         console.log(socket.remoteAddress);
+        console.log(socket.remotePort);
         const returnValue = await locationBusiness.locationUpdateBusiness(data);
         console.log(returnValue);
         socket.write(returnValue);
