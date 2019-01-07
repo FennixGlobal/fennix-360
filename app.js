@@ -30,6 +30,7 @@ socketIO.on('connection', (sock) => {
     let responseData;
     console.log('connected to elock');
     sock.on('elock_data', async (newSockData) => {
+        console.log(newSockData);
         // responseData = await locationBusiness.eLocksDataUpdateDumpBusiness(newSockData);
         responseData = await locationBusiness.eLocksDataUpdateBusiness(newSockData);
         if (responseData !== null && responseData !== undefined && responseData !== '') {
@@ -148,8 +149,8 @@ app.use('/ticket', ticketRouter);
 app.use('/device', deviceRouter);
 app.use('/beneficiary', beneficiaryRouter);
 app.use('/common', commonRouter);
-app.use('/company',companyRouter);
-app.use('/trip',tripRouter);
+app.use('/company', companyRouter);
+app.use('/trip', tripRouter);
 app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
