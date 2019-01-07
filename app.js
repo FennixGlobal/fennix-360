@@ -61,7 +61,12 @@ TCPServer.on("connection", (socket) => {
         console.log('end connection');
     });
     socket.on('close', (flag) => {
+        console.log('closing the socket');
         console.log(flag);
+    });
+    socket.on('lookup', (lookupdata) => {
+        console.log('lock up data');
+        console.log(lookupdata);
     });
 });
 
