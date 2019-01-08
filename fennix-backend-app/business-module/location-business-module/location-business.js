@@ -6,7 +6,7 @@ const containerAccessor = require('../../repository-module/data-accesors/contain
 const {deviceValidator} = require('../../util-module/device-validations');
 const cronJob = require('cron').CronJob;
 const {notificationEmailBusiness} = require('../../business-module/common-business-module/common-business');
-
+const eLockSessionBusiness = require('../e-lock-business-module/e-lock-session-business');
 let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data, socketKey) => {
     let returnValue = {socketKey, data: ''};
@@ -440,6 +440,11 @@ const dataSplitterDump = async (data, masterDate) => {
     if (processedLoc.longitude.loc !== 0 && processedLoc.latitude.loc !== 0) {
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         if (deviceUpdatedDate > masterDate) {
+            const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
+            console.log(eLockSessionData);
+            if (eLockSessionData) {
+                await eLockSessionBusiness.insertELockSessionBusiness(eLockData.socketAddress, deviceIMEIId);
+            }
             const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
             if (arrayNotEmptyCheck(containerResponse)) {
                 containerId = containerResponse[0]['containerId'];

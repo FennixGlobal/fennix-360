@@ -5,7 +5,7 @@ let SchemaType = mongoose.Schema.Types;
 
 const eLockSessionSchema = new Schema({
     eLockId: Number,
-    connectingIdAddress: String,
+    connectingIPAddress: String,
     connectingPort: String,
     connectingSocket: String,
     lastConnectionTime: Date,
