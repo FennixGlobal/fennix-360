@@ -45,6 +45,7 @@ const getCountryListAccessor = async (req) => {
     let countryListResponse, request = [req.userId, req.languageId], masterGlobalAdminRequest = [req.languageId];
     switch (req.userRole) {
         case 'ROLE_SUPERVISOR':
+        case 'ROLE_ELOCKS_OPERATOR':
         case 'ROLE_ADMIN': {
             countryListResponse = await connectionCheckAndQueryExec(request, selectCountryForSupervisorAndAdminQuery);
             break;
