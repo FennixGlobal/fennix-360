@@ -6,7 +6,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {socket} = require('../../../app');
-const tripAccessors = require('../../repository-module/data-accesors/trip-accessor')''
+const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');
 const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, notificationEmailBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
