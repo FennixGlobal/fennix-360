@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary" />
+    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -52,11 +56,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="23">
-              <caret line="60" column="2" lean-forward="true" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
+            <state relative-caret-position="246">
+              <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -70,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="246">
-              <caret line="103" column="25" selection-start-line="103" selection-start-column="25" selection-end-line="103" selection-end-column="25" />
+            <state relative-caret-position="77">
+              <caret line="101" column="86" selection-start-line="101" selection-start-column="86" selection-end-line="101" selection-end-column="86" />
             </state>
           </provider>
         </entry>
@@ -108,7 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>240</find>
       <find>containerLockStatus</find>
       <find>toLowerCase</find>
       <find>masterPasswordResponse</find>
@@ -138,6 +141,7 @@
       <find>getcountry</find>
       <find>listCenters</find>
       <find>METADATA_LIST_CENTERS</find>
+      <find>add</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -226,8 +230,8 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/location-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-common-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/metadata-accesor.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" />
       </list>
     </option>
   </component>
@@ -450,12 +454,12 @@
       <workItem from="1545475691785" duration="1463000" />
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
-      <workItem from="1546634203635" duration="40869000" />
+      <workItem from="1546634203635" duration="42774000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1529299000" />
+    <option name="totallyTimeSpent" value="1531204000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1027,13 +1031,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/common-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="4" selection-start-line="2" selection-start-column="4" selection-end-line="2" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/status-code-constants.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="446">
@@ -1351,13 +1348,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="60" column="2" lean-forward="true" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="151">
@@ -1365,10 +1355,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/node_modules/crypto-js/index.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" lean-forward="true" selection-start-line="3" selection-end-line="3" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="77">
+          <caret line="101" column="86" selection-start-line="101" selection-start-column="86" selection-end-line="101" selection-end-column="86" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="246">
-          <caret line="103" column="25" selection-start-line="103" selection-start-column="25" selection-end-line="103" selection-end-column="25" />
+          <caret line="29" column="4" selection-start-line="29" selection-start-column="4" selection-end-line="29" selection-end-column="4" />
         </state>
       </provider>
     </entry>

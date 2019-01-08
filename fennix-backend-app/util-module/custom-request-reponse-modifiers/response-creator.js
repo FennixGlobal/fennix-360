@@ -20,13 +20,13 @@ const fennixResponse = (status, language, data) => {
 const connectionCheckAndQueryExec = async (req, query) => {
     let returnQuery;
     const start = Date.now();
-    // returnQuery = await pool.query(query, req);
-    // const duration = Date.now() - start;
-    // console.log(`query  took : ${duration}`);
-    const postgresClient = new Client(postgresSofiaDev);
-    await postgresClient.connect();
-    returnQuery = await postgresClient.query(query, req);
-    await postgresClient.end();
+    returnQuery = await pool.query(query, req);
+    const duration = Date.now() - start;
+    console.log(`query  took : ${duration}`);
+    // const postgresClient = new Client(postgresSofiaDev);
+    // await postgresClient.connect();
+    // returnQuery = await postgresClient.query(query, req);
+    // await postgresClient.end();
     return returnQuery;
 };
 

@@ -99,7 +99,8 @@ const addUserBusiness = async (req) => {
     request.updated_date = new Date();
     request.created_date = new Date();
     request.isActive = true;
-    request.password = await crypto.AES.encrypt('genius Playboy', 'P@ssw0rd');
+    request.password = '$2a$15$vmR3fd7Jnn34hWQPjK5uP.iVHq9wJUCXh0djUv5AHC.GvblRvEQU6';
+    // request.password = await crypto.AES.encrypt('genius Playboy', 'P@ssw0rd');
     console.log('password');
     console.log(request.password);
     console.log("request");
