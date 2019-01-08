@@ -2,6 +2,7 @@ const companyAccessors = require('../../repository-module/data-accesors/comapny-
 const routeBusiness = require('../route-business-module/route-business');
 const {COMMON_CONSTANTS} = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
 
 const addCompanyBusiness = async (req) => {
     let request = req.body, response, routeResponse, finalResponse;
