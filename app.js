@@ -48,14 +48,16 @@ TCPServer.on("connection", (socket) => {
     socket.setEncoding('utf8');
     console.log('connected');
     const socketKey = `${socket.remoteAddress}:${socket.remotePort}`;
-    benSocket[socketKey] = socket;
-    console.log(benSocket);
     socket.on('data', async (data) => {
-        console.log(socket.remoteAddress);
-        console.log(socket.remotePort);
-        const returnValue = await locationBusiness.locationUpdateBusiness(data);
+        // console.log(socket.remoteAddress);
+        // console.log(socket.remotePort);
+    if (benSocket && socket && socketKey && !benSocket.objectHasPropertyCheck(benSocket, socketKey)) {
+        benSocket[socketKey] = socket;
+    }
+        const returnValue = await locationBusiness.locationUpdateBusiness(data,socketKey);
         console.log(returnValue);
-        socket.write(returnValue);
+        benSocket[returnValue.socketKey].write(returnValue.data);
+        // socket.write(returnValue);
     });
     socket.on('error', (err) => {
         console.log('error occurred');

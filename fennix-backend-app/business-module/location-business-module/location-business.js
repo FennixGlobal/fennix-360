@@ -8,15 +8,14 @@ const cronJob = require('cron').CronJob;
 const {notificationEmailBusiness} = require('../../business-module/common-business-module/common-business');
 
 let locationObj = {}, deviceObj = {};
-const locationUpdateBusiness = async (data) => {
-    let returnString = '';
+const locationUpdateBusiness = async (data, socketKey) => {
+    let returnValue = {socketKey, data: ''};
     if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {  // '#SA'
-        returnString = processData(data);
+        returnValue.data = processData(data);
     } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {  // '#RD
-
         await processLocation(data);
     }
-    return returnString;
+    return returnValue;
 };
 
 const processData = (loginString) => {
@@ -160,8 +159,7 @@ const batteryPercentCalculator = (batteryVoltage) => {
         dvMeasure = batteryVoltage - volts[vSelected];
         dpRange = perc[vSelected + 1] - perc[vSelected];
         ret = perc[vSelected] + ((dvMeasure * dpRange) / dvRange);
-    }
-    else if (vSelected === (volts.length - 1)) {
+    } else if (vSelected === (volts.length - 1)) {
         ret = 100;
     }
     return ret;
@@ -216,12 +214,12 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
-               setTimeout(()=>{
-                notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
-               },100);
-                setTimeout(()=>{
+                setTimeout(() => {
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
+                }, 100);
+                setTimeout(() => {
                     notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
-                },300);
+                }, 300);
                 // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
             }
             containerId = containerResponse[0]['containerId'];
