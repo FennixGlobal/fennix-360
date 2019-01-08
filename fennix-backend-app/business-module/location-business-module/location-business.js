@@ -289,14 +289,14 @@ const eLockBatteryPercentCalculator = (hexValue) => {
     }
     return batteryPercent;
 };
-const eLocksDataUpdateBusiness = async (data) => {
+const eLocksDataUpdateBusiness = async (eLockData) => {
     let returnString = '', updateLoc, deviceId, containerId, updateDevice, returnArray, locationList = [],
         deviceAttributesList = [], masterData = {},
         dataSplitterResponse = null;
-    const eLockStatus = data.slice(0, 2);
+    const eLockStatus = eLockData.data.slice(0, 2);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
-            returnArray = await dataIterator(data, null);
+            returnArray = await dataIterator(eLockData.data, null);
             break;
         case 28:
             returnString = '(P46)';
@@ -313,10 +313,10 @@ const eLocksDataUpdateBusiness = async (data) => {
         let eLockAttributeId = parseInt(eLockAttributesPrimaryKeyResponse[0]['counter']) + 1;
         let finalELockAttrCount = eLockAttributeId + returnArray.gps.length;
         await containerAccessor.updateNextDeviceAttributesPrimaryKeyAccessor(finalELockAttrCount + 1);
-        await asyncForEach(returnArray.gps, async (data) => {
+        await asyncForEach(returnArray.gps, async (gpsData) => {
             locationPrimaryId++;
             eLockAttributeId++;
-            dataSplitterResponse = await dataSplitter(data, locationPrimaryId, eLockAttributeId);
+            dataSplitterResponse = await dataSplitter(gpsData, locationPrimaryId, eLockAttributeId);
             if (notNullCheck(dataSplitterResponse)) {
                 if (notNullCheck(dataSplitterResponse['location'])) {
                     locationList.push(dataSplitterResponse['location']);
@@ -354,6 +354,7 @@ const eLocksDataUpdateBusiness = async (data) => {
     }
     await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     newJob.start();
+    console.log(newJob);
     return returnString;
 };
 
