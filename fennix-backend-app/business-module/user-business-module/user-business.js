@@ -98,6 +98,10 @@ const addUserBusiness = async (req) => {
     request.created_date = new Date();
     request.isActive = true;
     request.password = crypto['AES'].encrypt('genius Playboy', 'P@ssw0rd');
+    console.log('password');
+    console.log(request.password);
+    console.log("request");
+    console.log(request);
     await userAccessors.addUserAccessor(request);
     emailSendBusiness(request.emailId, 'USER');
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
