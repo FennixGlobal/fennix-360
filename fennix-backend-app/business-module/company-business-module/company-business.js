@@ -1,6 +1,6 @@
 const companyAccessors = require('../../repository-module/data-accesors/comapny-accessor');
 const routeBusiness = require('../route-business-module/route-business');
-const {COMMON_CONSTANTS} = require('../../util-module/util-constants/fennix-common-constants');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
 
