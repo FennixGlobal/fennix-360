@@ -11,14 +11,14 @@ let locationObj = {}, deviceObj = {};
 const locationUpdateBusiness = async (data, socketKey) => {
     let returnValue = {socketKey, data: ''};
     if (data.indexOf(deviceCommandConstants.cmdLogin) !== -1) {  // '#SA'
-        returnValue.data = processData(data);
+        returnValue.data = await processData(data);
     } else if (data.indexOf(deviceCommandConstants.cmdLocationReport) !== -1) {  // '#RD
         await processLocation(data);
     }
     return returnValue;
 };
 
-const processData = (loginString) => {
+const processData = async (loginString) => {
     let returnString, loginFlag;
     const checkSum = 3;
     const dataCommand = loginString.substr(0, 3);
@@ -31,8 +31,14 @@ const processData = (loginString) => {
         imei: loginString.substr(14, 15),
         firmwareVersion: loginString.substr(loginHome, (loginString.length - 1) - (loginHome - 1) - checkSum)
     };
-    loginFlag = processLogin(loginString.substr(14, 15));
+    loginFlag = await processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), deviceCommandConstants.cmdLoginResponse) : loginString; // '#SB'
+    console.log('login string');
+    console.log(loginString);
+    console.log('login command');
+    console.log(deviceCommandConstants.cmdLoginResponse);
+
+    console.log(returnString);
     return returnString;
 };
 
