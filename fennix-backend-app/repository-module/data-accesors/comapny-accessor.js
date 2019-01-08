@@ -21,7 +21,14 @@ const editCompanyAccessor = async (req) => {
     return returnObj;
 };
 
+const listCompanyAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, companyQueries.listCompanyQuery);
+    return returnObj;
+};
+
 module.exports = {
     addCompanyAccessor,
-    editCompanyAccessor
+    editCompanyAccessor,
+    listCompanyAccessor
 };

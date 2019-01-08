@@ -12,7 +12,7 @@ const addCompanyBusiness = async (req) => {
     response = await companyAccessors.addCompanyAccessor(request);
     console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        routeResponse = await routeBusiness.insertCompanyRouteBusiness(req);
+        // routeResponse = await routeBusiness.insertCompanyRouteBusiness(req);
         if (notNullCheck(routeResponse)) {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('added company route successfully');
@@ -20,6 +20,25 @@ const addCompanyBusiness = async (req) => {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
             console.log('error while adding company routes');
         }
+    }
+    return finalResponse;
+};
+const listCompanyBusiness = async (req) => {
+    let response, finalResponse, modifiedResponse = [];
+    response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId]);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.forEach((item) => {
+            let obj = {
+                companyId: item['company_id'],
+                companyName: item['company_name'],
+                companyType: item['company_type'],
+                customsId: item['customs_id']
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
@@ -45,10 +64,6 @@ const deleteCompanyBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');
 };
 
-const listCompanyBusiness = async (req) => {
-    let request = req.body, response, finalResponse;
-    return finalResponse;
-};
 
 const sortCompanyBusiness = async (req) => {
     let request = req.body, response, finalResponse;
