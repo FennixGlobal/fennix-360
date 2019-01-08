@@ -200,7 +200,8 @@ const tableKeyMap = {
     tickets: {key: 'ticketId'},
     family_info: {key: 'family_info_id'},
     accounting: {key: 'accounting_id'},
-    container: {key: 'container_id'}
+    container: {key: 'container_id'},
+    company: {key: 'company_id'}
 };
 
 const tableDefaultSortMap = {
