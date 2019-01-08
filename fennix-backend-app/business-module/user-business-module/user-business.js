@@ -93,11 +93,13 @@ const listOperatorsBusiness = async (req) => {
 
 const addUserBusiness = async (req) => {
     let request = req.body;
-    request.image = await imageStorageBusiness(request.image, 'USER');
+    if (request.image) {
+        request.image = await imageStorageBusiness(request.image, 'USER');
+    }
     request.updated_date = new Date();
     request.created_date = new Date();
     request.isActive = true;
-    request.password = crypto['AES'].encrypt('genius Playboy', 'P@ssw0rd');
+    request.password = await crypto.AES.encrypt('genius Playboy', 'P@ssw0rd');
     console.log('password');
     console.log(request.password);
     console.log("request");
