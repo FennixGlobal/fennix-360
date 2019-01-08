@@ -152,6 +152,7 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
                 otherUserIdsForGivenUserId = await getUserIdsForSupervisorAccessor([req.query.userId, req.query.languageId]);
                 break;
             }
+            case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ELOCKS_OPERATOR:
             case COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_ADMIN : {
                 otherUserIdsForGivenUserId = await getUserIdsForAdminAccessor([req.query.userId, req.query.languageId]);
                 break;
