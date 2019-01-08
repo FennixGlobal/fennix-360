@@ -42,11 +42,14 @@ socketIO.on('connection', (sock) => {
 
 TCPServer.listen(3100);
 // ELockServer.listen(3150);
-
+const benSocket = {};
 TCPServer.on("connection", (socket) => {
     console.log('IN TCP');
     socket.setEncoding('utf8');
     console.log('connected');
+    const socketKey = `${socket.remoteAddress}:${socket.remotePort}`;
+    benSocket[socketKey] = socket;
+    console.log(benSocket);
     socket.on('data', async (data) => {
         console.log(socket.remoteAddress);
         console.log(socket.remotePort);
