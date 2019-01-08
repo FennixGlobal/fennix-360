@@ -49,15 +49,13 @@ TCPServer.on("connection", (socket) => {
     console.log('connected');
     const socketKey = `${socket.remoteAddress}:${socket.remotePort}`;
     socket.on('data', async (data) => {
-        // console.log(socket.remoteAddress);
-        // console.log(socket.remotePort);
         if (benSocket && socket && socketKey && !benSocket.hasOwnProperty(socketKey)) {
             benSocket[socketKey] = socket;
         }
         const returnValue = await locationBusiness.locationUpdateBusiness(data, socketKey);
-        console.log(returnValue);
-        benSocket[returnValue.socketKey].write(returnValue.data);
-        // socket.write(returnValue);
+        if (returnValue.data) {
+            benSocket[returnValue.socketKey].write(returnValue.data);
+        }
     });
     socket.on('error', (err) => {
         console.log('error occurred');

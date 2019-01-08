@@ -57,38 +57,38 @@ router.post('/showElockMap', function (req, res) {
         res.send(response);
     })
 });
+//
+// router.get('/listTripDetails', function (req, res) {
+//     let returnObj;
+//     returnObj = containerBusiness.fetchTripDetailsBusiness(req);
+//     returnObj.then((response) => {
+//         res.send(response);
+//     })
+// });
+//
+// router.get('/startTrip', function (req, res) {
+//     let returnObj;
+//     returnObj = containerBusiness.startTripBusiness(req);
+//     returnObj.then((response) => {
+//         res.send(response);
+//     })
+// });
+//
+// router.get('/endTrip', function (req, res) {
+//     let returnObj;
+//     returnObj = containerBusiness.endTripBusiness(req);
+//     returnObj.then((response) => {
+//         res.send(response);
+//     })
+// });
 
-router.get('/listTripDetails', function (req, res) {
-    let returnObj;
-    returnObj = containerBusiness.fetchTripDetailsBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
-
-router.get('/startTrip', function (req, res) {
-    let returnObj;
-    returnObj = containerBusiness.startTripBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
-
-router.get('/endTrip', function (req, res) {
-    let returnObj;
-    returnObj = containerBusiness.endTripBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
-
-router.get('/listCompletedTripDetails', function (req, res) {
-    let returnObj;
-    returnObj = containerBusiness.fetchCompletedTripDetailsBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
+// router.get('/listCompletedTripDetails', function (req, res) {
+//     let returnObj;
+//     returnObj = containerBusiness.fetchCompletedTripDetailsBusiness(req);
+//     returnObj.then((response) => {
+//         res.send(response);
+//     })
+// });
 
 router.get('/unlockElock', function (req, res) {
     let returnObj;

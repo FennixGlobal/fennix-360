@@ -3,12 +3,17 @@
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/route-business-module/route-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/route-business-module/route-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/route-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/route-accessor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/route-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/route-query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -25,55 +30,82 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/route-query.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="573">
-              <caret line="37" column="45" selection-start-line="37" selection-start-column="45" selection-end-line="37" selection-end-column="45" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/route-accessor.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="16" column="29" lean-forward="true" selection-start-line="16" selection-start-column="29" selection-end-line="16" selection-end-column="29" />
+            <state>
+              <caret lean-forward="true" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/route-business-module/route-business.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="573">
-              <caret line="35" column="31" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+            <state relative-caret-position="147">
+              <caret line="42" column="32" selection-start-line="42" selection-start-column="32" selection-end-line="42" selection-end-column="32" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="368">
-              <caret line="30" column="32" lean-forward="true" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
+            <state relative-caret-position="115">
+              <caret line="5" column="44" lean-forward="true" selection-start-line="5" selection-start-column="44" selection-end-line="5" selection-end-column="44" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="297">
-              <caret line="25" column="81" selection-start-line="25" selection-start-column="81" selection-end-line="25" selection-end-column="81" />
+            <state>
+              <caret lean-forward="true" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="481">
+              <caret line="60" column="2" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="527">
+              <caret line="136" selection-start-line="136" selection-end-line="136" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="132">
+              <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="255" selection-end-column="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret line="50" column="39" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="83">
+              <caret line="158" column="30" lean-forward="true" selection-start-line="158" selection-start-column="30" selection-end-line="158" selection-end-column="30" />
             </state>
           </provider>
         </entry>
@@ -89,14 +121,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>fetchTripDetailsQuery</find>
-      <find>start</find>
-      <find>assign</find>
-      <find>password</find>
-      <find>endT</find>
-      <find>getTripDuration</find>
-      <find>getContainerMasterPasswordQuery</find>
-      <find>unlock</find>
       <find>setContainerLockStatusQuery</find>
       <find>connectionCheckAndQueryExec</find>
       <find>set_ac</find>
@@ -109,7 +133,6 @@
       <find>masterPasswordResponse</find>
       <find>emailSendBusiness</find>
       <find>notificationEmailBusiness</find>
-      <find>getNotificationEmailsForTripIdAccesssor</find>
       <find>notif</find>
       <find>unlo</find>
       <find>sortWith</find>
@@ -119,6 +142,15 @@
       <find>map</find>
       <find>companyController</find>
       <find>223</find>
+      <find>sidenav_order_id</find>
+      <find>getTripDuration</find>
+      <find>commonFetchTripDetails</find>
+      <find>SchemaType</find>
+      <find>getTripStatusName</find>
+      <find>containerAccessors</find>
+      <find>processLogin</find>
+      <find>tripAccessors</find>
+      <find>getNotificationEmailsForTripIdAccesssor</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -146,6 +178,7 @@
       <replace />
       <replace>'EN_US'</replace>
       <replace>notificationEmailBusiness</replace>
+      <replace>tripAccessors</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Users\AB\Desktop\fennix-backend\fennix-backend-app\util-module\custom-request-reponse-modifiers</dir>
@@ -157,8 +190,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/auth-controller.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/device-controller.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/location-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js" />
@@ -177,37 +208,39 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/beneficiary-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/request-validators.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/data-validators.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/company-container.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/comapny-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-code-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/company-controller.js" />
-        <option value="$PROJECT_DIR$/app.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-message-constants.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/connection-constants.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/route-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/route-query.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/route-business-module/route-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
+        <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" />
       </list>
     </option>
   </component>
@@ -253,6 +286,13 @@
               <item name="fennix-backend-app" type="462c0819:PsiDirectoryNode" />
               <item name="business-module" type="462c0819:PsiDirectoryNode" />
               <item name="company-business-module" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fennix-backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fennix-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="fennix-backend-app" type="462c0819:PsiDirectoryNode" />
+              <item name="business-module" type="462c0819:PsiDirectoryNode" />
+              <item name="trip-business-module" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="fennix-backend" type="b2602c69:ProjectViewProjectNode" />
@@ -423,12 +463,12 @@
       <workItem from="1545475691785" duration="1463000" />
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
-      <workItem from="1546634203635" duration="14890000" />
+      <workItem from="1546634203635" duration="34094000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1503320000" />
+    <option name="totallyTimeSpent" value="1522524000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -448,7 +488,7 @@
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" sideWeight="0.5078534" side_tool="true" weight="0.25842696" />
       <window_info anchor="bottom" id="Message" order="0" />
-      <window_info anchor="bottom" id="Find" order="1" weight="0.32905984" />
+      <window_info active="true" anchor="bottom" id="Find" order="1" visible="true" weight="0.32794118" />
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4990086" weight="0.6136035" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.9054858" weight="0.45156696" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
@@ -714,37 +754,37 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>64</line>
+          <line>65</line>
           <option name="timeStamp" value="435" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>66</line>
+          <line>67</line>
           <option name="timeStamp" value="436" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>70</line>
+          <line>71</line>
           <option name="timeStamp" value="437" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>75</line>
+          <line>76</line>
           <option name="timeStamp" value="439" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>79</line>
+          <line>80</line>
           <option name="timeStamp" value="440" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>73</line>
+          <line>74</line>
           <option name="timeStamp" value="441" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js</url>
-          <line>72</line>
+          <line>73</line>
           <option name="timeStamp" value="442" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -1000,41 +1040,6 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/beneficiary-location-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="81">
-          <caret line="9" column="28" selection-start-line="9" selection-start-column="28" selection-end-line="9" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/restriction-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/beneficiary-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2829">
-          <caret line="123" column="58" selection-start-line="123" selection-start-column="58" selection-end-line="123" selection-end-column="58" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2852">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/metadata-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2668">
-          <caret line="116" column="27" selection-start-line="116" selection-start-column="27" selection-end-line="116" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-controller-constants.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="828">
@@ -1060,48 +1065,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="69">
           <caret line="132" column="20" selection-start-line="132" selection-start-column="20" selection-end-line="132" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="37" column="60" selection-start-line="37" selection-start-column="60" selection-end-line="37" selection-end-column="60" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="179">
-          <caret line="18" column="74" lean-forward="true" selection-start-line="18" selection-start-column="74" selection-end-line="18" selection-end-column="74" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="17" column="6" selection-start-line="17" selection-start-column="6" selection-end-line="17" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="408" column="24" lean-forward="true" selection-start-line="408" selection-start-column="24" selection-end-line="408" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="143">
-          <caret line="91" column="15" selection-start-line="91" selection-start-column="4" selection-end-line="91" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/data-validators.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="123" selection-start-line="2" selection-start-column="123" selection-end-line="2" selection-end-column="123" />
         </state>
       </provider>
     </entry>
@@ -1139,34 +1102,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5175">
-          <caret line="225" column="13" selection-start-line="225" selection-start-column="13" selection-end-line="225" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5382">
-          <caret line="234" column="57" selection-start-line="234" selection-start-column="57" selection-end-line="234" selection-end-column="57" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3634">
-          <caret line="158" column="6" selection-start-line="158" selection-start-column="6" selection-end-line="158" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1978">
-          <caret line="86" column="27" selection-start-line="86" selection-start-column="27" selection-end-line="86" selection-end-column="27" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="424">
@@ -1174,27 +1109,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="79">
-          <caret line="181" column="40" selection-start-line="181" selection-start-column="40" selection-end-line="181" selection-end-column="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/lite-ticket-controller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="543">
           <caret line="60" column="3" lean-forward="true" selection-start-line="60" selection-start-column="3" selection-end-line="60" selection-end-column="3" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="23">
-          <caret line="1" column="29" selection-start-line="1" selection-start-column="29" selection-end-line="1" selection-end-column="29" />
         </state>
       </provider>
     </entry>
@@ -1218,18 +1136,12 @@
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="92">
           <caret line="4" column="2" selection-start-line="4" selection-start-column="2" selection-end-line="4" selection-end-column="2" />
         </state>
       </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js">
-      <provider selected="true" editor-type-id="text-editor" />
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/common-controller.js">
       <provider selected="true" editor-type-id="text-editor">
@@ -1259,59 +1171,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/auth-accesor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="20" lean-forward="true" selection-start-line="2" selection-start-column="20" selection-end-line="2" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/connection-constants.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="352">
           <caret line="21" column="13" selection-start-line="21" selection-start-column="13" selection-end-line="21" selection-end-column="13" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" column="44" selection-start-line="2" selection-start-column="44" selection-end-line="2" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="115">
-          <caret line="77" column="71" selection-start-line="77" selection-start-column="71" selection-end-line="77" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/company-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="26" lean-forward="true" selection-end-line="43" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
-          <caret line="42" lean-forward="true" selection-start-line="42" selection-end-line="42" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="25" column="81" selection-start-line="25" selection-start-column="81" selection-end-line="25" selection-end-column="81" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="368">
-          <caret line="30" column="32" lean-forward="true" selection-start-line="30" selection-start-column="32" selection-end-line="30" selection-end-column="32" />
         </state>
       </provider>
     </entry>
@@ -1329,17 +1192,202 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="297">
-          <caret line="14" column="20" lean-forward="true" selection-start-line="14" selection-start-column="20" selection-end-line="14" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/route-business-module/route-business.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="573">
           <caret line="35" column="31" selection-start-line="35" selection-start-column="31" selection-end-line="35" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="281">
+          <caret line="53" column="25" lean-forward="true" selection-start-line="53" selection-start-column="25" selection-end-line="53" selection-end-column="25" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="67">
+          <caret line="675" column="41" selection-start-line="675" selection-start-column="41" selection-end-line="675" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="90" column="68" lean-forward="true" selection-start-line="90" selection-start-column="68" selection-end-line="90" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/company-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="297">
+          <caret line="34" lean-forward="true" selection-start-line="34" selection-end-line="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/ticket-business-module/ticket-business.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="366">
+          <caret line="21" column="45" selection-start-line="21" selection-start-column="45" selection-end-line="21" selection-end-column="45" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="15" column="24" lean-forward="true" selection-start-line="15" selection-start-column="24" selection-end-line="15" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="24" column="23" selection-start-line="24" selection-start-column="23" selection-end-line="24" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/route-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="3" column="39" selection-start-line="3" selection-start-column="39" selection-end-line="3" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/auth-accesor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="143">
+          <caret line="38" column="64" selection-start-line="38" selection-start-column="64" selection-end-line="38" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="20" column="6" selection-start-line="20" selection-start-column="6" selection-end-line="20" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="56" column="22" selection-start-line="56" selection-start-column="22" selection-end-line="56" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/encoder-decoder-constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="13" lean-forward="true" selection-start-column="13" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="100" column="33" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="151">
+          <caret line="44" column="51" lean-forward="true" selection-start-line="44" selection-start-column="51" selection-end-line="44" selection-end-column="51" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="162">
+          <caret line="18" column="28" selection-start-line="18" selection-start-column="28" selection-end-line="18" selection-end-column="28" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/data-validators.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" column="114" selection-start-line="4" selection-start-column="100" selection-end-line="4" selection-end-column="114" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="14" column="68" selection-start-line="14" selection-start-column="51" selection-end-line="14" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret line="50" column="39" selection-start-line="50" selection-start-column="39" selection-end-line="50" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="136" selection-start-line="136" selection-end-line="136" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="481">
+          <caret line="60" column="2" selection-start-line="60" selection-start-column="2" selection-end-line="60" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="83">
+          <caret line="158" column="30" lean-forward="true" selection-start-line="158" selection-start-column="30" selection-end-line="158" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="115">
+          <caret line="5" column="44" lean-forward="true" selection-start-line="5" selection-start-column="44" selection-end-line="5" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="132">
+          <caret line="251" lean-forward="true" selection-start-line="251" selection-end-line="255" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="147">
+          <caret line="42" column="32" selection-start-line="42" selection-start-column="32" selection-end-line="42" selection-end-column="32" />
         </state>
       </provider>
     </entry>

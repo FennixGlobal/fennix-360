@@ -45,11 +45,11 @@ const getContainerMapHistoryAccessor = async (req) => {
     return returnObj;
 };
 
-const getActiveTripDetailsByContainerIdAccessor = async (req) => {
-    let returnObj;
-    returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
-    return returnObj;
-};
+// const getActiveTripDetailsByContainerIdAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
+//     return returnObj;
+// };
 
 const getTotalNoOfContainersForMapAccessor = async (req) => {
     let returnObj, modifiedQuery, extraQuery = ``, request, finalQuery;
@@ -196,18 +196,20 @@ const deleteSortedDumpDataAccessor = async (req) => {
     returnObj = await containerQueries.deleteSortedDumpDataQuery(req);
     return returnObj;
 };
-const fetchNextElockTripPrimaryKeyAccessor = async () => {
-    let returnObj;
-    returnObj = await containerQueries.fetchNextElockTripPrimaryKeyQuery();
-    return returnObj;
-};
 
+// const fetchNextElockTripPrimaryKeyAccessor = async () => {
+//     let returnObj;
+//     returnObj = await containerQueries.fetchNextElockTripPrimaryKeyQuery();
+//     return returnObj;
+// };
+//
+//
+// const insertElockTripDataAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.insertElockTripDataQuery(req);
+//     return returnObj;
+// };
 
-const insertElockTripDataAccessor = async (req) => {
-    let returnObj;
-    returnObj = await containerQueries.insertElockTripDataQuery(req);
-    return returnObj;
-};
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
@@ -242,50 +244,44 @@ const getActivePasswordForContainerIdAccessor = async (req) => {
     return returnObj;
 };
 
-const fetchTripDetailsAccessor = async (req) => {
-    let returnObj;
-    returnObj = await containerQueries.fetchTripDetailsQuery(req);
-    return returnObj;
-};
-const getNotificationEmailsForTripIdAccesssor = async (req) => {
-    let returnObj;
-    returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
-    return returnObj;
-};
+// const fetchTripDetailsAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.fetchTripDetailsQuery(req);
+//     return returnObj;
+// };
+// const getNotificationEmailsForTripIdAccesssor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
+//     return returnObj;
+// };
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.setContainerLockStatusQuery);
     console.log(returnObj);
     return returnObj;
 };
-const updateTripStatusAccessor = async (req) => {
-    let returnObj, newReq = {};
-    newReq['tripId'] = req.tripId;
-    newReq['setFields'] = getSetFields(req, 'tripId');
-    returnObj = await containerQueries.updateTripStatusQuery(newReq);
-    return returnObj;
-};
+// const updateTripStatusAccessor = async (req) => {
+//     let returnObj, newReq = {};
+//     newReq['tripId'] = req.tripId;
+//     newReq['setFields'] = getSetFields(req, 'tripId');
+//     returnObj = await containerQueries.updateTripStatusQuery(newReq);
+//     return returnObj;
+// };
 
 const getContainerMasterPasswordAcessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerMasterPasswordQuery);
     return returnObj;
 };
-// TODO:Move this to commons
-const getSetFields = (setFields, skipValue) => {
-    if (notNullCheck(setFields)) {
-        delete setFields[skipValue];
-    }
-    return setFields;
-};
+
 module.exports = {
-    fetchTripDetailsAccessor,
+    // fetchTripDetailsAccessor,
     getContainerMasterPasswordAcessor,
-    updateTripStatusAccessor,
+    // updateTripStatusAccessor,
     setContainerLockStatusAccessor,
-    getNotificationEmailsForTripIdAccesssor,
-    fetchNextElockTripPrimaryKeyAccessor,
-    insertElockTripDataAccessor,
+    // getNotificationEmailsForTripIdAccesssor,
+    // fetchNextElockTripPrimaryKeyAccessor,
+    // insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,
     updateNextDeviceAttributesPrimaryKeyAccessor,
     addContainerDetailsAccessor,
@@ -310,7 +306,7 @@ module.exports = {
     getContainerDocumentByContainerIdAccessor,
     getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor,
-    getActiveTripDetailsByContainerIdAccessor,
+    // getActiveTripDetailsByContainerIdAccessor,
     fetchAndUpdateContainerPasswordCounterAccessor,
     getActivePasswordForContainerIdAccessor
 };

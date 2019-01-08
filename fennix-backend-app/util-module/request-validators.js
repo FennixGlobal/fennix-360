@@ -131,9 +131,16 @@ const sortWithPaginationQueryCreator = (sortBy, sortOrder, offset, limit, table)
     query = `order by ${sortBy} ${sortOrder} nulls last offset ${offset} limit ${limit}`;
     return query;
 };
+const skipFieldsCreator = (setFields, skipValue) => {
+    if (notNullCheck(setFields)) {
+        delete setFields[skipValue];
+    }
+    return setFields;
+};
 
 module.exports = {
     filterQueryCreator,
+    skipFieldsCreator,
     mongoWhereInCreator,
     requestInModifier,
     insertQueryCreator,

@@ -1,44 +1,35 @@
-const companyBusiness = require('../business-module/company-business-module/company-business');
 var express = require('express');
 var router = express.Router();
+const tripBusiness = require('../business-module/trip-business-module/trip-business');
 
-router.post('/addCompany', function (req, res) {
+router.get('/listTripDetails', function (req, res) {
     let returnObj;
-    returnObj = companyBusiness.addCompanyBusiness(req);
-    returnObj.then((response) => {
-        res.send(response);
-    })
-});
-router.post('/editCompany', function (req, res) {
-    let returnObj;
-    returnObj = companyBusiness.editCompanyBusiness(req);
+    returnObj = tripBusiness.fetchTripDetailsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.get('/deleteCompany', function (req, res) {
+router.get('/startTrip', function (req, res) {
     let returnObj;
-    returnObj = companyBusiness.deleteCompanyBusiness(req);
+    returnObj = tripBusiness.startTripBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
 
-router.get('/listCompany', function (req, res) {
+router.get('/endTrip', function (req, res) {
     let returnObj;
-    returnObj = companyBusiness.listCompanyBusiness(req);
+    returnObj = tripBusiness.endTripBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
-
-router.get('/sortCompany', function (req, res) {
+router.get('/listCompletedTripDetails', function (req, res) {
     let returnObj;
-    returnObj = companyBusiness.sortCompanyBusiness(req);
+    returnObj = tripBusiness.fetchCompletedTripDetailsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
 });
-
 module.exports = router;
