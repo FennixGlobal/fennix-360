@@ -26,7 +26,7 @@ const addCompanyBusiness = async (req) => {
 };
 const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
-    response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId]);
+    response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId, parseInt(req.query.skip), parseInt(req.query.limit)]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
