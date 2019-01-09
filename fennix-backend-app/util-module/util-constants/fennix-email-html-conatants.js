@@ -23,7 +23,7 @@ const roleMailBody = {
         body: `<p style="font-size: 1.5em;font-weight: bold;margin:0">Its great to have you help us.</p>
 <p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Login to manage beneficiaries based on your role and location.You can track beneficiaries,add beneficiaries,add tickets,track beneficiaries and a lot more.</p>
 <p style="font-weight: bold;margin: 0">Please login to the application by clicking on the below and set your desired password.</p>`,
-        url: 'http://sofiadev.fennix360.com:4200/newLogin',
+        url: 'http://patdoj.fennix.global:4200/newLogin',
         urlName: 'Fennix360 - Admin Login'
     },
     beneficiary: {
@@ -31,7 +31,7 @@ const roleMailBody = {
         body: `<p style="font-size: 1.3em;font-weight: bold;margin:0">Welcome</p>
 <p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Login to see various metrics of your respective device,your details and a lot more.</p>
 <p style="font-weight: bold;margin: 0">Please login to the application by clicking on the below and set your desired password.</p>`,
-        url: 'http://sofiadev.fennix360.com:4200/newLogin',
+        url: 'http://patdoj.fennix.global:4200/newLogin',
         urlName: 'Fennix360'
     },
 };

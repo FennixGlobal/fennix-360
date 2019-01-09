@@ -11,7 +11,7 @@ const addCompanyBusiness = async (req) => {
     request.createdBy = request.userId;
     request.isActive = true;
     response = await companyAccessors.addCompanyAccessor(request);
-    console.log(response);
+    // console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         // routeResponse = await routeBusiness.insertCompanyRouteBusiness(req);
         if (notNullCheck(routeResponse)) {
@@ -25,7 +25,7 @@ const addCompanyBusiness = async (req) => {
     return finalResponse;
 };
 const listCompanyBusiness = async (req) => {
-    let response, finalResponse, modifiedResponse = [];
+    let response, finalResponse, modifiedResponse = {gridData: []};
     response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.forEach((item) => {
@@ -35,7 +35,7 @@ const listCompanyBusiness = async (req) => {
                 companyType: item['company_type'],
                 customsId: item['customs_id']
             };
-            modifiedResponse.push(obj);
+            modifiedResponse.gridData.push(obj);
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
