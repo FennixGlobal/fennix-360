@@ -26,7 +26,7 @@ const addCompanyBusiness = async (req) => {
 };
 const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
-    response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId]);
+    response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId, parseInt(req.query.skip), parseInt(req.query.limit)]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
@@ -37,6 +37,7 @@ const listCompanyBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(obj);
         });
+        modifiedResponse.totalNoOfRecords = response.rows.length;
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
