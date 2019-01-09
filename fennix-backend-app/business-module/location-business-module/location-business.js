@@ -442,7 +442,7 @@ const dataSplitterDump = async (data, masterDate) => {
         if (deviceUpdatedDate > masterDate) {
             const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
             console.log(eLockSessionData);
-            if (eLockSessionData) {
+            if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(eLockData.socketAddress, deviceIMEIId);
             }
             const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
