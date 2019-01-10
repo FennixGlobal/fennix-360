@@ -33,12 +33,12 @@ const processData = async (loginString) => {
     };
     loginFlag = await processLogin(loginString.substr(14, 15));
     returnString = loginFlag ? loginString.replace(loginString.substr(0, 3), deviceCommandConstants.cmdLoginResponse) : loginString; // '#SB'
-    console.log('login string');
-    console.log(loginString);
-    console.log('login command');
-    console.log(deviceCommandConstants.cmdLoginResponse);
+    // console.log('login string');
+    // console.log(loginString);
+    // console.log('login command');
+    // console.log(deviceCommandConstants.cmdLoginResponse);
 
-    console.log(returnString);
+    // console.log(returnString);
     return returnString;
 };
 
@@ -302,8 +302,8 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
             returnString = '(P46)';
             break;
     }
-    console.log('GPS and alarm data');
-    console.log(returnArray);
+    // console.log('GPS and alarm data');
+    // console.log(returnArray);
     if (objectHasPropertyCheck(returnArray, 'gps') && arrayNotEmptyCheck(returnArray.gps)) {
         const locationPrimaryKeyResponse = await containerAccessor.fetchNextLocationPrimaryKeyAccessor();
         const eLockAttributesPrimaryKeyResponse = await containerAccessor.fetchNextDeviceAttributesPrimaryKeyAccessor();
@@ -328,8 +328,8 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
                 deviceId = deviceId || (dataSplitterResponse ? dataSplitterResponse['deviceId'] : null);
                 containerId = containerId || (dataSplitterResponse ? dataSplitterResponse['containerId'] : null);
                 returnString = returnString || objectHasPropertyCheck(dataSplitterResponse, 'returnString') ? dataSplitterResponse['returnString'] : null;
-                console.log('data splitter rfesponse');
-                console.log(dataSplitterResponse);
+                // console.log('data splitter rfesponse');
+                // console.log(dataSplitterResponse);
                 if (notNullCheck(dataSplitterResponse['deviceAttributes'])) {
                     deviceAttributesList.push(dataSplitterResponse['deviceAttributes']);
                 }
@@ -441,7 +441,7 @@ const dataSplitterDump = async (data, masterDate) => {
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         if (deviceUpdatedDate > masterDate) {
             const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
-            console.log(eLockSessionData);
+            // console.log(eLockSessionData);
             if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(eLockData.socketAddress, deviceIMEIId);
             }
@@ -492,8 +492,8 @@ const eLocksDataUpdateDumpBusiness = async (data) => {
         dumpDataList = [], masterDateResponse = {}, masterDate,
         dataSplitterResponse = null, response;
     const eLockStatus = data.slice(0, 2);
-    console.log('elock Status');
-    console.log(eLockStatus);
+    // console.log('elock Status');
+    // console.log(eLockStatus);
     switch (parseInt(eLockStatus, 10)) {
         case 24:
             returnArray = await dataIterator(data, null);
@@ -517,8 +517,8 @@ const eLocksDataUpdateDumpBusiness = async (data) => {
             containerAccessor.updateMasterDumpDateAccessor('dumpDate', dumpDataList.pop()['deviceDate']);
         }
     }
-    console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
-    console.log(returnString);
+    // console.log('+++++++++++++++++++++return string++++++++++++++++++++++++');
+    // console.log(returnString);
     return returnString;
 };
 
