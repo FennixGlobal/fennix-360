@@ -6,9 +6,9 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
 const {fetchUserDetailsBusiness} = require('../user-business-module/user-business');
+const jwt = require('jsonwebtoken');
 
-
-const checkEmailId = async(req) => {
+const checkEmailId = async (req) => {
     let responseObj, businessResponse;
     // const algo = emoji[req.query.avatar]['encoding'];
     // const passKey = emoji[req.query.avatar]['secretPass'];
@@ -32,21 +32,21 @@ const checkEmailId = async(req) => {
 const fetchLoginProfileBusiness = async (req) => {
     let loginProfileResponse;
     // if (req.query.userRoleId > 2) {
-        loginProfileResponse = await fetchUserDetailsBusiness(req);
-        // userController
-        // await router.get('user/fetchProfile', function (req, res) {
-        //     const returnObj = res;
-        //     returnObj.then((response) => {
-        //         loginProfileResponse = response;
-        //     });
-        // })
+    loginProfileResponse = await fetchUserDetailsBusiness(req);
+    // userController
+    // await router.get('user/fetchProfile', function (req, res) {
+    //     const returnObj = res;
+    //     returnObj.then((response) => {
+    //         loginProfileResponse = response;
+    //     });
+    // })
     // } else {
-        // await router.get('beneficiary/fetchBeneficiaryProfile', function (req, res) {
-        //     const returnObj = res;
-        //     returnObj.then((response) => {
-        //         loginProfileResponse = response;
-        //     });
-        // })
+    // await router.get('beneficiary/fetchBeneficiaryProfile', function (req, res) {
+    //     const returnObj = res;
+    //     returnObj.then((response) => {
+    //         loginProfileResponse = response;
+    //     });
+    // })
     // }
     return loginProfileResponse;
 };
@@ -60,11 +60,11 @@ const authenticateUser = async (req) => {
         req.body.language
     ];
     businessResponse = await authenticateUserDetails(request);
-    console.log(businessResponse);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
             responseObj = retireCheck(businessResponse.rows);
+            console.log(responseObj);
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
         }
@@ -74,6 +74,7 @@ const authenticateUser = async (req) => {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
                 responseObj = retireCheck(businessResponse.rows);
+                console.log(responseObj);
             } else {
                 responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
             }

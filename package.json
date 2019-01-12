@@ -24,6 +24,7 @@
     "http-errors": "~1.6.2",
     "isomorphic-fetch": "^2.2.1",
     "joi": "^13.7.0",
+    "jsonwebtoken": "^8.4.0",
     "moment": "^2.22.2",
     "moment-timezone": "^0.5.21",
     "mongoose": "^5.0.16",

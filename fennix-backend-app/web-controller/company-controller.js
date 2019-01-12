@@ -47,4 +47,5 @@ router.get('/getCompanyDetails', function (req, res) {
         res.send(response);
     })
 });
+
 module.exports = router;
