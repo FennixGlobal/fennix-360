@@ -603,7 +603,9 @@ const deviceDetailsByContainerIdQuery = (query) => {
         {$unwind: "$device"}
     ]);
 };
-
+const getDeviceIMEIByContainerIDQuery = (containerId) => {
+    return deviceAggregator.find({containerId});
+};
 const checkIfDeviceIsPresentQuery = (req) => {
     return deviceAggregator.count({imei: req});
 };
@@ -656,5 +658,6 @@ module.exports = {
     getDeviceDetailsByDeviceIdQuery,
     updateLocationDeviceAttributeMasterQuery,
     getTotalNoOfDevicesQuery,
-    getContainerIdByImeiQuery
+    getContainerIdByImeiQuery,
+    getDeviceIMEIByContainerIDQuery
 };

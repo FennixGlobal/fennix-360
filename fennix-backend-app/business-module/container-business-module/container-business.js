@@ -8,7 +8,7 @@ const userAccessors = require('../../repository-module/data-accesors/user-acceso
 const {socket} = require('../../../app');
 const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');
 const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, notificationEmailBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
-
+const eLockSessionBusiness = require('../e-lock-business-module/e-lock-session-business');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 
 const addContainerDetailsBusiness = async (req) => {
@@ -92,7 +92,12 @@ const addContainerDetailsBusiness = async (req) => {
 };*/
 const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
-        finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit, languageId: req.query.languageId};
+        finalReturnObj = {}, request = {
+            sortBy: req.query.sort,
+            skip: req.query.skip,
+            limit: req.query.limit,
+            languageId: req.query.languageId
+        };
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
     request.userIdList = [];
     console.log('user response');
@@ -393,10 +398,16 @@ const unlockElockBusiness = async (req) => {
     const containerId = parseInt(req.query.containerId, 10);
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
+    const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-        containerAccessors.setContainerLockStatusAccessor([containerId, false]);
+        // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
         // activePasswordResponse.rows[0]['active_password']
-        socket.socketIO.emit('unlock_device', '100000');
+        const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
+        console.log(eLockSessionData);
+        socket.socketIO.emit('unlock_device', {
+            socketAddress: eLockSessionData[0]['connectingSocket'],
+            password: '100000'
+        });
     }
     // console.log(masterPasswordResponse);
     // if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {

@@ -16,7 +16,13 @@ const stoppagePointSchema = {
     timeDuration: SchemaType.Double,
     timeUnit: String
 };
-
+const routeSchema = {
+    startAddress: addressSchema,
+    endAddress: addressSchema,
+    wayPoints: [addressSchema],
+    stoppagePoints: [stoppagePointSchema],
+    totalDistance: Number
+};
 const companyRoutesCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,
     counter: Number
@@ -25,17 +31,31 @@ const companyRoutesCounterSchema = new Schema({
 const companyRoutesSchema = new Schema({
     routeId: Number,
     companyId: Number,
+    route: routeSchema,
+    isActive: Boolean,
+    createdBy: Number,
+    creationDate: Date,
+    updatedBy: Number,
+    updatedDate: Date
+});
+
+const companyPrimaryAddressSchema = new Schema({
+    companyId: Number,
     companyAddress: addressSchema,
     primaryWarehouseAddress: addressSchema,
     primaryPortAddress: addressSchema,
-    startAddress: addressSchema,
-    endAddress: addressSchema,
-    wayPoints: [addressSchema],
-    stoppagePoints: [stoppagePointSchema]
+    isActive: Boolean,
+    createdBy: Number,
+    creationDate: Date,
+    updatedBy: Number,
+    updatedDate: Date
 });
+
+const CompanyPrimaryAddressModel = mongoose.model('companyPrimaryAddressSchema', companyPrimaryAddressSchema, 'companyPrimaryAddress');
 const CompanyRouteCounterModel = mongoose.model('companyRouteCounterSchema', companyRoutesCounterSchema, 'companyRouteCounter');
 const CompanyRouteModel = mongoose.model('companyRouteSchema', companyRoutesSchema, 'companyRoute');
 module.exports = {
     CompanyRouteModel,
+    CompanyPrimaryAddressModel,
     CompanyRouteCounterModel
 };

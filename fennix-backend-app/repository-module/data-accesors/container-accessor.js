@@ -5,7 +5,7 @@ const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {updateQueryCreator} = require('../../util-module/request-validators');
 const {notNullCheck} = require('../../util-module/data-validators');
-
+const {getDeviceIMEIByContainerIDQuery}=require('../queries/device-query');
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
     finalResponse = await insertQueryCreator(req, TABLE_CONTAINER, containerQueries.addContainerDetailsQuery);
@@ -295,9 +295,18 @@ const getContainerMasterPasswordAcessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerMasterPasswordQuery);
     return returnObj;
 };
+const getDeviceIMEIByContainerIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, getDeviceIMEIByContainerIDQuery);
+    return returnObj;
+};
+
+
+
 
 module.exports = {
     // fetchTripDetailsAccessor,
+    getDeviceIMEIByContainerIdAccessor,
     getContainerMasterPasswordAcessor,
     // updateTripStatusAccessor,
     setContainerLockStatusAccessor,

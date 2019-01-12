@@ -12,9 +12,8 @@ const addCompanyBusiness = async (req) => {
     request.createdBy = request.userId;
     request.isActive = true;
     response = await companyAccessors.addCompanyAccessor(request);
-    // console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        // routeResponse = await routeBusiness.insertCompanyRouteBusiness(req);
+        routeResponse = await routeBusiness.insertCompanyRouteBusiness(req.body);
         if (notNullCheck(routeResponse)) {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('added company route successfully');
