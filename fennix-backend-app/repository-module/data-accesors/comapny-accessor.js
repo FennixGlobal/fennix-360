@@ -1,5 +1,5 @@
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {insertQueryCreator,updateQueryCreator} = require('../../util-module/request-validators');
+const {insertQueryCreator,updateQueryCreator,requestInModifier} = require('../../util-module/request-validators');
 const {TABLE_COMPANY} = require('../../util-module/db-constants');
 const companyQueries = require('../queries/company-query');
 
@@ -27,8 +27,16 @@ const listCompanyAccessor = async (req) => {
     return returnObj;
 };
 
+const getCompanyDetailsAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req, companyQueries.getCompanyDetailsQuery, true);
+    returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
+    return returnObj;
+};
+
 module.exports = {
     addCompanyAccessor,
+    getCompanyDetailsAccessor,
     editCompanyAccessor,
     listCompanyAccessor
 };

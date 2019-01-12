@@ -40,5 +40,11 @@ router.get('/sortCompany', function (req, res) {
         res.send(response);
     })
 });
-
+router.get('/getCompanyDetails', function (req, res) {
+    let returnObj;
+    returnObj = companyBusiness.getCompanyDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

@@ -66,7 +66,31 @@ const deleteCompanyBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');
 };
 
-
+const getCompanyDetailsBusiness = async (req) => {
+    let request = [req.query.companyId], response, modifiedResponse = [], finalResponse;
+    response = await companyAccessors.getCompanyDetailsAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = {
+                companyId: item['company_id'],
+                companyName: item['company_name'],
+                companyType: item['company_type'],
+                companyAddress: item['company_address'],
+                companyPhone: item['company_phone'],
+                companyEmail: item['company_email'],
+                companyState: item['company_state'],
+                companyCity: item['company_city'],
+                companyCountry: item['company_country'],
+                customsId: item['customs_id']
+            };
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
 const sortCompanyBusiness = async (req) => {
     let request = req.body, response, finalResponse;
     return finalResponse;
@@ -77,5 +101,6 @@ module.exports = {
     editCompanyBusiness,
     deleteCompanyBusiness,
     listCompanyBusiness,
-    sortCompanyBusiness
+    sortCompanyBusiness,
+    getCompanyDetailsBusiness
 };
