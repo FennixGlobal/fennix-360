@@ -216,6 +216,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
         if (arrayNotEmptyCheck(containerResponse)) {
             const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
             // console.log(eLockSessionData);
+            console.log('device IMEI',deviceIMEIId);
+            console.log('socketAddress',socketAddress);
             if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
             }
