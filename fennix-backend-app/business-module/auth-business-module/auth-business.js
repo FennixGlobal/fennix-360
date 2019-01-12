@@ -2,7 +2,7 @@ const crypto = require('crypto-js');
 const bcrypt = require('bcryptjs');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
-const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
 const {fetchUserDetailsBusiness} = require('../user-business-module/user-business');
@@ -31,23 +31,7 @@ const checkEmailId = async (req) => {
 
 const fetchLoginProfileBusiness = async (req) => {
     let loginProfileResponse;
-    // if (req.query.userRoleId > 2) {
     loginProfileResponse = await fetchUserDetailsBusiness(req);
-    // userController
-    // await router.get('user/fetchProfile', function (req, res) {
-    //     const returnObj = res;
-    //     returnObj.then((response) => {
-    //         loginProfileResponse = response;
-    //     });
-    // })
-    // } else {
-    // await router.get('beneficiary/fetchBeneficiaryProfile', function (req, res) {
-    //     const returnObj = res;
-    //     returnObj.then((response) => {
-    //         loginProfileResponse = response;
-    //     });
-    // })
-    // }
     return loginProfileResponse;
 };
 
@@ -109,17 +93,7 @@ const decrypt = (algo, passKey, message) => {
 const retireCheck = (responseObj) => (responseObj['isactive']);
 
 const authResponseObjectFormation = (responseObj) => {
-    return {
-        role_name: responseObj['role_name'],
-        user_role: responseObj['user_role'],
-        first_name: responseObj['first_name'],
-        last_name: responseObj['last_name'],
-        user_id: responseObj['user_id'],
-        owner_user_id: responseObj['owner_user_id'],
-        email_id: responseObj['email_id'],
-        isactive: responseObj['isactive'],
-        center_id: responseObj['center_id']
-    }
+    return responseObjectCreator(responseObj, ['role_name', 'user_role', 'first_name', 'last_name', 'user_id', 'owner_user_id', 'email_id', 'isactive', 'center_id'], ['role_name', 'user_role', 'first_name', 'last_name', 'user_id', 'owner_user_id', 'email_id', 'isactive', 'center_id']);
 };
 
 const responseFormation = (responseObj, retireCheck) => {

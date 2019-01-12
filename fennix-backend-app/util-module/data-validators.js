@@ -14,9 +14,35 @@ const deviceStatusMapper = (key, value) => {
     });
     return returnValue;
 };
+
+
+const responseObjectCreator = (inputObject, outputKeyArray, keyArray, excludeEmptyFlag = false) => {
+    let returnObject = null;
+    if (notNullCheck(inputObject) && arrayNotEmptyCheck(keyArray)) {
+        returnObject = {};
+        keyArray.forEach((key, index) => {
+            if (typeof key === 'string' && !excludeEmptyFlag) {
+                returnObject[outputKeyArray[index]] = inputObject[key];
+            } else if (arrayNotEmptyCheck(key) && !excludeEmptyFlag) {
+                returnObject[outputKeyArray[index]] = arrayObjectReducer(inputObject, key);
+            }
+        });
+    }
+    return returnObject;
+};
+
+const arrayObjectReducer = (inputData, mappingKeyArray) => {
+    if (mappingKeyArray.length === 1) {
+        return inputData[mappingKeyArray[0]];
+    } else {
+        return arrayObjectReducer(inputData[mappingKeyArray[0]], mappingKeyArray.splice(1, mappingKeyArray.length - 1));
+    }
+};
+
 module.exports = {
     notNullCheck,
     arrayNotEmptyCheck,
     deviceStatusMapper,
+    responseObjectCreator,
     objectHasPropertyCheck
 };

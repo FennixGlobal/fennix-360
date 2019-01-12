@@ -60,7 +60,6 @@ const dropdownActionButtonCreator = (dropdownActionButton) => {
     }
     return dropdownAction;
 };
-
 module.exports = {
     connectionCheckAndQueryExec,
     fennixResponse,
