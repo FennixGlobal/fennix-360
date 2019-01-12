@@ -52,7 +52,7 @@ const fetchLoginProfileBusiness = async (req) => {
 };
 
 const authenticateUser = async (req) => {
-    let responseObj, businessResponse, authResponse;
+    let responseObj, businessResponse, authResponse, retireCheckFlag, returnResponse = {response: null, header: null};
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const request = [
@@ -64,9 +64,14 @@ const authenticateUser = async (req) => {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
             responseObj = authResponseObjectFormation(businessResponse.rows[0]);
-            responseObj = retireCheck(responseObj);
+            retireCheckFlag = retireCheck(responseObj);
+            responseObj = responseFormation(responseObj);
+            returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
+            returnResponse.response = responseObj;
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
+            returnResponse.header = null;
+            returnResponse.response = responseObj;
         }
     } else {
         businessResponse = await authenticateBeneficiaryDetails(request);
@@ -74,15 +79,22 @@ const authenticateUser = async (req) => {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
                 responseObj = authResponseObjectFormation(businessResponse.rows[0]);
-                responseObj = retireCheck(responseObj);
+                retireCheckFlag = retireCheck(responseObj);
+                responseObj = responseFormation(responseObj);
+                returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
+                returnResponse.response = responseObj;
             } else {
                 responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
+                returnResponse.header = null;
+                returnResponse.response = responseObj;
             }
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
+            returnResponse.header = null;
+            returnResponse.response = responseObj;
         }
     }
-    return responseObj;
+    return returnResponse;
 };
 
 const decrypt = (algo, passKey, message) => {
@@ -94,7 +106,7 @@ const decrypt = (algo, passKey, message) => {
     }
 };
 
-const retireCheck = (responseObj) => (responseObj['isactive']) ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj);
+const retireCheck = (responseObj) => (responseObj['isactive']);
 
 const authResponseObjectFormation = (responseObj) => {
     return {
@@ -108,6 +120,10 @@ const authResponseObjectFormation = (responseObj) => {
         isactive: responseObj['isactive'],
         center_id: responseObj['center_id']
     }
+};
+
+const responseFormation = (responseObj, retireCheck) => {
+    return retireCheck ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj)
 };
 module.exports = {
     checkEmailId,

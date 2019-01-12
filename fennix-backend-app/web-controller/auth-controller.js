@@ -5,8 +5,8 @@ const authBusiness = require('../business-module/auth-business-module/auth-busin
 /* GET home page. */
 router.post('/authenticate', function (req, res) {
     var returnObj = authBusiness.authenticateUser(req);
-    returnObj.then((response) => {
-        res.send(response);
+    returnObj.then((authResponse) => {
+        res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
     })
 });
 
