@@ -190,7 +190,7 @@ const getGSMLevel = (gsmStatus) => {
 };
 //To insert dumped data to actual collections(elocksLocation & elocksDeviceAttributes)  & delete the dump from elocksDumpData
 const newJob = new cronJob('* 2 * * *', async () => {
-    console.log('cron Job started');
+    // console.log('cron Job started');
     await $eLocksDataDumpToMasterCronJobBusiness();
 });
 
@@ -217,8 +217,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
         if (arrayNotEmptyCheck(containerResponse)) {
             const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
             // console.log(eLockSessionData);
-            console.log('device IMEI',deviceIMEIId);
-            console.log('socketAddress',socketAddress);
+            // console.log('device IMEI',deviceIMEIId);
+            // console.log('socketAddress',socketAddress);
             if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
                 currentSocketAddress = socketAddress;
@@ -228,12 +228,12 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
             latArray = latArray ? latArray.sort() : [];
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
-                notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
+                // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
                 setTimeout(() => {
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
+                    // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
                 }, 100);
                 setTimeout(() => {
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
+                    // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
                 }, 300);
                 // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
             }
@@ -346,8 +346,8 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
             }
         });
         let finalLocationId, finalDeviceAttrId;
-        console.log(locationList.length);
-        console.log(deviceAttributesList.length);
+        // console.log(locationList.length);
+        // console.log(deviceAttributesList.length);
         if (arrayNotEmptyCheck(locationList)) {
             finalLocationId = locationList[locationList.length - 1]['_id'];
             updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
@@ -364,7 +364,7 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
     }
     await containerAccessor.updateElocksLocationDeviceAttributeMasterAccessor(masterData);
     newJob.start();
-    console.log(newJob);
+    // console.log(newJob);
     return returnString;
 };
 
