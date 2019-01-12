@@ -5,7 +5,7 @@ const insertCompanyRouteBusiness = async (req) => {
     let request = req, routeRequest = {}, response, counterResponse, primaryAddressRequest = {}, companyId = 0,
         routeArray = [];
     counterResponse = await routeAccessors.fetchAndUpdateCompanyRoutePrimaryKeyAccessor();
-    console.log(routeRequest);
+    console.log(counterResponse);
     routeRequest.routeId = counterResponse['_doc']['counter'];
     companyId = parseInt(request['companyId'], 10);
     primaryAddressRequest = responseObjectCreator(request, ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'], ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress']);
