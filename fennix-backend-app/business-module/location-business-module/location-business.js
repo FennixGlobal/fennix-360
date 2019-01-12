@@ -198,6 +198,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
+        currentSocketAddress = null,
         location = null, response = null,
         deviceAttributes = null;
     deviceAlertInfo = hexToBinary(data.slice(72, 76));
@@ -220,6 +221,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
             console.log('socketAddress',socketAddress);
             if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
+                currentSocketAddress = socketAddress;
             }
             let latArray = containerResponse[0]['trips']['latArray'];
             let lngArray = containerResponse[0]['trips']['lngArray'];
@@ -280,6 +282,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
             response['location'] = location;
             response['deviceAttributes'] = deviceAttributes;
             response['returnString'] = returnString;
+            response['socketAddress'] = currentSocketAddress;
         }
     }
     return response;

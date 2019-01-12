@@ -1,4 +1,4 @@
-const {CompanyRouteModel} = require('../models/route-model');
+const {CompanyRouteModel, CompanyPrimaryAddressModel} = require('../models/route-model');
 
 const insertCompanyRoutesQuery = (req) => {
     let response = null;
@@ -30,10 +30,13 @@ const editCompanyRoutesQuery = (routeId, req) => {
     });
     return response;
 };
-
+const insertCompanyPrimaryAddressQuery = (req) => {
+    return CompanyPrimaryAddressModel.collection.insert(req);
+};
 
 module.exports = {
     insertCompanyRoutesQuery,
     editCompanyRoutesQuery,
+    insertCompanyPrimaryAddressQuery,
     fetchAndUpdateCompanyRoutePrimaryKeyQuery
 };

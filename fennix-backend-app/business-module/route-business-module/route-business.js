@@ -2,7 +2,8 @@ const routeAccessors = require('../../repository-module/data-accesors/route-acce
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 
 const insertCompanyRouteBusiness = async (req) => {
-    let request = req, routeRequest = {}, response, counterResponse, primaryAddressRequest = {}, companyId = 0;
+    let request = req, routeRequest = {}, response, counterResponse, primaryAddressRequest = {}, companyId = 0,
+        routeArray = [];
     counterResponse = await routeAccessors.fetchAndUpdateCompanyRoutePrimaryKeyAccessor();
     routeRequest.routeId = counterResponse['_doc']['counter'];
     companyId = parseInt(request['companyId'], 10);
@@ -12,10 +13,13 @@ const insertCompanyRouteBusiness = async (req) => {
     });
     await routeAccessors.insertCompanyPrimaryAddressAccessor(primaryAddressRequest);
     if (objectHasPropertyCheck(request, 'routes') && arrayNotEmptyCheck(request.routes)) {
+
         request.routes.forEach((route) => {
-            const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints','totalDistance'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints','totalDistance']);
+            const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance']);
             newRoute['companyId'] = companyId;
+            routeArray.push(newRoute);
         });
+        await routeAccessors.insertRouteAccessor(routeArray);
     }
     response = await routeAccessors.insertRouteAccessor(routeRequest);
     return response;
