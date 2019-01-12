@@ -92,7 +92,7 @@ const addContainerDetailsBusiness = async (req) => {
 };*/
 const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
-        finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
+        finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit, languageId: req.query.languageId};
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
     request.userIdList = [];
     console.log('user response');
@@ -110,7 +110,7 @@ const listContainerBusiness = async (req) => {
             finalReturnObj[item['container_id']] = {
                 documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
                 containerId: item['container_id'],
-                containerType: item['container_type'],
+                containerType: item['container_type_value'],
                 containerName: item['container_name'],
                 companyName: item['company_name'],
                 image: item['container_image']

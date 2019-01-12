@@ -272,15 +272,15 @@ const setContainerLockStatusAccessor = async (req) => {
 // };
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
-    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [...req.userIdList, req.centerId];
-        extraQuery = `and center_id = $${req.userIdList.length + 1}`;
+        request = [req.languageId, ...req.userIdList, req.centerId];
+        extraQuery = `and center_id = $${req.userIdList.length + 2}`;
     } else if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT) {
-        request = [...req.userIdList, req.companyId];
-        extraQuery = ` and company_id = $${req.userIdList.length + 1}`;
+        request = [req.languageId, ...req.userIdList, req.companyId];
+        extraQuery = ` and company_id = $${req.userIdList.length + 2}`;
     } else {
-        request = [...req.userIdList];
+        request = [req.languageId, ...req.userIdList];
     }
     console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10), TABLE_CONTAINER)}`;
