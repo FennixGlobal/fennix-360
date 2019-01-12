@@ -20,6 +20,7 @@ const dbTableColMap = {
         phoneNo: 'mobile_no',
         gender: 'gender',
         image: 'image',
+        companyId: 'company_id',
         role: 'user_role',
         isActive:'isactive',
         userId: 'owner_user_id'

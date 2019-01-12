@@ -21,12 +21,19 @@ const editCompanyAccessor = async (req) => {
     return returnObj;
 };
 
+// const listCompanyAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await connectionCheckAndQueryExec(req, companyQueries.listCompanyQuery);
+//     return returnObj;
+// };
 const listCompanyAccessor = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, companyQueries.listCompanyQuery);
+    let returnObj, extraQuery, modifiedQuery, finalQuery;
+    modifiedQuery = requestInModifier(req.userIdList, companyQueries.listCompanyQuery, true);
+    extraQuery = ` order by updated_date desc nulls last offset $${req.userIdList.length + 2} limit $${req.userIdList.length + 3}`;
+    finalQuery = `${modifiedQuery} ${extraQuery}`;
+    returnObj = await connectionCheckAndQueryExec([req.languageId, ...req.userIdList, req.skip, req.limit], finalQuery);
     return returnObj;
 };
-
 const getCompanyDetailsAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, companyQueries.getCompanyDetailsQuery, true);

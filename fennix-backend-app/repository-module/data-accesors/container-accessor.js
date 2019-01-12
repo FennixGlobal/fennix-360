@@ -210,6 +210,7 @@ const deleteSortedDumpDataAccessor = async (req) => {
 //     return returnObj;
 // };
 
+/*
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
@@ -226,6 +227,8 @@ const listContainersAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
+*/
+
 const getContainerMasterPasswordAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.getContainerMasterPasswordQuery);
@@ -267,6 +270,25 @@ const setContainerLockStatusAccessor = async (req) => {
 //     returnObj = await containerQueries.updateTripStatusQuery(newReq);
 //     return returnObj;
 // };
+const listContainersAccessor = async (req) => {
+    let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [...req.userIdList, req.centerId];
+        extraQuery = `and center_id = $${req.userIdList.length + 1}`;
+    } else if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT) {
+        request = [...req.userIdList, req.companyId];
+        extraQuery = ` and company_id = $${req.userIdList.length + 1}`;
+    } else {
+        request = [...req.userIdList];
+    }
+    console.log(modifiedQuery);
+    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10), TABLE_CONTAINER)}`;
+    console.log(finalQuery);
+    console.log(req.userIdList);
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
+    return returnObj;
+};
 
 const getContainerMasterPasswordAcessor = async (req) => {
     let returnObj;

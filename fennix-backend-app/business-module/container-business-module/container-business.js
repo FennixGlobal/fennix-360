@@ -51,7 +51,7 @@ const addContainerDetailsBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
 
-const listContainerBusiness = async (req) => {
+/*const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
         finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
@@ -89,8 +89,50 @@ const listContainerBusiness = async (req) => {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
+};*/
+const listContainerBusiness = async (req) => {
+    let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
+        finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
+    userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
+    request.userIdList = [];
+    if (objectHasPropertyCheck(userResponse, 'userDetails') && objectHasPropertyCheck(userResponse.userDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userResponse.userDetails.rows)) {
+        request.companyId = userResponse.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT ? userResponse.userDetails.rows[0]['company_id'] : null;
+        userResponse.userDetails.rows.forEach((item) => request.userIdList.push(item['user_id']));
+        request.nativeUserRole = userResponse.nativeUserRole;
+    }
+    containerListResponse = await containerAccessors.listContainersAccessor(request);
+    totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
+    finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
+    if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
+        containerListResponse.rows.forEach(item => {
+            finalReturnObj[item['container_id']] = {
+                documentId: objectHasPropertyCheck(item, 'document_id') && notNullCheck(item['document_id']) ? item['document_id'] : 'Document Id Not Present',
+                containerId: item['container_id'],
+                containerType: item['container_type'],
+                containerName: item['container_name'],
+                companyName: item['company_name'],
+                image: item['container_image']
+            };
+            containerIds.push(item['container_id']);
+        });
+        let deviceDetailsResponse = await deviceAccessors.getDeviceDetailsForListOfContainersAccessor(containerIds);
+        if (arrayNotEmptyCheck(deviceDetailsResponse)) {
+            deviceDetailsResponse.forEach(device => {
+                finalReturnObj[device['containerId']] = {
+                    ...finalReturnObj[device['containerId']],
+                    deviceId: device['_id'],
+                    imei: objectHasPropertyCheck(device, 'imei') && notNullCheck(device['imei']) ? device['imei'] : '999999999',
+                    deviceType: objectHasPropertyCheck(device, 'deviceType') && arrayNotEmptyCheck(device['deviceType']) ? device['deviceType'][0]['name'] : 'No Device Type'
+                };
+            });
+        }
+        finalResponse['gridData'] = Object.keys(finalReturnObj).map(key => finalReturnObj[key]);
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
+    }
+    return returnObj;
 };
-
 const listUnassignedContainerBusiness = async () => {
     let response, modifiedResponse = [], finalResponse;
     response = await containerAccessors.listUnAssignedContainersAccessor([]);

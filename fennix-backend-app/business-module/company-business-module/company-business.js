@@ -3,6 +3,7 @@ const routeBusiness = require('../route-business-module/route-business');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
 
 const addCompanyBusiness = async (req) => {
@@ -24,10 +25,34 @@ const addCompanyBusiness = async (req) => {
     }
     return finalResponse;
 };
+/*
 const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
     response = await companyAccessors.listCompanyAccessor([req.query.languageId, req.query.userId, parseInt(req.query.skip), parseInt(req.query.limit)]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = {
+                companyId: item['company_id'],
+                companyName: item['company_name'],
+                companyType: item['company_type'],
+                customsId: item['customs_id']
+            };
+            modifiedResponse.gridData.push(obj);
+        });
+        modifiedResponse.totalNoOfRecords = response.rows.length;
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+*/
+
+const listCompanyBusiness = async (req) => {
+    let response, finalResponse, modifiedResponse = {gridData: []}, request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+    request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    response = await companyAccessors.listCompanyAccessor(request);
+    if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
                 companyId: item['company_id'],

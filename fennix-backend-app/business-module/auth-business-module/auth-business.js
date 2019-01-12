@@ -63,8 +63,8 @@ const authenticateUser = async (req) => {
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
-            responseObj = retireCheck(businessResponse.rows);
-            console.log(responseObj);
+            responseObj = authResponseObjectFormation(businessResponse.rows);
+            responseObj = retireCheck(responseObj);
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
         }
@@ -73,8 +73,8 @@ const authenticateUser = async (req) => {
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
-                responseObj = retireCheck(businessResponse.rows);
-                console.log(responseObj);
+                responseObj = authResponseObjectFormation(businessResponse.rows);
+                responseObj = retireCheck(responseObj);
             } else {
                 responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
             }
@@ -94,8 +94,21 @@ const decrypt = (algo, passKey, message) => {
     }
 };
 
-const retireCheck = (responseArray) => (responseArray[0]['isactive']) ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseArray[0]) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseArray[0]);
+const retireCheck = (responseObj) => (responseObj['isactive']) ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj);
 
+const authResponseObjectFormation = (responseObj) => {
+    return {
+        role_name: responseObj['role_name'],
+        user_role: responseObj['user_role'],
+        first_name: responseObj['first_name'],
+        last_name: responseObj['last_name'],
+        user_id: responseObj['user_id'],
+        owner_user_id: responseObj['owner_user_id'],
+        email_id: responseObj['email_id'],
+        isactive: responseObj['isactive'],
+        center_id: responseObj['center_id']
+    }
+};
 module.exports = {
     checkEmailId,
     authenticateUser,

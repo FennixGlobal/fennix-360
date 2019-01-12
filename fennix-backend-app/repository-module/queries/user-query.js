@@ -20,8 +20,8 @@ const updateUserProfileQuery = 'update users set first_name=$2,last_name=$3,addr
 const getUserListQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name, email_id, mobile_no, isactive, (select localized_text from localization where locale_key IN (select role_name from roles where role_id = user_role) and language = $1) as role,user_role as role_id, (select name from centers where center_id = u.center_id) as center, image from users u where owner_user_id IN ';
 
 const getTotalRecordsForListUsersQuery = 'select count(*) from users u where owner_user_id IN ';
-
-const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender, user_role, (select role_name from roles where role_id = u.user_role) as native_user_role from users u where user_id = $2';
+const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender, user_role, (select role_name from roles where role_id = u.user_role) as native_user_role, company_id from users u where user_id = $2';
+// const getUserNameFromUserIdQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name, user_id, gender, user_role, (select role_name from roles where role_id = u.user_role) as native_user_role from users u where user_id = $2';
 
 const insertUserQuery = 'insert into ';
 
@@ -45,11 +45,17 @@ const getUserIdsForGlobalAdminQuery = 'select concat(first_name, \' \', last_nam
     '    from users u where u.isactive = true';
 
 
+const getUserIdsForCustomsQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
+    '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name\n' +
+    '    , user_id, gender, user_role \n' +
+    '    from users u where u.isactive = true';
+
 module.exports = {
     insertUserQuery,
     getUserIdsForGlobalAdminQuery,
     getUserListQuery,
     checkUserEmailQuery,
+    getUserIdsForCustomsQuery,
     userProfileQuery,
     authenticateUser,
     updateUserProfileQuery,
