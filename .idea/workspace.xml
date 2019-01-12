@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/company-business-module/company-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/comapny-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/comapny-accessor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-common-constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-common-constants.js" afterDir="false" />
-    </list>
+    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary" />
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -49,8 +37,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="2" selection-start-line="2" selection-end-line="2" />
+            <state relative-caret-position="207">
+              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
             </state>
           </provider>
         </entry>
@@ -472,12 +460,12 @@
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
       <workItem from="1546634203635" duration="50381000" />
-      <workItem from="1547055457019" duration="10038000" />
+      <workItem from="1547055457019" duration="10300000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1548849000" />
+    <option name="totallyTimeSpent" value="1549111000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -504,7 +492,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" weight="0.48088235" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" visible="true" weight="0.48088235" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49966952" weight="0.48235294" />
       <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50363517" side_tool="true" weight="0.5065123" />
@@ -1328,8 +1316,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
+        <state relative-caret-position="207">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
         </state>
       </provider>
     </entry>

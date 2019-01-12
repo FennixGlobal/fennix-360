@@ -63,7 +63,7 @@ const authenticateUser = async (req) => {
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
-            responseObj = authResponseObjectFormation(businessResponse.rows);
+            responseObj = authResponseObjectFormation(businessResponse.rows[0]);
             responseObj = retireCheck(responseObj);
         } else {
             responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
@@ -73,7 +73,7 @@ const authenticateUser = async (req) => {
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
-                responseObj = authResponseObjectFormation(businessResponse.rows);
+                responseObj = authResponseObjectFormation(businessResponse.rows[0]);
                 responseObj = retireCheck(responseObj);
             } else {
                 responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
