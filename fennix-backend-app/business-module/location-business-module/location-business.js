@@ -194,7 +194,7 @@ const newJob = new cronJob('* 2 * * *', async () => {
     await $eLocksDataDumpToMasterCronJobBusiness();
 });
 
-const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => {
+const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,socketAddress) => {
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
@@ -214,6 +214,11 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId) => 
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
         if (arrayNotEmptyCheck(containerResponse)) {
+            const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
+            // console.log(eLockSessionData);
+            if (!eLockSessionData) {
+                await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
+            }
             let latArray = containerResponse[0]['trips']['latArray'];
             let lngArray = containerResponse[0]['trips']['lngArray'];
             latArray = latArray ? latArray.sort() : [];
@@ -316,7 +321,7 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
         await asyncForEach(returnArray.gps, async (gpsData) => {
             locationPrimaryId++;
             eLockAttributeId++;
-            dataSplitterResponse = await dataSplitter(gpsData, locationPrimaryId, eLockAttributeId);
+            dataSplitterResponse = await dataSplitter(gpsData, locationPrimaryId, eLockAttributeId,eLockData.socketAddress);
             if (notNullCheck(dataSplitterResponse)) {
                 if (notNullCheck(dataSplitterResponse['location'])) {
                     locationList.push(dataSplitterResponse['location']);
