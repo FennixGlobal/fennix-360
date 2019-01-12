@@ -65,7 +65,7 @@ const authenticateUser = async (req) => {
         if (authResponse) {
             responseObj = authResponseObjectFormation(businessResponse.rows[0]);
             retireCheckFlag = retireCheck(responseObj);
-            responseObj = responseFormation(responseObj);
+            responseObj = responseFormation(responseObj, retireCheckFlag);
             returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
             returnResponse.response = responseObj;
         } else {
@@ -80,7 +80,7 @@ const authenticateUser = async (req) => {
             if (authResponse) {
                 responseObj = authResponseObjectFormation(businessResponse.rows[0]);
                 retireCheckFlag = retireCheck(responseObj);
-                responseObj = responseFormation(responseObj);
+                responseObj = responseFormation(responseObj, retireCheckFlag);
                 returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
                 returnResponse.response = responseObj;
             } else {
