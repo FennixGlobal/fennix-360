@@ -288,7 +288,7 @@ const assignContainerBusiness = async (req) => {
     return finalResponse;
 };
 const containerMapDataListBusiness = async (req) => {
-    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit)},
+    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit), languageId: req.body.languageId},
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
     userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
