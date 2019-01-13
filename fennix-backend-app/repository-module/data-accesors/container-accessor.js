@@ -99,6 +99,7 @@ const getContainerIdListAccessor = async (req) => {
     }
     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
     console.log(request);
+    console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
