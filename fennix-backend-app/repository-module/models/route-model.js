@@ -29,7 +29,7 @@ const companyRoutesCounterSchema = new Schema({
 });
 
 const companyRoutesSchema = new Schema({
-    routeId: Number,
+    _id: Number,
     companyId: Number,
     route: routeSchema,
     isActive: Boolean,
@@ -40,7 +40,7 @@ const companyRoutesSchema = new Schema({
 });
 
 const companyPrimaryAddressSchema = new Schema({
-    _id: SchemaType.ObjectId,
+    _id: Schema.Types.ObjectId,
     companyId: Number,
     companyAddress: addressSchema,
     primaryWarehouseAddress: addressSchema,
