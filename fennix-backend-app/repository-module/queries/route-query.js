@@ -31,7 +31,7 @@ const editCompanyRoutesQuery = (routeId, req) => {
     return response;
 };
 const insertCompanyPrimaryAddressQuery = (req) => {
-    return CompanyPrimaryAddressModel.collection.insert(req);
+    return CompanyPrimaryAddressModel.save(req);
 };
 
 const getRouteByCompanyIdQuery = (req)=>{
