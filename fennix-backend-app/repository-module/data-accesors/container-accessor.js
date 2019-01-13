@@ -92,10 +92,10 @@ const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, false);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [...req.userIdList, parseInt(req.centerId, 10)];
+        request = [req.languageId, ...req.userIdList, parseInt(req.centerId, 10)];
         extraQuery = `and center_id = $${req.userIdList.length + 1}`;
     } else {
-        request = [...req.userIdList];
+        request = [req.languageId, ...req.userIdList];
     }
     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
     console.log(request);
