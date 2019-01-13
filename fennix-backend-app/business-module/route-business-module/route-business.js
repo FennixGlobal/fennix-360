@@ -14,15 +14,15 @@ const insertCompanyRouteBusiness = async (req) => {
         delete routeRequest[reqItem];
     });
     await routeAccessors.insertCompanyPrimaryAddressAccessor(primaryAddressRequest);
-    // if (objectHasPropertyCheck(request, 'routes') && arrayNotEmptyCheck(request.routes)) {
-    //
-    //     request.routes.forEach((route) => {
-    //         const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance']);
-    //         newRoute['companyId'] = companyId;
-    //         routeArray.push(newRoute);
-    //     });
-    //     await routeAccessors.insertRouteAccessor(routeArray);
-    // }
+    if (objectHasPropertyCheck(request, 'routes') && arrayNotEmptyCheck(request.routes)) {
+
+        request.routes.forEach((route) => {
+            const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance']);
+            newRoute['companyId'] = companyId;
+            routeArray.push(newRoute);
+        });
+        response = await routeAccessors.insertRouteAccessor(routeArray);
+    }
     // response = await routeAccessors.insertRouteAccessor(routeRequest);
     return response;
 };
