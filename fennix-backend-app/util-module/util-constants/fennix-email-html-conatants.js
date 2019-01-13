@@ -11,7 +11,7 @@ ${body}
 </div>
 </div>
 <div style="background: #474747;height:35px;width:100%;color:#f2f2f2;text-align: center;padding:6px;box-sizing: border-box;">
- Fennix Global&Copy; 
+ Fennix Global&Copy;
 </div>
 </div>
 </div>

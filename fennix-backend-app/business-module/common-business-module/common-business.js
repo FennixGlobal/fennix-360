@@ -204,10 +204,10 @@ const notificationModifier = (notificationType) => {
 
 const mailModifier = (email, roleId) => {
     let body, url, urlName, header, returnMailBody;
-    url = `${roleMailBody[roleId.toLowerCase()].url}?emailId=${email}&roleId=${roleId}`;
-    body = roleMailBody[roleId.toLowerCase()].body;
-    urlName = roleMailBody[roleId.toLowerCase()].urlName;
-    header = roleMailBody[roleId.toLowerCase()].header;
+    url = `${roleMailBody[roleId].url}?emailId=${email}&roleId=${roleId}`;
+    body = roleMailBody[roleId].body;
+    urlName = roleMailBody[roleId].urlName;
+    header = roleMailBody[roleId].header;
     returnMailBody = roleHTMLCreator(header, body, urlName, url);
     return returnMailBody;
 };
