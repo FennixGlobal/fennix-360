@@ -299,7 +299,7 @@ const getContainerMasterPasswordAcessor = async (req) => {
 };
 const getDeviceIMEIByContainerIdAccessor = async (req) => {
     let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, getDeviceIMEIByContainerIDQuery);
+    returnObj = await getDeviceIMEIByContainerIDQuery(req);
     return returnObj;
 };
 
