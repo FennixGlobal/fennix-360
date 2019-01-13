@@ -101,12 +101,13 @@ const addUserBusiness = async (req) => {
     request.isActive = true;
     request.password = '$2a$15$vmR3fd7Jnn34hWQPjK5uP.iVHq9wJUCXh0djUv5AHC.GvblRvEQU6';
     // request.password = await crypto.AES.encrypt('genius Playboy', 'P@ssw0rd');
-    console.log('password');
-    console.log(request.password);
-    console.log("request");
+    // console.log('password');
+    // console.log(request.password);
+    // console.log("request");
+    // console.log(request);
     console.log(request);
     await userAccessors.addUserAccessor(request);
-    emailSendBusiness(request.emailId, 'USER');
+    // emailSendBusiness(request.emailId, request.roleId);
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
