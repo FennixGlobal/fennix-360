@@ -1,5 +1,6 @@
 const routeAccessors = require('../../repository-module/data-accesors/route-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
+const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const insertCompanyRouteBusiness = async (req) => {
     let request = req, routeRequest = {}, response, counterResponse, primaryAddressRequest = {}, companyId = 0,
@@ -41,9 +42,15 @@ const editCompanyRoutesBusiness = async (req) => {
     response = await routeAccessors.editCompanyRoutesAccessor(request.routeId, routeRequest);
     return response;
 };
-
+const getRouteByCompanyIdBusiness = async (req) => {
+    const companyId = req.query.companyId;
+    let routeResponse;
+    routeResponse = await routeAccessors.getRouteByCompanyIdAccessor(companyId);
+    return fennixResponse(200, 'EN_US', routeResponse);
+};
 module.exports = {
     editCompanyRoutesBusiness,
     insertCompanyRouteBusiness,
+    getRouteByCompanyIdBusiness,
     deleteCompanyRoutesBusiness
 };

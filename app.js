@@ -87,7 +87,7 @@ const groupRouter = require('./fennix-backend-app/web-controller/group-controlle
 const containerRouter = require('./fennix-backend-app/web-controller/container-controller');
 const tripRouter = require('./fennix-backend-app/web-controller/trip-controller');
 const companyRouter = require('./fennix-backend-app/web-controller/company-controller');
-
+const routeRouter = require('./fennix-backend-app/web-controller/route-controller');
 // Lite controllers
 const liteUserRouter = require('./fennix-backend-app/web-controller/lite-user-controller');
 const liteTicketRouter = require('./fennix-backend-app/web-controller/lite-ticket-controller');
