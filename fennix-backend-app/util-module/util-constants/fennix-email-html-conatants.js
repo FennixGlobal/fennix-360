@@ -17,20 +17,6 @@ ${body}
 </div>`;
 };
 
-const roleMailBody = {
-    1: emailBodyForRole('beneficiary'),
-    2: emailBodyForRole('beneficiary'),
-    3: emailBodyForRole('user'),
-    4: emailBodyForRole('user'),
-    5: emailBodyForRole('user'),
-    6: emailBodyForRole('user'),
-    7: emailBodyForRole('user'),
-    8: emailBodyForRole('user'),
-    9: emailBodyForRole('customs'),
-    10: emailBodyForRole('client'),
-    11: emailBodyForRole('elock_operator')
-};
-
 const emailBodyForRole = (role) => {
     const roleBody = {
         user: {
@@ -52,6 +38,21 @@ const emailBodyForRole = (role) => {
     };
     return roleBody[role];
 };
+
+const roleMailBody = {
+    1: emailBodyForRole('beneficiary'),
+    2: emailBodyForRole('beneficiary'),
+    3: emailBodyForRole('user'),
+    4: emailBodyForRole('user'),
+    5: emailBodyForRole('user'),
+    6: emailBodyForRole('user'),
+    7: emailBodyForRole('user'),
+    8: emailBodyForRole('user'),
+    9: emailBodyForRole('customs'),
+    10: emailBodyForRole('client'),
+    11: emailBodyForRole('elock_operator')
+};
+
 module.exports = {
     roleHTMLCreator,
     roleMailBody
