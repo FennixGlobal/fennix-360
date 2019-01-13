@@ -18,7 +18,7 @@ const editCompanyRoutesAccessor = async (routeId, req) => {
     response = await routeQueries.editCompanyRoutesQuery(routeId, req);
     return response;
 };
-const insertCompanyPrimaryAddressAccessor = async (routeId, req) => {
+const insertCompanyPrimaryAddressAccessor = async (req) => {
     let response;
     response = await routeQueries.insertCompanyPrimaryAddressQuery(req);
     return response;

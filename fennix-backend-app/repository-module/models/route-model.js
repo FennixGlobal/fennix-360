@@ -40,7 +40,7 @@ const companyRoutesSchema = new Schema({
 });
 
 const companyPrimaryAddressSchema = new Schema({
-    _id: Schema.Types.ObjectId,
+    // _id: Schema.Types.ObjectId,
     companyId: Number,
     companyAddress: addressSchema,
     primaryWarehouseAddress: addressSchema,
