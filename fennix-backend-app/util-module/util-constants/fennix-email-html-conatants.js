@@ -2,7 +2,7 @@ const roleHTMLCreator = (header, body, urlName, url) => {
     return `<div style="width:100%;display:flex;align-items:center;justify-content:center;;box-sizing: border-box;">
 <div style="width:90%;display:flex;align-items:center;justify-content:center;;box-sizing: border-box;">
 <div style="background: #f2f2f2;width: 75%;box-shadow:0px 4px 12px #000;border-radius:4px;margin:0 auto;text-align:center;box-sizing: border-box;overflow:hidden">
-<div style="background: #474747;height:150px;width:100%;font-weight:bolder;font-size:4em;padding:20px;display: flex;align-items: center;color:#f2f2f2;justify-content: center;">${header}</div>
+<div style="background: #474747;text-align:center;height:150px;width:100%;font-weight:bolder;font-size:4em;padding:20px;color:#f2f2f2;"><p style="margin: 30px auto">${header}</p></div>
 <div style="background: linear-gradient(135deg,#f82 23%,#ff5e00 32%,transparent 0),linear-gradient(135deg,#ea3a00 38%,#ff5e00 45%,transparent 45%),linear-gradient(135deg,#bfbebe 50%,#bfbebe 55%,#f2f2f2 55%);width:100%;box-sizing:border-box;display:flex;text-align:center;height: 35px;"></div>
 <div style="background: #ededed;width:100%;box-sizing: border-box;display: flex;align-items: center;justify-content: center;text-align: center">
 <div style="padding: 20px;height: 100%;width: 100%;margin:0 auto;align-items: center;justify-content: center;color:#2a2a2a;box-sizing: border-box;flex-direction: column;">

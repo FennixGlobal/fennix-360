@@ -2,7 +2,7 @@ const companyAccessors = require('../../repository-module/data-accesors/comapny-
 const routeBusiness = require('../route-business-module/route-business');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
 
@@ -50,7 +50,48 @@ const listCompanyBusiness = async (req) => {
 */
 
 const listCompanyBusiness = async (req) => {
-    let response, finalResponse, modifiedResponse = {gridData: []}, request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+    let response, finalResponse, modifiedResponse = {gridData: []};
+    // request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+    response = commonListDropdownBusiness(req, req.query.languageId, parseInt(req.query.skip), parseInt(req.query.limit));
+    if (arrayNotEmptyCheck(response)) {
+        modifiedResponse.gridData = [...response];
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+    // request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    // response = await companyAccessors.listCompanyAccessor(request);
+    // if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+    //     response.rows.forEach((item) => {
+    //         let obj = {
+    //             companyId: item['company_id'],
+    //             companyName: item['company_name'],
+    //             companyType: item['company_type'],
+    //             customsId: item['customs_id']
+    //         };
+    //         modifiedResponse.gridData.push(obj);
+    //     });
+    //     modifiedResponse.totalNoOfRecords = response.rows.length;
+};
+
+const listCompanyDropdownBusiness = async (req) => {
+    let response, finalResponse, modifiedResponse = {dropdownList: []};
+    response = commonListDropdownBusiness(req, req.query.languageId);
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach(item => {
+            modifiedResponse.dropdownList.push(dropdownCreator(item['companyId'], item['companyName'], false));
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
+const commonListDropdownBusiness = async (req, languageId, skip = null, limit = null) => {
+    let response, modifiedResponse = {data: [], totalNoOfRecords: 0},
+        request = skip && limit ? {languageId, skip, limit} : {languageId};
     request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     response = await companyAccessors.listCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
@@ -61,14 +102,12 @@ const listCompanyBusiness = async (req) => {
                 companyType: item['company_type'],
                 customsId: item['customs_id']
             };
-            modifiedResponse.gridData.push(obj);
+            modifiedResponse.data.push(obj);
         });
+        modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);
         modifiedResponse.totalNoOfRecords = response.rows.length;
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
     }
-    return finalResponse;
+    return modifiedResponse;
 };
 
 const editCompanyBusiness = async (req) => {
@@ -128,5 +167,6 @@ module.exports = {
     deleteCompanyBusiness,
     listCompanyBusiness,
     sortCompanyBusiness,
+    listCompanyDropdownBusiness,
     getCompanyDetailsBusiness
 };
