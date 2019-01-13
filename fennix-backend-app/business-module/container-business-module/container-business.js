@@ -292,11 +292,15 @@ const containerMapDataListBusiness = async (req) => {
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
     userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
+    console.log(userRequest);
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    console.log(userResponse);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
+    console.log(totalNoOfRecords);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
@@ -311,77 +315,80 @@ const containerMapDataListBusiness = async (req) => {
             return init;
         }, {containerIdArray: [], containerDetailObj: {}});
         containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
-        containerDeviceArray.forEach((item) => {
-            locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
-            locationObj[item.containerId]['location'] = {
-                longitude: item.location.longitude,
-                latitude: item.location.latitude
-            };
-            containerIdListAndDetailObj['containerDetailObj'][item.containerId]['imei'] = item['device']['imei'];
-            const deviceDetails = {};
-            let noOfViolations = 0;
-            deviceDetails[item.containerId] = [];
-            const GPS = {A: 'Valid', V: 'Invalid'};
-            const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
-            if (batteryPercentage['deviceStatus'] === 'violation') {
-                noOfViolations += 1;
-            }
-            if (item.deviceAttributes.beltStatus) {
-                noOfViolations += 1;
-            }
-            if (item.deviceAttributes.shellStatus) {
-                noOfViolations += 1;
-            }
-            deviceDetails[item.containerId].push({
-                text: 'Battery',
-                status: batteryPercentage['deviceStatus'],
-                key: 'batteryPercentage',
-                icon: 'battery_charging_full',
-                value: `${item.deviceAttributes.batteryPercentage}%`
+        console.log(containerDeviceArray);
+        if (arrayNotEmptyCheck(containerDeviceArray)) {
+            containerDeviceArray.forEach((item) => {
+                locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
+                locationObj[item.containerId]['location'] = {
+                    longitude: item.location.longitude,
+                    latitude: item.location.latitude
+                };
+                containerIdListAndDetailObj['containerDetailObj'][item.containerId]['imei'] = item['device']['imei'];
+                const deviceDetails = {};
+                let noOfViolations = 0;
+                deviceDetails[item.containerId] = [];
+                const GPS = {A: 'Valid', V: 'Invalid'};
+                const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
+                if (batteryPercentage['deviceStatus'] === 'violation') {
+                    noOfViolations += 1;
+                }
+                if (item.deviceAttributes.beltStatus) {
+                    noOfViolations += 1;
+                }
+                if (item.deviceAttributes.shellStatus) {
+                    noOfViolations += 1;
+                }
+                deviceDetails[item.containerId].push({
+                    text: 'Battery',
+                    status: batteryPercentage['deviceStatus'],
+                    key: 'batteryPercentage',
+                    icon: 'battery_charging_full',
+                    value: `${item.deviceAttributes.batteryPercentage}%`
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'GSM',
+                    key: 'gsmQuality',
+                    icon: 'signal_cellular_4_bar',
+                    status: item.deviceAttributes.gsmQuality < 2 ? 'violation' : 'safe',
+                    value: item.deviceAttributes.gsmQuality < 2 ? 'Low' : 'OK'
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'Mileage',
+                    key: 'mileage',
+                    icon: 'directions_car',
+                    status: item.deviceAttributes.mileage === 0 ? 'violation' : 'safe',
+                    value: item.deviceAttributes.mileage === 0 ? 'Outdoor' : 'Home'
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'SAT',
+                    key: 'gpsQuality',
+                    icon: 'gps_fixed',
+                    status: item.deviceAttributes.gpsQuality === 'V' ? 'violation' : 'safe',
+                    value: GPS[item.deviceAttributes.gpsQuality]
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'Speed',
+                    key: 'speed',
+                    icon: 'directions_run',
+                    status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
+                    value: Math.floor(item.deviceAttributes.speed)
+                });
+                containerDevices = {...deviceDetails};
+                const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
+                const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString('es')}`;
+                const serverDate = new Date(`${item.deviceAttributes.serverDate}`);
+                const modifiedServerDate = `${serverDate.toLocaleDateString('es')} ${serverDate.toLocaleTimeString('es')}`;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceUpdatedDate'] = modifiedDate;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['serverDate'] = modifiedServerDate;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceDetails'] = deviceDetails[item.containerId];
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['noOfViolations'] = {
+                    text: 'Number of Violations',
+                    value: noOfViolations
+                };
+                locationObj[item.containerId]['noOfViolations'] = noOfViolations;
+                gridData[item.containerId] = {...containerIdListAndDetailObj.containerDetailObj[item.containerId]};
             });
-            deviceDetails[item.containerId].push({
-                text: 'GSM',
-                key: 'gsmQuality',
-                icon: 'signal_cellular_4_bar',
-                status: item.deviceAttributes.gsmQuality < 2 ? 'violation' : 'safe',
-                value: item.deviceAttributes.gsmQuality < 2 ? 'Low' : 'OK'
-            });
-            deviceDetails[item.containerId].push({
-                text: 'Mileage',
-                key: 'mileage',
-                icon: 'directions_car',
-                status: item.deviceAttributes.mileage === 0 ? 'violation' : 'safe',
-                value: item.deviceAttributes.mileage === 0 ? 'Outdoor' : 'Home'
-            });
-            deviceDetails[item.containerId].push({
-                text: 'SAT',
-                key: 'gpsQuality',
-                icon: 'gps_fixed',
-                status: item.deviceAttributes.gpsQuality === 'V' ? 'violation' : 'safe',
-                value: GPS[item.deviceAttributes.gpsQuality]
-            });
-            deviceDetails[item.containerId].push({
-                text: 'Speed',
-                key: 'speed',
-                icon: 'directions_run',
-                status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
-                value: Math.floor(item.deviceAttributes.speed)
-            });
-            containerDevices = {...deviceDetails};
-            const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-            const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString('es')}`;
-            const serverDate = new Date(`${item.deviceAttributes.serverDate}`);
-            const modifiedServerDate = `${serverDate.toLocaleDateString('es')} ${serverDate.toLocaleTimeString('es')}`;
-            containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceUpdatedDate'] = modifiedDate;
-            containerIdListAndDetailObj.containerDetailObj[item.containerId]['serverDate'] = modifiedServerDate;
-            containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceDetails'] = deviceDetails[item.containerId];
-            containerIdListAndDetailObj.containerDetailObj[item.containerId]['noOfViolations'] = {
-                text: 'Number of Violations',
-                value: noOfViolations
-            };
-            locationObj[item.containerId]['noOfViolations'] = noOfViolations;
-            gridData[item.containerId] = {...containerIdListAndDetailObj.containerDetailObj[item.containerId]};
-        });
+        }
         containerReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
         containerReturnObj['deviceDetails'] = containerDevices;
         containerReturnObj['deviceDetailsArray'] = Object.keys(containerDevices).map((device) => containerDevices[device]);

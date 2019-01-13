@@ -202,12 +202,12 @@ const notificationModifier = (notificationType) => {
     return notificationBodyMap[notificationType];
 };
 
-const mailModifier = (email, roleName) => {
+const mailModifier = (email, roleId) => {
     let body, url, urlName, header, returnMailBody;
-    url = `${roleMailBody[roleName.toLowerCase()].url}?emailId=${email}`;
-    body = roleMailBody[roleName.toLowerCase()].body;
-    urlName = roleMailBody[roleName.toLowerCase()].urlName;
-    header = roleMailBody[roleName.toLowerCase()].header;
+    url = `${roleMailBody[roleId.toLowerCase()].url}?emailId=${email}&roleId=${roleId}`;
+    body = roleMailBody[roleId.toLowerCase()].body;
+    urlName = roleMailBody[roleId.toLowerCase()].urlName;
+    header = roleMailBody[roleId.toLowerCase()].header;
     returnMailBody = roleHTMLCreator(header, body, urlName, url);
     return returnMailBody;
 };
