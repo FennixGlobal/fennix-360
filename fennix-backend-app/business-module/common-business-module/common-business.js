@@ -133,10 +133,10 @@ const dataURLtoFile = (dataurl) => {
     let newArray = dataurl.split(',')[1];
     return new Buffer(newArray, 'base64');
 };
-const emailSendBusiness = async (emailId, roleId) => {
-    const subject = 'Welcome to Fennix 360';
+const emailSendBusiness = async (emailId, roleId, fullName) => {
+    const subject = `Hi ${fullName}. Welcome to Sofia`;
     let body;
-    body = mailModifier(emailId, roleId);
+    body = mailModifier(emailId, roleId, fullName);
     const transporter = nodeMailer.createTransport({
         port: 465,
         host: 'smtp.gmail.com',
@@ -202,9 +202,9 @@ const notificationModifier = (notificationType) => {
     return notificationBodyMap[notificationType];
 };
 
-const mailModifier = (email, roleId) => {
+const mailModifier = (email, roleId, fullName) => {
     let body, url, urlName, header, returnMailBody;
-    url = `${roleMailBody[roleId].url}?emailId=${email}&roleId=${roleId}`;
+    url = `${roleMailBody[roleId].url}?emailId=${email}&roleId=${roleId}&fullName=${fullName}`;
     body = roleMailBody[roleId].body;
     urlName = roleMailBody[roleId].urlName;
     header = roleMailBody[roleId].header;

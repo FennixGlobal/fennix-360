@@ -107,7 +107,7 @@ const addUserBusiness = async (req) => {
     // console.log(request);
     // console.log(request);
     await userAccessors.addUserAccessor(request);
-    emailSendBusiness(request.emailId, request.role);
+    emailSendBusiness(request.emailId, request.role,`${request.firstName} ${request.lastName}`);
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 
