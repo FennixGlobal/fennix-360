@@ -288,7 +288,12 @@ const assignContainerBusiness = async (req) => {
     return finalResponse;
 };
 const containerMapDataListBusiness = async (req) => {
-    let request = {sortBy: req.body.sort, offset: parseInt(req.body.skip), limit: parseInt(req.body.limit), languageId: req.body.languageId},
+    let request = {
+            sortBy: req.body.sort,
+            offset: parseInt(req.body.skip),
+            limit: parseInt(req.body.limit),
+            languageId: req.body.languageId
+        },
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
     userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
@@ -406,9 +411,11 @@ const unlockElockBusiness = async (req) => {
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
+    console.log(deviceIMEIId);
     if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
         // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
         // activePasswordResponse.rows[0]['active_password']
+
         const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
         console.log(eLockSessionData);
         socket.socketIO.emit('unlock_device', {
