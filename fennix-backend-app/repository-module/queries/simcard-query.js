@@ -110,7 +110,7 @@ const listSimcardTypesQuery = () => {
 const insertSimcardQuery = (query) => {
     let simcardObj = new simcardDetails(query);
     simcardObj.save(function (err) {
-        if (err) return console.error(err);
+        if (err) console.error(err);
     });
 };
 

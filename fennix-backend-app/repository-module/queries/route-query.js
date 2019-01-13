@@ -31,7 +31,10 @@ const editCompanyRoutesQuery = (routeId, req) => {
     return response;
 };
 const insertCompanyPrimaryAddressQuery = (req) => {
-    return CompanyPrimaryAddressModel.save(req);
+    let companyPrimaryAddressObj = new CompanyPrimaryAddressModel(req);
+    companyPrimaryAddressObj.save(function (err) {
+        if (err) console.error(err);
+    })
 };
 
 const getRouteByCompanyIdQuery = (req)=>{
