@@ -48,4 +48,12 @@ router.get('/getCompanyDetails', function (req, res) {
     })
 });
 
+router.get('/getCompanyDropdownList', function (req, res) {
+    let returnObj;
+    returnObj = companyBusiness.listCompanyDropdownBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
