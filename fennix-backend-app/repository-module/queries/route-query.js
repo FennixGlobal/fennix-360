@@ -31,10 +31,14 @@ const editCompanyRoutesQuery = (routeId, req) => {
     return response;
 };
 const insertCompanyPrimaryAddressQuery = (req) => {
-    let companyPrimaryAddressObj = new CompanyPrimaryAddressModel(req);
-    companyPrimaryAddressObj.save(function (err) {
-        if (err) console.error(err);
-    })
+    // let companyPrimaryAddressObj = new CompanyPrimaryAddressModel(req);
+    CompanyPrimaryAddressModel.collection.insert(req, function (err, docs) {
+        if (err) {
+            return console.error(err);
+        } else {
+            return "company primary address data inserted to collection";
+        }
+    });
 };
 
 const getRouteByCompanyIdQuery = (req)=>{
