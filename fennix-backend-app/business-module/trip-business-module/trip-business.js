@@ -5,6 +5,7 @@ const {responseObjectCreator} = require('../../util-module/data-validators');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const startTripBusiness = async (req) => {
     let response, notificationsResponse;
