@@ -2,6 +2,7 @@ const tripAccessors = require('../../repository-module/data-accesors/trip-access
 const containerAccessors = require('../../repository-module/data-accesors/container-accessor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {responseObjectCreator} = require('../../util-module/data-validators');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const startTripBusiness = async (req) => {
     let response, notificationsResponse;
