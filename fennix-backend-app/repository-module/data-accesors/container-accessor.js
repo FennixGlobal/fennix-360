@@ -3,7 +3,7 @@ const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-
 const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = require('../../util-module/request-validators');
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
-const {updateQueryCreator} = require('../../util-module/request-validators');
+const {updateQueryCreator, pgDataFilterQueryCreator} = require('../../util-module/request-validators');
 const {notNullCheck} = require('../../util-module/data-validators');
 const {getDeviceIMEIByContainerIDQuery} = require('../queries/device-query');
 const addContainerDetailsAccessor = async (req) => {
@@ -45,11 +45,6 @@ const getContainerMapHistoryAccessor = async (req) => {
     return returnObj;
 };
 
-// const getActiveTripDetailsByContainerIdAccessor = async (req) => {
-//     let returnObj;
-//     returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
-//     return returnObj;
-// };
 
 const getTotalNoOfContainersForMapAccessor = async (req) => {
     let returnObj, modifiedQuery, extraQuery = ``, request, finalQuery;
@@ -88,21 +83,21 @@ const updateContainerAccessor = async (req) => {
     return returnObj;
 };
 
-const getContainerIdListAccessor = async (req) => {
-    let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
-    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
-    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
-        request = [req.languageId, ...req.userIdList, parseInt(req.centerId, 10)];
-        extraQuery = `and center_id = $${req.userIdList.length + 2}`;
-    } else {
-        request = [req.languageId, ...req.userIdList];
-    }
-    finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
-    console.log(request);
-    console.log(finalQuery);
-    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
-    return returnObj;
-};
+// const getContainerIdListAccessor = async (req) => {
+//     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [];
+//     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
+//     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+//         request = [req.languageId, ...req.userIdList, parseInt(req.centerId, 10)];
+//         extraQuery = `and center_id = $${req.userIdList.length + 2}`;
+//     } else {
+//         request = [req.languageId, ...req.userIdList];
+//     }
+//     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
+//     console.log(request);
+//     console.log(finalQuery);
+//     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
+//     return returnObj;
+// };
 
 const containerDeviceUpdateAccessor = async (data) => {
     let returnObj;
@@ -110,17 +105,6 @@ const containerDeviceUpdateAccessor = async (data) => {
     return returnObj;
 };
 
-// const getContainerIdAccessor = async (data) => {
-//     let returnObj;
-//     returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
-//     return returnObj;
-// };
-//
-// const containerLocationUpdateAccessor = async (data) => {
-//     let returnObj;
-//     returnObj = await deviceQueries.updateLocationDeviceAttributeMasterQuery(req);
-//     return returnObj;
-// };
 
 const getContainerDocumentByContainerIdAccessor = async (req) => {
     let returnObj;
@@ -199,18 +183,6 @@ const deleteSortedDumpDataAccessor = async (req) => {
     return returnObj;
 };
 
-// const fetchNextElockTripPrimaryKeyAccessor = async () => {
-//     let returnObj;
-//     returnObj = await containerQueries.fetchNextElockTripPrimaryKeyQuery();
-//     return returnObj;
-// };
-//
-//
-// const insertElockTripDataAccessor = async (req) => {
-//     let returnObj;
-//     returnObj = await containerQueries.insertElockTripDataQuery(req);
-//     return returnObj;
-// };
 
 /*
 const listContainersAccessor = async (req) => {
@@ -249,29 +221,14 @@ const getActivePasswordForContainerIdAccessor = async (req) => {
     return returnObj;
 };
 
-// const fetchTripDetailsAccessor = async (req) => {
-//     let returnObj;
-//     returnObj = await containerQueries.fetchTripDetailsQuery(req);
-//     return returnObj;
-// };
-// const getNotificationEmailsForTripIdAccesssor = async (req) => {
-//     let returnObj;
-//     returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
-//     return returnObj;
-// };
 const setContainerLockStatusAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, containerQueries.setContainerLockStatusQuery);
     console.log(returnObj);
     return returnObj;
 };
-// const updateTripStatusAccessor = async (req) => {
-//     let returnObj, newReq = {};
-//     newReq['tripId'] = req.tripId;
-//     newReq['setFields'] = getSetFields(req, 'tripId');
-//     returnObj = await containerQueries.updateTripStatusQuery(newReq);
-//     return returnObj;
-// };
+
+
 const listContainersAccessor = async (req) => {
     let returnObj, modifiedQuery, finalQuery, request = [], extraQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
@@ -303,16 +260,29 @@ const getDeviceIMEIByContainerIdAccessor = async (req) => {
     return returnObj;
 };
 
+const getContainerIdListAccessor = async (req) => {
+    let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [], filterQuery = ``;
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
+    if (objectHasPropertyCheck(req, 'keysArray') && objectHasPropertyCheck(req, 'valuesArray') && arrayNotEmptyCheck(req.keysArray) && arrayNotEmptyCheck(req.valuesArray)) {
+        filterQuery = pgDataFilterQueryCreator(req.keysArray, req.valuesArray);
+    }
+    if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
+        request = [req.languageId, ...req.userIdList, parseInt(req.centerId, 10)];
+        extraQuery = `and center_id = $${req.userIdList.length + 2}`;
+    } else {
+        request = [req.languageId, ...req.userIdList];
+    }
+    finalQuery = `${modifiedQuery} ${extraQuery} ${filterQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
+    console.log(request);
+    console.log(finalQuery);
+    returnObj = await connectionCheckAndQueryExec(request, finalQuery);
+    return returnObj;
+};
 
 module.exports = {
-    // fetchTripDetailsAccessor,
     getDeviceIMEIByContainerIdAccessor,
     getContainerMasterPasswordAcessor,
-    // updateTripStatusAccessor,
     setContainerLockStatusAccessor,
-    // getNotificationEmailsForTripIdAccesssor,
-    // fetchNextElockTripPrimaryKeyAccessor,
-    // insertElockTripDataAccessor,
     updateNextLocationPrimaryKeyAccessor,
     updateNextDeviceAttributesPrimaryKeyAccessor,
     addContainerDetailsAccessor,
@@ -326,7 +296,6 @@ module.exports = {
     updateContainerAccessor,
     containerLocationUpdateAccessor,
     containerDeviceAttributesUpdateAccessor,
-    // getContainerIdAccessor,
     getContainerForDeviceIdAccessor,
     containerDeviceUpdateAccessor,
     getSortedDumpDataAccessor,
@@ -337,7 +306,63 @@ module.exports = {
     getContainerDocumentByContainerIdAccessor,
     getContainerMapHistoryAccessor,
     getTotalNoOfContainersForMapAccessor,
-    // getActiveTripDetailsByContainerIdAccessor,
     fetchAndUpdateContainerPasswordCounterAccessor,
     getActivePasswordForContainerIdAccessor
 };
+
+
+// fetchTripDetailsAccessor,
+// updateTripStatusAccessor,
+// getNotificationEmailsForTripIdAccesssor,
+// fetchNextElockTripPrimaryKeyAccessor,
+// insertElockTripDataAccessor,
+// getContainerIdAccessor,
+// getActiveTripDetailsByContainerIdAccessor,
+// const getActiveTripDetailsByContainerIdAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.getActiveTripDetailsByContainerIdQuery(req);
+//     return returnObj;
+// };
+
+// const getContainerIdAccessor = async (data) => {
+//     let returnObj;
+//     returnObj = await containerQueries.updateLocationDeviceAttributeMasterQuery(req);
+//     return returnObj;
+// };
+//
+// const containerLocationUpdateAccessor = async (data) => {
+//     let returnObj;
+//     returnObj = await deviceQueries.updateLocationDeviceAttributeMasterQuery(req);
+//     return returnObj;
+// };
+
+// const fetchNextElockTripPrimaryKeyAccessor = async () => {
+//     let returnObj;
+//     returnObj = await containerQueries.fetchNextElockTripPrimaryKeyQuery();
+//     return returnObj;
+// };
+//
+//
+// const insertElockTripDataAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.insertElockTripDataQuery(req);
+//     return returnObj;
+// };
+
+// const fetchTripDetailsAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.fetchTripDetailsQuery(req);
+//     return returnObj;
+// };
+// const getNotificationEmailsForTripIdAccesssor = async (req) => {
+//     let returnObj;
+//     returnObj = await containerQueries.getNotificationEmailsForTripIdQuery(req);
+//     return returnObj;
+// };
+// const updateTripStatusAccessor = async (req) => {
+//     let returnObj, newReq = {};
+//     newReq['tripId'] = req.tripId;
+//     newReq['setFields'] = getSetFields(req, 'tripId');
+//     returnObj = await containerQueries.updateTripStatusQuery(newReq);
+//     return returnObj;
+// };

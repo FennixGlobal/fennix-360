@@ -137,8 +137,21 @@ const skipFieldsCreator = (setFields, skipValue) => {
     }
     return setFields;
 };
-
+const pgDataFilterQueryCreator = (keyArray, valueArray) => {
+    let filterQuery = ``;
+    if (arrayNotEmptyCheck(keyArray) && arrayNotEmptyCheck(valueArray)) {
+        keyArray.forEach((value, index) => {
+            if (index === keyArray.length -1) {
+                filterQuery = `${value} = ${valueArray[index]}`;
+            } else {
+                filterQuery = `${value} = ${valueArray[index]} and `;
+            }
+        });
+    }
+    return filterQuery;
+};
 module.exports = {
+    pgDataFilterQueryCreator,
     filterQueryCreator,
     skipFieldsCreator,
     mongoWhereInCreator,

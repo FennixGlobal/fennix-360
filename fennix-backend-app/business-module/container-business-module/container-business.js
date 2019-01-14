@@ -2,6 +2,7 @@ const containerAccessors = require('../../repository-module/data-accesors/contai
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
+const {filtersMapping} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
@@ -413,15 +414,15 @@ const unlockElockBusiness = async (req) => {
     const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
     console.log(deviceIMEIId);
     // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-        // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
-        // activePasswordResponse.rows[0]['active_password']
+    // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
+    // activePasswordResponse.rows[0]['active_password']
 
-        const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
-        console.log(eLockSessionData);
-        socket.socketIO.emit('unlock_device', {
-            socketAddress: eLockSessionData[0]['connectingSocket'],
-            password: '100000'
-        });
+    const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
+    console.log(eLockSessionData);
+    socket.socketIO.emit('unlock_device', {
+        socketAddress: eLockSessionData[0]['connectingSocket'],
+        password: '100000'
+    });
     // }
     // console.log(masterPasswordResponse);
     // if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
@@ -507,6 +508,148 @@ const timeHoursToMillisecondConverter = (time) => {
     let splitTime = time.split(':');
     return ((splitTime[0] * (60000 * 60)) + (splitTime[1] * 60000));
 };
+const containerMapDataListWithFiltersBusiness = async (req) => {
+    let request = {
+            sortBy: req.body.sort,
+            offset: parseInt(req.body.skip),
+            limit: parseInt(req.body.limit),
+            languageId: req.body.languageId
+        },
+        containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
+        containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
+    userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
+    console.log(userRequest);
+    userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    console.log(userResponse);
+    request.userIdList = userResponse.userIdsList;
+    request.nativeUserRole = userResponse.nativeUserRole;
+    let keysArray = [], valuesArray = [];
+    filtersMapping.containerFilters.forEach((filter) => {
+        if (objectHasPropertyCheck(req.body, filter)) {
+            keysArray.push(filter);
+            valuesArray.push(req.body[filter]);
+        }
+    });
+    request.keysArray = keysArray;
+    request.valuesArray = valuesArray;
+    containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    console.log(containerListResponse);
+    totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
+    console.log(totalNoOfRecords);
+    if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
+        let containerIdListAndDetailObj, containerDeviceArray;
+        containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
+            init.containerIdArray.push(parseInt(item.container_id));
+            init.containerDetailObj[item.container_id] = {
+                containerId: item['container_id'],
+                containerName: item['container_name'],
+                documentId: item['document_id'],
+                containerLockStatus: item['container_lock_status'],
+                image: item['container_image']
+            };
+            return init;
+        }, {containerIdArray: [], containerDetailObj: {}});
+        containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
+        console.log(containerDeviceArray);
+        if (arrayNotEmptyCheck(containerDeviceArray)) {
+            containerDeviceArray.forEach((item) => {
+                locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
+                locationObj[item.containerId]['location'] = {
+                    longitude: item.location.longitude,
+                    latitude: item.location.latitude
+                };
+                containerIdListAndDetailObj['containerDetailObj'][item.containerId]['imei'] = item['device']['imei'];
+                const deviceDetails = {};
+                let noOfViolations = 0;
+                deviceDetails[item.containerId] = [];
+                const GPS = {A: 'Valid', V: 'Invalid'};
+                const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
+                if (batteryPercentage['deviceStatus'] === 'violation') {
+                    noOfViolations += 1;
+                }
+                if (item.deviceAttributes.beltStatus) {
+                    noOfViolations += 1;
+                }
+                if (item.deviceAttributes.shellStatus) {
+                    noOfViolations += 1;
+                }
+                deviceDetails[item.containerId].push({
+                    text: 'Battery',
+                    status: batteryPercentage['deviceStatus'],
+                    key: 'batteryPercentage',
+                    icon: 'battery_charging_full',
+                    value: `${item.deviceAttributes.batteryPercentage}%`
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'GSM',
+                    key: 'gsmQuality',
+                    icon: 'signal_cellular_4_bar',
+                    status: item.deviceAttributes.gsmQuality < 2 ? 'violation' : 'safe',
+                    value: item.deviceAttributes.gsmQuality < 2 ? 'Low' : 'OK'
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'Mileage',
+                    key: 'mileage',
+                    icon: 'directions_car',
+                    status: item.deviceAttributes.mileage === 0 ? 'violation' : 'safe',
+                    value: item.deviceAttributes.mileage === 0 ? 'Outdoor' : 'Home'
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'SAT',
+                    key: 'gpsQuality',
+                    icon: 'gps_fixed',
+                    status: item.deviceAttributes.gpsQuality === 'V' ? 'violation' : 'safe',
+                    value: GPS[item.deviceAttributes.gpsQuality]
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'Speed',
+                    key: 'speed',
+                    icon: 'directions_run',
+                    status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
+                    value: Math.floor(item.deviceAttributes.speed)
+                });
+                containerDevices = {...deviceDetails};
+                const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
+                const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString('es')}`;
+                const serverDate = new Date(`${item.deviceAttributes.serverDate}`);
+                const modifiedServerDate = `${serverDate.toLocaleDateString('es')} ${serverDate.toLocaleTimeString('es')}`;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceUpdatedDate'] = modifiedDate;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['serverDate'] = modifiedServerDate;
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['deviceDetails'] = deviceDetails[item.containerId];
+                containerIdListAndDetailObj.containerDetailObj[item.containerId]['noOfViolations'] = {
+                    text: 'Number of Violations',
+                    value: noOfViolations
+                };
+                locationObj[item.containerId]['noOfViolations'] = noOfViolations;
+                gridData[item.containerId] = {...containerIdListAndDetailObj.containerDetailObj[item.containerId]};
+            });
+        }
+        containerReturnObj['markers'] = Object.keys(locationObj).map(key => locationObj[key]);
+        containerReturnObj['deviceDetails'] = containerDevices;
+        containerReturnObj['deviceDetailsArray'] = Object.keys(containerDevices).map((device) => containerDevices[device]);
+        containerReturnObj['gridData'] = Object.keys(gridData).map(data => gridData[data]);
+        containerReturnObj['markerDetails'] = gridData;
+        containerReturnObj['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
+        returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', containerReturnObj);
+    } else {
+        returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
+    }
+    return returnObj;
+};
+module.exports = {
+    addContainerDetailsBusiness,
+    assignContainerBusiness,
+    deactivateContainerBusiness,
+    listUnassignedContainerBusiness,
+    listContainerBusiness,
+    unlockElockBusiness,
+    getContainerMapHistoryBusiness,
+    containerMapDataListBusiness,
+    containerMapDataListWithFiltersBusiness,
+    uploadBeneficiaryDocumentsBusiness
+};
+
+
 // const fetchTripDetailsBusiness = async (req) => {
 //     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
 //         containerListResponse,
@@ -645,14 +788,3 @@ const timeHoursToMillisecondConverter = (time) => {
 //     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
 // };
 
-module.exports = {
-    addContainerDetailsBusiness,
-    assignContainerBusiness,
-    deactivateContainerBusiness,
-    listUnassignedContainerBusiness,
-    listContainerBusiness,
-    unlockElockBusiness,
-    getContainerMapHistoryBusiness,
-    containerMapDataListBusiness,
-    uploadBeneficiaryDocumentsBusiness
-};

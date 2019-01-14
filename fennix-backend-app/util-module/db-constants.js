@@ -209,7 +209,12 @@ const tableKeyMap = {
     container: {key: 'container_id'},
     company: {key: 'company_id'}
 };
-
+const filtersMapping = {
+    containerFilters: {
+        companyId: 'company_id',
+        containerType: 'container_type'
+    }
+};
 const tableDefaultSortMap = {
     beneficiaries: {sortBy: 'beneficiaryid', sortOrder: 'desc'},
     users: {sortBy: 'user_id', sortOrder: 'desc'},
@@ -229,6 +234,7 @@ module.exports = {
     TABLE_ACCOUNTING,
     dbTableColMap,
     tableKeyMap,
+    filtersMapping,
     tableDefaultSortMap,
     dbDownloadTableMapper
 };
