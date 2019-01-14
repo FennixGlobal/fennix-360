@@ -52,9 +52,10 @@ const listCompanyBusiness = async (req) => {
 const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
     // request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
-    response = commonListDropdownBusiness(req, req.query.languageId, parseInt(req.query.skip), parseInt(req.query.limit));
-    if (arrayNotEmptyCheck(response)) {
-        modifiedResponse.gridData = [...response];
+    response = await commonListDropdownBusiness(req, req.query.languageId, parseInt(req.query.skip), parseInt(req.query.limit));
+    if (arrayNotEmptyCheck(response.data)) {
+        modifiedResponse.totalNoOfRecords = response.totalNoOfRecords;
+        modifiedResponse.gridData = [...response.data];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
@@ -72,14 +73,13 @@ const listCompanyBusiness = async (req) => {
     //         };
     //         modifiedResponse.gridData.push(obj);
     //     });
-    //     modifiedResponse.totalNoOfRecords = response.rows.length;
 };
 
 const listCompanyDropdownBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {dropdownList: []};
-    response = commonListDropdownBusiness(req, req.query.languageId);
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach(item => {
+    response = await commonListDropdownBusiness(req, req.query.languageId);
+    if (arrayNotEmptyCheck(response.data)) {
+        response.data.forEach(item => {
             modifiedResponse.dropdownList.push(dropdownCreator(item['companyId'], item['companyName'], false));
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
