@@ -3,6 +3,7 @@ const containerAccessors = require('../../repository-module/data-accesors/contai
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {responseObjectCreator} = require('../../util-module/data-validators');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
 
 const startTripBusiness = async (req) => {
     let response, notificationsResponse;
