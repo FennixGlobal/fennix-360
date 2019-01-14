@@ -63,6 +63,7 @@ const listElockDevicesBusiness = async (req) => {
         containerIdNameMap = {}, devicesResponse, containerNameResponse, containerIds = [], totalNoOfRecords,
         modifiedResponse = {gridData: []}, finalResponse, request = {};
     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    console.log(userIdList);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
     console.log(centerIdResponse);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
@@ -70,8 +71,8 @@ const listElockDevicesBusiness = async (req) => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
-        request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
         console.log(centerIdsReq);
+        request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
         totalNoOfRecords = await deviceAccessor.getTotalNoOfElockDevicesAccessor(centerIdsReq);
         console.log(totalNoOfRecords);
         devicesResponse = await deviceAccessor.listElockDevicesAccessor(request);
