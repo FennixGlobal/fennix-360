@@ -18,6 +18,14 @@ router.get('/startTrip', function (req, res) {
     })
 });
 
+router.get('/getCompleteTripDetails', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchCompleteDeviceDetailsByTripIdBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/endTrip', function (req, res) {
     let returnObj;
     returnObj = tripBusiness.endTripBusiness(req);
