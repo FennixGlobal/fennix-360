@@ -1,47 +1,49 @@
-const {simcardDetails,simCardTypeModel, simcardCounterModel} = require('../models/simcard-model');
+const {simcardDetails, simCardTypeModel, simcardCounterModel} = require('../models/simcard-model');
 
 const listUnAssignedSimcardsQuery = (query) => {
     return simcardDetails.aggregate(
         [
             {
-                $match :{
-                    $and : [
+                $match: {
+                    $and: [
                         {
-                            $or : [
+                            $or: [
                                 {
-                                    "deviceId": { $eq:null }
+                                    "deviceId": {$eq: null}
                                 },
                                 {
-                                    "deviceId": { $eq:"" }
+                                    "deviceId": {$eq: ""}
                                 }
                             ]
                         },
                         {
-                            "active":true
+                            "active": true
                         },
                         {
-                            "centerId":query.centerId
+                            "centerId": query.centerId
                         }
-                    ]}},
+                    ]
+                }
+            },
             {
                 $lookup: {
                     from: "carrier",
                     localField: "carrierByCountryId",
                     foreignField: "_id",
-                    as : "carrier"
+                    as: "carrier"
 
                 }
             },
             {
-                $unwind:"$carrier"
+                $unwind: "$carrier"
             },
             {
                 $project: {
-                    "carrier.name" : 1,
-                    "phoneNo":1,
-                    "serialNp":1,
-                    "serial":1,
-                    "active":1
+                    "carrier.name": 1,
+                    "phoneNo": 1,
+                    "serialNp": 1,
+                    "serial": 1,
+                    "active": 1
                 }
             }
         ]
@@ -64,9 +66,9 @@ const getSimcardDetailsQuery = (req) => {
             }
         },
         {
-            $sort: {"createdDate":-1}
+            $sort: {"createdDate": -1}
         },
-        {$skip: req.skip}, {$limit:req.limit},
+        {$skip: req.skip}, {$limit: req.limit},
         {
             $lookup: {
                 from: "carrierByCountry",
@@ -119,7 +121,7 @@ const insertSimcardQuery = (query) => {
 // };
 
 const fetchNextPrimaryKeyQuery = () => {
-    return simcardCounterModel.findOneAndUpdate({}, {$inc:{counter:1}});
+    return simcardCounterModel.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 // //TODO: add retry logic for failure conditions
 // const insertNextPrimaryKeyQuery = (req) => {
@@ -135,7 +137,7 @@ const fetchNextPrimaryKeyQuery = () => {
 const addDeviceIdForSimcardQuery = (query) => {
     return simcardDetails.update({_id: query.simCardId},
         {
-            $set : {
+            $set: {
                 deviceId: query.deviceId
             }
         }).then(doc => {
@@ -147,8 +149,112 @@ const addDeviceIdForSimcardQuery = (query) => {
     });
 };
 
+// const getTotalNoOfSimcardsQuery = (query) => {
+//     return simcardDetails.count({centerId: {$in : query}});
+// };
+
+const getElockSimcardDetailsQuery = (req) => {
+    return simcardDetails.aggregate([
+        {
+            $match: {
+                "centerId": {$in: req.centerIdList}
+            }
+        },
+        {
+            $lookup:
+                {
+                    from: "devices",
+                    localField: "deviceId",
+                    foreignField: "_id",
+                    as: "devices"
+                }
+        }, {$unwind: "$devices"},
+        {$match: {"devices.containerId": {$exists: true, $ne: null}}},
+        {
+            $sort: {"createdDate": -1}
+        },
+        {$skip: req.skip}, {$limit: req.limit},
+        {
+            $lookup: {
+                from: "carrierByCountry",
+                localField: "carrierByCountryId",
+                foreignField: "_id",
+                as: "carrierByCountryDetails"
+            }
+        },
+        {
+            $unwind: "$carrierByCountryDetails"
+        },
+        {
+            $lookup: {
+                from: "carrier",
+                localField: "carrierByCountryDetails.carrierId",
+                foreignField: "_id",
+                as: "carrier"
+            }
+        },
+        {
+            $unwind: "$carrier"
+        }, {
+            $lookup: {
+                from: "simcardTypes",
+                localField: "simCardType",
+                foreignField: "_id",
+                as: "simCardTypes"
+            }
+        }, {$unwind: "$simCardTypes"},
+        {
+            $project: {
+                "simCardTypes.simcardType": 1,
+                "phoneNo": 1,
+                "deviceId": 1,
+                "serialNp": 1,
+                "carrier.name": 1,
+                "carrierByCountryDetails.apn": 1,
+                "centerId": 1
+            }
+        }
+    ])
+};
+
+const getTotalNoOfElockSimcardsQuery = (query) => {
+    return simcardDetails.aggregate([{
+        $match: {
+            "centerId": {$in: query}
+        }
+    },
+        {
+            $lookup:
+                {
+                    from: "devices",
+                    localField: "deviceId",
+                    foreignField: "_id",
+                    as: "devices"
+                }
+        }, {$unwind: "$devices"},
+        {$match: {"devices.containerId": {$exists: true, $ne: null}}},
+        {$count: "total"}
+    ])
+};
+
 const getTotalNoOfSimcardsQuery = (query) => {
-    return simcardDetails.count({centerId: {$in : query}});
+    return simcardDetails.aggregate([{
+        $match: {
+            "centerId": {$in: query}
+        }
+    },
+        {
+            $lookup:
+                {
+                    from: "devices",
+                    localField: "deviceId",
+                    foreignField: "_id",
+                    as: "devices"
+                }
+        }, {$unwind: "$devices"},
+        {$match: {"devices.beneficiaryId": {$exists: true, $ne: null}}},
+        {$count: "total"}
+    ])
 };
 
 module.exports = {
@@ -161,5 +267,7 @@ module.exports = {
     listUnAssignedSimcardsQuery,
     // insertNextPrimaryKeyQuery,
     fetchNextPrimaryKeyQuery,
+    getTotalNoOfElockSimcardsQuery,
+    getElockSimcardDetailsQuery,
     getTotalNoOfSimcardsQuery
 };

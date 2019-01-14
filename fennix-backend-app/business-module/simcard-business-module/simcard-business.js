@@ -118,6 +118,43 @@ const addSimcardBusiness = async (req) => {
 //     return finalResponse;
 // };
 
+const getElockSimCardListBusiness = async (req) => {
+    let response, centerIdResponse, centerIdsReq = [], finalResponse, request = {},
+        modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList, totalNoOfSimcards;
+    userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+    if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
+        centerIdResponse.rows.forEach(item => {
+            centerIdsReq.push(item['center_id']);
+            cardIdNameMap[item['center_id']] = item['center_name'];
+        });
+        totalNoOfSimcards = await simCardAccessor.getTotalNoOfElockSimcardsAccessor(centerIdsReq);
+        request = {centerIdList: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+        response = await simCardAccessor.getElockSimcardDetailsAccessor(request);
+    }
+
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let simCardObj = {
+                simCardId: item['_id'],
+                deviceId: item['deviceId'],
+                simType: item['simCardTypes']['simcardType'],
+                mobileNo: item['phoneNo'],
+                serialNumber: item['serialNp'],
+                apn: item['carrierByCountryDetails']['apn'],
+                carrierName: item['carrier']['name'],
+                center: cardIdNameMap[item['centerId']]
+            };
+            modifiedResponse.gridData.push(simCardObj);
+        });
+        modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const getSimCardListBusiness = async (req) => {
     let response, centerIdResponse, centerIdsReq = [], finalResponse, request = {},
         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList, totalNoOfSimcards;
@@ -138,7 +175,7 @@ const getSimCardListBusiness = async (req) => {
             let simCardObj = {
                 simCardId: item['_id'],
                 deviceId: item['deviceId'],
-                simType: item['simCardType'],
+                simType: item['simCardTypes']['simcardType'],
                 mobileNo: item['phoneNo'],
                 serialNumber: item['serialNp'],
                 apn: item['carrierByCountryDetails']['apn'],
@@ -147,13 +184,49 @@ const getSimCardListBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(simCardObj);
         });
-        modifiedResponse.totalNoOfRecords = totalNoOfSimcards;
+        modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
+// const getSimCardListBusiness = async (req) => {
+//     let response, centerIdResponse, centerIdsReq = [], finalResponse, request = {},
+//         modifiedResponse = {gridData: []}, cardIdNameMap = {}, userIdList, totalNoOfSimcards;
+//     userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+//     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+//     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
+//         centerIdResponse.rows.forEach(item => {
+//             centerIdsReq.push(item['center_id']);
+//             cardIdNameMap[item['center_id']] = item['center_name'];
+//         });
+//         totalNoOfSimcards = await simCardAccessor.getTotalNoOfSimcardsAccessor(centerIdsReq);
+//         request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+//         response = await simCardAccessor.getSimcardDetailsAccessor(request);
+//     }
+//
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let simCardObj = {
+//                 simCardId: item['_id'],
+//                 deviceId: item['deviceId'],
+//                 simType: item['simCardType'],
+//                 mobileNo: item['phoneNo'],
+//                 serialNumber: item['serialNp'],
+//                 apn: item['carrierByCountryDetails']['apn'],
+//                 carrierName: item['carrier']['name'],
+//                 center: cardIdNameMap[item['centerId']]
+//             };
+//             modifiedResponse.gridData.push(simCardObj);
+//         });
+//         modifiedResponse.totalNoOfRecords = totalNoOfSimcards;
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 
 module.exports = {
     listUnAssignedSimcardsBusiness,

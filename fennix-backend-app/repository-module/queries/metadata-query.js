@@ -131,6 +131,66 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     'left join action a \n' +
     'on a.action_id = rcwa.on_change_action';
 
+const createPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
+    ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as element_title\n' +
+    ', (select localized_text from localization where locale_key = rcwa.element_label and language = \'EN_US\') as element_label\n' +
+    ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_request_params,se.endpoint_request_type as submit_request_type\n' +
+    ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_request_params,de.endpoint_request_type as dropdown_request_type\n' +
+    ',wis.element_type ,wis.sub_type as element_subtype\n' +
+    ',rcwa.request_mapping_key,rcwa.dropdown_id\n' +
+    ',rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
+    ', (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_sub_section_type\n' +
+    ',rcwa.widget_sub_section_order_id\n' +
+    ',rcwa.disable_flag,rcwa.default_key__accent_value,rcwa.default_value__hover_value,rcwa.is_editable__sort\n' +
+    ', a.action_name\n' +
+    ',rcwa.widget_section_order_id,rcwa.widget_section_title\n' +
+    ', (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
+    ',rcwa.widget_col_count,rcwa.widget_row_count\n' +
+    'from role_card_widget_attribute rcwa\n' +
+    'left join widget_attributes wis on\n' +
+    'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
+    'join role_cards_widgets rcw\n' +
+    'on rcwa.role_card_widget_id = 11\n' +
+    'join role_cards rc \n' +
+    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'LOGIN\'\n' +
+    'left join endpoints se \n' +
+    'on se.endpoint_id = rcwa.submit_endpoint\n' +
+    'left join endpoints de\n' +
+    'on de.endpoint_id = rcwa.dropdown_endpoint\n' +
+    'left join action a \n' +
+    'on a.action_id = rcwa.on_change_action';
+
+
+const forgotPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
+    ', (select localized_text from localization where locale_key = rcwa.element_title and language = \'EN_US\') as element_title\n' +
+    ', (select localized_text from localization where locale_key = rcwa.element_label and language = \'EN_US\') as element_label\n' +
+    ', se.endpoint as submit_endpoint,se.endpoint_mandatory_request_params as submit_request_params,se.endpoint_request_type as submit_request_type\n' +
+    ', de.endpoint as dropdown_endpoint,de.endpoint_mandatory_request_params as dropdown_request_params,de.endpoint_request_type as dropdown_request_type\n' +
+    ',wis.element_type ,wis.sub_type as element_subtype\n' +
+    ',rcwa.request_mapping_key,rcwa.dropdown_id\n' +
+    ',rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
+    ', (select widget_subtype from widget_subtype where widget_subtype_id = rcwa.widget_section_subtype) as widget_sub_section_type\n' +
+    ',rcwa.widget_sub_section_order_id\n' +
+    ',rcwa.disable_flag,rcwa.default_key__accent_value,rcwa.default_value__hover_value,rcwa.is_editable__sort\n' +
+    ', a.action_name\n' +
+    ',rcwa.widget_section_order_id,rcwa.widget_section_title\n' +
+    ', (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
+    ',rcwa.widget_col_count,rcwa.widget_row_count\n' +
+    'from role_card_widget_attribute rcwa\n' +
+    'left join widget_attributes wis on\n' +
+    'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
+    'join role_cards_widgets rcw\n' +
+    'on rcwa.role_card_widget_id = 11\n' +
+    'join role_cards rc \n' +
+    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'LOGIN\'\n' +
+    'left join endpoints se \n' +
+    'on se.endpoint_id = rcwa.submit_endpoint\n' +
+    'left join endpoints de\n' +
+    'on de.endpoint_id = rcwa.dropdown_endpoint\n' +
+    'left join action a \n' +
+    'on a.action_id = rcwa.on_change_action';
+
+
 const modalMetadataQuery = 'select  \n' +
     'm.modal_width, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
     ',(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
@@ -183,5 +243,7 @@ module.exports = {
     cardWidgetMetadataQuery,
     loginMetadataQuery,
     getRoleQuery,
-    modalMetadataQuery
+    modalMetadataQuery,
+    forgotPasswordMetadataQuery,
+    createPasswordMetadataQuery
 };

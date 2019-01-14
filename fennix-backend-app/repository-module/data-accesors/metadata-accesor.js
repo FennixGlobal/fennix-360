@@ -57,8 +57,21 @@ const getLanguagesDropdownAccessor = async () => {
 };
 
 const getLoginMetadataAccessor = async (req) => {
-    let returnObj;
-    returnObj = await connectionCheckAndQueryExec(req, metadataQueries.loginMetadataQuery);
+    let returnObj, finalQuery;
+    if (req) {
+        switch (req.toLowerCase()) {
+            case 'login':
+                finalQuery = metadataQueries.loginMetadataQuery;
+                break;
+            case 'forgot_password':
+                finalQuery = metadataQueries.forgotPasswordMetadataQuery;
+                break;
+            case 'change_password':
+                finalQuery = metadataQueries.createPasswordMetadataQuery;
+                break
+        }
+    }
+    returnObj = await connectionCheckAndQueryExec(req, finalQuery);
     return returnObj;
 };
 const getModalMetadataAccessor = async (req) => {

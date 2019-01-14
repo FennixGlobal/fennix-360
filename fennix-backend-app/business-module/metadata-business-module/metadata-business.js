@@ -91,9 +91,9 @@ const getFilterMetadataBusiness = async (req, colName) => {
     return response;
 };
 
-const getLoginMetadataBusiness = async () => {
+const getLoginMetadataBusiness = async (req) => {
     let responseObj, loginMetadtaResponse = {widgetSections: {}};
-    responseObj = await metadataAccessor.getLoginMetadataAccessor();
+    responseObj = await metadataAccessor.getLoginMetadataAccessor(req.query);
     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         loginMetadtaResponse.widgetSections = responseObj.rows.reduce((init, item) => {
             init = {...init, ...widgetSectionCreator(item, init)};
