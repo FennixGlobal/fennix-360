@@ -1,4 +1,4 @@
-const {ContainerPasswordCounterModel, ElocksDeviceAttributeModel,LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel, ElocksDumpDataModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
+const {ContainerPasswordCounterModel, ElocksDeviceAttributeModel, LocationDeviceAttributeContainerMasterModel, ElocksLocationModel, ElocksDumpMasterModel, ElocksDumpDataModel, ElocksDeviceAttributesCounterModel, ElocksLocationCounterModel} = require('../models/container-model');
 
 const addContainerDetailsQuery = 'insert into ';
 // const listContainersQuery = 'select * from container where isactive = true and owner_user_id IN ';
@@ -136,9 +136,11 @@ const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
     return ContainerPasswordCounterModel.findOneAndUpdate({}, {$inc: {[password]: 1}});
 };
 
+const getContainerDetailsQuery = 'select (select localized_text from localization where language = $1 and locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = c.container_type)) as container_type_value, * from container c where isactive = true and container_id IN ';
 
 module.exports = {
     getContainerMasterPasswordQuery,
+    getContainerDetailsQuery,
     updateNextLocationPrimaryKeyQuery,
     setContainerLockStatusQuery,
     getContainerDocumentByContainerIdQuery,

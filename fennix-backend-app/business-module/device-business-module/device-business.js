@@ -58,6 +58,59 @@ const listDeviceTypesBusiness = async () => {
     return finalResponse;
 };
 
+const listElockDevicesBusiness = async (req) => {
+    let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
+        containerIdNameMap = {}, devicesResponse, containerNameResponse, containerIds = [], totalNoOfRecords,
+        modifiedResponse = {gridData: []}, finalResponse, request = {};
+    userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+    if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
+        centerIdResponse.rows.forEach(item => {
+            centerIdsReq.push(item['center_id']);
+            centerIdNameMap[item['center_id']] = item['center_name'];
+        });
+        request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+        totalNoOfRecords = await deviceAccessor.getTotalNoOfElockDevicesAccessor(centerIdsReq);
+        devicesResponse = await deviceAccessor.listElockDevicesAccessor(request);
+    }
+
+    if (arrayNotEmptyCheck(devicesResponse)) {
+        devicesResponse.forEach((item) => {
+            if (objectHasPropertyCheck(item, 'containerId')) {
+                containerIds.push(`${item['containerId']}`);
+            }
+        });
+        containerNameResponse = await containerAccessor.getContainerDetailsAccessor({containerIdList: containerIds, languageId: req.query.languageId});
+        if (objectHasPropertyCheck(containerNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerNameResponse.rows)) {
+            containerNameResponse.rows.forEach((item) => {
+                let obj = {
+                    containerType: item['container_type_value'],
+                    containerName: item['container_name']
+                };
+                containerIdNameMap[item['container_id']] = obj;
+            });
+        }
+        devicesResponse.forEach((item) => {
+            deviceObj = {
+                deviceId: item['_id'],
+                deviceType: item['deviceTypes']['name'],
+                imei: item['imei'],
+                isActive: item['active'],
+                mobileNo: item['simcards']['phoneNo'],
+                center: centerIdNameMap[item['centerId']],
+                containerType: objectHasPropertyCheck(containerIdNameMap[item['containerId']], 'containerType') ? containerIdNameMap[item['containerId']]['containerType'] : '-',
+                containerName: objectHasPropertyCheck(containerIdNameMap[item['containerId']], 'containerName') ? containerIdNameMap[item['containerId']]['containerName'] : '-'
+            };
+            modifiedResponse.gridData.push(deviceObj);
+        });
+        modifiedResponse.totalNoOfRecords = totalNoOfRecords;
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const listDevicesBusiness = async (req) => {
     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
         beneficiaryIdNameMap = {}, devicesResponse, beneficiaryNameResponse, beneficiaryIds = [], totalNoOfRecords,
@@ -113,11 +166,11 @@ const listDevicesBusiness = async (req) => {
     return finalResponse;
 };
 
-const getBeneficiaryMapHistoryAccessor = async (req) => {
-    let returnObj;
-    returnObj = await getBeneficiaryMapHistoryQuery(req);
-    return returnObj;
-};
+// const getBeneficiaryMapHistoryAccessor = async (req) => {
+//     let returnObj;
+//     returnObj = await getBeneficiaryMapHistoryQuery(req);
+//     return returnObj;
+// };
 
 // const listDevicesBusiness = async (req) => {
 //     let userIdList, centerIdResponse, centerIdsReq = [], centerIdNameMap = {},
@@ -382,5 +435,6 @@ module.exports = {
     unlinkDeviceForContainerBusiness,
     listUnAssignedDevicesForContainerBusiness,
     unlinkDeviceForBeneficiaryBusiness,
+    listElockDevicesBusiness,
     getDeviceDetailsByBeneficiaryIdBusiness
 };

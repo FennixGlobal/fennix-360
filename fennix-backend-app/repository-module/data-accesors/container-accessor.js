@@ -279,7 +279,15 @@ const getContainerIdListAccessor = async (req) => {
     return returnObj;
 };
 
+const getContainerDetailsAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.containerIdList, containerQueries.getContainerDetailsQuery, true);
+    returnObj = await connectionCheckAndQueryExec([req.languageId, ...req.containerIdList], modifiedQuery);
+    return returnObj;
+};
+
 module.exports = {
+    getContainerDetailsAccessor,
     getDeviceIMEIByContainerIdAccessor,
     getContainerMasterPasswordAcessor,
     setContainerLockStatusAccessor,

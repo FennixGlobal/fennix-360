@@ -152,7 +152,20 @@ const getPhoneNoForContainerAccessor = async (req) => {
     return returnObj;
 };
 
+const listElockDevicesAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.listElockDevicesQuery(req);
+    return returnObj;
+};
+const getTotalNoOfElockDevicesAccessor = async (req) => {
+    let returnObj;
+    returnObj = await deviceQueries.getTotalNoOfElockDevicesQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    listElockDevicesAccessor,
+    getTotalNoOfElockDevicesAccessor,
     checkIfDeviceIsPresentAccessor,
     unlinkDeviceForContainerAccessor,
     deviceByContainerAccessor,

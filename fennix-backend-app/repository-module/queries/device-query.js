@@ -631,7 +631,59 @@ const getPhoneNoForContainerQuery = (req) => {
     ])
 };
 
+const listElockDevicesQuery = (req) => {
+    return deviceAggregator.aggregate([
+        {
+            $match: {
+                "centerId": {$in: req.centerIds},
+                "containerId":{$exists:true,$ne: null},
+                "active": true
+            }
+        },
+        {$sort: {"createdDate": -1}},
+        {$skip: req.skip}, {$limit: req.limit},
+        {
+            $lookup: {
+                from: "deviceTypes",
+                localField: "deviceTypeId",
+                foreignField: "_id",
+                as: "deviceTypes"
+            }
+        },
+        {
+            $lookup: {
+                from: "simcards",
+                localField: "simCardId",
+                foreignField: "_id",
+                as: "simcards"
+            }
+        },
+        {
+            $unwind: "$deviceTypes"
+        },
+        {
+            $unwind: "$simcards"
+        },
+        {
+            $project: {
+                "imei": 1,
+                "deviceTypes.name": 1,
+                "simcards.phoneNo": 1,
+                "active": 1,
+                "centerId": 1,
+                "containerId": 1
+            }
+        }
+    ])
+};
+
+const getTotalNoOfElockDevicesQuery = (query) => {
+    return deviceAggregator.count({centerId: {$in: query},containerId:{$exists:true,$ne: null}});
+};
+
 module.exports = {
+    getTotalNoOfElockDevicesQuery,
+    listElockDevicesQuery,
     getDeviceDetailsForListOfContainersQuery,
     updateDeviceWithContainerIdQuery,
     unlinkDeviceForContainerQuery,
