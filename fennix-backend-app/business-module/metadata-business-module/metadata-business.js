@@ -93,6 +93,7 @@ const getFilterMetadataBusiness = async (req, colName) => {
 
 const getLoginMetadataBusiness = async (req) => {
     let responseObj, loginMetadtaResponse = {widgetSections: {}};
+    console.log(req.query);
     responseObj = await metadataAccessor.getLoginMetadataAccessor(req.query.location);
     if (objectHasPropertyCheck(responseObj, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(responseObj.rows)) {
         loginMetadtaResponse.widgetSections = responseObj.rows.reduce((init, item) => {
