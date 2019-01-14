@@ -378,10 +378,10 @@ const containerMapDataListBusiness = async (req) => {
                     value: Math.floor(item.deviceAttributes.speed)
                 });
                 deviceDetails[item.containerId].push({
-                    text: 'onlineStatus',
+                    text: 'EStatus',
                     key: 'online',
                     icon: 'radio_button_checked',
-                    status: differenceTime < 3 ? 'moving' : 'still',
+                    status: differenceTime < 3 ? 'safe' : 'violation',
                     value: differenceTime < 3 ? 'Online' : 'Offline'
                 });
                 containerDevices = {...deviceDetails};
