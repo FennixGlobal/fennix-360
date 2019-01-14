@@ -67,17 +67,17 @@ const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
         {
             $match: {
                 tripId: tripId
-            }
-        },
-        {
-            $lookup: {
-                from: 'elocksDeviceAttributes',
-                foreignField: 'tripId',
-                localField: 'tripId',
-                as: 'deviceAttributes'
-            }
-        }
+            }}
     ]);
+        // },
+        // {
+        //     $lookup: {
+        //         from: 'elocksDeviceAttributes',
+        //         foreignField: 'tripId',
+        //         localField: 'tripId',
+        //         as: 'deviceAttributes'
+        //     }
+        // }
     // };
 };
 module.exports = {
