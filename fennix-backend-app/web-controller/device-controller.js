@@ -75,6 +75,7 @@ router.get('/checkIfDevicePresent', function (req, res) {
 
 router.get('/listELocks', function (req, res) {
     let returnObj;
+    console.log(req);
     returnObj = deviceBusiness.listElockDevicesBusiness(req);
     returnObj.then((response) => {
         res.send(response);
