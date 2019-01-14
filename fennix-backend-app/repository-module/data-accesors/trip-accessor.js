@@ -44,8 +44,14 @@ const fetchCompleteDeviceDetailsByTripIdAccessor = async (req) => {
     returnObj = await tripQueries.fetchCompleteDeviceDetailsByTripIdQuery(req);
     return returnObj;
 };
+const tripStatusAggregatorAccessor = async () => {
+    let returnObj;
+    returnObj = await tripQueries.tripStatusAggregatorQuery();
+    return returnObj;
+};
 
 module.exports = {
+    tripStatusAggregatorAccessor,
     fetchTripDetailsAccessor,
     insertElockTripDataAccessor,
     fetchCompleteDeviceDetailsByTripIdAccessor,

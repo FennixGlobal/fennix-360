@@ -50,6 +50,16 @@ const fetchNextElockTripPrimaryKeyQuery = () => {
 const getNotificationEmailsForTripIdQuery = (req) => {
     return ElocksTripDataModel.find({tripId: req.tripId})
 };
+const tripStatusAggregatorQuery = () => {
+    return ElocksTripDataModel.aggregate([
+        {
+            $match:{isTripActive:true}
+        },
+        {
+            $group: {_id:"$tripStatus", count:{$sum:1}}
+        }
+    ]);
+};
 
 const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
     // const getTripHistoryQuery = (tripId) => {
@@ -76,6 +86,7 @@ module.exports = {
     fetchNextElockTripPrimaryKeyQuery,
     insertElockTripDataQuery,
     updateTripStatusQuery,
+    tripStatusAggregatorQuery,
     fetchCompleteDeviceDetailsByTripIdQuery,
     getActiveTripDetailsByContainerIdQuery
 };

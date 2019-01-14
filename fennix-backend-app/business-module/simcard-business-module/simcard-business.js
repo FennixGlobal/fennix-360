@@ -233,5 +233,6 @@ module.exports = {
     listSimcardTypesBusiness,
     addSimcardBusiness,
     getSimCardListBusiness,
+    getElockSimCardListBusiness,
     getSimCardDetailsBusiness
 };

@@ -1,5 +1,5 @@
 const simcardBusiness = require('../business-module/simcard-business-module/simcard-business');
-const {SIMCARD_CONTROLLER}=require('../util-module/util-constants/fennix-controller-constants');
+const {SIMCARD_CONTROLLER} = require('../util-module/util-constants/fennix-controller-constants');
 var express = require('express');
 var router = express.Router();
 
@@ -38,6 +38,14 @@ router.post(SIMCARD_CONTROLLER.SIMCARD_ADD_SIMCARD, function (req, res) {
 router.get(SIMCARD_CONTROLLER.SIMCARD_LIST_SIMCARDS_FOR_USER, (req, res) => {
     let returnObj;
     returnObj = simcardBusiness.getSimCardListBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/listELockSimcards', (req, res) => {
+    let returnObj;
+    returnObj = simcardBusiness.getElockSimCardListBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })

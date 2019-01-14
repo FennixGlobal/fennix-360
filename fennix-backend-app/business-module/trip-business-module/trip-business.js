@@ -59,6 +59,14 @@ const fetchCompletedTripDetailsBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
 
+const tripStatusAggregatorBusiness = async () => {
+    let response;
+    response = await tripAccessors.tripStatusAggregatorAccessor();
+    if (arrayNotEmptyCheck(response)) {
+
+    }
+};
+
 const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
     let containerListResponse, response, tripResponse = {gridData: []};
     let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
@@ -124,5 +132,6 @@ module.exports = {
     startTripBusiness,
     fetchCompletedTripDetailsBusiness,
     fetchCompleteDeviceDetailsByTripIdBusiness,
-    endTripBusiness
+    endTripBusiness,
+    tripStatusAggregatorBusiness
 };
