@@ -71,7 +71,7 @@ const getLoginMetadataAccessor = async (req) => {
                 break
         }
     }
-    returnObj = await connectionCheckAndQueryExec(req, finalQuery);
+    returnObj = await connectionCheckAndQueryExec([], finalQuery);
     return returnObj;
 };
 const getModalMetadataAccessor = async (req) => {
