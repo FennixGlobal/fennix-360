@@ -64,6 +64,7 @@ const listElockDevicesBusiness = async (req) => {
         modifiedResponse = {gridData: []}, finalResponse, request = {};
     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
+    console.log(centerIdResponse);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdsReq.push(item['center_id']);
@@ -82,7 +83,10 @@ const listElockDevicesBusiness = async (req) => {
                 containerIds.push(`${item['containerId']}`);
             }
         });
-        containerNameResponse = await containerAccessor.getContainerDetailsAccessor({containerIdList: containerIds, languageId: req.query.languageId});
+        containerNameResponse = await containerAccessor.getContainerDetailsAccessor({
+            containerIdList: containerIds,
+            languageId: req.query.languageId
+        });
         console.log(containerNameResponse);
         if (objectHasPropertyCheck(containerNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerNameResponse.rows)) {
             containerNameResponse.rows.forEach((item) => {
