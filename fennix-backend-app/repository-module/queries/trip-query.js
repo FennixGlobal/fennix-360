@@ -1,4 +1,5 @@
 const {ElocksTripCounterModel, ElocksTripDataModel} = require('../models/trip-model');
+const {ElocksLocationModel} = require('../models/container-model');
 
 const getActiveTripDetailsByContainerIdQuery = (req) => {
     return ElocksTripDataModel.aggregate([
@@ -50,11 +51,31 @@ const getNotificationEmailsForTripIdQuery = (req) => {
     return ElocksTripDataModel.find({tripId: req.tripId})
 };
 
+const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
+    // const getTripHistoryQuery = (tripId) => {
+    return ElocksLocationModel.aggregate([
+        {
+            $match: {
+                tripId: tripId
+            }
+        },
+        {
+            $lookup: {
+                from: 'elocksDeviceAttributes',
+                foreignField: 'tripId',
+                localField: 'tripId',
+                as: 'deviceAttributes'
+            }
+        }
+    ]);
+    // };
+};
 module.exports = {
     fetchTripDetailsQuery,
     getNotificationEmailsForTripIdQuery,
     fetchNextElockTripPrimaryKeyQuery,
     insertElockTripDataQuery,
     updateTripStatusQuery,
+    fetchCompleteDeviceDetailsByTripIdQuery,
     getActiveTripDetailsByContainerIdQuery
 };

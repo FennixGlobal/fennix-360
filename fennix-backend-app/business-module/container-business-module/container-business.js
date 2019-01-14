@@ -412,7 +412,7 @@ const unlockElockBusiness = async (req) => {
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
     console.log(deviceIMEIId);
-    if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
+    // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
         // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
         // activePasswordResponse.rows[0]['active_password']
 
@@ -422,7 +422,7 @@ const unlockElockBusiness = async (req) => {
             socketAddress: eLockSessionData[0]['connectingSocket'],
             password: '100000'
         });
-    }
+    // }
     // console.log(masterPasswordResponse);
     // if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
     // socket.socketIO.emit('reset_device_password', {

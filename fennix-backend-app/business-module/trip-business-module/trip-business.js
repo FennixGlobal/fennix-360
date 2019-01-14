@@ -1,6 +1,7 @@
 const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');
 const containerAccessors = require('../../repository-module/data-accesors/container-accessor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
+const {responseObjectCreator} = require('../../util-module/data-validators');
 
 const startTripBusiness = async (req) => {
     let response, notificationsResponse;
@@ -102,9 +103,26 @@ const fetchTripDetailsBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
 
+const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
+    let response, modifiedResponse = [], finalResponse;
+    response = await tripAccessors.fetchCompleteDeviceDetailsByTripIdAccessor(parseInt(req.query.tripId));
+    if (arrayNotEmptyCheck(response)) {
+        response.forEach((item) => {
+            let obj1 = responseObjectCreator(item, ['tripId', 'lat', 'lng', 'deviceId', 'containerId', 'locationId'], ['tripId', 'latitude', 'longitude', 'deviceId', 'containerId', '_id']);
+            let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', 'deviceAttributeId'], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', '_id']);
+            modifiedResponse.push({...obj1, ...obj2});
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 module.exports = {
     fetchTripDetailsBusiness,
     startTripBusiness,
     fetchCompletedTripDetailsBusiness,
+    fetchCompleteDeviceDetailsByTripIdBusiness,
     endTripBusiness
 };

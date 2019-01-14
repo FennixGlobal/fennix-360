@@ -215,14 +215,14 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
         if (arrayNotEmptyCheck(containerResponse)) {
-            const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
+            // const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
             // console.log(eLockSessionData);
             // console.log('device IMEI',deviceIMEIId);
             // console.log('socketAddress',socketAddress);
-            if (!eLockSessionData) {
+            // if (!eLockSessionData) {
                 await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
                 currentSocketAddress = socketAddress;
-            }
+            // }
             let latArray = containerResponse[0]['trips']['latArray'];
             let lngArray = containerResponse[0]['trips']['lngArray'];
             latArray = latArray ? latArray.sort() : [];

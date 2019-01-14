@@ -39,9 +39,16 @@ const insertElockTripDataAccessor = async (req) => {
     return returnObj;
 };
 
+const fetchCompleteDeviceDetailsByTripIdAccessor = async (req) => {
+    let returnObj;
+    returnObj = await tripQueries.fetchCompleteDeviceDetailsByTripIdQuery(req);
+    return returnObj;
+};
+
 module.exports = {
     fetchTripDetailsAccessor,
     insertElockTripDataAccessor,
+    fetchCompleteDeviceDetailsByTripIdAccessor,
     getActiveTripDetailsByContainerIdAccessor,
     getNotificationEmailsForTripIdAccessor,
     updateTripStatusAccessor,
