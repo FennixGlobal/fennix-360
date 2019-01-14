@@ -77,7 +77,7 @@ const listCompanyBusiness = async (req) => {
 
 const listCompanyDropdownBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {dropdownList: []};
-    response = await commonListDropdownBusiness(req, req.query.languageId,null,null);
+    response = await commonListDropdownBusiness(req, req.query.languageId, null, null);
     if (arrayNotEmptyCheck(response.data)) {
         response.data.forEach(item => {
             modifiedResponse.dropdownList.push(dropdownCreator(item['companyId'], item['companyName'], false));
@@ -90,6 +90,8 @@ const listCompanyDropdownBusiness = async (req) => {
 };
 
 const commonListDropdownBusiness = async (req, languageId, skip, limit) => {
+    console.log(skip);
+    console.log(limit);
     let response, modifiedResponse = {data: [], totalNoOfRecords: 0},
         request = skip && limit ? {languageId, skip, limit} : {languageId};
     console.log(request);
