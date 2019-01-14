@@ -70,7 +70,9 @@ const listElockDevicesBusiness = async (req) => {
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
         request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
+        console.log(centerIdsReq);
         totalNoOfRecords = await deviceAccessor.getTotalNoOfElockDevicesAccessor(centerIdsReq);
+        console.log(totalNoOfRecords);
         devicesResponse = await deviceAccessor.listElockDevicesAccessor(request);
     }
 
@@ -81,6 +83,7 @@ const listElockDevicesBusiness = async (req) => {
             }
         });
         containerNameResponse = await containerAccessor.getContainerDetailsAccessor({containerIdList: containerIds, languageId: req.query.languageId});
+        console.log(containerNameResponse);
         if (objectHasPropertyCheck(containerNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerNameResponse.rows)) {
             containerNameResponse.rows.forEach((item) => {
                 let obj = {
