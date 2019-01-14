@@ -304,9 +304,7 @@ const containerMapDataListBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
-    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
-    console.log(totalNoOfRecords);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
@@ -321,7 +319,6 @@ const containerMapDataListBusiness = async (req) => {
             return init;
         }, {containerIdArray: [], containerDetailObj: {}});
         containerDeviceArray = await deviceAccessors.deviceByContainerAccessor(containerIdListAndDetailObj.containerIdArray);
-        console.log(containerDeviceArray);
         if (arrayNotEmptyCheck(containerDeviceArray)) {
             containerDeviceArray.forEach((item) => {
                 locationObj[item.containerId] = {...containerIdListAndDetailObj['containerDetailObj'][item.containerId]};
@@ -334,6 +331,7 @@ const containerMapDataListBusiness = async (req) => {
                 let noOfViolations = 0;
                 deviceDetails[item.containerId] = [];
                 const GPS = {A: 'Valid', V: 'Invalid'};
+                let differenceTime = Math.floor(new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime() / 1000 / 60);
                 const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
                 if (batteryPercentage['deviceStatus'] === 'violation') {
                     noOfViolations += 1;
@@ -378,6 +376,13 @@ const containerMapDataListBusiness = async (req) => {
                     icon: 'directions_run',
                     status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
                     value: Math.floor(item.deviceAttributes.speed)
+                });
+                deviceDetails[item.containerId].push({
+                    text: 'onlineStatus',
+                    key: 'online',
+                    icon: 'radio_button_checked',
+                    status: differenceTime < 3 ? 'moving' : 'still',
+                    value: differenceTime < 3 ? 'Online' : 'Offline'
                 });
                 containerDevices = {...deviceDetails};
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
