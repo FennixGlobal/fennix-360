@@ -92,6 +92,7 @@ const listCompanyDropdownBusiness = async (req) => {
 const commonListDropdownBusiness = async (req, languageId, skip = null, limit = null) => {
     let response, modifiedResponse = {data: [], totalNoOfRecords: 0},
         request = skip && limit ? {languageId, skip, limit} : {languageId};
+    console.log(request);
     request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     response = await companyAccessors.listCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
