@@ -131,8 +131,8 @@ const statusCodes = {
         }
     },
     604: {
-        devMsg: 'Password is incorrect', userMsg: {
-            EN_US: 'Password is incorrect',
+        devMsg: 'Email or Password is incorrect', userMsg: {
+            EN_US: 'Email or Password is incorrect',
             espMX: 'La contraseña es incorrecta',
             espLA: 'La contraseña es incorrecta'
         }
