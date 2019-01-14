@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -36,11 +36,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="119" column="62" selection-start-line="119" selection-start-column="62" selection-end-line="119" selection-end-column="62" />
+            <state relative-caret-position="172">
+              <caret line="123" column="43" selection-start-line="123" selection-start-column="43" selection-end-line="123" selection-end-column="43" />
             </state>
           </provider>
         </entry>
@@ -57,13 +57,13 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
+            <state relative-caret-position="203">
+              <caret line="78" column="8" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="98">
@@ -227,7 +227,6 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/simcard-business-module/simcard-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/simcard-controller.js" />
@@ -236,9 +235,10 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/device-controller.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-message-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" />
       </list>
     </option>
   </component>
@@ -476,12 +476,12 @@
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
       <workItem from="1546634203635" duration="50381000" />
-      <workItem from="1547055457019" duration="63665000" />
+      <workItem from="1547055457019" duration="64318000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1602476000" />
+    <option name="totallyTimeSpent" value="1603129000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1317,13 +1317,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="119" column="62" selection-start-line="119" selection-start-column="62" selection-end-line="119" selection-end-column="62" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="144">
@@ -1331,17 +1324,24 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="65" column="22" selection-start-line="65" selection-start-column="22" selection-end-line="65" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/container-model.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="98">
           <caret line="125" column="6" selection-start-line="125" selection-start-column="6" selection-end-line="125" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="203">
+          <caret line="78" column="8" selection-start-line="78" selection-start-column="8" selection-end-line="78" selection-end-column="8" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="172">
+          <caret line="123" column="43" selection-start-line="123" selection-start-column="43" selection-end-line="123" selection-end-column="43" />
         </state>
       </provider>
     </entry>

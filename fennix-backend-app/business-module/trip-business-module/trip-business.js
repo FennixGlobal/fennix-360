@@ -121,8 +121,8 @@ const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj1 = responseObjectCreator(item, ['tripId', 'lat', 'lng', 'deviceId', 'containerId', 'locationId'], ['tripId', 'latitude', 'longitude', 'deviceId', 'containerId', '_id']);
-            let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', 'deviceAttributeId'], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', '_id']);
-            modifiedResponse.push({...obj1, ...obj2});
+            // let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', 'deviceAttributeId'], ['gps', 'direction', 'mileage', 'gpsQuality', 'vehicleId', 'deviceStatus', 'geoFenceAlarm', 'cellId', 'lac', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', '_id']);
+            modifiedResponse.push({...obj1});
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
