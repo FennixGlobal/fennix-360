@@ -194,7 +194,7 @@ const newJob = new cronJob('* 2 * * *', async () => {
     await $eLocksDataDumpToMasterCronJobBusiness();
 });
 
-const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,socketAddress) => {
+const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, socketAddress) => {
     let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
         deviceUpdatedDate,
         returnString = '',
@@ -220,8 +220,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
             // console.log('device IMEI',deviceIMEIId);
             // console.log('socketAddress',socketAddress);
             // if (!eLockSessionData) {
-                await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
-                currentSocketAddress = socketAddress;
+            await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
+            currentSocketAddress = socketAddress;
             // }
             let latArray = containerResponse[0]['trips']['latArray'];
             let lngArray = containerResponse[0]['trips']['lngArray'];
@@ -259,9 +259,9 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId,sock
                 locationId: locationPrimaryId,
                 tripId: containerResponse[0]['trips']['tripId'],
                 gps: data.slice(49, 50),
-                speed: data.slice(50, 52),
-                direction: data.slice(52, 54),
-                mileage: data.slice(54, 62),
+                speed: notNullCheck(data.slice(50, 52)) ? hexDecimalConverter(data.slice(50, 52)) * 1.85 : 0,// multiply by 1.85 to convert to km from sea mile
+                direction: notNullCheck(data.slice(52, 54)) ? hexDecimalConverter(data.slice(52, 54)) * 2 : 0,
+                mileage: notNullCheck(data.slice(54, 62)) ? hexDecimalConverter(data.slice(54, 62)) : 0,
                 gpsQuality: data.slice(62, 64),
                 vehicleId: data.slice(64, 72),
                 deviceStatus: deviceAlertInfo.returnValue,
@@ -326,7 +326,7 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
         await asyncForEach(returnArray.gps, async (gpsData) => {
             locationPrimaryId++;
             eLockAttributeId++;
-            dataSplitterResponse = await dataSplitter(gpsData, locationPrimaryId, eLockAttributeId,eLockData.socketAddress);
+            dataSplitterResponse = await dataSplitter(gpsData, locationPrimaryId, eLockAttributeId, eLockData.socketAddress);
             if (notNullCheck(dataSplitterResponse)) {
                 if (notNullCheck(dataSplitterResponse['location'])) {
                     locationList.push(dataSplitterResponse['location']);
@@ -613,6 +613,14 @@ const hexToBinary = (deviceStatus) => {
     returnValue.flag = ret.length === 16;
     returnValue.returnArray = ret;
     return returnValue;
+};
+
+const binaryToDecimalConverter = (binary) => {
+    return parseInt(binary, 2);
+};
+
+const hexDecimalConverter = (hex) => {
+    return parseInt(hex, 16);
 };
 
 module.exports = {
