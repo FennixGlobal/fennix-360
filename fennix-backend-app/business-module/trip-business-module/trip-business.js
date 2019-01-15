@@ -109,7 +109,7 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
 
 const fetchTripDetailsBusiness = async (req) => {
     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
-        mongoRequest = {status: ["IN_PROGRESS", "NOT_STARTED"], containerId: {$in: []}},
+        mongoRequest = {status: ["IN_PROGRESS"], containerId: {$in: []}},
         tripResponse;
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
