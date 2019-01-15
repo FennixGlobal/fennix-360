@@ -53,32 +53,30 @@ const getNotificationEmailsForTripIdQuery = (req) => {
 const tripStatusAggregatorQuery = () => {
     return ElocksTripDataModel.aggregate([
         {
-            $match:{isTripActive:true}
+            $match: {isTripActive: true}
         },
         {
-            $group: {_id:"$tripStatus", count:{$sum:1}}
+            $group: {_id: "$tripStatus", count: {$sum: 1}}
         }
     ]);
 };
 
 const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
-    // const getTripHistoryQuery = (tripId) => {
     return ElocksLocationModel.aggregate([
         {
             $match: {
                 tripId: tripId
-            }}
+            }
+        },
+        {
+            $lookup: {
+                from: 'elocksDeviceAttributes',
+                foreignField: 'locationId',
+                localField: '_id',
+                as: 'deviceAttributes'
+            }
+        }
     ]);
-        // },
-        // {
-        //     $lookup: {
-        //         from: 'elocksDeviceAttributes',
-        //         foreignField: 'tripId',
-        //         localField: 'tripId',
-        //         as: 'deviceAttributes'
-        //     }
-        // }
-    // };
 };
 module.exports = {
     fetchTripDetailsQuery,
