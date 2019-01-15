@@ -151,7 +151,8 @@ const listUnassignedContainerBusiness = async () => {
                 containerName: item['container_name'],
                 id: item['container_id'],
                 containerType: item['container_type'],
-                companyName: item['container_name']
+                companyName: item['company_name'],
+                companyId: item['company_id']
             };
             modifiedResponse.push(obj);
         });
