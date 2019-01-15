@@ -120,6 +120,7 @@ const dbTableColMap = {
         containerName: 'container_name',
         containerType: 'container_type',
         companyName: 'company_name',
+        companyId: 'company_id',
         containerColor: 'container_color',
         containerLength: 'container_length',
         containerWidth: 'container_width',
