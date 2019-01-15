@@ -266,6 +266,7 @@ const getContainerIdListAccessor = async (req) => {
     if (objectHasPropertyCheck(req, 'keysArray') && objectHasPropertyCheck(req, 'valuesArray') && arrayNotEmptyCheck(req.keysArray) && arrayNotEmptyCheck(req.valuesArray)) {
         filterQuery = pgDataFilterQueryCreator(req.keysArray, req.valuesArray);
     }
+    console.log(filterQuery);
     if (req.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_OPERATOR) {
         request = [req.languageId, ...req.userIdList, parseInt(req.centerId, 10)];
         extraQuery = `and center_id = $${req.userIdList.length + 2}`;
