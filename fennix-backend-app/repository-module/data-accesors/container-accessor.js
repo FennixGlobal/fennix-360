@@ -263,6 +263,7 @@ const getDeviceIMEIByContainerIdAccessor = async (req) => {
 const getContainerIdListAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [], filterQuery = ``;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
+    console.log(req);
     if (objectHasPropertyCheck(req, 'keysArray') && objectHasPropertyCheck(req, 'valuesArray') && arrayNotEmptyCheck(req.keysArray) && arrayNotEmptyCheck(req.valuesArray)) {
         filterQuery = pgDataFilterQueryCreator(req.keysArray, req.valuesArray);
     }
