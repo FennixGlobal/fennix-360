@@ -49,4 +49,13 @@ router.get('/getTripDetails', function (req, res) {
     })
 });
 
+
+router.get('/tripAggregator', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.tripStatusAggregatorBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

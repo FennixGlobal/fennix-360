@@ -228,14 +228,15 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
             latArray = latArray ? latArray.sort() : [];
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
-                // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
                 setTimeout(() => {
-                    // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
-                }, 100);
-                setTimeout(() => {
-                    // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
-                }, 300);
-                // notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
+                    setTimeout(() => {
+                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
+                    }, 400);
+                    setTimeout(() => {
+                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
+                    }, 800);
+                }, 20000);
             }
             containerId = containerResponse[0]['containerId'];
             deviceId = containerResponse[0]['_id'];
