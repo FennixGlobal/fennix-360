@@ -44,6 +44,8 @@ const getCompanyDetailsAccessor = async (req) => {
 const totalNoOfCompaniesAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, companyQueries.totalNoOfCompaniesQuery, false);
+    console.log(modifiedQuery);
+    console.log(req);
     returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
     return returnObj;
 };
