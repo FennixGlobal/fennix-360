@@ -261,7 +261,7 @@ const getDeviceIMEIByContainerIdAccessor = async (req) => {
 };
 
 const getContainerIdListAccessor = async (req) => {
-    let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [], filterQuery = ``;
+    let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [], filterQuery = null;
     modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
     console.log(req);
     if (objectHasPropertyCheck(req, 'keysArray') && objectHasPropertyCheck(req, 'valuesArray') && arrayNotEmptyCheck(req.keysArray) && arrayNotEmptyCheck(req.valuesArray)) {
@@ -274,7 +274,7 @@ const getContainerIdListAccessor = async (req) => {
     } else {
         request = [req.languageId, ...req.userIdList];
     }
-    finalQuery = `${modifiedQuery} ${extraQuery} and ${filterQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
+    finalQuery = notNullCheck(filterQuery) ? `${modifiedQuery} ${extraQuery} and ${filterQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}` : `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
     console.log(request);
     console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
