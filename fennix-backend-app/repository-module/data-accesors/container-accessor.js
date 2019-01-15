@@ -4,7 +4,7 @@ const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = 
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {updateQueryCreator, pgDataFilterQueryCreator} = require('../../util-module/request-validators');
-const {notNullCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
+const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getDeviceIMEIByContainerIDQuery} = require('../queries/device-query');
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
