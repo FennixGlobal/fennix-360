@@ -571,6 +571,27 @@ const widgetFormElementCreator = (widgetElementItem) => {
                     }
                 };
                 break;
+            case 'data_container':
+                widgetElementData = {
+                    ...widgetElementData, ...{
+                        elementContainerReqUrl: widgetElementItem['checkbox_container_endpoint'],
+                        elementContainerReqType: widgetElementItem['checkbox_container_req_type'],
+                        elementContainerReqParams: widgetElementItem['checkbox_container_req_params'],
+                        elementContainerId: widgetElementItem['checkbox_container_set_id'],
+                        elementTitle: widgetElementItem['element_title'],
+                        submitReqType: widgetElementItem['submit_request_type'],
+                        submitRequestParams: widgetElementItem['submit_request_params'],
+                        submitEndpoint: widgetElementItem['submit_endpoint'],
+                        elementLabel: widgetElementItem['element_label'],
+                        elementIcon: widgetElementItem['element_icon_value'],
+                        elementModalId: widgetElementItem['element_modal_id'],
+                        requestMappingKey: widgetElementItem['request_mapping_key'],
+                        dataEndpoint: widgetElementItem['dropdown_endpoint'],
+                        dataReqType: widgetElementItem['dropdown_request_type'],
+                        dataRequestParams: widgetElementItem['dropdown_request_params']
+                    }
+                };
+                break;
 
             case 'text-link':
             case 'detail-text':
