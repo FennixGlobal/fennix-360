@@ -150,9 +150,9 @@ const createPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n
     'left join widget_attributes wis on\n' +
     'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
     'join role_cards_widgets rcw\n' +
-    'on rcwa.role_card_widget_id = 11\n' +
+    'on rcwa.role_card_widget_id = 78\n' +
     'join role_cards rc \n' +
-    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'LOGIN\'\n' +
+    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'SET_PASSWORD\'\n' +
     'left join endpoints se \n' +
     'on se.endpoint_id = rcwa.submit_endpoint\n' +
     'left join endpoints de\n' +
@@ -180,9 +180,9 @@ const forgotPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n
     'left join widget_attributes wis on\n' +
     'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
     'join role_cards_widgets rcw\n' +
-    'on rcwa.role_card_widget_id = 11\n' +
+    'on rcwa.role_card_widget_id = 77\n' +
     'join role_cards rc \n' +
-    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'LOGIN\'\n' +
+    'on rcw.role_card_id = rc.role_card_id and rc.card_header_localization_key = \'FORGOT_PASSWORD\'\n' +
     'left join endpoints se \n' +
     'on se.endpoint_id = rcwa.submit_endpoint\n' +
     'left join endpoints de\n' +
