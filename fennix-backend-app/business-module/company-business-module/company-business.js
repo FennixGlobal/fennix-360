@@ -88,9 +88,8 @@ const listCompanyDropdownBusiness = async (req) => {
     }
     return finalResponse;
 };
-
-const commonListDropdownBusiness = async (req, languageId, skip, limit) => {
-    let response, modifiedResponse = {data: [], totalNoOfRecords: 0},
+const commonListDropdownBusiness = async (req, languageId, skip = null, limit = null) => {
+    let response, modifiedResponse = {data: [], totalNoOfRecords: 0}, totalRecords,
         request = notNullCheck(skip) && notNullCheck(limit) ? {languageId, skip, limit} : {languageId};
     request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     response = await companyAccessors.listCompanyAccessor(request);
@@ -105,7 +104,9 @@ const commonListDropdownBusiness = async (req, languageId, skip, limit) => {
             modifiedResponse.data.push(obj);
         });
         modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);
-        modifiedResponse.totalNoOfRecords = response.rows.length;
+        totalRecords = await companyAccessors.totalNoOfCompaniesAccessor(request.userIdList);
+        console.log(totalRecords);
+        modifiedResponse.totalNoOfRecords = totalRecords['count'];
     }
     return modifiedResponse;
 };

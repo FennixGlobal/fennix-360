@@ -41,9 +41,17 @@ const getCompanyDetailsAccessor = async (req) => {
     return returnObj;
 };
 
+const totalNoOfCompaniesAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.userIdList, companyQueries.totalNoOfCompaniesQuery, false);
+    returnObj = await connectionCheckAndQueryExec(req.userIdList, modifiedQuery);
+    return returnObj;
+};
+
 module.exports = {
     addCompanyAccessor,
     getCompanyDetailsAccessor,
     editCompanyAccessor,
-    listCompanyAccessor
+    listCompanyAccessor,
+    totalNoOfCompaniesAccessor
 };
