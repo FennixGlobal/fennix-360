@@ -49,6 +49,13 @@ router.get('/getTripDetails', function (req, res) {
     })
 });
 
+router.get('/listNotStartedTrip', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchNotStartedTripDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 
 router.get('/tripAggregator', function (req, res) {
     let returnObj;

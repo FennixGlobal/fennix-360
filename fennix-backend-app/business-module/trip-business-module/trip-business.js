@@ -130,10 +130,17 @@ const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
     }
     return finalResponse;
 };
-
+const fetchNotStartedTripDetailsBusiness = async (req) => {
+    let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
+        mongoRequest = {status: ["NOT_STARTED"], containerId: {$in: []}},
+        tripResponse;
+    tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
+    return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
+};
 module.exports = {
     fetchTripDetailsBusiness,
     startTripBusiness,
+    fetchNotStartedTripDetailsBusiness,
     fetchCompletedTripDetailsBusiness,
     fetchCompleteDeviceDetailsByTripIdBusiness,
     endTripBusiness,
