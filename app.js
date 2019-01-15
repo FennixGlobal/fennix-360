@@ -165,7 +165,7 @@ app.use('/carrier', carrierRouter);
 app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
 app.use('/container', containerRouter);
-app.use('/route', routeRouter);
+app.use('/companyRoute', routeRouter);
 app.use('/lite', [liteUserRouter, liteTicketRouter, liteDeviceRouter, liteUserTrackingRouter]);
 app.use('/', indexRouter);
 
