@@ -21,7 +21,8 @@ const routeSchema = {
     endAddress: addressSchema,
     wayPoints: [addressSchema],
     stoppagePoints: [stoppagePointSchema],
-    totalDistance: Number
+    totalDistance: Number,
+    steps: [addressSchema]
 };
 const companyRoutesCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,
