@@ -579,6 +579,7 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         elementContainerReqParams: widgetElementItem['checkbox_container_req_params'],
                         elementContainerId: widgetElementItem['checkbox_container_set_id'],
                         elementTitle: widgetElementItem['element_title'],
+                        dataMappingKey: widgetElementItem['default_value__hover_value'],
                         submitReqType: widgetElementItem['submit_request_type'],
                         submitRequestParams: widgetElementItem['submit_request_params'],
                         submitEndpoint: widgetElementItem['submit_endpoint'],
