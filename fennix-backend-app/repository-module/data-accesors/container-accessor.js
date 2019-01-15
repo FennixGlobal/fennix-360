@@ -274,7 +274,7 @@ const getContainerIdListAccessor = async (req) => {
     } else {
         request = [req.languageId, ...req.userIdList];
     }
-    finalQuery = `${modifiedQuery} ${extraQuery} ${filterQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
+    finalQuery = `${modifiedQuery} ${extraQuery} and ${filterQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', req.offset, req.limit, TABLE_CONTAINER)}`;
     console.log(request);
     console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
