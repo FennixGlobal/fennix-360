@@ -53,6 +53,7 @@ const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
     // request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
     response = await commonListDropdownBusiness(req, req.query.languageId, parseInt(req.query.skip), parseInt(req.query.limit));
+    console.log(response);
     if (arrayNotEmptyCheck(response.data)) {
         modifiedResponse.totalNoOfRecords = response.totalNoOfRecords;
         modifiedResponse.gridData = [...response.data];
@@ -93,6 +94,7 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
         request = notNullCheck(skip) && notNullCheck(limit) ? {languageId, skip, limit} : {languageId};
     request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     response = await companyAccessors.listCompanyAccessor(request);
+    console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
@@ -106,7 +108,7 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
         modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);
         totalRecords = await companyAccessors.totalNoOfCompaniesAccessor(request.userIdList);
         console.log(totalRecords);
-        modifiedResponse.totalNoOfRecords = totalRecords['count'];
+        modifiedResponse.totalNoOfRecords = objectHasPropertyCheck(totalRecords, 'rows') && arrayNotEmptyCheck(totalRecords['rows']) ? totalRecords['rows'][0]['count'] : 0;
     }
     return modifiedResponse;
 };

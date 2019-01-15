@@ -529,10 +529,10 @@ const containerMapDataListWithFiltersBusiness = async (req) => {
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     let keysArray = [], valuesArray = [];
-    filtersMapping.containerFilters.forEach((filter) => {
-        if (objectHasPropertyCheck(req.body, filter)) {
-            keysArray.push(filter);
-            valuesArray.push(req.body[filter]);
+    Object.keys(filtersMapping.containerFilters).forEach((key) => {
+        if (objectHasPropertyCheck(req.body, key)) {
+            keysArray.push(filtersMapping.containerFilters[key]);
+            valuesArray.push(req.body[key]);
         }
     });
     request.keysArray = keysArray;
