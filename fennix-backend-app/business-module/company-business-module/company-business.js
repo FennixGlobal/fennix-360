@@ -108,7 +108,7 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
         modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);
         totalRecords = await companyAccessors.totalNoOfCompaniesAccessor(request.userIdList);
         console.log(totalRecords);
-        modifiedResponse.totalNoOfRecords = totalRecords['count'];
+        modifiedResponse.totalNoOfRecords = objectHasPropertyCheck(totalRecords, 'rows') && arrayNotEmptyCheck(totalRecords['rows']) ? totalRecords['rows'][0]['count'] : 0;
     }
     return modifiedResponse;
 };
