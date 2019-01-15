@@ -2,9 +2,8 @@ var express = require('express');
 var router = express.Router();
 const routeBusiness = require('../business-module/route-business-module/route-business');
 
-router.get('getCompanyRoutes', (req, res) => {
+router.get('/getCompanyRoutes', (req, res) => {
     let returnObj;
-    console.log('inside route controller');
     returnObj = routeBusiness.getRouteByCompanyIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
