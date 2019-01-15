@@ -4,7 +4,7 @@ const addContainerDetailsQuery = 'insert into ';
 // const listContainersQuery = 'select * from container where isactive = true and owner_user_id IN ';
 const listContainersQuery = 'select (select localized_text from localization where language = $1 and locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = c.container_type)) as container_type_value, * from container c where isactive = true and owner_user_id IN ';
 const getTotalNoOfContainersQuery = 'select count(*) from container where isactive = true and owner_user_id IN ';
-const listUnassignedContainersQuery = 'select container_id, container_name,container_type,company_name from container where (device_id is null or device_id = 0) and isactive = true';
+const listUnassignedContainersQuery = 'select container_id, container_name,container_type, company_id, (select company_name from company where company_id = c.company_id) as company_name from container c where (device_id is null or device_id = 0) and isactive = true';
 const getTotalNoOfContainersForMapQuery = 'select count(*) from container where (device_id is null or device_id = 0) and isactive = true and owner_user_id IN ';
 
 const getContainerDocumentByContainerIdQuery = 'select dropbox_base_path,(select location_code from location where location_id = c.location_3) as location_code from container c  where c.container_id = $1';
