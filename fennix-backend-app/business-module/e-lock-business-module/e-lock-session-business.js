@@ -1,9 +1,9 @@
 const eLockSessionAccessors = require('../../repository-module/data-accesors/e-lock-session-accessor');
 
-const insertELockSessionBusiness = async (req, deviceId) => {
-    let request = {}, sessionInsertResponse;
+const insertELockSessionBusiness = async (req, imei) => {
+    let request, sessionInsertResponse;
     request = {
-        eLockId: parseInt(deviceId, 10),
+        imei: parseInt(imei, 10),
         connectingIPAddress: req.ipAddress,
         connectingPort: req.socketPort,
         connectingSocket: req.socketKey,
@@ -14,8 +14,8 @@ const insertELockSessionBusiness = async (req, deviceId) => {
     return sessionInsertResponse;
 };
 
-const getELockSessionBusiness = async (deviceId) => {
-    const request = {eLockId: deviceId};
+const getELockSessionBusiness = async (imei) => {
+    const request = {imei};
     let sessionResponse, elockSessionFinalResponse = null;
     sessionResponse = await eLockSessionAccessors.getELockSessionAccessor(request);
     console.log(sessionResponse);

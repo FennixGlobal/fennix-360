@@ -1,10 +1,8 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-require('mongoose-double')(mongoose);
-let SchemaType = mongoose.Schema.Types;
 
 const eLockSessionSchema = new Schema({
-    eLockId: Number,
+    imei: Number,
     connectingIPAddress: String,
     connectingPort: String,
     connectingSocket: String,
