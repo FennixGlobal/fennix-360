@@ -59,6 +59,24 @@ const emailBodyForRole = (role) => {
                     <p style="font-weight: bold;margin: 0">Please login to the application by clicking on the below button and set your desired password.</p>`,
             url: 'http://patdoj.fennix.global:4200/newLogin',
             urlName: 'Sofia'
+        },
+        start_trip: {
+            header: 'We have an update on your E-Lock Trip',
+            body: `<p style="font-size: 1.3em;font-weight: bold;margin:0">Your trip has started</p>`,
+            url: 'http://patdoj.fennix.global:4200/login',
+            urlName: 'See Trip Details'
+        },
+        geo_fence: {
+            header: 'We have an update on your E-Lock Trip',
+            body: `<p style="font-size: 1.3em;font-weight: bold;margin:0">Your trip has geo-fence violation.</p>`,
+            url: 'http://patdoj.fennix.global:4200/login',
+            urlName: 'See Trip Details'
+        },
+        end_trip: {
+            header: 'We have an update on your E-Lock Trip',
+            body: `<p style="font-size: 1.3em;font-weight: bold;margin:0">Your trip has ended.</p>`,
+            url: 'http://patdoj.fennix.global:4200/newLogin',
+            urlName: 'See Trip Details'
         }
     };
     return roleBody[role];
@@ -75,7 +93,10 @@ const roleMailBody = {
     8: emailBodyForRole('user'),
     9: emailBodyForRole('customs'),
     10: emailBodyForRole('client'),
-    11: emailBodyForRole('elock_operator')
+    11: emailBodyForRole('elock_operator'),
+    'start_trip': emailBodyForRole('start_trip'),
+    'end_trip': emailBodyForRole('end_trip'),
+    'geo_fence': emailBodyForRole('geo_fence')
 };
 
 module.exports = {

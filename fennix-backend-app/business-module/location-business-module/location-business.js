@@ -229,12 +229,12 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 setTimeout(() => {
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence');
+                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence',containerResponse[0]);
                     setTimeout(() => {
-                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence');
+                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence',containerResponse[0]);
                     }, 400);
                     setTimeout(() => {
-                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence');
+                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence',containerResponse[0]);
                     }, 800);
                 }, 20000);
             }

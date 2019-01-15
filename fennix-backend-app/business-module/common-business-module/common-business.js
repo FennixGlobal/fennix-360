@@ -4,6 +4,7 @@ const {imageDBLocation, imageLocalLocation} = require('../../util-module/connect
 const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor, getContainerCheckboxMetadataAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const nodeMailer = require('nodemailer');
+const tripBusiness = require('../trip-business-module/trip-business');
 const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const {roleHTMLCreator, roleMailBody} = require('../../util-module/util-constants/fennix-email-html-conatants');
 const fetch = require('isomorphic-fetch');
@@ -163,10 +164,14 @@ const emailSendBusiness = async (emailId, roleId, fullName) => {
     });
 };
 
-const notificationEmailBusiness = async (emailId, notificationType) => {
-    const subject = 'Status Update on E-Lock Trip';
+const notificationEmailBusiness = async (emailId, notificationType,containerDetails) => {
+
+
+    let subject = notificationModifier(notificationType);
     let body;
-    body = notificationModifier(notificationType);
+    console.log('container Details');
+    console.log(containerDetails);
+    body = roleMailBody[notificationType];
     const transporter = nodeMailer.createTransport({
         port: 465,
         host: 'smtp.gmail.com',
@@ -194,10 +199,10 @@ const notificationEmailBusiness = async (emailId, notificationType) => {
 
 const notificationModifier = (notificationType) => {
     const notificationBodyMap = {
-        start_trip: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your Trip has started</p>`,
-        end_trip: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your Trip has Ended</p>`,
-        unlock_device: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">Your device ha been unlocked</p>`,
-        geo_fence: `<p style="font-size: 1.3em;font-weight: bold;margin:0">E-Lock Status</p><p style="font-size: 1.1em;width:60%;padding: 10px;margin:0 auto;">There has been a geofence violation on the trip</p>`
+        start_trip:'Sofia - Your Container Trip Has Started',
+        end_trip:'Sofia - Your Container Trip Has Ended',
+        unlock_device:'Sofia - The Container being transported has been unlocked',
+        geo_fence:'Sofia - Your Container Trip Has some geofence violation',
     };
     return notificationBodyMap[notificationType];
 };

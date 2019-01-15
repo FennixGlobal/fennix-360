@@ -17,7 +17,7 @@ const insertCompanyRouteBusiness = async (req) => {
     if (objectHasPropertyCheck(request, 'routes') && arrayNotEmptyCheck(request.routes)) {
 
         request.routes.forEach((route) => {
-            const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance', 'steps'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance', 'steps']);
+            const newRoute = responseObjectCreator(route, ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName'], ['startAddress', 'endAddress', 'waypoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName']);
             newRoute['companyId'] = companyId;
             routeArray.push(newRoute);
         });
