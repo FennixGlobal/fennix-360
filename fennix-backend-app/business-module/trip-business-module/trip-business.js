@@ -137,6 +137,6 @@ module.exports = {
     fetchCompletedTripDetailsBusiness,
     fetchCompleteDeviceDetailsByTripIdBusiness,
     endTripBusiness,
-    getTripDetailsByTripIdBusiness,
+    // getTripDetailsByTripIdBusiness,
     tripStatusAggregatorBusiness
 };
