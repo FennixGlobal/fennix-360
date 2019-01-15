@@ -4,6 +4,7 @@ const routeBusiness = require('../business-module/route-business-module/route-bu
 
 router.get('getCompanyRoutes', (req, res) => {
     let returnObj;
+    console.log(inside route controller);
     returnObj = routeBusiness.getRouteByCompanyIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
