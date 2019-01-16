@@ -110,8 +110,8 @@ const listContainerBusiness = async (req) => {
         };
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
     request.userIdList = [];
-    console.log('user response');
-    console.log(userResponse);
+    // console.log('user response');
+    // console.log(userResponse);
     if (objectHasPropertyCheck(userResponse, 'userDetails') && objectHasPropertyCheck(userResponse.userDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userResponse.userDetails.rows)) {
         request.companyId = userResponse.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT ? userResponse.userDetails.rows[0]['company_id'] : null;
         userResponse.userDetails.rows.forEach((item) => request.userIdList.push(item['user_id']));
@@ -240,9 +240,9 @@ const assignContainerBusiness = async (req) => {
     req.body.deviceAssignedBy = req.body.userId;
     activePasswordResponse = await containerAccessors.fetchAndUpdateContainerPasswordCounterAccessor('containerActivePasswordCounter');
     // if (arrayNotEmptyCheck(activePasswordResponse)) {
-    console.log(activePasswordResponse);
+    // console.log(activePasswordResponse);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([parseInt(req.body.containerId, 10)]);
-    console.log(masterPasswordResponse);
+    // console.log(masterPasswordResponse);
     req.body.activePassword = activePasswordResponse['containerActivePasswordCounter'];
     if (objectHasPropertyCheck(masterPasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(masterPasswordResponse.rows)) {
         // socket.socketIO.emit('set_active_password', {
@@ -259,8 +259,8 @@ const assignContainerBusiness = async (req) => {
         deviceId: parseInt(req.body.deviceId, 10)
     };
     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
-    console.log('trip Request');
-    console.log(req.body);
+    // console.log('trip Request');
+    // console.log(req.body);
     tripRequest = {
         tripId: elockTripPrimaryId,
         containerId: parseInt(req.body.containerId, 10),
@@ -310,9 +310,9 @@ const containerMapDataListBusiness = async (req) => {
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
     userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
-    console.log(userRequest);
+    // console.log(userRequest);
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
-    console.log(userResponse);
+    // console.log(userResponse);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
@@ -445,7 +445,7 @@ const unlockElockBusiness = async (req) => {
     // activePasswordResponse.rows[0]['active_password']
 
     const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
-    console.log(eLockSessionData);
+    // console.log(eLockSessionData);
     socket.socketIO.emit('unlock_device', {
         socketAddress: eLockSessionData[0]['connectingSocket'],
         password: '100000'
@@ -554,9 +554,9 @@ const containerMapDataListWithFiltersBusiness = async (req) => {
         containerReturnObj = {}, gridData = {}, locationObj = {}, totalNoOfRecords,
         containerDevices = {}, containerListResponse, returnObj, userResponse, userRequest;
     userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}};
-    console.log(userRequest);
+    // console.log(userRequest);
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
-    console.log(userResponse);
+    // console.log(userResponse);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     let keysArray = [], valuesArray = [];
@@ -569,9 +569,9 @@ const containerMapDataListWithFiltersBusiness = async (req) => {
     request.keysArray = keysArray;
     request.valuesArray = valuesArray;
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
-    console.log(containerListResponse);
+    // console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersForMapAccessor(request);
-    console.log(totalNoOfRecords);
+    // console.log(totalNoOfRecords);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         let containerIdListAndDetailObj, containerDeviceArray;
         containerIdListAndDetailObj = containerListResponse.rows.reduce((init, item) => {
