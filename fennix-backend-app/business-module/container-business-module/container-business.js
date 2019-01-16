@@ -426,11 +426,19 @@ const containerMapDataListBusiness = async (req) => {
     }
     return returnObj;
 };
+
+const lockElockBusiness = async (req) => {
+    const containerId = parseInt(req.query.containerId, 10);
+    await containerAccessors.setContainerLockStatusAccessor([containerId, true]);
+    return fennixResponse(statusCodeConstants.STATUS_DEVICE_UNLOCKED, 'EN_US', []);
+};
+
 const unlockElockBusiness = async (req) => {
     const containerId = parseInt(req.query.containerId, 10);
     const activePasswordResponse = await containerAccessors.getActivePasswordForContainerIdAccessor([containerId]);
     let masterPasswordResponse = await containerAccessors.getContainerMasterPasswordAcessor([containerId]);
     const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
+    // const tripData = await tripAccessors.
     console.log(deviceIMEIId);
     // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
     await containerAccessors.setContainerLockStatusAccessor([containerId, false]);
@@ -509,12 +517,16 @@ const getContainerMapHistoryBusiness = async (req) => {
 const getTripDuration = (dateTime, timeFlag) => {
     let startTime = dateTime.startTime, endTime = dateTime.endTime, startDate = new Date(dateTime.startDate),
         endDate = new Date(dateTime.endDate);
+    console.log(startDate);
+    console.log('duration');
+    console.log(endDate);
     if (timeFlag) {
         startTime = timeHoursToMillisecondConverter(startTime);
         endTime = timeHoursToMillisecondConverter(endTime);
         startDate.setTime(startTime);
         endDate.setTime(endTime);
     }
+    console.log(startDate.getTime() - endDate.getTime());
     return Math.abs(startDate.getTime() - endDate.getTime());
 };
 
@@ -661,6 +673,7 @@ const containerMapDataListWithFiltersBusiness = async (req) => {
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
+    lockElockBusiness,
     deactivateContainerBusiness,
     listUnassignedContainerBusiness,
     listContainerBusiness,

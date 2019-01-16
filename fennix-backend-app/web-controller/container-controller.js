@@ -58,6 +58,13 @@ router.post('/showElockMap', function (req, res) {
     })
 });
 
+router.get('/lockElock', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.lockElockBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 
 router.post('/showElockMapWithFilters', function (req, res) {
     let returnObj;
