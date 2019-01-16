@@ -57,8 +57,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
-              <caret line="405" column="33" selection-start-line="405" selection-start-column="33" selection-end-line="405" selection-end-column="33" />
+            <state relative-caret-position="99">
+              <caret line="406" column="48" selection-start-line="406" selection-start-column="48" selection-end-line="406" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -456,12 +456,12 @@
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
       <workItem from="1546634203635" duration="50381000" />
-      <workItem from="1547055457019" duration="105266000" />
+      <workItem from="1547055457019" duration="105704000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1644077000" />
+    <option name="totallyTimeSpent" value="1644515000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -474,7 +474,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" weight="0.24322538" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1290,8 +1289,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="405" column="33" selection-start-line="405" selection-start-column="33" selection-end-line="405" selection-end-column="33" />
+        <state relative-caret-position="99">
+          <caret line="406" column="48" selection-start-line="406" selection-start-column="48" selection-end-line="406" selection-end-column="48" />
         </state>
       </provider>
     </entry>

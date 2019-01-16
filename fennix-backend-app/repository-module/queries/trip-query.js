@@ -80,7 +80,7 @@ const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
 };
 
 const getTripDetailsByTripIdQuery = (tripId) => {
-return ElocksTripDataModel.find({tripId});
+    return ElocksTripDataModel.find({tripId});
 };
 
 module.exports = {

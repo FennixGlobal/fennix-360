@@ -51,9 +51,9 @@ const tripStatusAggregatorAccessor = async () => {
     return returnObj;
 };
 
-const getTripDetailsByTripIdAccessor = async () => {
+const getTripDetailsByTripIdAccessor = async (req) => {
     let returnObj;
-    returnObj = await tripQueries.getTripDetailsByTripIdQuery();
+    returnObj = await tripQueries.getTripDetailsByTripIdQuery(req);
     return returnObj;
 };
 
