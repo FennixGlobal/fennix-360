@@ -10,6 +10,7 @@ const containerAccessor = require('../../repository-module/data-accesors/contain
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');
 
 const deviceAggregatorDashboard = async (req) => {
     let beneficiaryResponse, deviceResponse, returnObj, userIdList;
@@ -398,12 +399,15 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
 };
 
 const unlinkDeviceForContainerBusiness = async (req) => {
-    let request = parseInt(req.query.containerId),
-        containerRequest = {containerId: req.query.containerId, deviceId: null};
-    //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection
-    await deviceAccessor.unlinkDeviceForContainerAccessor(request);
-    await containerAccessor.updateContainerAccessor(containerRequest);
-    await deviceAccessor.unlinkLocationMasterForContainerAccessor(request);
+    let request = parseInt(req.query.tripId), tripResponse,
+        containerRequest = {containerId: 0, deviceId: null};
+    // req.query.containerId
+    //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection=
+    tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(request);
+    console.log(tripResponse);
+    // await deviceAccessor.unlinkDeviceForContainerAccessor(request);
+    // await containerAccessor.updateContainerAccessor(containerRequest);
+    // await deviceAccessor.unlinkLocationMasterForContainerAccessor(request);
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
 /**
