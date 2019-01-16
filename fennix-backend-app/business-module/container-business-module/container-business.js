@@ -461,20 +461,22 @@ const unlockElockBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_DEVICE_UNLOCKED, 'EN_US', []);
 };
 const getContainerMapHistoryBusiness = async (req) => {
-    let toDate = new Date(), fromDate = new Date(), startAddress = null, endAddress = null, request, response,
+    let startAddress = null, endAddress = null, request, response,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
-    let tripLimit = notNullCheck(req.query.limit) ? req.query.limit : 5;
-    let tripRequest = {
-        containerId: parseInt(req.query.containerId),
-        tripLimit: tripLimit
-    };
-    tripResponse = await tripAccessors.getActiveTripDetailsByContainerIdAccessor(tripRequest);
-    let tripIds = [];
-    if (arrayNotEmptyCheck(tripResponse)) {
-        tripResponse.forEach((item) => tripIds.push(item['tripId']));
-    }
+
+        // toDate = new Date(), fromDate = new Date(),
+    // let tripLimit = notNullCheck(req.query.limit) ? req.query.limit : 5;
+    // let tripRequest = {
+    //     containerId: parseInt(req.query.containerId),
+    //     tripLimit: tripLimit
+    // };
+    // tripResponse = await tripAccessors.getActiveTripDetailsByContainerIdAccessor(tripRequest);
+    let tripIds = [req.query.tripId];
+    // if (arrayNotEmptyCheck(tripResponse)) {
+    //     tripResponse.forEach((item) => tripIds.push(item['tripId']));
+    // }
     request = {
-        containerId: parseInt(req.query.containerId),
+        // containerId: parseInt(req.query.containerId),
         tripId: tripIds
     };
     response = await containerAccessors.getContainerMapHistoryAccessor(request);
