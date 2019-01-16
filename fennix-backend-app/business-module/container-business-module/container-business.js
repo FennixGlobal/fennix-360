@@ -539,14 +539,15 @@ const getDateTimeStamp = (dateObj, time) => {
     console.log('actual date');
     console.log(actualDate);
     console.log(timeInMilliSeconds);
-    actualDate.setTime(timeInMilliSeconds);
+    actualDate.setHours(timeInMilliSeconds.hours);
+    actualDate.setMinutes(timeInMilliSeconds.minutes);
     console.log('actual time');
     console.log(actualDate);
     return actualDate;
 };
 const timeHoursToMillisecondConverter = (time) => {
     let splitTime = time.split(':');
-    return ((parseInt(splitTime[0]) * (60000 * 60)) + (parseInt(splitTime[1]) * 60000));
+    return {hours: parseInt(splitTime[0]), minutes: (parseInt(splitTime[1]) * 60000)};
 };
 const containerMapDataListWithFiltersBusiness = async (req) => {
     let request = {
