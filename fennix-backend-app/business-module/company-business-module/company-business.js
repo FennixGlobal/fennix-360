@@ -20,7 +20,7 @@ const addCompanyBusiness = async (req) => {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('added company route successfully');
         } else {
-            finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('error while adding company routes');
         }
     }

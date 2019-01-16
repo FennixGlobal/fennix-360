@@ -9,7 +9,6 @@ const insertRouteAccessor = async (req) => {
 const fetchAndUpdateCompanyRoutePrimaryKeyAccessor = async () => {
     let response;
     response = await routeQueries.fetchAndUpdateCompanyRoutePrimaryKeyQuery();
-    console.log(response);
     return response;
 };
 

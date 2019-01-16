@@ -3,7 +3,7 @@ const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = requ
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const insertCompanyRouteBusiness = async (req) => {
-    let request = req, routeRequest = {}, response, counterResponse, primaryAddressRequest = {}, companyId = 0,
+    let request = req, routeRequest = {}, response, counterResponse, companyId = 0,
         routeArray = [];
     counterResponse = await routeAccessors.fetchAndUpdateCompanyRoutePrimaryKeyAccessor();
     console.log(counterResponse);
@@ -23,7 +23,6 @@ const insertCompanyRouteBusiness = async (req) => {
         });
         response = await routeAccessors.insertRouteAccessor(routeArray);
     }
-    // response = await routeAccessors.insertRouteAccessor(routeRequest);
     return response;
 };
 const deleteCompanyRoutesBusiness = async (req) => {
