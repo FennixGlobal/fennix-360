@@ -8,6 +8,7 @@ const fetchTripDetailsAccessor = async (req) => {
 };
 const getActiveTripDetailsByContainerIdAccessor = async (req) => {
     let returnObj;
+    console.log(req);
     returnObj = await tripQueries.getActiveTripDetailsByContainerIdQuery(req);
     return returnObj;
 };
