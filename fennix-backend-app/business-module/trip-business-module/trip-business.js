@@ -139,12 +139,13 @@ const fetchNotStartedTripDetailsBusiness = async (req) => {
 };
 
 const fetchTripDetailsByTripIdBusiness = async (req) => {
-    const tripId = req.query.tripId;
+    const tripId = parseInt(req.query.tripId,10);
     let tripResponse;
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(tripId);
     if (tripResponse) {
         console.log(tripResponse);
     }
+    return tripResponse;
 };
 
 const editTripBusiness = async (req) => {
