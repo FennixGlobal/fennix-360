@@ -13,6 +13,20 @@ const statusCodes = {
             espLA: 'company edited successfully'
         }
     },
+    265: {
+        devMsg: 'No container for given id', userMsg: {
+            EN_US: 'No container for given id',
+            espMX: 'No container for given id',
+            espLA: 'No container for given id'
+        }
+    },
+    264: {
+        devMsg: 'container edited successfully', userMsg: {
+            EN_US: 'container edited successfully',
+            espMX: 'container edited successfully',
+            espLA: 'container edited successfully'
+        }
+    },
     223: {
         devMsg: 'company edit failed', userMsg: {
             EN_US: 'company edit failed',

@@ -78,10 +78,16 @@ const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
         }
     ]);
 };
+
+const getTripDetailsByTripIdQuery = (tripId) => {
+return ElocksTripDataModel.find({tripId});
+};
+
 module.exports = {
     fetchTripDetailsQuery,
     getNotificationEmailsForTripIdQuery,
     fetchNextElockTripPrimaryKeyQuery,
+    getTripDetailsByTripIdQuery,
     insertElockTripDataQuery,
     updateTripStatusQuery,
     tripStatusAggregatorQuery,

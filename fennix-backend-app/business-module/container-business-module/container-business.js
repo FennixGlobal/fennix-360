@@ -51,7 +51,16 @@ const addContainerDetailsBusiness = async (req) => {
     }
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
-
+const editContainerBusiness = async (req) => {
+    let response, finalResponse;
+    response = await containerAccessors.editContainerAccessor(req);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_CONTAINER_EDIT_SUCCESS, 'EN_US', 'Updated container data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', '');
+    }
+    return finalResponse;
+};
 /*const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
         finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
@@ -649,6 +658,7 @@ module.exports = {
     listUnassignedContainerBusiness,
     listContainerBusiness,
     unlockElockBusiness,
+    editContainerBusiness,
     getContainerMapHistoryBusiness,
     containerMapDataListBusiness,
     containerMapDataListWithFiltersBusiness,

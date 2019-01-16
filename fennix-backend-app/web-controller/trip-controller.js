@@ -9,6 +9,22 @@ router.get('/listActiveTrip', function (req, res) {
         res.send(response);
     })
 });
+router.post('/editTripData', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.editTripBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.get('/tripDataByTripId', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchTripDetailsByTripIdBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 
 router.get('/startTrip', function (req, res) {
     let returnObj;

@@ -288,8 +288,20 @@ const getContainerDetailsAccessor = async (req) => {
     return returnObj;
 };
 
+const editContainerAccessor = async (req) => {
+    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
+    fields.sort();
+    fields.splice(fields.indexOf('containerId'), 1);
+    updatedQueryCreatorResponse = updateQueryCreator('container', fields, 'container_id');
+    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
+    request.push(req.containerId);
+    returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
+    return returnObj;
+};
+
 module.exports = {
     getContainerDetailsAccessor,
+    editContainerAccessor,
     getDeviceIMEIByContainerIdAccessor,
     getContainerMasterPasswordAcessor,
     setContainerLockStatusAccessor,

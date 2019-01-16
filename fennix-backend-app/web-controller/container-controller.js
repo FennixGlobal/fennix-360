@@ -66,7 +66,13 @@ router.post('/showElockMapWithFilters', function (req, res) {
         res.send(response);
     })
 });
-
+router.post('/editContainer', function (req, res) {
+    let returnObj;
+    returnObj = containerBusiness.editContainerBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 //
 // router.get('/listTripDetails', function (req, res) {
 //     let returnObj;

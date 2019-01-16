@@ -137,6 +137,85 @@ const fetchNotStartedTripDetailsBusiness = async (req) => {
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
+
+const fetchTripDetailsByTripIdBusiness = async (req) => {
+    const tripId = req.query.tripId;
+    let tripResponse;
+    tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(tripId);
+    if (tripResponse) {
+        console.log(tripResponse);
+    }
+};
+
+const editTripBusiness = async (req) => {
+    let request = {status: "NOT_STARTED", containerId: {$in: [req.body.containerId]}, tripId: req.body.tripId},
+        latArray = [], lngArray = [], restrictionRequestList = [], modifiedResponse, tripRequest = req.body;
+    let tripDetailsResponse = await tripAccessors.fetchTripDetailsAccessor(request);
+    if (arrayNotEmptyCheck(tripDetailsResponse) && tripDetailsResponse[0]['tripStatus'] === "NOT_STARTED") {
+        tripRequest = {
+            tripId: req.body.tripId,
+            containerId: parseInt(req.body.containerId, 10),
+            deviceId: parseInt(req.body.deviceId, 10),
+            startAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.startAddress : '',
+            endAddress: objectHasPropertyCheck(req.body, 'address') ? req.body.address.endAddress : '',
+            startDate: getDateTimeStamp(req.body.expectedStartDate, req.body.expectedStartTime),
+            endDate: getDateTimeStamp(req.body.expectedEndDate, req.body.expectedEndTime),
+            tripName: req.body.tripName,
+            startTime: req.body.expectedStartTime,
+            endTime: req.body.expectedEndTime,
+            tripDuration: getTripDuration({
+                startDate: req.body.expectedStartDate,
+                startTime: req.body.expectedStartTime,
+                endDate: req.body.expectedEndDate,
+                endTime: req.body.expectedEndTime
+            }),
+            tripStatus: 'NOT_STARTED',
+            notificationEmail1: req.body.notificationEmail1,
+            notificationEmail2: req.body.notificationEmail2,
+            notificationEmail3: req.body.notificationEmail3,
+            isTripActive: true
+        };
+        restrictionRequestList = objectHasPropertyCheck(req.body, 'address') && objectHasPropertyCheck(req.body.address, 'restriction') && arrayNotEmptyCheck(req.body.address['restriction']) ? req.body.address['restriction'] : [];
+        restrictionRequestList.forEach(item => {
+            latArray.push(item['lat']);
+            lngArray.push(item['lng']);
+        });
+        tripRequest = {
+            ...tripRequest,
+            restrictions: restrictionRequestList,
+            latArray: latArray,
+            lngArray: lngArray,
+            createdDate: new Date()
+        };
+        tripAccessors.updateTripStatusAccessor(tripRequest);
+        modifiedResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
+    } else {
+        modifiedResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_ERROR, 'EN_US', []);
+    }
+    return modifiedResponse;
+};
+const getTripDuration = (dateTime, timeFlag) => {
+    let startTime = dateTime.startTime, endTime = dateTime.endTime, startDate = new Date(dateTime.startDate),
+        endDate = new Date(dateTime.endDate);
+    if (timeFlag) {
+        startTime = timeHoursToMillisecondConverter(startTime);
+        endTime = timeHoursToMillisecondConverter(endTime);
+        startDate.setTime(startTime);
+        endDate.setTime(endTime);
+    }
+    return Math.abs(startDate.getTime() - endDate.getTime());
+};
+
+const getDateTimeStamp = (date, time) => {
+    let timeInMilliSeconds = timeHoursToMillisecondConverter(time), actualDate = new Date(date);
+    actualDate.setTime(timeInMilliSeconds);
+    return actualDate;
+};
+const timeHoursToMillisecondConverter = (time) => {
+    let splitTime = time.split(':');
+    return ((splitTime[0] * (60000 * 60)) + (splitTime[1] * 60000));
+};
+
 module.exports = {
     fetchTripDetailsBusiness,
     startTripBusiness,
@@ -144,6 +223,7 @@ module.exports = {
     fetchCompletedTripDetailsBusiness,
     fetchCompleteDeviceDetailsByTripIdBusiness,
     endTripBusiness,
-    // getTripDetailsByTripIdBusiness,
+    editTripBusiness,
+    fetchTripDetailsByTripIdBusiness,
     tripStatusAggregatorBusiness
 };
