@@ -516,8 +516,9 @@ const getTripDuration = (dateTime, timeFlag) => {
     return Math.abs(startDate.getTime() - endDate.getTime());
 };
 
-const getDateTimeStamp = (date, time) => {
-    let timeInMilliSeconds = timeHoursToMillisecondConverter(time), actualDate = new Date(date);
+const getDateTimeStamp = (dateObj, time) => {
+    let timeInMilliSeconds = timeHoursToMillisecondConverter(time),
+        actualDate = dateObj ? new Date(dateObj.year, dateObj.month, dateObj.date) : new Date();
     actualDate.setTime(timeInMilliSeconds);
     console.log('actual time');
     console.log(actualDate);
