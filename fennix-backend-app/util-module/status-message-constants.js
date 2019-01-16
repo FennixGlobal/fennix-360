@@ -27,6 +27,13 @@ const statusCodes = {
             espLA: 'container edited successfully'
         }
     },
+    900:{
+        devMsg: 'delink of ELock failed', userMsg: {
+            EN_US: 'delink of ELock failed',
+            espMX: 'container edited successfully',
+            espLA: 'container edited successfully'
+        }
+    },
     223: {
         devMsg: 'company edit failed', userMsg: {
             EN_US: 'company edit failed',

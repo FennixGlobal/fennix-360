@@ -399,7 +399,7 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
 };
 
 const unlinkDeviceForContainerBusiness = async (req) => {
-    let request = parseInt(req.query.tripId), tripResponse,
+    let request = parseInt(req.query.tripId), tripResponse,finalResponse,
         containerRequest = {containerId: 0, deviceId: null};
     //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection=
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(request);
@@ -408,6 +408,9 @@ const unlinkDeviceForContainerBusiness = async (req) => {
         await deviceAccessor.unlinkDeviceForContainerAccessor(containerRequest.containerId);
         await containerAccessor.updateContainerAccessor(containerRequest);
         await deviceAccessor.unlinkLocationMasterForContainerAccessor(containerRequest.containerId);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_DELINK_ELOCK_FAILED, 'EN_US', []);
     }
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };

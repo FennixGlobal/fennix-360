@@ -21,8 +21,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="110" column="46" selection-start-line="110" selection-start-column="46" selection-end-line="110" selection-end-column="46" />
+            <state relative-caret-position="173">
+              <caret line="110" column="49" selection-start-line="110" selection-start-column="49" selection-end-line="110" selection-end-column="49" />
             </state>
           </provider>
         </entry>
@@ -30,7 +30,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
+            <state relative-caret-position="127">
               <caret line="480" column="6" selection-start-line="480" selection-start-column="6" selection-end-line="480" selection-end-column="6" />
             </state>
           </provider>
@@ -102,8 +102,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="405" column="69" selection-start-line="405" selection-start-column="39" selection-end-line="405" selection-end-column="69" />
+            <state relative-caret-position="299">
+              <caret line="412" column="24" selection-start-line="412" selection-start-column="24" selection-end-line="412" selection-end-column="24" />
             </state>
           </provider>
         </entry>
@@ -119,8 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>objectHasPropertyCheck</find>
-      <find>fennixR</find>
       <find>statusCodeConstants</find>
       <find>604</find>
       <find>objecthas</find>
@@ -147,8 +145,10 @@
       <find>getT</find>
       <find>createTrip</find>
       <find>unl</find>
-      <find>mapHi</find>
       <find>set</find>
+      <find>getTripDetailsByTripIdAccessor</find>
+      <find>trip</find>
+      <find>mapHi</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -483,12 +483,12 @@
       <workItem from="1545738741945" duration="1873000" />
       <workItem from="1545851742679" duration="1235000" />
       <workItem from="1546634203635" duration="50381000" />
-      <workItem from="1547055457019" duration="102946000" />
+      <workItem from="1547055457019" duration="103467000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1641757000" />
+    <option name="totallyTimeSpent" value="1642278000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -501,6 +501,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" weight="0.24322538" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1286,13 +1287,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="69">
-          <caret line="463" column="42" lean-forward="true" selection-start-line="463" selection-start-column="42" selection-end-line="463" selection-end-column="42" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="117">
@@ -1300,24 +1294,31 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="110" column="46" selection-start-line="110" selection-start-column="46" selection-end-line="110" selection-end-column="46" />
+        <state relative-caret-position="127">
+          <caret line="480" column="6" selection-start-line="480" selection-start-column="6" selection-end-line="480" selection-end-column="6" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="480" column="6" selection-start-line="480" selection-start-column="6" selection-end-line="480" selection-end-column="6" />
+        <state relative-caret-position="173">
+          <caret line="110" column="49" selection-start-line="110" selection-start-column="49" selection-end-line="110" selection-end-column="49" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="69">
+          <caret line="463" column="42" lean-forward="true" selection-start-line="463" selection-start-column="42" selection-end-line="463" selection-end-column="42" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="405" column="69" selection-start-line="405" selection-start-column="39" selection-end-line="405" selection-end-column="69" />
+        <state relative-caret-position="299">
+          <caret line="412" column="24" selection-start-line="412" selection-start-column="24" selection-end-line="412" selection-end-column="24" />
         </state>
       </provider>
     </entry>
