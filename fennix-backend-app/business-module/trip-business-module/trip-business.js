@@ -81,7 +81,9 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
         });
+        console.log(mongoRequest);
         response = await tripAccessors.fetchTripDetailsAccessor(mongoRequest);
+        console.log(response);
         if (arrayNotEmptyCheck(response)) {
             let formattedArray = [];
             response.forEach((item) => {
@@ -139,7 +141,7 @@ const fetchNotStartedTripDetailsBusiness = async (req) => {
 };
 
 const fetchTripDetailsByTripIdBusiness = async (req) => {
-    const tripId = parseInt(req.query.tripId,10);
+    const tripId = parseInt(req.query.tripId, 10);
     let tripResponse;
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(tripId);
     if (tripResponse) {
