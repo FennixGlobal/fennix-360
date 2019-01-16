@@ -401,13 +401,14 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
 const unlinkDeviceForContainerBusiness = async (req) => {
     let request = parseInt(req.query.tripId), tripResponse,
         containerRequest = {containerId: 0, deviceId: null};
-    // req.query.containerId
     //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection=
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(request);
-    console.log(tripResponse);
-    // await deviceAccessor.unlinkDeviceForContainerAccessor(request);
-    // await containerAccessor.updateContainerAccessor(containerRequest);
-    // await deviceAccessor.unlinkLocationMasterForContainerAccessor(request);
+    if (arrayNotEmptyCheck(tripResponse)) {
+        containerRequest.containerId = tripResponse[0]['containerId'];
+        await deviceAccessor.unlinkDeviceForContainerAccessor(containerRequest.containerId);
+        await containerAccessor.updateContainerAccessor(containerRequest);
+        await deviceAccessor.unlinkLocationMasterForContainerAccessor(containerRequest.containerId);
+    }
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
 /**
