@@ -403,8 +403,6 @@ const unlinkDeviceForContainerBusiness = async (req) => {
         containerRequest = {containerId: 0, deviceId: null};
     //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection=
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(request);
-    console.log(tripResponse);
-    console.log(tripResponse[0]['containerId']);
     if (tripResponse.length > 0) {
         containerRequest.containerId = parseInt(tripResponse[0]['containerId'], 10);
         await deviceAccessor.unlinkDeviceForContainerAccessor(containerRequest.containerId);
