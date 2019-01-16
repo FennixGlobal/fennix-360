@@ -343,7 +343,9 @@ const containerMapDataListBusiness = async (req) => {
                 let noOfViolations = 0;
                 deviceDetails[item.containerId] = [];
                 const GPS = {A: 'Valid', V: 'Invalid'};
-                let differenceTime = Math.floor(new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime() / 1000 / 60);
+                let differenceTime = Math.floor((new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime()) / 1000 / 60);
+                console.log('time difference');
+                console.log(differenceTime);
                 const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
                 if (batteryPercentage['deviceStatus'] === 'violation') {
                     noOfViolations += 1;
