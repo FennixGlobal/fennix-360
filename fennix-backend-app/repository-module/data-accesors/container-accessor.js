@@ -278,6 +278,7 @@ const getContainerIdListAccessor = async (req) => {
     console.log(request);
     console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
+    console.log(returnObj);
     return returnObj;
 };
 
