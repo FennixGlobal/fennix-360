@@ -21,6 +21,9 @@ const dbTableColMap = {
         gender: 'gender',
         image: 'image',
         companyId: 'company_id',
+        created_date:'created_date',
+        updated_date:'updated_date',
+        first_time_login:'first_time_login',
         role: 'user_role',
         isActive:'isactive',
         userId: 'owner_user_id'

@@ -259,6 +259,8 @@ const assignContainerBusiness = async (req) => {
         deviceId: parseInt(req.body.deviceId, 10)
     };
     await deviceAccessors.updateDeviceWithContainerIdAccessor(request);
+    console.log('trip Request');
+    console.log(req.body);
     tripRequest = {
         tripId: elockTripPrimaryId,
         containerId: parseInt(req.body.containerId, 10),
@@ -517,6 +519,8 @@ const getTripDuration = (dateTime, timeFlag) => {
 const getDateTimeStamp = (date, time) => {
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time), actualDate = new Date(date);
     actualDate.setTime(timeInMilliSeconds);
+    console.log('actual time');
+    console.log(actualDate);
     return actualDate;
 };
 const timeHoursToMillisecondConverter = (time) => {
