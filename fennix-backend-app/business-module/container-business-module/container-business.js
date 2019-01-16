@@ -464,7 +464,7 @@ const getContainerMapHistoryBusiness = async (req) => {
     let startAddress = null, endAddress = null, request, response,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence = null, tripResponse, historyDetails;
 
-        // toDate = new Date(), fromDate = new Date(),
+    // toDate = new Date(), fromDate = new Date(),
     // let tripLimit = notNullCheck(req.query.limit) ? req.query.limit : 5;
     // let tripRequest = {
     //     containerId: parseInt(req.query.containerId),
@@ -534,7 +534,7 @@ const getTripDuration = (dateTime, timeFlag) => {
 
 const getDateTimeStamp = (dateObj, time) => {
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time),
-        actualDate = dateObj ? new Date(dateObj.year, dateObj.month, dateObj.date) : new Date();
+        actualDate = dateObj ? new Date(parseInt(`${dateObj.year}`), parseInt(`${dateObj.month}`) - 1, parseInt(`${dateObj.date}`)) : new Date();
     actualDate.setTime(timeInMilliSeconds);
     console.log('actual time');
     console.log(actualDate);
