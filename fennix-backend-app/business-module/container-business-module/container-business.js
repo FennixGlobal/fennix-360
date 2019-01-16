@@ -273,10 +273,8 @@ const assignContainerBusiness = async (req) => {
         startTime: req.body.expectedStartTime,
         endTime: req.body.expectedEndTime,
         tripDuration: getTripDuration({
-            startDate: req.body.expectedStartDate,
-            startTime: req.body.expectedStartTime,
-            endDate: req.body.expectedEndDate,
-            endTime: req.body.expectedEndTime
+            startDate: getDateTimeStamp(req.body.expectedStartDate, req.body.expectedStartTime),
+            endDate: getDateTimeStamp(req.body.expectedEndDate, req.body.expectedEndTime),
         }),
         tripStatus: 'NOT_STARTED',
         notificationEmail1: req.body.notificationEmail1,
@@ -517,19 +515,20 @@ const getContainerMapHistoryBusiness = async (req) => {
     return finalResponse;
 };
 const getTripDuration = (dateTime, timeFlag) => {
-    let startTime = dateTime.startTime, endTime = dateTime.endTime, startDate = new Date(dateTime.startDate),
-        endDate = new Date(dateTime.endDate);
-    console.log(startDate);
-    console.log('duration');
-    console.log(endDate);
-    if (timeFlag) {
-        startTime = timeHoursToMillisecondConverter(startTime);
-        endTime = timeHoursToMillisecondConverter(endTime);
-        startDate.setTime(startTime);
-        endDate.setTime(endTime);
-    }
-    console.log(startDate.getTime() - endDate.getTime());
-    return Math.abs(startDate.getTime() - endDate.getTime());
+    // let startTime = dateTime.startTime, endTime = dateTime.endTime, startDate = new Date(dateTime.startDate),
+    //     endDate = new Date(dateTime.endDate);
+    // console.log(startDate);
+    // console.log('duration');
+    // console.log(endDate);
+    // if (timeFlag) {
+    //     startTime = timeHoursToMillisecondConverter(startTime);
+    //     endTime = timeHoursToMillisecondConverter(endTime);
+    //     startDate.setTime(startTime);
+    //     endDate.setTime(endTime);
+    // }
+    // console.log(startDate.getTime() - endDate.getTime());
+    console.log(Math.abs(dateTime.startDate.getTime() - dateTime.endDate.getTime()));
+    return Math.abs(dateTime.startDate.getTime() - dateTime.endDate.getTime());
 };
 
 const getDateTimeStamp = (dateObj, time) => {
