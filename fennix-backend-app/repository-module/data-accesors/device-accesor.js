@@ -108,6 +108,7 @@ const unlinkLocationMasterForBeneficiaryAccessor = async (req) => {
 
 const unlinkDeviceForContainerAccessor = async (req) => {
     let returnObj;
+    console.log(req);
     returnObj = await deviceQueries.unlinkDeviceForContainerQuery(req);
     return returnObj;
 };

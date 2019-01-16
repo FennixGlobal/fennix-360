@@ -9,7 +9,7 @@ const {getDeviceIMEIByContainerIDQuery} = require('../queries/device-query');
 const addContainerDetailsAccessor = async (req) => {
     let returnObj, finalResponse;
     finalResponse = await insertQueryCreator(req, TABLE_CONTAINER, containerQueries.addContainerDetailsQuery);
-    console.log(finalResponse.modifiedInsertQuery);
+    // console.log(finalResponse.modifiedInsertQuery);
     returnObj = await connectionCheckAndQueryExec(finalResponse.valuesArray, finalResponse.modifiedInsertQuery);
     return returnObj;
 };
@@ -241,10 +241,10 @@ const listContainersAccessor = async (req) => {
     } else {
         request = [req.languageId, ...req.userIdList];
     }
-    console.log(modifiedQuery);
+    // console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10), TABLE_CONTAINER)}`;
-    console.log(finalQuery);
-    console.log(req.userIdList);
+    // console.log(finalQuery);
+    // console.log(req.userIdList);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };

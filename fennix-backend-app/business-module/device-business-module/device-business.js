@@ -64,18 +64,18 @@ const listElockDevicesBusiness = async (req) => {
         containerIdNameMap = {}, devicesResponse, containerNameResponse, containerIds = [], totalNoOfRecords,
         modifiedResponse = {gridData: []}, finalResponse, request = {};
     userIdList = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    console.log(userIdList);
+    // console.log(userIdList);
     centerIdResponse = await getCenterIdsForLoggedInUserAndSubUsersAccessor(userIdList);
-    console.log(centerIdResponse);
+    // console.log(centerIdResponse);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
             centerIdsReq.push(item['center_id']);
             centerIdNameMap[item['center_id']] = item['center_name'];
         });
-        console.log(centerIdsReq);
+        // console.log(centerIdsReq);
         request = {centerIds: centerIdsReq, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
         totalNoOfRecords = await deviceAccessor.getTotalNoOfElockDevicesAccessor(centerIdsReq);
-        console.log(totalNoOfRecords);
+        // console.log(totalNoOfRecords);
         devicesResponse = await deviceAccessor.listElockDevicesAccessor(request);
     }
 
@@ -89,7 +89,7 @@ const listElockDevicesBusiness = async (req) => {
             containerIdList: containerIds,
             languageId: req.query.languageId
         });
-        console.log(containerNameResponse);
+        // console.log(containerNameResponse);
         if (objectHasPropertyCheck(containerNameResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerNameResponse.rows)) {
             containerNameResponse.rows.forEach((item) => {
                 let obj = {
@@ -399,12 +399,12 @@ const listUnAssignedDevicesForContainerBusiness = async () => {
 };
 
 const unlinkDeviceForContainerBusiness = async (req) => {
-    let request = parseInt(req.query.tripId), tripResponse,finalResponse,
+    let request = parseInt(req.query.tripId), tripResponse, finalResponse,
         containerRequest = {containerId: 0, deviceId: null};
     //unlinking the device for container in devices collection, beneficiaries table & locationAttributesMaster collection=
     tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(request);
     if (arrayNotEmptyCheck(tripResponse)) {
-        containerRequest.containerId = tripResponse[0]['containerId'];
+        containerRequest.containerId = parseInt(tripResponse[0]['containerId'], 10);
         await deviceAccessor.unlinkDeviceForContainerAccessor(containerRequest.containerId);
         await containerAccessor.updateContainerAccessor(containerRequest);
         await deviceAccessor.unlinkLocationMasterForContainerAccessor(containerRequest.containerId);

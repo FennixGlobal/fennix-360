@@ -84,7 +84,7 @@ const updateQueryCreator = (table, fields, whereCondition) => {
     responseObj = {
         presentFields, query
     };
-    console.log(responseObj);
+    // console.log(responseObj);
     return responseObj;
 };
 

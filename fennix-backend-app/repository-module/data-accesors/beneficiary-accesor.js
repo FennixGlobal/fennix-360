@@ -101,9 +101,9 @@ const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) =>
         }
     }
     modifiedQuery = requestInModifier(requestList, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
-    console.log(modifiedQuery);
+    // console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery}`;
-    console.log(finalQuery);
+    // console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(finalRequest, finalQuery);
     return returnObj;
 };
@@ -130,8 +130,8 @@ const getBeneficiaryListByOwnerId = async (req) => {
         extraQuery = `and isactive = true`;
     }
     modifiedQuery = `${modifiedQuery}${extraQuery} ${sortWithPaginationQueryCreator('beneficiaryid', 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10),TABLE_BENEFICIARIES)}`;
-    console.log(modifiedQuery);
-    console.log(request);
+    // console.log(modifiedQuery);
+    // console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, modifiedQuery);
     return returnObj;
 };
