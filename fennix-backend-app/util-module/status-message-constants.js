@@ -27,13 +27,6 @@ const statusCodes = {
             espLA: 'container edited successfully'
         }
     },
-    900:{
-        devMsg: 'delink of ELock failed', userMsg: {
-            EN_US: 'delink of ELock failed',
-            espMX: 'container edited successfully',
-            espLA: 'container edited successfully'
-        }
-    },
     223: {
         devMsg: 'company edit failed', userMsg: {
             EN_US: 'company edit failed',
@@ -265,6 +258,13 @@ const statusCodes = {
             EN_US: 'no location exists for given id',
             espMX: 'no location exists for given id',
             espLA: 'no location exists for given id'
+        }
+    },
+    910:{
+        devMsg: 'delink of ELock failed', userMsg: {
+            EN_US: 'delink of ELock failed',
+            espMX: 'container edited successfully',
+            espLA: 'container edited successfully'
         }
     }
 };

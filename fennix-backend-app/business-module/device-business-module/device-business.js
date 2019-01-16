@@ -412,7 +412,7 @@ const unlinkDeviceForContainerBusiness = async (req) => {
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_DELINK_ELOCK_FAILED, 'EN_US', []);
     }
-    return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
+    return finalResponse;
 };
 /**
  * @description Checking if the device is present by checking if the IMEI is Uniques as IMEI must be unique for a device

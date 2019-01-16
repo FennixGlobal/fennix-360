@@ -169,8 +169,8 @@ const notificationEmailBusiness = async (emailId, notificationType,containerDeta
 
     let subject = notificationModifier(notificationType);
     let body;
-    console.log('container Details');
-    console.log(containerDetails);
+    // console.log('container Details');
+    // console.log(containerDetails);
     body = roleMailBody[notificationType];
     const transporter = nodeMailer.createTransport({
         port: 465,
