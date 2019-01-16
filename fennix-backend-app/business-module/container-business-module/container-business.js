@@ -538,6 +538,7 @@ const getDateTimeStamp = (dateObj, time) => {
         actualDate = dateObj ? new Date(parseInt(`${dateObj.year}`), parseInt(`${dateObj.month}`) - 1, parseInt(`${dateObj.date}`)) : new Date();
     console.log('actual date');
     console.log(actualDate);
+    console.log(timeInMilliSeconds);
     actualDate.setTime(timeInMilliSeconds);
     console.log('actual time');
     console.log(actualDate);
@@ -545,7 +546,7 @@ const getDateTimeStamp = (dateObj, time) => {
 };
 const timeHoursToMillisecondConverter = (time) => {
     let splitTime = time.split(':');
-    return ((splitTime[0] * (60000 * 60)) + (splitTime[1] * 60000));
+    return ((parseInt(splitTime[0]) * (60000 * 60)) + (parseInt(splitTime[1]) * 60000));
 };
 const containerMapDataListWithFiltersBusiness = async (req) => {
     let request = {
