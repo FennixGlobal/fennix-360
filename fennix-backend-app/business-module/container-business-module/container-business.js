@@ -536,6 +536,8 @@ const getDateTimeStamp = (dateObj, time) => {
     console.log(dateObj);
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time),
         actualDate = dateObj ? new Date(parseInt(`${dateObj.year}`), parseInt(`${dateObj.month}`) - 1, parseInt(`${dateObj.date}`)) : new Date();
+    console.log('actual date');
+    console.log(actualDate);
     actualDate.setTime(timeInMilliSeconds);
     console.log('actual time');
     console.log(actualDate);
