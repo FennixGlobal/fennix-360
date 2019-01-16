@@ -344,8 +344,8 @@ const containerMapDataListBusiness = async (req) => {
                 deviceDetails[item.containerId] = [];
                 const GPS = {A: 'Valid', V: 'Invalid'};
                 let differenceTime = Math.floor((new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime()) / 1000 / 60);
-                console.log('time difference');
-                console.log(differenceTime);
+                // console.log('time difference');
+                // console.log(differenceTime);
                 const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
                 if (batteryPercentage['deviceStatus'] === 'violation') {
                     noOfViolations += 1;
@@ -433,7 +433,7 @@ const unlockElockBusiness = async (req) => {
     const deviceIMEIId = await containerAccessors.getDeviceIMEIByContainerIdAccessor(containerId);
     console.log(deviceIMEIId);
     // if (objectHasPropertyCheck(activePasswordResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(activePasswordResponse.rows)) {
-    // containerAccessors.setContainerLockStatusAccessor([containerId, false]);
+    await containerAccessors.setContainerLockStatusAccessor([containerId, false]);
     // activePasswordResponse.rows[0]['active_password']
 
     const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId[0]['imei']);
