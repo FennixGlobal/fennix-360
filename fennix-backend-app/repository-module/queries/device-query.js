@@ -101,12 +101,51 @@ const getBeneficiaryIdByImeiQuery = (query) => {
     return deviceAggregator.find({imei: query, active: true}, {"_id": 1, "beneficiaryId": 1});
 };
 
+// const getContainerIdByImeiQuery = (req) => {
+//     return deviceAggregator.aggregate([
+//         {$match:{
+//                 $and: [
+//                     {
+//                         imei: req
+//                     },
+//                     {
+//                         active: true
+//                     },
+//                     {
+//                         containerId: {
+//                             $exists: true
+//                         }
+//                     },
+//                     {
+//                         $or: [
+//                             {
+//                                 beneficiaryId: null
+//                             },
+//                             {
+//                                 beneficiaryId: {
+//                                     $exists: false
+//                                 }
+//                             }]
+//                     }
+//                 ]
+//             }},
+//         {
+//             $lookup: {
+//                 from: "elockTripData",
+//                 localField: "_id",
+//                 foreignField: "deviceId",
+//                 as: "trips"
+//             }
+//         },
+//         {$unwind: "$trips"},{$match: {"trips.tripStatus":'IN_PROGRESS'}}]);
+// };
 const getContainerIdByImeiQuery = (req) => {
     return deviceAggregator.aggregate([
-        {$match:{
+        {
+            $match: {
                 $and: [
                     {
-                        imei: req
+                        imei: req.deviceIMEIId
                     },
                     {
                         active: true
@@ -128,7 +167,8 @@ const getContainerIdByImeiQuery = (req) => {
                             }]
                     }
                 ]
-            }},
+            }
+        },
         {
             $lookup: {
                 from: "elockTripData",
@@ -137,15 +177,22 @@ const getContainerIdByImeiQuery = (req) => {
                 as: "trips"
             }
         },
-        {$unwind: "$trips"},{$match: {"trips.tripStatus":'IN_PROGRESS'}}]);
+        {$unwind: "$trips"},
+        {
+            $match: {
+                $or: [{$and: [{"trips.tripActualStartTime": {$lte: new Date(req.deviceUpdatedDate)}}, {"trips.tripStatus": "IN_PROGRESS"}]},
+                    {$and: [{"trips.tripActualStartTime": {$lte: new Date(req.deviceUpdatedDate)}}, {"trips.tripActualEndTime": {$gte: new Date(req.deviceUpdatedDate)}}, {"trips.tripStatus": "COMPLETED"}]}]
+            }
+        }]);
+    //TODO - Abhay - replace this
+    // deviceTripDelinkDate -- use this instead of actualEndDate
 };
-
 const listDevicesQuery = (req) => {
     return deviceAggregator.aggregate([
         {
             $match: {
                 "centerId": {$in: req.centerIds},
-                "beneficiaryId":{$exists:true,$ne: null}
+                "beneficiaryId": {$exists: true, $ne: null}
             }
         },
         {$sort: {"createdDate": -1}},
@@ -215,7 +262,7 @@ const unlinkDeviceForBeneficiaryQuery = async (req) => {
 };
 
 const getTotalNoOfDevicesQuery = (query) => {
-    return deviceAggregator.count({centerId: {$in: query},beneficiaryId:{$exists:true,$ne: null}});
+    return deviceAggregator.count({centerId: {$in: query}, beneficiaryId: {$exists: true, $ne: null}});
 };
 
 const updateDeviceAttributeQuery = (req) => {
@@ -636,7 +683,7 @@ const listElockDevicesQuery = (req) => {
         {
             $match: {
                 "centerId": {$in: req.centerIds},
-                "containerId":{$exists:true,$ne: null},
+                "containerId": {$exists: true, $ne: null},
                 "active": true
             }
         },
@@ -678,7 +725,7 @@ const listElockDevicesQuery = (req) => {
 };
 
 const getTotalNoOfElockDevicesQuery = (query) => {
-    return deviceAggregator.count({centerId: {$in: query},containerId:{$exists:true,$ne: null}});
+    return deviceAggregator.count({centerId: {$in: query}, containerId: {$exists: true, $ne: null}});
 };
 
 module.exports = {

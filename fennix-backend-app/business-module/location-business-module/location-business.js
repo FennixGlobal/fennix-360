@@ -195,17 +195,17 @@ const newJob = new cronJob('* 2 * * *', async () => {
 });
 
 const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, socketAddress) => {
-    let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, deviceStatus,
+    let deviceIMEIId, datalength, containerId, deviceId, deviceAlertInfo, deviceType, protocol, dataType,
         deviceUpdatedDate,
         returnString = '',
         currentSocketAddress = null,
         location = null, response = null,
         deviceAttributes = null;
     deviceAlertInfo = hexToBinary(data.slice(72, 76));
-    deviceIMEIId = data.slice(2, 12);//device Id
+    deviceIMEIId = parseInt(data.slice(2, 12), 10);//device Id
     protocol = data.slice(12, 14);// 17 being the protocol
     deviceType = data.slice(14, 15);// 1 being rechargeable
-    deviceStatus = data.slice(15, 16);// data type
+    dataType = data.slice(15, 16);// data type - 1-real time,2- alarm,3-history
     datalength = data.slice(16, 20);
     let processedLoc = {
         latitude: degreeConverter(data.slice(32, 40), hexToBinary(data.slice(49, 50))),
@@ -213,9 +213,12 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
     };
     if (processedLoc.longitude.loc !== 0 && processedLoc.latitude.loc !== 0) {
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
-        const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
+        const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor({
+            deviceIMEIId,
+            deviceUpdatedDate
+        });
         console.log('device Updated date:', deviceUpdatedDate);
-        if (notNullCheck(containerResponse) && notNullCheck(containerResponse.trips) && (deviceUpdatedDate.getTime() > containerResponse.trips.tripActualStartTime.getTime())) {
+        if (notNullCheck(containerResponse) && notNullCheck(containerResponse.trips)) {
             await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
             currentSocketAddress = socketAddress;
             let latArray = containerResponse['trips']['latArray'];

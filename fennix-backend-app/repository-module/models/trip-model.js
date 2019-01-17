@@ -45,7 +45,11 @@ const elockTripDataSchema = new Schema({
     ],
     latArray: [SchemaType.Double],
     lngArray: [SchemaType.Double],
-    createdDate: Date
+    createdDate: Date,
+    createdBy: Number,
+    updatedDate: Date,
+    updatedBy: Number,
+    deviceTripDelinkDate: Date
 });
 const elockTripCounterSchema = new Schema({
     _id: Schema.Types.ObjectId,
