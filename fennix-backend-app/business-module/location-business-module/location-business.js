@@ -214,35 +214,30 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
     if (processedLoc.longitude.loc !== 0 && processedLoc.latitude.loc !== 0) {
         deviceUpdatedDate = new Date(parseInt(`20${data.slice(24, 26)}`, 10), (parseInt(data.slice(22, 24)) - 1), data.slice(20, 22), data.slice(26, 28), data.slice(28, 30), data.slice(30, 32));// date
         const containerResponse = await deviceAccessor.getContainerIdByImeiAccessor(parseInt(deviceIMEIId, 10));
-        if (arrayNotEmptyCheck(containerResponse)) {
-            // const eLockSessionData = await eLockSessionBusiness.getELockSessionBusiness(deviceIMEIId);
-            // console.log(eLockSessionData);
-            // console.log('device IMEI',deviceIMEIId);
-            // console.log('socketAddress',socketAddress);
-            // if (!eLockSessionData) {
+        console.log('device Updated date:', deviceUpdatedDate);
+        if (notNullCheck(containerResponse) && notNullCheck(containerResponse.trips) && (deviceUpdatedDate.getTime() > containerResponse.trips.tripActualStartTime.getTime())) {
             await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
             currentSocketAddress = socketAddress;
-            // }
-            let latArray = containerResponse[0]['trips']['latArray'];
-            let lngArray = containerResponse[0]['trips']['lngArray'];
+            let latArray = containerResponse['trips']['latArray'];
+            let lngArray = containerResponse['trips']['lngArray'];
             latArray = latArray ? latArray.sort() : [];
             lngArray = lngArray ? lngArray.sort() : [];
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 setTimeout(() => {
-                    notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail1'], 'geo_fence',containerResponse[0]);
+                    notificationEmailBusiness(containerResponse['trips']['notificationEmail1'], 'geo_fence', containerResponse[0]);
                     setTimeout(() => {
-                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail2'], 'geo_fence',containerResponse[0]);
+                        notificationEmailBusiness(containerResponse['trips']['notificationEmail2'], 'geo_fence', containerResponse[0]);
                     }, 400);
                     setTimeout(() => {
-                        notificationEmailBusiness(containerResponse[0]['trips']['notificationEmail3'], 'geo_fence',containerResponse[0]);
+                        notificationEmailBusiness(containerResponse['trips']['notificationEmail3'], 'geo_fence', containerResponse[0]);
                     }, 800);
                 }, 20000);
             }
-            containerId = containerResponse[0]['containerId'];
-            deviceId = containerResponse[0]['_id'];
+            containerId = containerResponse['containerId'];
+            deviceId = containerResponse['_id'];
             location = {
                 containerId: containerId,
-                tripId: containerResponse[0]['trips']['tripId'],
+                tripId: containerResponse['trips']['tripId'],
                 deviceId: deviceId,
                 // TODO add speed logic
                 // speed: data.slice(50, 52),
@@ -258,7 +253,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
                 deviceId: deviceId,
                 _id: elockDeviceAttributeId,
                 locationId: locationPrimaryId,
-                tripId: containerResponse[0]['trips']['tripId'],
+                tripId: containerResponse['trips']['tripId'],
                 gps: data.slice(49, 50),
                 speed: notNullCheck(data.slice(50, 52)) ? hexDecimalConverter(data.slice(50, 52)) * 1.85 : 0,// multiply by 1.85 to convert to km from sea mile
                 direction: notNullCheck(data.slice(52, 54)) ? hexDecimalConverter(data.slice(52, 54)) * 2 : 0,

@@ -137,7 +137,7 @@ const getContainerIdByImeiQuery = (req) => {
                 as: "trips"
             }
         },
-        {$unwind: "$trips"},{$match: {"trips.isTripActive":true}}]);
+        {$unwind: "$trips"},{$match: {"trips.tripStatus":'IN_PROGRESS'}}]);
 };
 
 const listDevicesQuery = (req) => {

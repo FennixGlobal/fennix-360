@@ -527,21 +527,20 @@ const getTripDuration = (dateTime, timeFlag) => {
     //     endDate.setTime(endTime);
     // }
     // console.log(startDate.getTime() - endDate.getTime());
-    console.log(Math.abs(dateTime.startDate.getTime() - dateTime.endDate.getTime()));
     return Math.abs(dateTime.startDate.getTime() - dateTime.endDate.getTime());
 };
 
 const getDateTimeStamp = (dateObj, time) => {
-    console.log(dateObj);
+    // console.log(dateObj);
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time),
         actualDate = dateObj ? new Date(parseInt(`${dateObj.year}`), parseInt(`${dateObj.month}`) - 1, parseInt(`${dateObj.date}`)) : new Date();
-    console.log('actual date');
-    console.log(actualDate);
-    console.log(timeInMilliSeconds);
+    // console.log('actual date');
+    // console.log(actualDate);
+    // console.log(timeInMilliSeconds);
     actualDate.setHours(timeInMilliSeconds.hours);
     actualDate.setMinutes(timeInMilliSeconds.minutes);
-    console.log('actual time');
-    console.log(actualDate);
+    // console.log('actual time');
+    // console.log(actualDate);
     return actualDate;
 };
 const timeHoursToMillisecondConverter = (time) => {
