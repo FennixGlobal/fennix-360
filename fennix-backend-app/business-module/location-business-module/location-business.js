@@ -219,6 +219,8 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
         });
         console.log('device Updated date:', deviceUpdatedDate);
         console.log(containerResponse);
+        console.log(containerResponse.trips);
+        console.log(containerResponse.trips.tripId);
         if (notNullCheck(containerResponse) && notNullCheck(containerResponse.trips) && notNullCheck(containerResponse.trips.tripId)) {
             await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
             currentSocketAddress = socketAddress;
@@ -226,6 +228,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
             let lngArray = containerResponse['trips']['lngArray'];
             latArray = latArray ? latArray.sort() : [];
             lngArray = lngArray ? lngArray.sort() : [];
+
             if (processedLoc.latitude.loc > latArray[latArray.length - 1] || processedLoc.latitude.loc < latArray[0] || processedLoc.longitude.loc > lngArray[latArray.length - 1] || processedLoc.longitude.loc < lngArray[0]) {
                 setTimeout(() => {
                     notificationEmailBusiness(containerResponse['trips']['notificationEmail1'], 'geo_fence', containerResponse[0]);
@@ -285,6 +288,7 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
             response['socketAddress'] = currentSocketAddress;
         }
     }
+    console.log(response);
     return response;
 };
 
@@ -346,8 +350,6 @@ const eLocksDataUpdateBusiness = async (eLockData) => {
             }
         });
         let finalLocationId, finalDeviceAttrId;
-        console.log(locationList.length);
-        console.log(deviceAttributesList.length);
         if (arrayNotEmptyCheck(locationList)) {
             finalLocationId = locationList[locationList.length - 1]['_id'];
             updateLoc = await containerAccessor.containerLocationUpdateAccessor(locationList);
