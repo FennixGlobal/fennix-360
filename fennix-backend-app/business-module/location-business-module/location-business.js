@@ -217,10 +217,6 @@ const dataSplitter = async (data, locationPrimaryId, elockDeviceAttributeId, soc
             deviceIMEIId,
             deviceUpdatedDate
         });
-        console.log('device Updated date:', deviceUpdatedDate);
-        console.log(containerResponse);
-        // console.log(containerResponse.trips);
-        // console.log(containerResponse.trips.tripId);
         if (notNullCheck(containerResponse) && notNullCheck(containerResponse[0].trips) && notNullCheck(containerResponse[0].trips.tripId)) {
             await eLockSessionBusiness.insertELockSessionBusiness(socketAddress, deviceIMEIId);
             currentSocketAddress = socketAddress;
