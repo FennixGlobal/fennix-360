@@ -75,6 +75,8 @@ const fetchCompleteDeviceDetailsByTripIdQuery = (tripId) => {
                 localField: '_id',
                 as: 'deviceAttributes'
             }
+        }, {
+            $sort: {deviceDate: -1}
         }
     ]);
 };
