@@ -243,8 +243,9 @@ const listContainersAccessor = async (req) => {
     }
     // console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery} ${sortWithPaginationQueryCreator(req.sortBy, 'desc', parseInt(req.skip, 10), parseInt(req.limit, 10), TABLE_CONTAINER)}`;
-    // console.log(finalQuery);
-    // console.log(req.userIdList);
+    console.log('final query');
+    console.log(finalQuery);
+    console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, finalQuery);
     return returnObj;
 };
