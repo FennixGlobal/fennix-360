@@ -110,15 +110,17 @@ const listContainerBusiness = async (req) => {
         };
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
     request.userIdList = [];
-    // console.log('user response');
-    // console.log(userResponse);
+    console.log('user response');
+    console.log(userResponse);
     if (objectHasPropertyCheck(userResponse, 'userDetails') && objectHasPropertyCheck(userResponse.userDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userResponse.userDetails.rows)) {
         request.companyId = userResponse.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT ? userResponse.userDetails.rows[0]['company_id'] : null;
         userResponse.userDetails.rows.forEach((item) => request.userIdList.push(item['user_id']));
         request.nativeUserRole = userResponse.nativeUserRole;
     }
     containerListResponse = await containerAccessors.listContainersAccessor(request);
+    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
+    console.log(totalNoOfRecords);
     finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach(item => {
