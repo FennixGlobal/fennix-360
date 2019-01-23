@@ -136,7 +136,7 @@ const getMapRouteGoogleDetailsBusiness = async (req) => {
     let returnResponse;
     const googleResponse = await axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`);
     console.log(googleResponse);
-    if (googleResponse && objectHasPropertyCheck(googleResponse, 'data') && objectHasPropertyCheck(googleResponse.data, 'snappedPoints'){
+    if (googleResponse && objectHasPropertyCheck(googleResponse, 'data') && objectHasPropertyCheck(googleResponse.data, 'snappedPoints')){
         console.log(googleResponse.data.snappedPoints);
         returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', googleResponse.data.snappedPoints);
     } else {
