@@ -134,8 +134,9 @@ const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
 };
 const getMapRouteGoogleDetailsBusiness = async (req) => {
     axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`).then((data) => {
-        console.log(data)
+        console.log(data.data);
     }).catch((error) => {
+        console.log('error occured');
         console.log(error);
     });
 };

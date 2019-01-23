@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -47,20 +45,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="245">
-              <caret line="43" column="38" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="38" />
+            <state relative-caret-position="127">
+              <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="135" column="90" selection-start-line="135" selection-start-column="90" selection-end-line="135" selection-end-column="90" />
+            <state relative-caret-position="173">
+              <caret line="138" column="37" selection-start-line="138" selection-start-column="37" selection-end-line="138" selection-end-column="37" />
             </state>
           </provider>
         </entry>
@@ -486,12 +484,12 @@
       <workItem from="1545851742679" duration="1235000" />
       <workItem from="1546634203635" duration="50381000" />
       <workItem from="1547055457019" duration="135642000" />
-      <workItem from="1548268366325" duration="1354000" />
+      <workItem from="1548268366325" duration="2149000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1675807000" />
+    <option name="totallyTimeSpent" value="1676602000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -518,7 +516,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" weight="0.5514706" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" visible="true" weight="0.5514706" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49966952" weight="0.48235294" />
       <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50363517" side_tool="true" weight="0.5065123" />
@@ -1311,17 +1309,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="135" column="90" selection-start-line="135" selection-start-column="90" selection-end-line="135" selection-end-column="90" />
+        <state relative-caret-position="127">
+          <caret line="45" column="43" selection-start-line="45" selection-start-column="43" selection-end-line="45" selection-end-column="43" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/trip-controller.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="245">
-          <caret line="43" column="38" selection-start-line="43" selection-start-column="12" selection-end-line="43" selection-end-column="38" />
+        <state relative-caret-position="173">
+          <caret line="138" column="37" selection-start-line="138" selection-start-column="37" selection-end-line="138" selection-end-column="37" />
         </state>
       </provider>
     </entry>
