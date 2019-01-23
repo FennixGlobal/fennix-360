@@ -126,18 +126,19 @@ const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
             let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['gps', 'direction', 'mileage', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', 'deviceAttributeId'], ['gps', 'direction', 'mileage', 'speed', 'gpsStatus', 'serverDate', 'batteryPercentage', 'deviceUpdatedDate', '_id']);
             modifiedResponse.gridData.push({...obj1, ...obj2});
         });
-        axios.get('https://roads.googleapis.com/v1/snapToRoads?path=-35.27801,149.12958|-35.28032,149.12907|-35.28099,149.12929|-35.28144,149.12984|-35.28194,149.13003|-35.28282,149.12956|-35.28302,149.12881|-35.28473,149.12836&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0').then((data) => {
-            console.log(data)
-        }).catch((error) => {
-            console.log(error);
-        });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
-
+const getMapRouteGoogleDetailsBusiness = async (req) => {
+    axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`).then((data) => {
+        console.log(data)
+    }).catch((error) => {
+        console.log(error);
+    });
+};
 // const getTripMapHistoryByTripIdBusiness
 const fetchNotStartedTripDetailsBusiness = async (req) => {
     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
@@ -235,5 +236,6 @@ module.exports = {
     endTripBusiness,
     editTripBusiness,
     fetchTripDetailsByTripIdBusiness,
-    tripStatusAggregatorBusiness
+    tripStatusAggregatorBusiness,
+    getMapRouteGoogleDetailsBusiness
 };

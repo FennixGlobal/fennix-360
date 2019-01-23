@@ -41,7 +41,13 @@ router.get('/getCompleteTripDetails', function (req, res) {
         res.send(response);
     })
 });
-
+router.get('/fetchGoogleMapCoordinates',function (req,res) {
+    let returnObj;
+    returnObj = tripBusiness.getMapRouteGoogleDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+})
 router.get('/endTrip', function (req, res) {
     let returnObj;
     returnObj = tripBusiness.endTripBusiness(req);
