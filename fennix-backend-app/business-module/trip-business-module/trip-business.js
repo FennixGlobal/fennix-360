@@ -133,12 +133,16 @@ const fetchCompleteDeviceDetailsByTripIdBusiness = async (req) => {
     return finalResponse;
 };
 const getMapRouteGoogleDetailsBusiness = async (req) => {
-    axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`).then((data) => {
-        console.log(data.data);
-    }).catch((error) => {
-        console.log('error occured');
-        console.log(error);
-    });
+    let returnResponse;
+    const googleResponse = await axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`);
+    console.log(googleResponse);
+    if (googleResponse && objectHasPropertyCheck(googleResponse, 'data') && objectHasPropertyCheck(googleResponse.data, 'snappedPoints'){
+        console.log(googleResponse.data.snappedPoints);
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', googleResponse.data.snappedPoints);
+    } else {
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_LOCATION_EXISTS_FOR_GIVEN_ID, 'EN_US', []);
+    }
+    return returnResponse;
 };
 // const getTripMapHistoryByTripIdBusiness
 const fetchNotStartedTripDetailsBusiness = async (req) => {
