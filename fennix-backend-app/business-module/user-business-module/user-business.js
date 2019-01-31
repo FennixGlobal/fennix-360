@@ -1,4 +1,4 @@
-const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
+const {notNullCheck, arrayNotEmptyCheck, objectHasPropertyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
 const {imageStorageBusiness, emailSendBusiness} = require('../common-business-module/common-business');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -162,6 +162,17 @@ const downloadUsersListBusiness = async (req) => {
     sheet.addRows(modifiedResponse);
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/users.xlsx');
 };
+const listUnassignedClientsBusiness = async () => {
+    let request = ['ROLE_CLIENT'], response, modifiedResponse = {gridData: []};
+    response = await userAccessors.listUnAssignedClientsAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = responseObjectCreator(item, ['userId', 'userName'], ['user_id', 'full_name']);
+            modifiedResponse.gridData.push(obj);
+        });
+    }
+    return modifiedResponse;
+};
 module.exports = {
     addUserBusiness,
     updateUserProfileBusiness,
@@ -169,6 +180,7 @@ module.exports = {
     fetchUserDetailsBusiness,
     downloadUsersListBusiness,
     updateUserBusiness,
+    listUnassignedClientsBusiness,
     deleteUserBusiness,
     listOperatorsBusiness
 };

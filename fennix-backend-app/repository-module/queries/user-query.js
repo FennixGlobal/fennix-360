@@ -50,8 +50,12 @@ const getUserIdsForCustomsQuery = 'select concat(first_name, \' \', last_name) a
     '    , user_id, gender, user_role \n' +
     '    from users u where u.isactive = true';
 
+//TODO: change below query to accept multiple roles
+const listUnassignedClientsQuery = 'select user_id, concat(first_name, \' \', last_name) as full_name from users where (company_id is null or company_id = 0) and user_role IN (select role_id from roles where role_name IN $1)';
+
 module.exports = {
     insertUserQuery,
+    listUnassignedClientsQuery,
     getUserIdsForGlobalAdminQuery,
     getUserListQuery,
     checkUserEmailQuery,

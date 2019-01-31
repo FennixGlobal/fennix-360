@@ -263,8 +263,13 @@ const getUserIdsForCustomsAccessor = async (req) => {
 //     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
 //     return returnObj;
 // };
-
+const listUnAssignedClientsAccessor = async (req) => {
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.listUnassignedClientsQuery);
+    return returnObj;
+};
 module.exports = {
+    listUnAssignedClientsAccessor,
     addUserAccessor,
     getUserNameFromUserIdAccessor,
     fetchUserProfileAccessor,

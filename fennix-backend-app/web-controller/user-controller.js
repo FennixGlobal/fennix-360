@@ -73,5 +73,11 @@ router.post(USER_CONTROLLER.USER_DELETE_USER, async (req, res) => {
         res.send(response);
     })
 });
-
+router.get(USER_CONTROLLER.USER_LIST_UNASSIGNED_CLIENTS, async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.listUnassignedClientsBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

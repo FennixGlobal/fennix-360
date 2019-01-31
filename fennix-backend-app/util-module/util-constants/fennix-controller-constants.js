@@ -7,7 +7,8 @@ const USER_CONTROLLER = {
     USER_GET_USER_DETAILS: '/getUserDetails',
     USER_ADD_USER: '/addUser',
     USER_DOWNLOAD_USER: '/downloadUsers',
-    USER_FETCH_USER_PROFILE: '/fetchProfile'
+    USER_FETCH_USER_PROFILE: '/fetchProfile',
+    USER_LIST_UNASSIGNED_CLIENTS:'/listUnassignedClients'
 };
 
 const SIMCARD_CONTROLLER = {
