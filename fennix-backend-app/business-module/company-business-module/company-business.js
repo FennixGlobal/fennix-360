@@ -4,7 +4,7 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
-const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, responseObjectCreator} = require('../../util-module/data-validators');
 
 const addCompanyBusiness = async (req) => {
     let request = req.body, response, routeResponse, finalResponse;
@@ -96,12 +96,7 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
     console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
-            let obj = {
-                companyId: item['company_id'],
-                companyName: item['company_name'],
-                companyType: item['company_type'],
-                customsId: item['customs_id']
-            };
+            let obj = responseObjectCreator(item, ['companyId', 'companyName', 'companyType', 'customsId', 'noOfRoutes', 'noOfClients'], ['company_id', 'company_name', 'company_type', 'customs_id', 'no_of_routes', 'no_of_clients']);
             modifiedResponse.data.push(obj);
         });
         modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);

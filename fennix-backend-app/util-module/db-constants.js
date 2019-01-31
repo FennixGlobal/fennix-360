@@ -44,7 +44,9 @@ const dbTableColMap = {
         createdBy: 'created_by',
         createdDate: 'created_date',
         updatedDate: 'updated_date',
-        updatedBy: 'updated_by'
+        updatedBy: 'updated_by',
+        noOfRoutes: 'no_of_routes',
+        noOfClients: 'no_of_clients'
     },
     beneficiaries: {
         firstName: 'firstname',
