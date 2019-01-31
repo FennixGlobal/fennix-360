@@ -7,16 +7,19 @@ const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-ac
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, responseObjectCreator} = require('../../util-module/data-validators');
 
 const addCompanyBusiness = async (req) => {
-    let request = req.body, response, routeResponse, finalResponse;
+    let request = req.body, response, routeResponse, finalResponse, noOfRouteRequest;
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
     response = await companyAccessors.addCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
+        console.log(response.rows);
         request.companyId = response.rows[0]['company_id'];
         routeResponse = await routeBusiness.insertCompanyRouteBusiness(request);
         if (notNullCheck(routeResponse)) {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
+            noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length};
+            await companyAccessors.editCompanyAccessor(noOfRouteRequest);
             console.log('added company route successfully');
         } else {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
