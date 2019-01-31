@@ -39,6 +39,16 @@ const getTotalRecordsForListUsersAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(userIdList, modifiedQuery);
     return returnObj;
 };
+const updateUserAccessor = async (req) => {
+    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
+    fields.sort();
+    fields.splice(fields.indexOf('userId'), 1);
+    updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
+    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
+    request.push(req.userId);
+    returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
+    return returnObj;
+};
 
 const addUserAccessor = async (req) => {
     let returnObj, finalResponse;
@@ -243,16 +253,16 @@ const getUserIdsForCustomsAccessor = async (req) => {
     return returnObj;
 };
 
-const updateUserAccessor = async (req) => {
-    let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req.body), request = [];
-    fields.sort();
-    fields.splice(fields.indexOf('userId'), 1);
-    updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
-    updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req.body[f]));
-    request.push(req.body.userId);
-    returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
-    return returnObj;
-};
+// const updateUserAccessor = async (req) => {
+//     let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req.body), request = [];
+//     fields.sort();
+//     fields.splice(fields.indexOf('userId'), 1);
+//     updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
+//     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req.body[f]));
+//     request.push(req.body.userId);
+//     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
+//     return returnObj;
+// };
 
 module.exports = {
     addUserAccessor,

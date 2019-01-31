@@ -51,16 +51,16 @@ const addContainerDetailsBusiness = async (req) => {
     }
     return fennixResponse(statusCodeConstants.STATUS_CONTAINER_ADDED_SUCCESS, 'EN_US', []);
 };
-const editContainerBusiness = async (req) => {
-    let response, finalResponse;
-    response = await containerAccessors.editContainerAccessor(req);
-    if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_CONTAINER_EDIT_SUCCESS, 'EN_US', 'Updated container data successfully');
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', '');
-    }
-    return finalResponse;
-};
+// const editContainerBusiness = async (req) => {
+//     let response, finalResponse;
+//     response = await containerAccessors.editContainerAccessor(req);
+//     if (notNullCheck(response) && response['rowCount'] != 0) {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_CONTAINER_EDIT_SUCCESS, 'EN_US', 'Updated container data successfully');
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', '');
+//     }
+//     return finalResponse;
+// };
 /*const listContainerBusiness = async (req) => {
     let returnObj, totalNoOfRecords, userResponse, finalResponse = {}, containerListResponse, containerIds = [],
         finalReturnObj = {}, request = {sortBy: req.query.sort, skip: req.query.skip, limit: req.query.limit};
@@ -152,9 +152,10 @@ const listContainerBusiness = async (req) => {
     }
     return returnObj;
 };
-const listUnassignedContainerBusiness = async () => {
+const listUnassignedContainerBusiness = async (req) => {
     let response, modifiedResponse = [], finalResponse;
-    response = await containerAccessors.listUnAssignedContainersAccessor([]);
+    let userIdList = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
+    response = await containerAccessors.listUnAssignedContainersAccessor(userIdList);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {
@@ -676,6 +677,17 @@ const containerMapDataListWithFiltersBusiness = async (req) => {
         returnObj = fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
     }
     return returnObj;
+};
+
+const editContainerBusiness = async (req) => {
+    let response, finalResponse;
+    response = await containerAccessors.updateContainerAccessor(req.body);
+    if (notNullCheck(response) && response['rowCount'] != 0) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_CONTAINER_EDIT_SUCCESS, 'EN_US', 'Updated container data successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', '');
+    }
+    return finalResponse;
 };
 module.exports = {
     addContainerDetailsBusiness,
