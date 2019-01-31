@@ -17,7 +17,7 @@ router.post('/editCompany', function (req, res) {
     })
 });
 
-router.get('/deleteCompany', function (req, res) {
+router.get('/deactivateCompany', function (req, res) {
     let returnObj;
     returnObj = companyBusiness.deleteCompanyBusiness(req);
     returnObj.then((response) => {
