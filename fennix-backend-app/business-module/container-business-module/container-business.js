@@ -151,7 +151,7 @@ const listContainerBusiness = async (req) => {
 const listUnassignedContainerBusiness = async (req) => {
     let response, modifiedResponse = [], finalResponse;
     let userIdList = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-    response = await containerAccessors.listUnAssignedContainersAccessor(userIdList);
+    response = await containerAccessors.listUnAssignedContainersAccessor([33]);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = {

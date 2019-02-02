@@ -64,6 +64,7 @@ const listUnAssignedContainersAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req, containerQueries.listUnassignedContainersQuery, false);
     console.log(modifiedQuery);
+    console.log(req);
     returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
     return returnObj;
 };
