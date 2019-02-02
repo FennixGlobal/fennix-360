@@ -27,8 +27,15 @@ const getRouteByCompanyIdAccessor = async(req)=>{
     let response;
     response = await routeQueries.getRouteByCompanyIdQuery(req);
     return response;
-}
+};
+
+const getPrimaryAddressByCompanyIdAccessor = async (req) => {
+    let response;
+    response = await routeQueries.getPrimaryAddressByCompanyIdQuery(req);
+    return response;
+};
 module.exports = {
+    getPrimaryAddressByCompanyIdAccessor,
     insertRouteAccessor,
     insertCompanyPrimaryAddressAccessor,
     editCompanyRoutesAccessor,

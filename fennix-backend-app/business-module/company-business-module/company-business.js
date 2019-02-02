@@ -132,24 +132,21 @@ const deleteCompanyBusiness = async (req) => {
 };
 
 const getCompanyDetailsBusiness = async (req) => {
-    let request = [req.query.companyId], response, modifiedResponse = [], finalResponse;
+    let request = [req.query.companyId], response, modifiedResponse, finalResponse, primaryAddressResponse, routeResponse, routeArray = [];
     response = await companyAccessors.getCompanyDetailsAccessor(request);
+    primaryAddressResponse = await routeBusiness.getPrimaryAddressByCompanyIdBusiness(parseInt(req.query.companyId));
+    routeResponse = await routeBusiness.getCommonRouteByCompanyIdBusiness(parseInt(req.query.companyId));
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        response.rows.forEach((item) => {
-            let obj = {
-                companyId: item['company_id'],
-                companyName: item['company_name'],
-                companyType: item['company_type'],
-                companyAddress: item['company_address'],
-                companyPhone: item['company_phone'],
-                companyEmail: item['company_email'],
-                companyState: item['company_state'],
-                companyCity: item['company_city'],
-                companyCountry: item['company_country'],
-                customsId: item['customs_id']
-            };
-            modifiedResponse.push(obj);
-        });
+        let companyObj = responseObjectCreator(response.rows[0], ['companyId', 'companyName', 'companyType', 'companyPhone', 'companyEmail', 'companyState', 'companyCity', 'companyCountry', 'documentId'],
+            ['company_id', 'company_name', 'company_type', 'company_phone', 'company_email', 'company_state', 'company_city', 'company_country', 'document_id']);
+        let addressObj = arrayNotEmptyCheck(primaryAddressResponse) ? responseObjectCreator(primaryAddressResponse[0], ['companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'], ['companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress']) : [];
+        if (arrayNotEmptyCheck(routeResponse)) {
+            routeResponse.forEach((route) => {
+                let routeObj = responseObjectCreator(route, ['routeId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps'], ['_id', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps']);
+                routeArray.push(routeObj);
+            });
+        }
+        modifiedResponse = {...companyObj, ...addressObj, ...routeArray};
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_COMPANY_FOR_ID, 'EN_US', []);

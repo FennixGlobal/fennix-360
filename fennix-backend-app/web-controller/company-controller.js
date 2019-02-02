@@ -55,5 +55,11 @@ router.get('/getCompanyDropdownList', function (req, res) {
         res.send(response);
     })
 });
-
+router.get('/getCompanyDetailsByCompId', function (req, res) {
+    let returnObj;
+    returnObj = companyBusiness.getCompanyDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
 module.exports = router;

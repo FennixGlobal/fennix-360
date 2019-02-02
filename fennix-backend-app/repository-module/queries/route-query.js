@@ -44,7 +44,16 @@ const insertCompanyPrimaryAddressQuery = (req) => {
 const getRouteByCompanyIdQuery = (req)=>{
     return CompanyRouteModel.find({companyId:req});
 };
+
+const getPrimaryAddressByCompanyIdQuery = (req) => {
+    return CompanyPrimaryAddressModel.find({
+        companyId: req,
+        isActive: true
+    });
+};
+
 module.exports = {
+    getPrimaryAddressByCompanyIdQuery,
     insertCompanyRoutesQuery,
     editCompanyRoutesQuery,
     getRouteByCompanyIdQuery,
