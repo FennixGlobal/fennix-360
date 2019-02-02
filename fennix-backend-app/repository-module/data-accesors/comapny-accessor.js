@@ -18,6 +18,7 @@ const editCompanyAccessor = async (req) => {
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
     request.push(req.companyId);
     console.log(updatedQueryCreatorResponse);
+    console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
