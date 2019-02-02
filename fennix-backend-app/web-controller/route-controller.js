@@ -10,4 +10,12 @@ router.get('/getCompanyRoutes', (req, res) => {
     })
 });
 
+router.get('/getRoutesByRouteId', (req, res) => {
+    let returnObj;
+    returnObj = routeBusiness.getRouteDetailsByRouteIdBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

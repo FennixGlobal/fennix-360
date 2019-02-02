@@ -51,8 +51,15 @@ const getPrimaryAddressByCompanyIdQuery = (req) => {
         isActive: true
     });
 };
+const getRouteByRouteIdQuery = (req) => {
+    return CompanyRouteModel.find({
+        _id: req,
+        isActive: true
+    });
+};
 
 module.exports = {
+    getRouteByRouteIdQuery,
     getPrimaryAddressByCompanyIdQuery,
     insertCompanyRoutesQuery,
     editCompanyRoutesQuery,

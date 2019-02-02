@@ -65,11 +65,22 @@ const getPrimaryAddressByCompanyIdBusiness = async (req) => {
     response = await routeAccessors.getPrimaryAddressByCompanyIdAccessor(req);
     return response;
 };
-
+const getRouteDetailsByRouteIdBusiness = async (req) => {
+    let response, finalResponse;
+    response = await routeAccessors.getRouteByRouteIdAccessor(parseInt(req.query.routeId));
+    if (arrayNotEmptyCheck(response)) {
+        let obj = responseObjectCreator(response[0], ['companyId', 'routeId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps'], ['companyId', '_id', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps']);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', obj);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROUTE_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
 module.exports = {
     getPrimaryAddressByCompanyIdBusiness,
     editCompanyRoutesBusiness,
     insertCompanyRouteBusiness,
     getRouteByCompanyIdBusiness,
+    getRouteDetailsByRouteIdBusiness,
     deleteCompanyRoutesBusiness
 };

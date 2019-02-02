@@ -260,11 +260,18 @@ const statusCodes = {
             espLA: 'no location exists for given id'
         }
     },
-    910:{
+    910: {
         devMsg: 'delink of ELock failed', userMsg: {
             EN_US: 'delink of ELock failed',
             espMX: 'container edited successfully',
             espLA: 'container edited successfully'
+        }
+    },
+    224: {
+        devMsg: 'no route available for given id', userMsg: {
+            EN_US: 'no route available for given id',
+            espMX: 'no route available for the given id',
+            espLA: 'no route available for the given id'
         }
     }
 };
