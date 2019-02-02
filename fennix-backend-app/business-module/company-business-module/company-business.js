@@ -96,7 +96,6 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
         request = notNullCheck(skip) && notNullCheck(limit) ? {languageId, skip, limit} : {languageId};
     request.userIdList = await getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
     response = await companyAccessors.listCompanyAccessor(request);
-    console.log(response);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = responseObjectCreator(item, ['companyId', 'companyName', 'companyType', 'customsId', 'noOfRoutes', 'noOfClients'], ['company_id', 'company_name', 'company_type', 'customs_id', 'no_of_routes', 'no_of_clients']);
@@ -104,7 +103,6 @@ const commonListDropdownBusiness = async (req, languageId, skip = null, limit = 
         });
         modifiedResponse.data.sort((prev, next) => prev.companyId - next.companyId);
         totalRecords = await companyAccessors.totalNoOfCompaniesAccessor(request.userIdList);
-        console.log(totalRecords);
         modifiedResponse.totalNoOfRecords = objectHasPropertyCheck(totalRecords, 'rows') && arrayNotEmptyCheck(totalRecords['rows']) ? totalRecords['rows'][0]['count'] : 0;
     }
     return modifiedResponse;
@@ -125,7 +123,7 @@ const editCompanyBusiness = async (req) => {
 };
 
 const deleteCompanyBusiness = async (req) => {
-    let request = {companyId: req.body.companyId, isActive: false, updatedBy: req.body.userId, updatedDate: new Date()};
+    let request = {companyId: parseInt(req.body.companyId), isActive: false, updatedBy: req.body.userId, updatedDate: new Date()};
     await companyAccessors.editCompanyAccessor(request);
     await routeBusiness.deleteCompanyRoutesBusiness(req);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');

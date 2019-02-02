@@ -110,17 +110,13 @@ const listContainerBusiness = async (req) => {
         };
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
     request.userIdList = [];
-    console.log('user response');
-    console.log(userResponse);
     if (objectHasPropertyCheck(userResponse, 'userDetails') && objectHasPropertyCheck(userResponse.userDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userResponse.userDetails.rows)) {
         request.companyId = userResponse.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT ? userResponse.userDetails.rows[0]['company_id'] : null;
         userResponse.userDetails.rows.forEach((item) => request.userIdList.push(item['user_id']));
         request.nativeUserRole = userResponse.nativeUserRole;
     }
     containerListResponse = await containerAccessors.listContainersAccessor(request);
-    console.log(containerListResponse);
     totalNoOfRecords = await containerAccessors.getTotalNoOfContainersAccessor(request);
-    console.log(totalNoOfRecords);
     finalResponse['totalNoOfRecords'] = objectHasPropertyCheck(totalNoOfRecords, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(totalNoOfRecords.rows) ? totalNoOfRecords.rows[0]['count'] : 0;
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach(item => {
@@ -189,8 +185,7 @@ const deactivateContainerBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
-        dropboxShareResponse;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
     const date = new Date(),
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.containerId];
@@ -534,16 +529,10 @@ const getTripDuration = (dateTime, timeFlag) => {
 };
 
 const getDateTimeStamp = (dateObj, time) => {
-    // console.log(dateObj);
     let timeInMilliSeconds = timeHoursToMillisecondConverter(time),
         actualDate = dateObj ? new Date(parseInt(`${dateObj.year}`), parseInt(`${dateObj.month}`) - 1, parseInt(`${dateObj.date}`)) : new Date();
-    // console.log('actual date');
-    // console.log(actualDate);
-    // console.log(timeInMilliSeconds);
     actualDate.setHours(timeInMilliSeconds.hours);
     actualDate.setMinutes(timeInMilliSeconds.minutes);
-    // console.log('actual time');
-    // console.log(actualDate);
     return actualDate;
 };
 const timeHoursToMillisecondConverter = (time) => {

@@ -42,12 +42,6 @@ const editCompanyRoutesBusiness = async (req) => {
     response = await routeAccessors.editCompanyRoutesAccessor(request.routeId, routeRequest);
     return response;
 };
-const getRouteByCompanyIdBusiness = async (req) => {
-    const companyId = parseInt(req.query.companyId);
-    let routeResponse;
-    routeResponse = await routeAccessors.getRouteByCompanyIdAccessor(companyId);
-    return fennixResponse(200, 'EN_US', routeResponse);
-};
 
 const getRouteByCompanyIdBusiness = async (req) => {
     const companyId = parseInt(req.query.companyId);
@@ -81,6 +75,7 @@ module.exports = {
     editCompanyRoutesBusiness,
     insertCompanyRouteBusiness,
     getRouteByCompanyIdBusiness,
+    getCommonRouteByCompanyIdBusiness,
     getRouteDetailsByRouteIdBusiness,
     deleteCompanyRoutesBusiness
 };
