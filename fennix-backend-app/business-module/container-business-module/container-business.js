@@ -680,7 +680,7 @@ const editContainerBusiness = async (req) => {
 };
 
 const getContainerDetailsByContainerIdBusiness = async (req) => {
-    let request = [req.query.containerId], response, modifiedResponse = [], finalResponse;
+    let request = {containerIdList: [req.query.containerId]}, response, modifiedResponse = [], finalResponse;
     response = await containerAccessors.getContainerDetailsByContIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
