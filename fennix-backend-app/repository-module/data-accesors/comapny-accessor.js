@@ -39,9 +39,9 @@ const listCompanyAccessor = async (req) => {
 const getCompanyDetailsAccessor = async (req) => {
     let returnObj, modifiedQuery;
     console.log(req);
-    modifiedQuery = requestInModifier(req, companyQueries.getCompanyDetailsQuery, true);
+    modifiedQuery = requestInModifier(req.companyIdList, companyQueries.getCompanyDetailsQuery, true);
     console.log(modifiedQuery);
-    returnObj = await connectionCheckAndQueryExec(req, modifiedQuery);
+    returnObj = await connectionCheckAndQueryExec([req.languageId, ...req.companyIdList], modifiedQuery);
     return returnObj;
 };
 

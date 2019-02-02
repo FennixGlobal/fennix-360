@@ -132,7 +132,7 @@ const deleteCompanyBusiness = async (req) => {
 };
 
 const getCompanyDetailsBusiness = async (req) => {
-    let request = [req.query.languageId, req.query.companyId], response, modifiedResponse, finalResponse,
+    let request = {languageId: req.query.languageId, companyIdList: [req.query.companyId]}, response, modifiedResponse, finalResponse,
         primaryAddressResponse, routeResponse, routeArray = [];
     response = await companyAccessors.getCompanyDetailsAccessor(request);
     primaryAddressResponse = await routeBusiness.getPrimaryAddressByCompanyIdBusiness(parseInt(req.query.companyId));
