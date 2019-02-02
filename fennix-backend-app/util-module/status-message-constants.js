@@ -95,6 +95,13 @@ const statusCodes = {
             espLA: 'no filters available for the given id'
         }
     },
+    227: {
+        devMsg: 'no user available for given id', userMsg: {
+            EN_US: 'no user available for given id',
+            espMX: 'no user available for the given id',
+            espLA: 'no user available for the given id'
+        }
+    },
     211: {
         devMsg: 'no roles available for the given id', userMsg: {
             EN_US: 'no roles available for the given id',
@@ -281,7 +288,7 @@ const statusCodes = {
             espLA: 'no route available for the given id'
         }
     },
-    266:{
+    266: {
         devMsg: 'Container Deactivated successfully', userMsg: {
             EN_US: 'Container Deactivated successfully',
             espMX: 'Container Deactivated successfully',

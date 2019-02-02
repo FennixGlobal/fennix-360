@@ -122,7 +122,7 @@ const deleteUserBusiness = async (req) => {
     if (notNullCheck(response) && response['rowCount'] != 0) {
         finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', 'Deleted user data successfully');
     } else {
-        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID)
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
