@@ -45,7 +45,7 @@ const editCompanyRoutesBusiness = async (req) => {
 
 const getRouteByCompanyIdBusiness = async (req) => {
     const companyId = parseInt(req.query.companyId);
-    let routeResponse = getCommonRouteByCompanyIdBusiness(companyId);
+    let routeResponse = await getCommonRouteByCompanyIdBusiness(companyId);
     return fennixResponse(200, 'EN_US', routeResponse);
 };
 const getCommonRouteByCompanyIdBusiness = async (req) => {
