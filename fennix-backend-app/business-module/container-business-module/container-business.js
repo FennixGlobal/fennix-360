@@ -177,9 +177,9 @@ const deactivateContainerBusiness = async (req) => {
     request['deactivatedBy'] = req.query.userId;
     response = await containerAccessors.updateContainerAccessor(request);
     if (notNullCheck(response) && response['rowCount'] != 0) {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_BENEFICIARY_DEACTIVATE_SUCCESS, 'EN_US', 'Deleted container data successfully');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_CONTAINER_DEACTIVATE_SUCCESS, 'EN_US', 'Deleted container data successfully');
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_BENEFICIARIES_FOR_ID, 'EN_US', '');
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', '');
     }
     return finalResponse;
 };

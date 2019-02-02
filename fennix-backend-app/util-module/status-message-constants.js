@@ -280,7 +280,14 @@ const statusCodes = {
             espMX: 'no route available for the given id',
             espLA: 'no route available for the given id'
         }
-    }
+    },
+    266:{
+        devMsg: 'Container Deactivated successfully', userMsg: {
+            EN_US: 'Container Deactivated successfully',
+            espMX: 'Container Deactivated successfully',
+            espLA: 'Container Deactivated successfully'
+        }
+    },
 };
 
 module.exports = {statusCodes};
