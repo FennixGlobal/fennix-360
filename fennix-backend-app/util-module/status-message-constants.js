@@ -295,6 +295,13 @@ const statusCodes = {
             espLA: 'Container Deactivated successfully'
         }
     },
+    267: {
+        devMsg: 'Trip Created successfully.Please navigate to list not started Trip to start the trip', userMsg: {
+            EN_US: 'Trip Created successfully.Please navigate to list not started Trip to start the trip',
+            espMX: 'Trip Created successfully.Please navigate to list not started Trip to start the trip',
+            espLA: 'Trip Created successfully.Please navigate to list not started Trip to start the trip'
+        }
+    }
 };
 
 module.exports = {statusCodes};

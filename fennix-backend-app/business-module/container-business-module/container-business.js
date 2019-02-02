@@ -185,7 +185,8 @@ const deactivateContainerBusiness = async (req) => {
 };
 
 const uploadBeneficiaryDocumentsBusiness = async (req) => {
-    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode, dropboxShareResponse;
+    let documentName, finalResponse, beneficiaryResponse, uploadResponse, createResponse, countryCode,
+        dropboxShareResponse;
     const date = new Date(),
         fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     const request = req.body, postgresReq = [req.body.containerId];
@@ -293,7 +294,7 @@ const assignContainerBusiness = async (req) => {
         createdDate: new Date()
     };
     await tripAccessors.insertElockTripDataAccessor(tripRequest);
-    finalResponse = fennixResponse(statusCodeConstants.STATUS_DEVICE_ADD_SUCCESS, 'EN_US', 'Updated container data successfully');
+    finalResponse = fennixResponse(statusCodeConstants.STATUS_TRIP_CREATED_SUCCESS, 'EN_US', 'Updated container data successfully');
     return finalResponse;
 };
 const containerMapDataListBusiness = async (req) => {
@@ -684,7 +685,7 @@ const getContainerDetailsByContainerIdBusiness = async (req) => {
     response = await containerAccessors.getContainerDetailsByContIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         let obj = responseObjectCreator(response.rows[0], ['containerId', 'containerName', 'containerType', 'companyId', 'containerColor', 'containerLength', 'containerWidth', 'containerHeight', 'containerUnitType', 'containerCapacity', 'userId', 'containerImage', 'centerId', 'containerUniqueId'], ['container_id', 'container_name', 'container_type', 'company_id', 'container_color', 'container_length', 'container_width',
-                'container_height', 'container_unit_type', 'container_capacity', 'owner_user_id', 'container_image', 'center_id', 'container_unique_id']);
+            'container_height', 'container_unit_type', 'container_capacity', 'owner_user_id', 'container_image', 'center_id', 'container_unique_id']);
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', obj);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', []);
