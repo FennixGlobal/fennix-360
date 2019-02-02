@@ -83,7 +83,7 @@ router.post('/editContainer', function (req, res) {
 
 router.get('/getContainerDetailsByContId', function (req, res) {
     let returnObj;
-    returnObj = containerBusiness.getContainerDetailsByContainerIdBusiness();
+    returnObj = containerBusiness.getContainerDetailsByContainerIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
