@@ -13,7 +13,6 @@ const addCompanyBusiness = async (req) => {
     request.isActive = true;
     response = await companyAccessors.addCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
-        console.log(response.rows);
         request.companyId = response.rows[0]['company_id'];
         routeResponse = await routeBusiness.insertCompanyRouteBusiness(request);
         if (notNullCheck(routeResponse)) {
@@ -53,9 +52,7 @@ const listCompanyBusiness = async (req) => {
 
 const listCompanyBusiness = async (req) => {
     let response, finalResponse, modifiedResponse = {gridData: []};
-    // request = {languageId: req.query.languageId, skip: parseInt(req.query.skip), limit: parseInt(req.query.limit)};
     response = await commonListDropdownBusiness(req, req.query.languageId, parseInt(req.query.skip), parseInt(req.query.limit));
-    console.log(response);
     if (arrayNotEmptyCheck(response.data)) {
         modifiedResponse.totalNoOfRecords = response.totalNoOfRecords;
         modifiedResponse.gridData = [...response.data];
@@ -123,7 +120,7 @@ const editCompanyBusiness = async (req) => {
 };
 
 const deleteCompanyBusiness = async (req) => {
-    let request = {companyId: parseInt(req.body.companyId), isActive: false, updatedBy: req.body.userId, updatedDate: new Date()};
+    let request = {companyId: parseInt(req.query.companyId), isActive: false, updatedBy: req.query.userId, updatedDate: new Date()};
     await companyAccessors.editCompanyAccessor(request);
     await routeBusiness.deleteCompanyRoutesBusiness(req);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');
