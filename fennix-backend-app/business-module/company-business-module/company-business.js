@@ -120,14 +120,20 @@ const editCompanyBusiness = async (req) => {
 };
 
 const deleteCompanyBusiness = async (req) => {
-    let request = {companyId: parseInt(req.query.companyId), isActive: false, updatedBy: req.query.userId, updatedDate: new Date()};
+    let request = {
+        companyId: parseInt(req.query.companyId),
+        isActive: false,
+        updatedBy: req.query.userId,
+        updatedDate: new Date()
+    };
     await companyAccessors.editCompanyAccessor(request);
     await routeBusiness.deleteCompanyRoutesBusiness(req);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN', 'Deleted company & route successfully');
 };
 
 const getCompanyDetailsBusiness = async (req) => {
-    let request = [req.query.companyId], response, modifiedResponse, finalResponse, primaryAddressResponse, routeResponse, routeArray = [];
+    let request = [req.query.languageId, req.query.companyId], response, modifiedResponse, finalResponse,
+        primaryAddressResponse, routeResponse, routeArray = [];
     response = await companyAccessors.getCompanyDetailsAccessor(request);
     primaryAddressResponse = await routeBusiness.getPrimaryAddressByCompanyIdBusiness(parseInt(req.query.companyId));
     routeResponse = await routeBusiness.getCommonRouteByCompanyIdBusiness(parseInt(req.query.companyId));
