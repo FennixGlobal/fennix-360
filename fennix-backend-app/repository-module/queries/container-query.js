@@ -138,7 +138,10 @@ const fetchAndUpdateContainerPasswordCounterQuery = (password) => {
 
 const getContainerDetailsQuery = 'select (select localized_text from localization where language = $1 and locale_key = (select dropdown_value from dropdown_set where dropdown_set_id = c.container_type)) as container_type_value, * from container c where isactive = true and container_id IN ';
 
+const getContainerDetailsByContIdQuery = 'select * from container where container_id IN ';
+
 module.exports = {
+    getContainerDetailsByContIdQuery,
     getContainerMasterPasswordQuery,
     getContainerDetailsQuery,
     updateNextLocationPrimaryKeyQuery,

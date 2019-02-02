@@ -1,7 +1,7 @@
 const containerAccessors = require('../../repository-module/data-accesors/container-accessor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper} = require('../../util-module/data-validators');
+const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, deviceStatusMapper, responseObjectCreator} = require('../../util-module/data-validators');
 const {filtersMapping} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const deviceAccessors = require('../../repository-module/data-accesors/device-accesor');
@@ -689,6 +689,23 @@ const editContainerBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+const getContainerDetailsByContainerIdBusiness = async (req) => {
+    let request = [req.query.containerId], response, modifiedResponse = [], finalResponse;
+    response = await containerAccessors.getContainerDetailsByContIdAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = responseObjectCreator(item, ['containerId', 'containerName', 'containerType', 'companyId', 'containerColor', 'containerLength', 'containerWidth', 'containerHeight', 'containerUnitType', 'containerCapacity', 'userId', 'containerImage', 'centerId', 'containerUniqueId'], ['container_id', 'container_name', 'container_type', 'company_id', 'container_color', 'container_length', 'container_width',
+                'container_height', 'container_unit_type', 'container_capacity', 'owner_user_id', 'container_image', 'center_id', 'container_unique_id']);
+            modifiedResponse.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 module.exports = {
     addContainerDetailsBusiness,
     assignContainerBusiness,
@@ -700,6 +717,7 @@ module.exports = {
     editContainerBusiness,
     getContainerMapHistoryBusiness,
     containerMapDataListBusiness,
+    getContainerDetailsByContainerIdBusiness,
     containerMapDataListWithFiltersBusiness,
     uploadBeneficiaryDocumentsBusiness
 };

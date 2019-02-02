@@ -288,6 +288,13 @@ const getContainerDetailsAccessor = async (req) => {
     return returnObj;
 };
 
+const getContainerDetailsByContIdAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestInModifier(req.containerIdList, containerQueries.getContainerDetailsByContIdQuery, false);
+    returnObj = await connectionCheckAndQueryExec(req.containerIdList, modifiedQuery);
+    return returnObj;
+};
+
 // const editContainerAccessor = async (req) => {
 //     let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
 //     fields.sort();
@@ -302,6 +309,7 @@ const getContainerDetailsAccessor = async (req) => {
 module.exports = {
     getContainerDetailsAccessor,
     // editContainerAccessor,
+    getContainerDetailsByContIdAccessor,
     getDeviceIMEIByContainerIdAccessor,
     getContainerMasterPasswordAcessor,
     setContainerLockStatusAccessor,
