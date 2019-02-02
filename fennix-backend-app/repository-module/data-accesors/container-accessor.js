@@ -291,6 +291,8 @@ const getContainerDetailsAccessor = async (req) => {
 const getContainerDetailsByContIdAccessor = async (req) => {
     let returnObj, modifiedQuery;
     modifiedQuery = requestInModifier(req.containerIdList, containerQueries.getContainerDetailsByContIdQuery, false);
+    console.log(modifiedQuery);
+    console.log(req.containerIdList);
     returnObj = await connectionCheckAndQueryExec(req.containerIdList, modifiedQuery);
     return returnObj;
 };
