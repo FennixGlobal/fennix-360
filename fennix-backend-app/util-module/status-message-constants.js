@@ -267,6 +267,13 @@ const statusCodes = {
             espLA: 'container edited successfully'
         }
     },
+    225: {
+        devMsg: 'no client available for given id', userMsg: {
+            EN_US: 'no client available for given id',
+            espMX: 'no client available for the given id',
+            espLA: 'no client available for the given id'
+        }
+    },
     224: {
         devMsg: 'no route available for given id', userMsg: {
             EN_US: 'no route available for given id',

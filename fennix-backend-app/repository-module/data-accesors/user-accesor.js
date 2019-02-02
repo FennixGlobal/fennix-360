@@ -268,7 +268,16 @@ const listUnAssignedClientsAccessor = async (req) => {
     returnObj = await connectionCheckAndQueryExec(req, userQueries.listUnassignedClientsQuery);
     return returnObj;
 };
+
+const listClientsByCompanyIdAccessor = async (req) => {
+    let returnObj, modifiedQuery;
+    modifiedQuery = requestModifiers.requestInModifier(req.companyIdList, userQueries.listClientsByCompanyIdQuery, true);
+    returnObj = await connectionCheckAndQueryExec([req.roleName, ...req.companyIdList], modifiedQuery);
+    return returnObj;
+};
+
 module.exports = {
+    listClientsByCompanyIdAccessor,
     listUnAssignedClientsAccessor,
     addUserAccessor,
     getUserNameFromUserIdAccessor,

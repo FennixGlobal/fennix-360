@@ -8,7 +8,8 @@ const USER_CONTROLLER = {
     USER_ADD_USER: '/addUser',
     USER_DOWNLOAD_USER: '/downloadUsers',
     USER_FETCH_USER_PROFILE: '/fetchProfile',
-    USER_LIST_UNASSIGNED_CLIENTS:'/listUnassignedClients'
+    USER_LIST_CLIENTS_BY_COMPANY_ID: '/listClientsByCompanyId',
+    USER_LIST_UNASSIGNED_CLIENTS: '/listUnassignedClients'
 };
 
 const SIMCARD_CONTROLLER = {
@@ -35,7 +36,7 @@ const METADATA_CONTROLLER = {
     METADATA_LIST_COUNTRIES: '/listCountries',
     METADATA_LIST_CENTERS: '/listCenters',
     METADATA_ALL_ROLES: '/roles',
-    METADATA_LIST_COUNTRIES_FOR_GRID:'/listCountriesForGrid',
+    METADATA_LIST_COUNTRIES_FOR_GRID: '/listCountriesForGrid',
     METADATA_ALL_ROLES_FOR_ADMIN: '/getRolesForAdmin',
     METADATA_ALL_ROLES_FOR_NON_ADMIN: '/getRolesForNonAdmin'
 };

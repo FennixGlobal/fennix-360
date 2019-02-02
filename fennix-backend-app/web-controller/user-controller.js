@@ -80,4 +80,13 @@ router.get(USER_CONTROLLER.USER_LIST_UNASSIGNED_CLIENTS, async (req, res) => {
         res.send(response);
     })
 });
+
+router.get(USER_CONTROLLER.USER_LIST_CLIENTS_BY_COMPANY_ID, async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.listClientsByCompanyIdBusiness();
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

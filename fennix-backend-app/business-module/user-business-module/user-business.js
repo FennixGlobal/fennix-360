@@ -162,19 +162,38 @@ const downloadUsersListBusiness = async (req) => {
     sheet.addRows(modifiedResponse);
     return workbook.xlsx.writeFile('/home/sindhura.gudarada/Downloads/users.xlsx');
 };
+
+const listClientsByCompanyIdBusiness = async (req) => {
+    let request = {roleName: 'ROLE_CLIENT', companyIdList: [parseInt(req.query.companyId)]}, response, modifiedResponse = {gridData: []}, finalResponse;
+    response = await userAccessors.listClientsByCompanyIdAccessor(request);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        response.rows.forEach((item) => {
+            let obj = responseObjectCreator(item, ['userId', 'userName', 'emailId'], ['user_id', 'full_name', 'email_id']);
+            modifiedResponse.gridData.push(obj);
+        });
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_CLIENT_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
 const listUnassignedClientsBusiness = async () => {
-    let request = ['ROLE_CLIENT'], response, modifiedResponse = {gridData: []};
+    let request = ['ROLE_CLIENT'], response, modifiedResponse = {gridData: []}, finalResponse;
     response = await userAccessors.listUnAssignedClientsAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
             let obj = responseObjectCreator(item, ['userId', 'userName'], ['user_id', 'full_name']);
             modifiedResponse.gridData.push(obj);
         });
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_NO_CLIENT_FOR_ID, 'EN_US', []);
     }
-    return modifiedResponse;
+    return finalResponse;
 };
 module.exports = {
     addUserBusiness,
+    listClientsByCompanyIdBusiness,
     updateUserProfileBusiness,
     getUserListBusiness,
     fetchUserDetailsBusiness,
