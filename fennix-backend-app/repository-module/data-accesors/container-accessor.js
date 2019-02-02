@@ -82,7 +82,7 @@ const updateContainerAccessor = async (req) => {
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
     request.push(req.containerId);
     console.log(request);
-    console.log(updatedQueryCreatorResponse.query);
+    console.log(updatedQueryCreatorResponse);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
