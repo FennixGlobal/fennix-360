@@ -44,8 +44,10 @@ const updateUserAccessor = async (req) => {
     fields.sort();
     fields.splice(fields.indexOf('userId'), 1);
     updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
+    console.log(updatedQueryCreatorResponse);
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
     request.push(req.userId);
+    console.log(request);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
