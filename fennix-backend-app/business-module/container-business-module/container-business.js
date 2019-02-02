@@ -680,15 +680,12 @@ const editContainerBusiness = async (req) => {
 };
 
 const getContainerDetailsByContainerIdBusiness = async (req) => {
-    let request = {containerIdList: [req.query.containerId]}, response, modifiedResponse = [], finalResponse;
+    let request = {containerIdList: [req.query.containerId]}, response, finalResponse;
     response = await containerAccessors.getContainerDetailsByContIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        response.rows.forEach((item) => {
-            let obj = responseObjectCreator(item, ['containerId', 'containerName', 'containerType', 'companyId', 'containerColor', 'containerLength', 'containerWidth', 'containerHeight', 'containerUnitType', 'containerCapacity', 'userId', 'containerImage', 'centerId', 'containerUniqueId'], ['container_id', 'container_name', 'container_type', 'company_id', 'container_color', 'container_length', 'container_width',
+        let obj = responseObjectCreator(response.rows[0], ['containerId', 'containerName', 'containerType', 'companyId', 'containerColor', 'containerLength', 'containerWidth', 'containerHeight', 'containerUnitType', 'containerCapacity', 'userId', 'containerImage', 'centerId', 'containerUniqueId'], ['container_id', 'container_name', 'container_type', 'company_id', 'container_color', 'container_length', 'container_width',
                 'container_height', 'container_unit_type', 'container_capacity', 'owner_user_id', 'container_image', 'center_id', 'container_unique_id']);
-            modifiedResponse.push(obj);
-        });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', obj);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', []);
     }
