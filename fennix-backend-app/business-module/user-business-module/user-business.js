@@ -102,7 +102,7 @@ const addUserBusiness = async (req) => {
     request.first_time_login = true;
     request.password = '$2a$15$vmR3fd7Jnn34hWQPjK5uP.iVHq9wJUCXh0djUv5AHC.GvblRvEQU6';
     await userAccessors.addUserAccessor(request);
-    // emailSendBusiness(request.emailId, request.role, `${request.firstName} ${request.lastName}`);
+    emailSendBusiness(request.emailId, request.role, `${request.firstName} ${request.lastName}`);
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
 const updateUserBusiness = async (req) => {

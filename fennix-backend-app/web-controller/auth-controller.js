@@ -10,6 +10,13 @@ router.post('/authenticate', function (req, res) {
     })
 });
 
+router.post('/forgotPassword', function (req, res) {
+    var returnObj = authBusiness.authenticateUser(req);
+    returnObj.then((authResponse) => {
+        res.send(authResponse.response);
+    })
+});
+
 router.get('/fetchLoginProfile', function (req, res) {
     var returnObj = authBusiness.fetchLoginProfileBusiness(req);
     returnObj.then((response) => {
