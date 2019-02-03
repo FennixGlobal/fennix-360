@@ -116,14 +116,16 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
     let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
+    console.log(request);
     containerListResponse = await containerAccessors.getContainerIdListAccessor(request);
+    console.log(containerListResponse);
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
         });
-        // console.log(mongoRequest);
+        console.log(mongoRequest);
         response = await tripAccessors.fetchTripDetailsAccessor(mongoRequest);
-        // console.log(response);
+        console.log('trip response', response);
         if (arrayNotEmptyCheck(response)) {
             let formattedArray = [];
             response.forEach((item) => {
