@@ -10,7 +10,7 @@ router.post('/authenticate', function (req, res) {
     })
 });
 
-router.post('/forgotPassword', function (req, res) {
+router.post('/forgotPasswordLink', function (req, res) {
     var returnObj = authBusiness.authenticateUser(req);
     returnObj.then((authResponse) => {
         res.send(authResponse.response);
