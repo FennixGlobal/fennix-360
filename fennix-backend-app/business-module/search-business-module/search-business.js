@@ -7,7 +7,7 @@ const searchBusiness = async (req) => {
     let request, response, modifiedResponse = {dropdownList: []}, finalResponse;
     response = await searchAccessors.searchAccessor(req.query.searchValue);
     if (arrayNotEmptyCheck(response)) {
-        response.rows.forEach((item) => {
+        response.forEach((item) => {
             let obj = responseObjectCreator(item, ['dropdownKey', 'dropdownValue', 'tag'], ['value', 'value', 'tag']);
             modifiedResponse.dropdownList.push(obj);
         });
