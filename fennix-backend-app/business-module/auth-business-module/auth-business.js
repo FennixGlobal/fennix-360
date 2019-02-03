@@ -160,9 +160,9 @@ const resetPasswordBusiness = async (req) => {
             responseObj = authResponseObjectFormation(businessResponse.rows[0]);
             retireCheckFlag = retireCheck(responseObj);
             responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
-            if (retireCheckFlag) {
-                forgotPasswordemailBusiness(emailId, `${businessResponse.rows[0]['first_name']} ${businessResponse.rows[0]['last_name']}`, businessResponse.rows[0]['user_role']);
-            }
+            // if (retireCheckFlag) {
+            //     forgotPasswordemailBusiness(emailId, `${businessResponse.rows[0]['first_name']} ${businessResponse.rows[0]['last_name']}`, businessResponse.rows[0]['user_role']);
+            // }
             returnResponse = responseObj;
         } else {
             returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
