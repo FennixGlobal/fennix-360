@@ -186,8 +186,7 @@ const userResetPasswordBusiness = async (emailId, password) => {
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         request = {userId: response.rows[0].user_id, password};
         updateResponse = await userAccessors.updateUserAccessor(request);
-        console.log(updateResponse);
-        if (objectHasPropertyCheck(updateResponse, 'rows') && arrayNotEmptyCheck(updateResponse.rows)) {
+        if (objectHasPropertyCheck(updateResponse, 'rowCount') && updateResponse.rowCount > 0) {
             finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_UPDATE_PASSWORD_SUCCESS, 'EN_US', []);
         } else {
             finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_UPDATE_PASSWORD_FAILED, 'EN_US', []);
