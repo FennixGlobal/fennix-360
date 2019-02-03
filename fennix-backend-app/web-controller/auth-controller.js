@@ -17,6 +17,13 @@ router.post('/forgotPasswordLink', function (req, res) {
     })
 });
 
+router.post('/resetPassword', function (req, res) {
+    var returnObj = authBusiness.forgotPasswordBusiness(req);
+    returnObj.then((authResponse) => {
+        res.send(authResponse.response);
+    })
+});
+
 router.get('/fetchLoginProfile', function (req, res) {
     var returnObj = authBusiness.fetchLoginProfileBusiness(req);
     returnObj.then((response) => {

@@ -102,6 +102,7 @@ const deviceRouter = require('./fennix-backend-app/web-controller/device-control
 const ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
 
 const indexRouter = require('./routes/index');
+const searchRouter = require('./fennix-backend-app/web-controller/search-controller');
 
 var app = express();
 app.use(bodyParser.json());
@@ -166,6 +167,7 @@ app.use('/simcard', simcardRouter);
 app.use('/group', groupRouter);
 app.use('/container', containerRouter);
 app.use('/route', routeRouter);
+app.use('/search', searchRouter);
 app.use('/lite', [liteUserRouter, liteTicketRouter, liteDeviceRouter, liteUserTrackingRouter]);
 app.use('/', indexRouter);
 

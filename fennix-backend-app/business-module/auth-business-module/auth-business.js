@@ -5,7 +5,7 @@ const {emoji} = require('../../util-module/custom-request-reponse-modifiers/enco
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
-const {fetchUserDetailsBusiness} = require('../user-business-module/user-business');
+const {fetchUserDetailsBusiness,userResetPasswordBusiness} = require('../user-business-module/user-business');
 const jwt = require('jsonwebtoken');
 const {forgotPasswordemailBusiness} = require('../common-business-module/common-business');
 
@@ -133,6 +133,43 @@ const forgotPasswordBusiness = async (req) => {
     }
     return returnResponse;
 };
+const resetPasswordBusiness = async(req)=>{
+    let responseObj, businessResponse, retireCheckFlag, returnResponse = '';
+    const algo = emoji[req.body.avatar]['encoding'];
+    const passKey = emoji[req.body.avatar]['secretPass'];
+    const emailId = decrypt(algo, passKey, req.body.email);
+    const password = decrypt(algo, passKey, req.body.newPassword);
+    const request = [
+        decrypt(algo, passKey, req.body.email),
+        req.body.language
+    ];
+    businessResponse = await authenticateUserDetails(request);
+    if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+        retireCheckFlag = retireCheck(businessResponse.rows[0]);
+        responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
+        if (retireCheckFlag) {
+            userResetPasswordBusiness(emailId,password);
+        }
+        returnResponse = responseObj;
+    } else {
+        businessResponse = await authenticateBeneficiaryDetails(request);
+        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+            responseObj = authResponseObjectFormation(businessResponse.rows[0]);
+            retireCheckFlag = retireCheck(responseObj);
+            responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
+            if (retireCheckFlag) {
+                forgotPasswordemailBusiness(emailId, `${businessResponse.rows[0]['first_name']} ${businessResponse.rows[0]['last_name']}`, businessResponse.rows[0]['user_role']);
+            }
+            returnResponse = responseObj;
+        } else {
+            returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
+            // returnResponse.header = null;
+            // returnResponse.response = responseObj;
+        }
+
+    }
+    return returnResponse;
+};
 
 const responseFormation = (responseObj, retireCheck) => {
     return retireCheck ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj)
@@ -140,6 +177,7 @@ const responseFormation = (responseObj, retireCheck) => {
 module.exports = {
     checkEmailId,
     authenticateUser,
+    resetPasswordBusiness,
     forgotPasswordBusiness,
     fetchLoginProfileBusiness
 };

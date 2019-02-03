@@ -8,6 +8,12 @@ const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-
 const {insertQueryCreator, updateQueryCreator} = require("../../util-module/request-validators");
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
+const getUserByUserEmailIdAccessor = async(req)=>{
+    let returnObj;
+    returnObj = await connectionCheckAndQueryExec(req, userQueries.checkUserEmailQuery);
+    return returnObj;
+};
+
 const fetchUserProfileAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userQueries.userProfileQuery);
@@ -291,4 +297,5 @@ module.exports = {
     getUserIdsForAdminAccessor,
     getUserIdsForAllRolesAccessor,
     updateUserAccessor,
+    getUserByUserEmailIdAccessor
 };

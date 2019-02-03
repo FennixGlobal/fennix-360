@@ -308,7 +308,21 @@ const statusCodes = {
             espMX: 'No results for the given search',
             espLA: 'No results for the given search'
         }
-    }
+    },
+    270: {
+        devMsg: 'Password update successful', userMsg: {
+            EN_US: 'Password update successful',
+            espMX: 'Password update successful',
+            espLA: 'Password update successful'
+        }
+    },
+    271: {
+        devMsg: 'Password update failed', userMsg: {
+            EN_US: 'Password update failed',
+            espMX: 'Password update failed',
+            espLA: 'Password update failed'
+        }
+    },
 };
 
 module.exports = {statusCodes};

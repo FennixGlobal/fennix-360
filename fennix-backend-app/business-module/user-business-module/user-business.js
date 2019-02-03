@@ -105,6 +105,7 @@ const addUserBusiness = async (req) => {
     emailSendBusiness(request.emailId, request.role, `${request.firstName} ${request.lastName}`);
     return fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', []);
 };
+
 const updateUserBusiness = async (req) => {
     let response, finalResponse;
     response = await userAccessors.updateUserAccessor(req.body);
@@ -164,7 +165,8 @@ const downloadUsersListBusiness = async (req) => {
 };
 
 const listClientsByCompanyIdBusiness = async (req) => {
-    let request = {roleName: 'ROLE_CLIENT', companyIdList: [parseInt(req.query.companyId)]}, response, modifiedResponse = {gridData: []}, finalResponse;
+    let request = {roleName: 'ROLE_CLIENT', companyIdList: [parseInt(req.query.companyId)]}, response,
+        modifiedResponse = {gridData: []}, finalResponse;
     response = await userAccessors.listClientsByCompanyIdAccessor(request);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         response.rows.forEach((item) => {
@@ -177,6 +179,25 @@ const listClientsByCompanyIdBusiness = async (req) => {
     }
     return finalResponse;
 };
+
+const userResetPasswordBusiness = async (emailId, password) => {
+    let req = emailId, response, finalResponse, updateResponse, request;
+    response = await userAccessors.getUserByUserEmailIdAccessor(req);
+    if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
+        request = {user_id: response.rows[0].user_id, password};
+        updateResponse = await userAccessors.updateUserAccessor(request);
+        if (objectHasPropertyCheck(updateResponse, 'rows') && arrayNotEmptyCheck(updateResponse.rows)) {
+
+            finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_UPDATE_PASSWORD_SUCCESS, 'EN_US', []);
+        } else {
+            finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_UPDATE_PASSWORD_FAILED, 'EN_US', []);
+        }
+    } else {
+        finalResponse = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_UPDATE_PASSWORD_FAILED, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const listUnassignedClientsBusiness = async () => {
     let request = ['ROLE_CLIENT'], response, modifiedResponse = {gridData: []}, finalResponse;
     response = await userAccessors.listUnAssignedClientsAccessor(request);
@@ -201,5 +222,6 @@ module.exports = {
     updateUserBusiness,
     listUnassignedClientsBusiness,
     deleteUserBusiness,
+    userResetPasswordBusiness,
     listOperatorsBusiness
 };
