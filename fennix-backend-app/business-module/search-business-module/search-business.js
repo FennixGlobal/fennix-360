@@ -1,7 +1,7 @@
 const searchAccessors = require('../../repository-module/data-accesors/search-accessor');
 const {arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const statusCodeConstants = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const searchBusiness = async (req) => {
     let request, response, modifiedResponse = {dropdownList: []}, finalResponse;
