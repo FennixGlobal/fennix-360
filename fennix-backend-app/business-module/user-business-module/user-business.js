@@ -181,7 +181,7 @@ const listClientsByCompanyIdBusiness = async (req) => {
 };
 
 const userResetPasswordBusiness = async (emailId, password) => {
-    let req = emailId, response, finalResponse, updateResponse, request;
+    let req = [emailId], response, finalResponse, updateResponse, request;
     response = await userAccessors.getUserByUserEmailIdAccessor(req);
     console.log(response);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
