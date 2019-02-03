@@ -9,6 +9,8 @@ const insertCompanyRoutesQuery = (req) => {
         } 
         response = "Company routes documents inserted to Collection";
     });
+    //TODO: temp fix. check why call back is getting executed with delay
+    response = "Company routes documents inserted to Collection";
     console.log(response);
     return response;
 };
