@@ -193,7 +193,6 @@ const forgotPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n
     'left join action a \n' +
     'on a.action_id = rcwa.on_change_action';
 
-
 const modalMetadataQuery = 'select  \n' +
     'm.modal_width, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
     ',(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +

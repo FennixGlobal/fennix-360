@@ -301,6 +301,13 @@ const statusCodes = {
             espMX: 'Trip Created successfully.Please navigate to list not started Trip to start the trip',
             espLA: 'Trip Created successfully.Please navigate to list not started Trip to start the trip'
         }
+    },
+    268: {
+        devMsg: 'No results for the given search', userMsg: {
+            EN_US: 'No results for the given search',
+            espMX: 'No results for the given search',
+            espLA: 'No results for the given search'
+        }
     }
 };
 
