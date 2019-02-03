@@ -148,6 +148,7 @@ const resetPasswordBusiness = async(req)=>{
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         retireCheckFlag = retireCheck(businessResponse.rows[0]);
         responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
+        console.log(retireCheckFlag);
         if (retireCheckFlag) {
             userResetPasswordBusiness(emailId,password);
         }
