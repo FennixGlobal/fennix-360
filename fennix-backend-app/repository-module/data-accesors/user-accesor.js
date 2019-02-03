@@ -46,6 +46,7 @@ const getTotalRecordsForListUsersAccessor = async (req) => {
     return returnObj;
 };
 const updateUserAccessor = async (req) => {
+    console.log(req);
     let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
     fields.sort();
     fields.splice(fields.indexOf('userId'), 1);
