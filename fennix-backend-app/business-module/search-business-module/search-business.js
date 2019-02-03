@@ -5,7 +5,7 @@ const statusCodeConstants = require('../../util-module/status-code-constants');
 
 const searchBusiness = async (req) => {
     let request, response, modifiedResponse = {dropdownList: []}, finalResponse;
-    response = await searchAccessors.searchAccessor(req);
+    response = await searchAccessors.searchAccessor(req.query.searchValue);
     if (arrayNotEmptyCheck(response)) {
         response.rows.forEach((item) => {
             let obj = responseObjectCreator(item, ['dropdownKey', 'dropdownValue', 'tag'], ['value', 'value', 'tag']);
