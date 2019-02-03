@@ -137,6 +137,8 @@ const resetPasswordBusiness = async (req) => {
     let responseObj, businessResponse, retireCheckFlag, returnResponse = '';
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
+    console.log('actual password');
+    console.log(req.body.password);
     const emailId = decrypt(algo, passKey, req.body.email);
     const password = decrypt(algo, passKey, req.body.password);
     console.log('password change');
