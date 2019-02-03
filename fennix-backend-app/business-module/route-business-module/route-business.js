@@ -9,7 +9,7 @@ const insertCompanyRouteBusiness = async (req) => {
     // console.log(counterResponse);
     routeRequest.routeId = counterResponse['counter'];
     companyId = parseInt(request['companyId'], 10);
-    primaryAddressRequest = responseObjectCreator(request, ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'], ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress']);
+    let primaryAddressRequest = responseObjectCreator(request, ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'], ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress']);
     ['companyId', 'companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'].forEach((reqItem) => {
         delete routeRequest[reqItem];
     });

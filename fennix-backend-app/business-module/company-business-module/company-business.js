@@ -11,17 +11,19 @@ const addCompanyBusiness = async (req) => {
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
+    request.noOfRoutes = 0;
+    request.noOfClients = 0;
     response = await companyAccessors.addCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         request.companyId = response.rows[0]['company_id'];
         routeResponse = await routeBusiness.insertCompanyRouteBusiness(request);
         console.log(routeResponse);
         if (notNullCheck(routeResponse)) {
-            finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
-            noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length};
+            noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length, noOfClients: 0};
             console.log(noOfRouteRequest);
             await companyAccessors.editCompanyAccessor(noOfRouteRequest);
             console.log('added company route successfully');
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
         } else {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('error while adding company routes');
@@ -134,7 +136,8 @@ const deleteCompanyBusiness = async (req) => {
 };
 
 const getCompanyDetailsBusiness = async (req) => {
-    let request = {languageId: req.query.languageId, companyIdList: [req.query.companyId]}, response, modifiedResponse, finalResponse,
+    let request = {languageId: req.query.languageId, companyIdList: [req.query.companyId]}, response, modifiedResponse,
+        finalResponse,
         primaryAddressResponse, routeResponse, routeArray = [];
     response = await companyAccessors.getCompanyDetailsAccessor(request);
     primaryAddressResponse = await routeBusiness.getPrimaryAddressByCompanyIdBusiness(parseInt(req.query.companyId));
