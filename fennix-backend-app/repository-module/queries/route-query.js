@@ -3,6 +3,7 @@ const {CompanyRouteModel, CompanyPrimaryAddressModel,CompanyRouteCounterModel} =
 const insertCompanyRoutesQuery = (req) => {
     let response = null;
     CompanyRouteModel.collection.insert(req, function (err, docs) {
+        console.log('inside call back function');
         if (err) {
             console.error(err);
         } 
