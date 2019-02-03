@@ -1,6 +1,7 @@
 const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');
 const containerAccessors = require('../../repository-module/data-accesors/container-accessor');
 const userAccessors = require('../../repository-module/data-accesors/user-accesor');
+const {notificationEmailBusiness} = require('../common-business-module/common-business');
 const {responseObjectCreator} = require('../../util-module/data-validators');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
@@ -10,14 +11,22 @@ const axios = require('axios');
 
 const fetchTripDetailsBusiness = async (req) => {
     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
-        mongoRequest = req.query.searchValue ? {status: ["IN_PROGRESS"], containerId: {$in: []}, searchValue: req.query.searchValue}:{status: ["IN_PROGRESS"], containerId: {$in: []}},
+        mongoRequest = req.query.searchValue ? {
+            status: ["IN_PROGRESS"],
+            containerId: {$in: []},
+            searchValue: req.query.searchValue
+        } : {status: ["IN_PROGRESS"], containerId: {$in: []}},
         tripResponse;
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
 const fetchCompletedTripDetailsBusiness = async (req) => {
     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
-        mongoRequest = req.query.searchValue ? {status: ["COMPLETED"], containerId: {$in: []}, searchValue: req.query.searchValue}:{status: ["COMPLETED"], containerId: {$in: []}},
+        mongoRequest = req.query.searchValue ? {
+            status: ["COMPLETED"],
+            containerId: {$in: []},
+            searchValue: req.query.searchValue
+        } : {status: ["COMPLETED"], containerId: {$in: []}},
         tripResponse;
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
@@ -28,8 +37,8 @@ const startTripBusiness = async (req) => {
     let response, notificationsResponse;
     notificationsResponse = await tripAccessors.getNotificationEmailsForTripIdAccessor({tripId: req.query.tripId});
     if (notNullCheck(notificationsResponse)) {
-        containerAccessors.setContainerLockStatusAccessor([parseInt(notificationsResponse[0].containerId), true]);
-        tripAccessors.updateTripStatusAccessor({
+        await containerAccessors.setContainerLockStatusAccessor([parseInt(notificationsResponse[0].containerId), true]);
+        await tripAccessors.updateTripStatusAccessor({
             tripId: req.query.tripId,
             tripStatus: 'IN_PROGRESS',
             tripActualStartTime: new Date()
@@ -112,9 +121,9 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
         });
-        console.log(mongoRequest);
+        // console.log(mongoRequest);
         response = await tripAccessors.fetchTripDetailsAccessor(mongoRequest);
-        console.log(response);
+        // console.log(response);
         if (arrayNotEmptyCheck(response)) {
             let formattedArray = [];
             response.forEach((item) => {

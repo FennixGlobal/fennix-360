@@ -29,7 +29,20 @@ const insertElockTripDataQuery = (req) => {
     });
 };
 const fetchTripDetailsQuery = (req) => {
-    return ElocksTripDataModel.find({
+    return req.searchValue ? ElocksTripDataModel.find(
+        {
+            $and: [
+                {tripStatus: {$in: req.status}},
+                {containerId: req.containerId},
+                {
+                    $or: [
+                        {'tripName': req.searchValue},
+                        {'startAddress.name': req.searchValue},
+                        {'endAddress.name': req.searchValue}
+                    ]
+                }
+            ]
+        }) : ElocksTripDataModel.find({
         tripStatus: {$in: req.status},
         containerId: req.containerId
     });
