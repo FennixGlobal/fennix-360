@@ -184,7 +184,7 @@ const userResetPasswordBusiness = async (emailId, password) => {
     let req = emailId, response, finalResponse, updateResponse, request;
     response = await userAccessors.getUserByUserEmailIdAccessor(req);
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        request = {user_id: response.rows[0].user_id, password};
+        request = {userId: response.rows[0].user_id, password};
         updateResponse = await userAccessors.updateUserAccessor(request);
         if (objectHasPropertyCheck(updateResponse, 'rows') && arrayNotEmptyCheck(updateResponse.rows)) {
 
