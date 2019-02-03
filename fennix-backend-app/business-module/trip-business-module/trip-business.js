@@ -64,11 +64,25 @@ const fetchCompletedTripDetailsBusiness = async (req) => {
 };
 
 const tripStatusAggregatorBusiness = async () => {
-    let response;
+    let response, tripStatusMap = {
+        NOT_STARTED: 'notStarted',
+        IN_PROGRESS: 'inProgress',
+        COMPLETED: 'completed'
+    }, returnObj = {
+        notStarted: {value: 0, legend: 'NOT STARTED', key: 'notStarted'},
+        inProgress: {value: 0, legend: 'IN PROGRESS', key: 'inProgress'},
+        completed: {value: 0, legend: 'COMPLETED', key: 'completed'}
+    };
     response = await tripAccessors.tripStatusAggregatorAccessor();
     if (arrayNotEmptyCheck(response)) {
         console.log(response);
+        response.forEach((item) => {
+            if (objectHasPropertyCheck(tripStatusMap, item._id)) {
+                returnObj[tripStatusMap[item._id]].value = item.count;
+            }
+        })
     }
+    return returnObj;
 };
 
 const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
@@ -136,7 +150,7 @@ const getMapRouteGoogleDetailsBusiness = async (req) => {
     let returnResponse;
     const googleResponse = await axios.get(`https://roads.googleapis.com/v1/snapToRoads?path=${req.query.locationArray}6&interpolate=true&key=AIzaSyCVO7onAj7X9PLkvQkrDZrOFWNwEFMeyu0`);
     console.log(googleResponse);
-    if (googleResponse && objectHasPropertyCheck(googleResponse, 'data') && objectHasPropertyCheck(googleResponse.data, 'snappedPoints')){
+    if (googleResponse && objectHasPropertyCheck(googleResponse, 'data') && objectHasPropertyCheck(googleResponse.data, 'snappedPoints')) {
         console.log(googleResponse.data.snappedPoints);
         returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', googleResponse.data.snappedPoints);
     } else {
