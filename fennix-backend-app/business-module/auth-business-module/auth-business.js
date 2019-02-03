@@ -5,7 +5,7 @@ const {emoji} = require('../../util-module/custom-request-reponse-modifiers/enco
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
-const {fetchUserDetailsBusiness,userResetPasswordBusiness} = require('../user-business-module/user-business');
+const {fetchUserDetailsBusiness, userResetPasswordBusiness} = require('../user-business-module/user-business');
 const jwt = require('jsonwebtoken');
 const {forgotPasswordemailBusiness} = require('../common-business-module/common-business');
 
@@ -133,25 +133,25 @@ const forgotPasswordBusiness = async (req) => {
     }
     return returnResponse;
 };
-const resetPasswordBusiness = async(req)=>{
+const resetPasswordBusiness = async (req) => {
     let responseObj, businessResponse, retireCheckFlag, returnResponse = '';
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const emailId = decrypt(algo, passKey, req.body.email);
     const password = decrypt(algo, passKey, req.body.password);
-    console.log(password);
+    console.log('password change', password);
     const request = [
         decrypt(algo, passKey, req.body.email),
         req.body.language
     ];
     businessResponse = await authenticateUserDetails(request);
-    console.log(businessResponse);
+    // console.log(businessResponse);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         retireCheckFlag = retireCheck(businessResponse.rows[0]);
         responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
-        console.log(retireCheckFlag);
+        // console.log(retireCheckFlag);
         if (retireCheckFlag) {
-            userResetPasswordBusiness(emailId,password);
+            userResetPasswordBusiness(emailId, password);
         }
         returnResponse = responseObj;
     } else {
