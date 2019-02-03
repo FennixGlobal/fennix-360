@@ -18,7 +18,7 @@ router.post('/forgotPasswordLink', function (req, res) {
 });
 
 router.post('/resetPassword', function (req, res) {
-    var returnObj = authBusiness.forgotPasswordBusiness(req);
+    var returnObj = authBusiness.resetPasswordBusiness(req);
     returnObj.then((authResponse) => {
         res.send(authResponse.response);
     })
