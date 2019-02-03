@@ -29,6 +29,7 @@ const insertElockTripDataQuery = (req) => {
     });
 };
 const fetchTripDetailsQuery = (req) => {
+    console.log(req.searchValue);
     return req.searchValue ? ElocksTripDataModel.find(
         {
             $and: [
