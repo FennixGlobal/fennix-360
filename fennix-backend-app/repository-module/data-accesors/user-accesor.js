@@ -49,6 +49,7 @@ const updateUserAccessor = async (req) => {
     let returnObj, updatedQueryCreatorResponse, fields = Object.keys(req), request = [];
     fields.sort();
     fields.splice(fields.indexOf('userId'), 1);
+    console.log(fields);
     updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
     console.log(updatedQueryCreatorResponse);
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
