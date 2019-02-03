@@ -140,7 +140,7 @@ const resetPasswordBusiness = async (req) => {
     console.log('actual password');
     console.log(req.body.password);
     const emailId = decrypt(algo, passKey, req.body.email);
-    const password = decrypt(algo, passKey, req.body.password);
+    const password = req.body.password;
     console.log('password change');
     console.log(password);
     const request = [
