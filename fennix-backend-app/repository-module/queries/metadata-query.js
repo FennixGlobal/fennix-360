@@ -117,7 +117,7 @@ const loginMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n' +
     ',rcwa.widget_section_order_id,rcwa.widget_section_title\n' +
     ', (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
     ',rcwa.widget_col_count,rcwa.widget_row_count\n' +
-    'rn.route_url, (select localized_text from localization where locale_key = rn.route_name and language = \'EN_US\') as route_name\n' +
+    ', rn.route_url, (select localized_text from localization where locale_key = rn.route_name and language = \'EN_US\') as route_name\n' +
     'from role_card_widget_attribute rcwa\n' +
     'left join widget_attributes wis on\n' +
     'rcwa.widget_attribute_id = wis.widget_attribute_id\n' +
