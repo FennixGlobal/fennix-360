@@ -9,3 +9,5 @@ router.get('/search', (req, res) => {
         res.send(response);
     })
 });
+
+module.exports = router;
