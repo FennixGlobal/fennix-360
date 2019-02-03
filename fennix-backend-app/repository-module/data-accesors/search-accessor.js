@@ -6,6 +6,13 @@ const searchAccessor = async (req) => {
     return returnObj;
 };
 
+const insertSearchAccessor = async (req) => {
+    let returnObj;
+    returnObj = await searchQueries.insertSearchQuery(req);
+    return returnObj;
+};
+
 module.exports = {
-    searchAccessor
+    searchAccessor,
+    insertSearchAccessor
 };

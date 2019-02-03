@@ -1,5 +1,6 @@
 const companyAccessors = require('../../repository-module/data-accesors/comapny-accessor');
 const routeBusiness = require('../route-business-module/route-business');
+const searchBusiness = require('../search-business-module/search-business');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
@@ -7,29 +8,32 @@ const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-ac
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck, responseObjectCreator} = require('../../util-module/data-validators');
 
 const addCompanyBusiness = async (req) => {
-    let request = req.body, response, routeResponse, finalResponse, noOfRouteRequest;
+    let request = req.body, response, routeResponse, finalResponse, noOfRouteRequest, searchRequest = [];
     request.createdDate = new Date();
     request.createdBy = request.userId;
     request.isActive = true;
-    request.noOfRoutes = 0;
-    request.noOfClients = 0;
     response = await companyAccessors.addCompanyAccessor(request);
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         request.companyId = response.rows[0]['company_id'];
         routeResponse = await routeBusiness.insertCompanyRouteBusiness(request);
-        console.log(routeResponse);
         if (notNullCheck(routeResponse)) {
-            noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length, noOfClients: 0};
-            console.log(noOfRouteRequest);
-            await companyAccessors.editCompanyAccessor(noOfRouteRequest);
-            console.log('added company route successfully');
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
+            noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length};
+            await companyAccessors.editCompanyAccessor(noOfRouteRequest);
+            searchRequest.push(getObject('ORIGIN', request['startAddress']['name']));
+            searchRequest.push(getObject('DESTINATION', request['endAddress']['name']));
+            await searchBusiness.insertSearchBusiness(searchRequest);
+            console.log('added company route successfully');
         } else {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             console.log('error while adding company routes');
         }
     }
     return finalResponse;
+};
+
+const getObject = (tag, value) => {
+    return {tag, value};
 };
 /*
 const listCompanyBusiness = async (req) => {

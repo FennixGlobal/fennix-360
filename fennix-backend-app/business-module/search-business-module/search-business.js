@@ -17,7 +17,10 @@ const searchBusiness = async (req) => {
     }
     return finalResponse;
 };
-
+const insertSearchBusiness = async (req) => {
+    await searchAccessors.insertSearchAccessor(req);
+};
 module.exports = {
-    searchBusiness
+    searchBusiness,
+    insertSearchBusiness
 };
