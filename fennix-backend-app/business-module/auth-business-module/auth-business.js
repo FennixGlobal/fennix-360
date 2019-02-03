@@ -137,41 +137,31 @@ const resetPasswordBusiness = async (req) => {
     let responseObj, businessResponse, retireCheckFlag, returnResponse = '';
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
-    console.log('actual password');
-    console.log(req.body.password);
     const emailId = decrypt(algo, passKey, req.body.email);
     const password = req.body.password;
-    console.log('password change');
-    console.log(password);
     const request = [
         emailId,
         req.body.language
     ];
     businessResponse = await authenticateUserDetails(request);
-    // console.log(businessResponse);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         retireCheckFlag = retireCheck(businessResponse.rows[0]);
         responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
-        // console.log(retireCheckFlag);
         if (retireCheckFlag) {
-            userResetPasswordBusiness(emailId, password);
-        }
-        returnResponse = responseObj;
-    } else {
-        businessResponse = await authenticateBeneficiaryDetails(request);
-        if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
-            responseObj = authResponseObjectFormation(businessResponse.rows[0]);
-            retireCheckFlag = retireCheck(responseObj);
-            responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
-            // if (retireCheckFlag) {
-            //     forgotPasswordemailBusiness(emailId, `${businessResponse.rows[0]['first_name']} ${businessResponse.rows[0]['last_name']}`, businessResponse.rows[0]['user_role']);
-            // }
-            returnResponse = responseObj;
+            returnResponse = await userResetPasswordBusiness(emailId, password);
         } else {
             returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
-            // returnResponse.header = null;
-            // returnResponse.response = responseObj;
         }
+    } else {
+        // businessResponse = await authenticateBeneficiaryDetails(request);
+        // if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
+        //     responseObj = authResponseObjectFormation(businessResponse.rows[0]);
+        //     retireCheckFlag = retireCheck(responseObj);
+        //     responseObj = responseFormation(businessResponse.rows[0], retireCheckFlag);
+        //     returnResponse = responseObj;
+        // } else {
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
+        // }
 
     }
     return returnResponse;

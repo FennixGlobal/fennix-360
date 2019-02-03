@@ -13,14 +13,14 @@ router.post('/authenticate', function (req, res) {
 router.post('/forgotPasswordLink', function (req, res) {
     var returnObj = authBusiness.forgotPasswordBusiness(req);
     returnObj.then((authResponse) => {
-        res.send(authResponse.response);
+        res.send(authResponse);
     })
 });
 
 router.post('/resetPassword', function (req, res) {
     var returnObj = authBusiness.resetPasswordBusiness(req);
     returnObj.then((authResponse) => {
-        res.send(authResponse.response);
+        res.send(authResponse);
     })
 });
 
