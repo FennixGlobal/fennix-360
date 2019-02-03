@@ -598,6 +598,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
             case 'detail-text':
                 widgetElementData = {
                     ...widgetElementData, ...{
+                        navigationRouteUrl: widgetElementItem['route_url'],
+                        navigationRouteName: widgetElementItem['route_name'],
                         elementLabel: widgetElementItem['element_label']
                     }
                 };
