@@ -61,24 +61,6 @@ const getBeneficiaryDetailsAccessor = async (req) => {
     return returnObj;
 };
 
-// const getBeneifciaryIdList = async (req) => {
-//     let returnObj;
-//     returnObj = await connectionCheckAndQueryExec(req, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery);
-//     return returnObj;
-// };
-
-// const getBeneifciaryIdList = async (req) => {
-//     let returnObj, userIds, extraQuery, finalQuery, modifiedQuery;
-//     userIds = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID);
-//     extraQuery = ` and center_id = $${userIds.length + 1} order by $${userIds.length + 2} desc nulls last offset $${userIds.length + 3} limit $${userIds.length + 4}`;
-//     modifiedQuery = requestInModifier(userIds, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
-//     console.log(modifiedQuery);
-//     finalQuery = `${modifiedQuery} ${extraQuery}`;
-//     console.log(finalQuery);
-//     returnObj = await connectionCheckAndQueryExec([...userIds, req.query.centerId, req.query.sort, req.query.skip, req.query.limit], finalQuery);
-//     return returnObj;
-// };
-
 const getBeneifciaryIdList = async (req) => {
     let userIdNativeRoleResponse, userIds;
     userIdNativeRoleResponse = await userAccessor.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
@@ -101,9 +83,7 @@ const getExtraQueryBasedOnUserRole = async (requestList, nativeUserRole, req) =>
         }
     }
     modifiedQuery = requestInModifier(requestList, beneficiaryQueries.getBenefeciaryIdListForOwnerAndCenterQuery, false);
-    // console.log(modifiedQuery);
     finalQuery = `${modifiedQuery} ${extraQuery}`;
-    // console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec(finalRequest, finalQuery);
     return returnObj;
 };

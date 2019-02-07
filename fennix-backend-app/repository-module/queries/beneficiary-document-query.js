@@ -1,7 +1,6 @@
 const {beneficiaryDocumentModel} = require('../models/beneficiay-document-model');
 
 const updateBeneficiaryDocumentQuery = (beneficiaryId, categoryDoc) => {
-    console.log(categoryDoc);
     return beneficiaryDocumentModel.update({beneficiaryId: beneficiaryId},
         {
             $push : categoryDoc

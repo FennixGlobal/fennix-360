@@ -164,8 +164,15 @@ const getTotalNoOfElockDevicesAccessor = async (req) => {
     return returnObj;
 };
 
+const editDeviceAccessor = async (deviceId, req) => {
+    let returnObj;
+    returnObj = await deviceQueries.editDeviceQuery(deviceId, req);
+    return returnObj;
+};
+
 module.exports = {
     listElockDevicesAccessor,
+    editDeviceAccessor,
     getTotalNoOfElockDevicesAccessor,
     checkIfDeviceIsPresentAccessor,
     unlinkDeviceForContainerAccessor,

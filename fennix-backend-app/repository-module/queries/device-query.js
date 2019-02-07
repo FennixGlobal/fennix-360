@@ -727,9 +727,22 @@ const listElockDevicesQuery = (req) => {
 const getTotalNoOfElockDevicesQuery = (query) => {
     return deviceAggregator.count({centerId: {$in: query}, containerId: {$exists: true, $ne: null}});
 };
+const editDeviceQuery = (deviceId, req) => {
+    return DeviceAttributeModel.update({
+            _id: deviceId
+        },
+        req, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 module.exports = {
     getTotalNoOfElockDevicesQuery,
+    editDeviceQuery,
     listElockDevicesQuery,
     getDeviceDetailsForListOfContainersQuery,
     updateDeviceWithContainerIdQuery,

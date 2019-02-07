@@ -439,8 +439,22 @@ const getPhoneNoForContainerBusiness = async (req) => {
     return finalResponse;
 };
 
+const editDeviceBusiness = async (req) => {
+    let deviceId = parseInt(req.body.deviceId), mainReq = req.body, response, finalResponse;
+    delete mainReq.deviceId;
+    response = deviceAccessor.editDeviceAccessor(deviceId, mainReq);
+    if (notNullCheck(response)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated device successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', 'Error while updating device details');
+    }
+    return finalResponse;
+};
+
+
 module.exports = {
     deviceAggregatorDashboard,
+    editDeviceBusiness,
     listDevicesBusiness,
     insertDeviceBusiness,
     getPhoneNoForContainerBusiness,

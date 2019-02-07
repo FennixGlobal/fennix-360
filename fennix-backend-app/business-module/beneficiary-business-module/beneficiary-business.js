@@ -58,6 +58,7 @@ const addBeneficiaryBusiness = async (req) => {
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.createdDate = new Date();
     request.createdBy = request.userId;
+    request.dob = request.dob ? new Date(request.dob.year, request.dob.month, request.dob.date) : '';
     if (objectHasPropertyCheck(request, 'image')) {
         imageUpload = request.image;
         delete request.image;
@@ -123,6 +124,7 @@ const updateBeneficiaryBusiness = async (req) => {
         beneficiaryResponse, folderBasePath,
         profileName, restrictionRequestList = [], finalRestrictionObj;
     const request = {...req.body};
+    request.dob = request.dob ? new Date(request.dob.year, request.dob.month, request.dob.date) : '';
     if (objectHasPropertyCheck(request, 'image')) {
         imageUpload = request.image;
         delete request.image;
@@ -148,14 +150,14 @@ const updateBeneficiaryBusiness = async (req) => {
         await restrictionAccessor.updateLocationRestrictionAccessor(finalRestrictionObj);
     }
     const date = new Date();
-    req.updatedDate = new Date();
-    req.updatedBy = request.userId;
+    request.updatedDate = date;
+    request.updatedBy = request.userId;
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     beneficiaryResponse = await beneficiaryAccessor.getBeneficiaryDocumentByBeneficiaryIdAccessor([request.beneficiaryId]);
-    countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
-    countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
-    countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
-    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+    if (objectHasPropertyCheck(beneficiaryResponse, COMMON_CONSTANTS.FENNIX_ROWS) && !arrayNotEmptyCheck(beneficiaryResponse.rows)) {
+        countryCode = await getCountryCodeByLocationIdAccessor([request.country]);
+        countryCode = objectHasPropertyCheck(countryCode, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryCode.rows) && notNullCheck(countryCode.rows[0]['location_code']) ? countryCode.rows[0]['location_code'] : 'OO';
+        countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
         createFolderFlag = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']);
         profileName = `BENEFICIARY_${request['beneficiaryid']}_${fullDate}`;
         folderBasePath = notNullCheck(beneficiaryResponse.rows[0]['dropbox_base_path']) ? beneficiaryResponse.rows[0]['dropbox_base_path'] : `/pat-j/${countryCode}/${profileName}`;

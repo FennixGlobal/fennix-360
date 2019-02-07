@@ -88,6 +88,16 @@ const updateQueryCreator = (table, fields, whereCondition) => {
     return responseObj;
 };
 
+const mongoUpdateQueryCreator = (obj) => {
+    let request = {$set: {}};
+    if (notNullCheck(obj)) {
+        Object.keys(obj).forEach(key => {
+            request.$set[key] = obj[key];
+        });
+    }
+    return request;
+};
+
 const requestInModifier = (itemArray, query, isLanguage) => {
     let modifiedQuery = query;
     if (arrayNotEmptyCheck(itemArray)) {
@@ -160,5 +170,6 @@ module.exports = {
     excelColCreator,
     excelRowsCreator,
     updateQueryCreator,
+    mongoUpdateQueryCreator,
     sortWithPaginationQueryCreator
 };
