@@ -90,7 +90,7 @@ const endTripBusiness = async (req) => {
 // };
 
 const tripStatusAggregatorBusiness = async () => {
-    let response, tripStatusMap = {
+    let response, returnResponse, tripStatusMap = {
         NOT_STARTED: 'notStarted',
         IN_PROGRESS: 'inProgress',
         COMPLETED: 'completed'
@@ -106,9 +106,14 @@ const tripStatusAggregatorBusiness = async () => {
             if (objectHasPropertyCheck(tripStatusMap, item._id)) {
                 returnObj[tripStatusMap[item._id]].value = item.count;
             }
-        })
+        });
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', returnObj);
+    } else {
+        returnResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', '');
     }
-    return returnObj;
+
+
+    return returnResponse;
 };
 
 const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
