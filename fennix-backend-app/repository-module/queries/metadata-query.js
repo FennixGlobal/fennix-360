@@ -12,7 +12,7 @@ const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , rcwa.widget_col_count, rcwa.widget_row_count, rcwa.element_primary_value__validation, rcwa.element_secondary_value__async_validation\n' +
     '    , rcwa.element_icon_value, rcwa.widget_section_order_id, rcwa.widget_attribute_type,rcwa.attribute_width\n' +
     '    , rcwa.widget_sub_section_type, rcwa.widget_sub_section_order_id,rcwa.element_modal_id\n' +
-    '    , rcwa.sub_section_orientation, rcwa.section_orientation\n'+
+    '    , rcwa.sub_section_orientation, rcwa.section_orientation,rcwa.navigation_route as route_id\n'+
     '    , rcwa.sub_section_width\n'+
     '    , (select localized_text from localization where locale_key = rcwa.element_title and language = $3) as element_title\n' +
     '    , (select localized_text from localization where locale_key = rcwa.element_label and language = $3) as element_label\n' +
