@@ -31,7 +31,7 @@ const getUserIdsForAdminQuery = 'select concat(first_name, \' \', last_name) as 
 const getUserIdsForSuperAdminQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
     '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name\n' +
     '    , user_id, gender, user_role \n' +
-    '    from users u where isactive = true and location_id = (select location_id from users where user_id = $2)';
+    '    from users u where isactive = true and location_id = (select location_id from users where user_id = $2) and user_role IN (select role_id from roles where role_name IN ('ROLE_CLIENT', 'ROLE_CUSTOMS_ADMIN', 'ROLE_E_LOCK_ADMIN', 'ROLE_E_LOCK_COUNTRY_ADMIN', 'RROLE_ELOCKS_OPERATOR', 'ROLE_CUSTOMS_OPERATOR'))';
 
 const getUserIdsForMasterAdminQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
     '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name \n' +
