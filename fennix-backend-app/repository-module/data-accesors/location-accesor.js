@@ -50,6 +50,7 @@ const getCountryListAccessor = async (req) => {
             countryListResponse = await connectionCheckAndQueryExec(request, selectCountryForSupervisorAndAdminQuery);
             break;
         }
+        case 'ROLE_E_LOCK_ADMIN':    
         case 'ROLE_SUPER_ADMIN' : {
             countryListResponse = await connectionCheckAndQueryExec(request, selectCountryForSuperAdminQuery);
             break;
