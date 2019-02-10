@@ -75,7 +75,7 @@ router.post(USER_CONTROLLER.USER_DELETE_USER, async (req, res) => {
 });
 router.get(USER_CONTROLLER.USER_LIST_UNASSIGNED_CLIENTS, async (req, res) => {
     let returnObj;
-    returnObj = userBusiness.listUnassignedClientsBusiness();
+    returnObj = userBusiness.listUnassignedClientsBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -83,7 +83,7 @@ router.get(USER_CONTROLLER.USER_LIST_UNASSIGNED_CLIENTS, async (req, res) => {
 
 router.get(USER_CONTROLLER.USER_LIST_CLIENTS_BY_COMPANY_ID, async (req, res) => {
     let returnObj;
-    returnObj = userBusiness.listClientsByCompanyIdBusiness();
+    returnObj = userBusiness.listClientsByCompanyIdBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
