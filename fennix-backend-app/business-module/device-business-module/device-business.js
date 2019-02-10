@@ -1,4 +1,5 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
+const {mongoUpdateQueryCreator} = require('../../util-module/request-validators');
 const {addDeviceIdForSimcardAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
@@ -440,9 +441,10 @@ const getPhoneNoForContainerBusiness = async (req) => {
 };
 
 const editDeviceBusiness = async (req) => {
-    let deviceId = parseInt(req.body.deviceId), mainReq = req.body, response, finalResponse;
+    let deviceId = parseInt(req.body.deviceId), mainReq = req.body, response, finalResponse, mongoReq;
     delete mainReq.deviceId;
-    response = deviceAccessor.editDeviceAccessor(deviceId, mainReq);
+    mongoReq = mongoUpdateQueryCreator(mainReq);
+    response = deviceAccessor.editDeviceAccessor(deviceId, mongoReq);
     if (notNullCheck(response)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated device successfully');
     } else {
@@ -451,11 +453,23 @@ const editDeviceBusiness = async (req) => {
     return finalResponse;
 };
 
+const deleteDeviceBusiness = async (req) => {
+    let deviceId = parseInt(req.body.deviceId), request = {active: false}, response, finalResponse, mongoReq;
+    mongoReq = mongoUpdateQueryCreator(request);
+    response = deviceAccessor.editDeviceAccessor(deviceId, mongoReq);
+    if (notNullCheck(response)) {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated device successfully');
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', 'Error while updating device details');
+    }
+    return finalResponse;
+};
 
 module.exports = {
     deviceAggregatorDashboard,
     editDeviceBusiness,
     listDevicesBusiness,
+    deleteDeviceBusiness,
     insertDeviceBusiness,
     getPhoneNoForContainerBusiness,
     checkIfDeviceIsPresentBusiness,

@@ -80,6 +80,15 @@ router.get('/listELocks', function (req, res) {
         res.send(response);
     })
 });
+
+router.post('/deleteDevice', function (req, res) {
+    let returnObj;
+    returnObj = deviceBusiness.deleteDeviceBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.post('/editDevice', function (req, res) {
     let returnObj;
     returnObj = deviceBusiness.editDeviceBusiness(req);

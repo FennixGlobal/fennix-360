@@ -256,10 +256,23 @@ const getTotalNoOfSimcardsQuery = (query) => {
         {$count: "total"}
     ])
 };
+const editSimcardQuery = (simCardId, req) => {
+    return simcardDetails.update({
+            _id: simCardId
+        },
+        req, {upsert: true}).then(doc => {
+        if (!doc) {
+            console.log('error');
+        } else {
+            console.log('success');
+        }
+    });
+};
 
 module.exports = {
     listSimcardTypesQuery,
     getSimcardDetailsQuery,
+    editSimcardQuery,
     insertSimcardQuery,
     updateSimcardQuery,
     deleteSimcardQuery,

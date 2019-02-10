@@ -54,7 +54,14 @@ const getElockSimcardDetailsAccessor = async (req) => {
     return responseObj;
 };
 
+const editSimcardAcessor = async (simCardId, req) => {
+    let returnObj;
+    returnObj = await simCardQueries.editSimcardQuery(simCardId, req);
+    return returnObj;
+};
+
 module.exports = {
+    editSimcardAcessor,
     getElockSimcardDetailsAccessor,
     getTotalNoOfElockSimcardsAccessor,
     listUnAssignedSimcardsAccessor,
