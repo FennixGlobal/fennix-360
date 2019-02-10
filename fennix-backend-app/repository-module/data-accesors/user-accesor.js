@@ -84,6 +84,8 @@ const getUserIdsForAdminAccessor = async (req) => {
 const getUserIdsForSuperAdminAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSuperAdminQuery);
+    console.log(req);
+    console.log(userQueries.getUserIdsForSuperAdminQuery);
     return returnObj;
 };
 
