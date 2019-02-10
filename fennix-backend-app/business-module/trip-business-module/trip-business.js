@@ -230,7 +230,7 @@ const fetchTripHistoryBusiness = async (req) => {
         }
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_TRIP_FOR_ID, 'EN_US', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', []);
     }
     return finalResponse;
 };
