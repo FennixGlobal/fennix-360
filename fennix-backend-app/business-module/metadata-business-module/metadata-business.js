@@ -265,7 +265,9 @@ const getCountryListBusiness = async (req) => {
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         request.userRole = userDetailsResponse.rows[0]['native_user_role'];
+        console.log(request);
         countryListResponse = await getCountryListAccessor(request);
+        console.log(countryListResponse);
     }
     if (objectHasPropertyCheck(countryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryListResponse.rows)) {
         countryListResponse.rows.forEach(item => {
