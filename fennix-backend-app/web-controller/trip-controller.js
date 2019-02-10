@@ -87,4 +87,12 @@ router.get('/tripAggregator', function (req, res) {
     })
 });
 
+router.get('/tripHistoryCheck', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchTripHistoryBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

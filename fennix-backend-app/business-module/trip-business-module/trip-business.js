@@ -212,6 +212,29 @@ const fetchTripDetailsByTripIdBusiness = async (req) => {
     return tripResponse;
 };
 
+const fetchTripHistoryBusiness = async (req) => {
+    let response, tripResponse, modifiedResponse = {tripData: [], geoFence: []}, finalResponse;
+    response = await tripAccessors.fetchCompleteDeviceDetailsByTripIdAccessor(parseInt(req.query.tripId));
+    if (arrayNotEmptyCheck(response)) {
+        tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(parseInt(req.query.tripId));
+        response.forEach((item) => {
+            let obj1 = responseObjectCreator(item, ['tripId', 'lat', 'lng'], ['tripId', 'lat', 'lng']);
+            let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['speed'], ['speed']);
+            modifiedResponse.tripData.push({...obj1, ...obj2});
+        });
+
+        if (arrayNotEmptyCheck(tripResponse)) {
+            tripResponse.forEach((item) => {
+                modifiedResponse.geoFence.push(responseObjectCreator(item, ['lat', 'lng'], ['lat', 'lng']));
+            });
+        }
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_TRIP_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
+};
+
 const editTripBusiness = async (req) => {
     let request = {status: "NOT_STARTED", containerId: {$in: [req.body.containerId]}, tripId: req.body.tripId},
         latArray = [], lngArray = [], restrictionRequestList = [], modifiedResponse, tripRequest = req.body;
@@ -289,6 +312,7 @@ module.exports = {
     fetchCompleteDeviceDetailsByTripIdBusiness,
     endTripBusiness,
     editTripBusiness,
+    fetchTripHistoryBusiness,
     fetchTripDetailsByTripIdBusiness,
     tripStatusAggregatorBusiness,
     getMapRouteGoogleDetailsBusiness
