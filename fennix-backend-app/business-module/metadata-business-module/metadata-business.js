@@ -250,7 +250,7 @@ const listCentersBusiness = async (req) => {
     centerIdResponse = await metadataAccessor.getCenterIdsAccessor(req);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
-            centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));
+            centerIdList.dropdownList.push(dropdownCreator(item['center_id'], item['name'], false));
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', centerIdList);
     } else {
