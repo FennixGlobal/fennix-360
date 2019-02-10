@@ -422,7 +422,7 @@ const widgetGridElementCreator = (widgetElementItem) => {
                 ...returnObj,
                 gridModalId: widgetElementItem['element_modal_id'],
                 gridNavigationRouteUrl: widgetElementItem['route_url'],
-                gridNavigationRouteId:widgetElementItem['route_id'],
+                gridNavigationRouteId: widgetElementItem['route_id'],
                 gridNavigationRouteName: widgetElementItem['route_name']
             };
             break;

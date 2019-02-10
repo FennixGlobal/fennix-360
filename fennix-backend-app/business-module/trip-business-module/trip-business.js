@@ -117,7 +117,7 @@ const tripStatusAggregatorBusiness = async () => {
 };
 
 const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
-    let containerListResponse, response, tripResponse = {gridData: []};
+    let containerListResponse, response, tripResponse = {gridData: []}, containerCompNameMap = {};
     let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
@@ -127,6 +127,7 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
+            containerCompNameMap[item['container_id']] = {containerName: item['container_name'], companyName: item['company_name']};
         });
         console.log(mongoRequest);
         response = await tripAccessors.fetchTripDetailsAccessor(mongoRequest);
@@ -145,7 +146,9 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
                     tripDuration: item['tripDuration'] ? item['tripDuration'] : '-',
                     tripActualStartDateTime: item['actualStartDate'] ? item['actualStartDate'] : '-',
                     tripActualEndDateTime: item['actualEndDate'] ? item['actualEndDate'] : '-',
-                    tripActualDuration: item['actualDuration'] ? item['actualDuration'] : '-'
+                    tripActualDuration: item['actualDuration'] ? item['actualDuration'] : '-',
+                    containerName: containerCompNameMap[item['containerId']]['containerName'],
+                    companyName: containerCompNameMap[item['containerId']]['companyName']
                 };
                 formattedArray.push(obj);
             });
@@ -155,7 +158,6 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
     }
     return tripResponse;
 };
-
 // const fetchTripDetailsBusiness = async (req) => {
 //     let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
 //         mongoRequest = {status: ["IN_PROGRESS"], containerId: {$in: []}},
