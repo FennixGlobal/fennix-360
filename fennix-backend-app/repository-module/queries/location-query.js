@@ -65,7 +65,7 @@ const locationDetailsUpdateQuery = (req) => {
 const selectCountryForSupervisorAndAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $2) as country_name,location_id, loc.locale_key from location loc where location_id = (select location_id from users where user_id = $1)';
 
 //SUPER_ADMIN
-const selectCountryForSuperAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $2) as country_name,location_id, loc.locale_key from location loc where location_id IN (select location_id from users where owner_user_id = $1)';
+const selectCountryForSuperAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $2) as country_name,location_id, loc.locale_key from location loc where location_id IN (select location_id from users where user_id = $1)';
 
 //MASTER_ADMIN
 const selectAllCountriesForMasterAdminQuery = 'select (select localized_text from localization where locale_key = loc.locale_key and language = $1) as country_name,location_id, loc.locale_key from location loc where location_level = 3';
@@ -81,7 +81,7 @@ const selectCenterIdsForSupervisorQuery = 'select center_id as location_id, name
 const selectCenterIdsForAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1)))';
 
 //SUPER_ADMIN
-const selectCenterIdsForSuperAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from location where parent_location_id IN (select location_id from users where user_id = $1))))';
+const selectCenterIdsForSuperAdminQuery = 'select loc.center_id, loc.name from centers loc where center_id = (select center_id from users where user_id = $1)';
 
 //MASTER_ADMIN
 const selectAllCenterIdsForMasterAdminQuery = 'select c.location_id, (select name from centers where location_id = c.location_id) as location_name from location c where location_level = 0';

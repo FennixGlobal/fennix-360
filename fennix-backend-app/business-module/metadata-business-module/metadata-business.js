@@ -250,7 +250,7 @@ const listCentersBusiness = async (req) => {
     centerIdResponse = await metadataAccessor.getCenterIdsAccessor(req);
     if (objectHasPropertyCheck(centerIdResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(centerIdResponse.rows)) {
         centerIdResponse.rows.forEach(item => {
-            centerIdList.dropdownList.push(dropdownCreator(item['location_id'], item['location_name'], false));
+            centerIdList.dropdownList.push(dropdownCreator(item['center_id'], item['name'], false));
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', centerIdList);
     } else {
@@ -265,7 +265,9 @@ const getCountryListBusiness = async (req) => {
     userDetailsResponse = await getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     if (objectHasPropertyCheck(userDetailsResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailsResponse.rows)) {
         request.userRole = userDetailsResponse.rows[0]['native_user_role'];
+        console.log(request);
         countryListResponse = await getCountryListAccessor(request);
+        console.log(countryListResponse);
     }
     if (objectHasPropertyCheck(countryListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(countryListResponse.rows)) {
         countryListResponse.rows.forEach(item => {

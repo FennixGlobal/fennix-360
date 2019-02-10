@@ -109,6 +109,7 @@ const listContainerBusiness = async (req) => {
             languageId: req.query.languageId
         };
     userResponse = await userAccessors.getUserIdsForAllRolesAccessor(req, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_ALL_NATIVE_USER_ROLE);
+    console.log(userResponse);
     request.userIdList = [];
     if (objectHasPropertyCheck(userResponse, 'userDetails') && objectHasPropertyCheck(userResponse.userDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userResponse.userDetails.rows)) {
         request.companyId = userResponse.nativeUserRole === COMMON_CONSTANTS.FENNIX_NATIVE_ROLE_CLIENT ? userResponse.userDetails.rows[0]['company_id'] : null;
