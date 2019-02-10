@@ -11,11 +11,6 @@ const {forgotPasswordemailBusiness} = require('../common-business-module/common-
 
 const checkEmailId = async (req) => {
     let responseObj, businessResponse;
-    // const algo = emoji[req.query.avatar]['encoding'];
-    // const passKey = emoji[req.query.avatar]['secretPass'];
-    // const request = [
-    //     decrypt(algo, passKey, req.query.email)
-    // ];
     businessResponse = await checkUserEmailId([req.query.userMailId]);
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         responseObj = fennixResponse(statusCodeConstants.STATUS_EMAIL_PRESENT, 'EN_US', businessResponse.rows[0]);
@@ -138,7 +133,8 @@ const resetPasswordBusiness = async (req) => {
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const emailId = decrypt(algo, passKey, req.body.email);
-    const password = req.body.password;
+    const password = req.body.password.toString();
+    console.log(password);
     const request = [
         emailId,
         req.body.language
