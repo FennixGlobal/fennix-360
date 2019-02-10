@@ -127,7 +127,10 @@ const commonFetchTripDetails = async (userRequest, mongoRequest, request) => {
     if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
         containerListResponse.rows.forEach((item) => {
             mongoRequest.containerId.$in.push(item['container_id']);
-            containerCompNameMap[item['container_id']] = {containerName: item['container_name'], companyName: item['company_name']};
+            containerCompNameMap[item['container_id']] = {
+                containerName: item['container_name'],
+                companyName: item['company_name']
+            };
         });
         console.log(mongoRequest);
         response = await tripAccessors.fetchTripDetailsAccessor(mongoRequest);
@@ -218,7 +221,7 @@ const fetchTripHistoryBusiness = async (req) => {
     if (arrayNotEmptyCheck(response)) {
         tripResponse = await tripAccessors.getTripDetailsByTripIdAccessor(parseInt(req.query.tripId));
         response.forEach((item) => {
-            let obj1 = responseObjectCreator(item, ['tripId', 'lat', 'lng'], ['tripId', 'lat', 'lng']);
+            let obj1 = responseObjectCreator(item, ['tripId', 'lat', 'lng'], ['tripId', 'latitude', 'longitude']);
             let obj2 = responseObjectCreator(item['deviceAttributes'][0], ['speed'], ['speed']);
             modifiedResponse.tripData.push({...obj1, ...obj2});
         });
