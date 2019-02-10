@@ -84,8 +84,6 @@ const getUserIdsForAdminAccessor = async (req) => {
 const getUserIdsForSuperAdminAccessor = async (req) => {
     let returnObj;
     returnObj = await connectionCheckAndQueryExec(req, userQueries.getUserIdsForSuperAdminQuery);
-    console.log(req);
-    console.log(userQueries.getUserIdsForSuperAdminQuery);
     return returnObj;
 };
 
@@ -174,7 +172,6 @@ const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
 const getUserIdsForAllRolesAccessor = async (req, dataModifier) => {
     let userDetailResponse, otherUserIdsForGivenUserId, returnObj;
     userDetailResponse = await connectionCheckAndQueryExec([req.query.languageId, req.query.userId], userQueries.getUserNameFromUserIdQuery);
-    console.log(userDetailResponse);
     if (objectHasPropertyCheck(userDetailResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userDetailResponse.rows)) {
         let nativeUserRole = userDetailResponse.rows[0][COMMON_CONSTANTS.FENNIX_NATIVE_ROLE];
         switch (nativeUserRole) {
