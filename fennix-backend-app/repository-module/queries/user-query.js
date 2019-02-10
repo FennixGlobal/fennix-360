@@ -28,11 +28,10 @@ const insertUserQuery = 'insert into ';
 const getUserIdsForSupervisorQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id = $1  or user_id = $1';
 
 const getUserIdsForAdminQuery = 'select concat(first_name, \' \', last_name) as full_name, (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name, user_id, gender, user_role from users u where owner_user_id IN (select user_id from users where owner_user_id = $1) or user_id = $1';
-
 const getUserIdsForSuperAdminQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
-    '(select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\n' +
-    ', user_id, gender, user_role \n' +
-    'from users u where location_id = $1';
+    '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $1) as role_name\n' +
+    '    , user_id, gender, user_role \n' +
+    '    from users u where isactive = true and location_id = (select location_id from users where user_id = $2)';
 
 const getUserIdsForMasterAdminQuery = 'select concat(first_name, \' \', last_name) as full_name,\n' +
     '    (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name \n' +
