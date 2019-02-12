@@ -358,7 +358,8 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
                 formattedArray.push(obj);
             });
             finalResponse.gridData = formattedArray;
-            finalResponse.totalNoOfRecords = response.length;
+            //TODO: fix length by writing new trip query to fetch total records count
+            finalResponse.totalNoOfRecords = tripResponse.length;
         }
     }
 };
