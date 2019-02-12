@@ -312,7 +312,7 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
         mongoRequest = {
             status: ["IN_PROGRESS"],
             containerId: {$in: []},
-        }, tripResponse, finalResponse = {gridData: []};
+        }, tripResponse, finalResponse = {gridData: []}, response;
     let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     console.log(userResponse);
     request.userIdList = userResponse.userIdsList;
@@ -360,8 +360,12 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
             finalResponse.gridData = formattedArray;
             //TODO: fix length by writing new trip query to fetch total records count
             finalResponse.totalNoOfRecords = tripResponse.length;
+            response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
         }
+    } else {
+        response = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', []);
     }
+    return response;
 };
 
 module.exports = {
