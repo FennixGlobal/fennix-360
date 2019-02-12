@@ -336,7 +336,9 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
             mongoRequest.containerId.$in.push(item['container_id']);
             containerCompNameMap[item['container_id']] = {containerName: item['container_name'], companyName: item['company_name']};
         });
+        console.log(mongoRequest);
         tripResponse = await tripAccessors.fetchTripDetailsFilterAccessor(mongoRequest);
+        console.log(tripResponse);
         if (arrayNotEmptyCheck(tripResponse)) {
             let formattedArray = [];
             tripResponse.forEach((item) => {
