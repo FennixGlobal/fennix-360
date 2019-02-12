@@ -365,7 +365,7 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
             response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
         }
     } else {
-        response = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', []);
+        response = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', finalResponse);
     }
     return response;
 };
