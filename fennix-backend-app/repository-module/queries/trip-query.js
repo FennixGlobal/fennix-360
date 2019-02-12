@@ -99,7 +99,51 @@ const getTripDetailsByTripIdQuery = (tripId) => {
     return ElocksTripDataModel.find({tripId});
 };
 
+const fetchTripDetailsFilterQuery = (req) => {
+    let response;
+    if (req.origin && req.destination) {
+        response = ElocksTripDataModel.find(
+            {
+                $and: [
+                    {tripStatus: {$in: req.status}},
+                    {containerId: req.containerId},
+                    req.origin,
+                    req.destination
+                ]
+            });
+    } else if (req.origin) {
+        response = ElocksTripDataModel.find(
+            {
+                $and: [
+                    {tripStatus: {$in: req.status}},
+                    {containerId: req.containerId},
+                    req.origin
+                ]
+            });
+    } else if (req.destination) {
+        response = ElocksTripDataModel.find(
+            {
+                $and: [
+                    {tripStatus: {$in: req.status}},
+                    {containerId: req.containerId},
+                    req.destination
+                ]
+            });
+    } else {
+        response = ElocksTripDataModel.find(
+            {
+                $and: [
+                    {tripStatus: {$in: req.status}},
+                    {containerId: req.containerId}
+                ]
+            });
+    }
+    return response;
+};
+
+
 module.exports = {
+    fetchTripDetailsFilterQuery,
     fetchTripDetailsQuery,
     getNotificationEmailsForTripIdQuery,
     fetchNextElockTripPrimaryKeyQuery,
