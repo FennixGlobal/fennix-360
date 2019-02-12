@@ -57,7 +57,14 @@ const getTripDetailsByTripIdAccessor = async (req) => {
     return returnObj;
 };
 
+const fetchTripDetailsFilterAccessor = async (req) => {
+    let returnObj;
+    returnObj = await tripQueries.fetchTripDetailsFilterQuery(req);
+    return returnObj;
+};
+
 module.exports = {
+    fetchTripDetailsFilterAccessor,
     tripStatusAggregatorAccessor,
     fetchTripDetailsAccessor,
     insertElockTripDataAccessor,
