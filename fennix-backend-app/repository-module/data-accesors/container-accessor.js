@@ -313,7 +313,7 @@ const getContainerDetailsByContIdAccessor = async (req) => {
 
 const getContainerIdListFilterAccessor = async (req) => {
     let returnObj, finalQuery, modifiedQuery, extraQuery = ``, request = [], filterQuery = null;
-    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersQuery, true);
+    modifiedQuery = requestInModifier(req.userIdList, containerQueries.listContainersFiltersQuery, true);
     if (objectHasPropertyCheck(req, 'companyName')) {
         filterQuery = `company_id IN (select company_id from company where company_name = ${req['companyName']})`;
     }
