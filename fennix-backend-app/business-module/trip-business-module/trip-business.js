@@ -314,6 +314,7 @@ const fetchTripDetailsFiltersBusiness = async (req) => {
             containerId: {$in: []},
         }, tripResponse, finalResponse = {gridData: []};
     let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    console.log(userResponse);
     request.userIdList = userResponse.userIdsList;
     request.nativeUserRole = userResponse.nativeUserRole;
     if (arrayNotEmptyCheck(req.body.pageFilters)) {
