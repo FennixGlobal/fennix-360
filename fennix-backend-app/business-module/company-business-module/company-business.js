@@ -152,8 +152,8 @@ const getCompanyDetailsBusiness = async (req) => {
     primaryAddressResponse = await routeBusiness.getPrimaryAddressByCompanyIdBusiness(parseInt(req.query.companyId));
     routeResponse = await routeBusiness.getCommonRouteByCompanyIdBusiness(parseInt(req.query.companyId));
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
-        let companyObj = responseObjectCreator(response.rows[0], ['companyId', 'companyName', 'companyType', 'companyPhone', 'companyEmail', 'companyState', 'companyCity', 'companyCountry', 'documentId'],
-            ['company_id', 'company_name', 'company_type', 'company_phone', 'company_email', 'company_state', 'company_city', 'company_country', 'document_id']);
+        let companyObj = responseObjectCreator(response.rows[0], ['companyId', 'companyName', 'companyType', 'companyPhone', 'companyEmail', 'companyState', 'companyCity', 'companyCountry', 'customsId', 'companyAddress'],
+            ['company_id', 'company_name', 'company_type', 'company_phone', 'company_email', 'company_state', 'company_city', 'company_country', 'customs_id', 'company_address']);
         let addressObj = arrayNotEmptyCheck(primaryAddressResponse) ? responseObjectCreator(primaryAddressResponse[0], ['companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress'], ['companyAddress', 'primaryWarehouseAddress', 'primaryPortAddress']) : [];
         if (arrayNotEmptyCheck(routeResponse)) {
             routeResponse.forEach((route) => {
