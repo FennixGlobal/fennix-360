@@ -147,7 +147,7 @@ const getElockSimCardListBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(simCardObj);
         });
-        // console.log(totalNoOfSimcards);
+        console.log(totalNoOfSimcards);
         modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
