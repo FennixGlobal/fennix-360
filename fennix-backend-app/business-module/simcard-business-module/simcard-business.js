@@ -140,7 +140,7 @@ const getElockSimCardListBusiness = async (req) => {
                 deviceId: item['deviceId'],
                 simType: item['simCardTypes']['simcardType'],
                 mobileNo: item['phoneNo'],
-                serialNumber: item['serialNp'],
+                serialNumber: item['serial'],
                 apn: item['carrierByCountryDetails']['apn'],
                 carrierName: item['carrier']['name'],
                 center: cardIdNameMap[item['centerId']]
