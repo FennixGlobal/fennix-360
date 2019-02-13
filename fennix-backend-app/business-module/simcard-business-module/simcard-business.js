@@ -147,8 +147,7 @@ const getElockSimCardListBusiness = async (req) => {
             };
             modifiedResponse.gridData.push(simCardObj);
         });
-        console.log(totalNoOfSimcards);
-        modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
+        modifiedResponse.totalNoOfRecords = totalNoOfSimcards[0]['total'];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
@@ -178,7 +177,7 @@ const getSimCardListBusiness = async (req) => {
                 deviceId: item['deviceId'],
                 simType: item['simCardTypes']['simcardType'],
                 mobileNo: item['phoneNo'],
-                serialNumber: item['serialNp'],
+                serialNumber: item['serial'],
                 apn: item['carrierByCountryDetails']['apn'],
                 carrierName: item['carrier']['name'],
                 center: cardIdNameMap[item['centerId']]
