@@ -183,7 +183,7 @@ const getElockSimcardDetailsQuery = (req) => {
             }
         },
         {
-            $unwind: "$carrierByCountryDetails"
+            $unwind: {path: "$carrierByCountryDetails", preserveNullAndEmptyArrays:true}
         },
         {
             $lookup: {
@@ -194,7 +194,7 @@ const getElockSimcardDetailsQuery = (req) => {
             }
         },
         {
-            $unwind: "$carrier"
+            $unwind: {path: "$carrier", preserveNullAndEmptyArrays:true}
         }, {
             $lookup: {
                 from: "simcardTypes",
@@ -202,7 +202,7 @@ const getElockSimcardDetailsQuery = (req) => {
                 foreignField: "_id",
                 as: "simCardTypes"
             }
-        }, {$unwind: "$simCardTypes"},
+        }, {$unwind: {path: "$simCardTypes", preserveNullAndEmptyArrays:true}},
         {
             $project: {
                 "simCardTypes.simcardType": 1,
