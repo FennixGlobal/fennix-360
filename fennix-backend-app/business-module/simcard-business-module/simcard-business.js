@@ -138,11 +138,11 @@ const getElockSimCardListBusiness = async (req) => {
             let simCardObj = {
                 simCardId: item['_id'],
                 deviceId: item['deviceId'],
-                simType: item['simCardTypes']['simcardType'],
+                simType: objectHasPropertyCheck(item['simCardTypes'], 'simcardType') ? item['simCardTypes']['simcardType'] : '-',
                 mobileNo: item['phoneNo'],
                 serialNumber: item['serial'],
-                apn: item['carrierByCountryDetails']['apn'],
-                carrierName: item['carrier']['name'],
+                apn: objectHasPropertyCheck(item['carrierByCountryDetails'], 'apn') ? item['carrierByCountryDetails']['apn'] : '-',
+                carrierName: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
                 center: cardIdNameMap[item['centerId']]
             };
             modifiedResponse.gridData.push(simCardObj);
