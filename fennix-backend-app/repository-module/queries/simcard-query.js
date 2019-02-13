@@ -208,7 +208,7 @@ const getElockSimcardDetailsQuery = (req) => {
                 "simCardTypes.simcardType": 1,
                 "phoneNo": 1,
                 "deviceId": 1,
-                "serialNp": 1,
+                "serial": 1,
                 "carrier.name": 1,
                 "carrierByCountryDetails.apn": 1,
                 "centerId": 1
