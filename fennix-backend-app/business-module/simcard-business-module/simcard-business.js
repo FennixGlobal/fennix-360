@@ -195,7 +195,7 @@ const getSimCardListBusiness = async (req) => {
 const editSimcardBusiness = async (req) => {
     let simCardId = parseInt(req.body.simCardId), mainReq = req.body, response, finalResponse, mongoReq;
     delete mainReq.simCardId;
-    mongoReq = mongoWhereInCreator(mainReq);
+    mongoReq = mongoUpdateQueryCreator(mainReq);
     response = simCardAccessor.editSimcardAcessor(simCardId, mongoReq);
     if (notNullCheck(response)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated simcard successfully');
