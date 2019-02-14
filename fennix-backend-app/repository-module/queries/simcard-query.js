@@ -268,7 +268,6 @@ const getTotalNoOfSimcardsQuery = (query) => {
     ])
 };
 const editSimcardQuery = (simCardId, req) => {
-    console.log(req);
     return simcardDetails.update({
             _id: simCardId
         },
