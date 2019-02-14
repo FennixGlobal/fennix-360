@@ -35,15 +35,26 @@ const listUnAssignedSimcardsQuery = (query) => {
                 }
             },
             {
-                $unwind: "$carrier"
+                $unwind: {path: "$carrier", preserveNullAndEmptyArrays: true}
+            },
+            {
+                $lookup: {
+                    from: "simcardTypes",
+                    localField: "simCardType",
+                    foreignField: "_id",
+                    as : "simcardTypes"
+                }
+            },
+            {
+                $unwind: {path: "$simcardTypes", preserveNullAndEmptyArrays: true}
             },
             {
                 $project: {
                     "carrier.name": 1,
                     "phoneNo": 1,
-                    "serialNp": 1,
                     "serial": 1,
-                    "active": 1
+                    "active": 1,
+                    "simcardTypes.simcardType": 1
                 }
             }
         ]
