@@ -66,7 +66,7 @@ router.post(USER_CONTROLLER.USER_UPDATE_USER, async (req, res) => {
     })
 });
 
-router.post(USER_CONTROLLER.USER_DELETE_USER, async (req, res) => {
+router.get(USER_CONTROLLER.USER_DELETE_USER, async (req, res) => {
     let returnObj;
     returnObj = userBusiness.deleteUserBusiness(req);
     returnObj.then((response) => {
