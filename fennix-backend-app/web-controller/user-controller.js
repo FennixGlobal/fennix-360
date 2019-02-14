@@ -89,4 +89,13 @@ router.get(USER_CONTROLLER.USER_LIST_CLIENTS_BY_COMPANY_ID, async (req, res) => 
     })
 });
 
+
+router.get('/getAllUserDetails', async (req, res) => {
+    let returnObj;
+    returnObj = userBusiness.fetchAllUserDetailsBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
