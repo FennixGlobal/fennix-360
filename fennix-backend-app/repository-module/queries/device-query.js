@@ -728,6 +728,7 @@ const getTotalNoOfElockDevicesQuery = (query) => {
     return deviceAggregator.count({centerId: {$in: query}, containerId: {$exists: true, $ne: null}});
 };
 const editDeviceQuery = (deviceId, req) => {
+    console.log(req);
     return DeviceAttributeModel.update({
             _id: deviceId
         },
