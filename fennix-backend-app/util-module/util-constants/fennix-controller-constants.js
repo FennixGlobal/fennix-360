@@ -17,8 +17,8 @@ const SIMCARD_CONTROLLER = {
     SIMCARD_LIST_SIMCARDS_FOR_USER: '/listSimCards',
     SIMCARD_ADD_SIMCARD: '/addSimcard',
     SIMCARD_GET_SIMCARD_DETAILS: '/simCardDetails',
-    // SIMCARD_UPDATE_SIMCARD:,
-    // SIMCARD_DELETE_SIMCARD:,
+    SIMCARD_EDIT_SIMCARD: '/editSimcard',
+    SIMCARD_DELETE_SIMCARD: '/deleteSimcard',
     SIMCARD_LIST_SIMCARD_TYPES: '/listSimcardTypes'
 };
 
