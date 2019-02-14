@@ -20,7 +20,7 @@ const listUnAssignedSimcardsBusiness = async (req) => {
                 isActive: item['active'],
                 carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
                 simcardId:item['_id'],
-                simType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
+                simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
             };
             modifiedResponse.push(obj);
         });
