@@ -16,11 +16,11 @@ const listUnAssignedSimcardsBusiness = async (req) => {
             let obj = {
                 id: item['_id'],
                 phoneNo: item['phoneNo'],
-                serialNo: notNullCheck(item['serial']) ? item['serial'] : notNullCheck(item['serialNp']) ? item['serialNp'] : 'Serial Not Assigned',
+                serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
                 isActive: item['active'],
-                carrier: item['carrier']['name'],
+                carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
                 simcardId:item['_id'],
-                simType:item['simType']
+                simType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
             };
             modifiedResponse.push(obj);
         });
