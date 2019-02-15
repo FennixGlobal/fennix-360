@@ -2,10 +2,12 @@ const searchAccessors = require('../../repository-module/data-accesors/search-ac
 const {arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {SEARCH_MAP} = require('../../util-module/util-constants/fennix-search-constants');
 
 const searchBusiness = async (req) => {
-    let request, response, modifiedResponse = {dropdownList: []}, finalResponse;
-    response = await searchAccessors.searchAccessor({value: req.query.searchValue, tag: req.query.tag});
+    let request, response, modifiedResponse = {dropdownList: []}, finalResponse,tag;
+    tag = req.query.tag && SEARCH_MAP[req.query.tag] ? SEARCH_MAP[req.query.tag] : '';
+    response = await searchAccessors.searchAccessor({value: req.query.searchValue, tag});
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = responseObjectCreator(item, ['dropdownKey', 'dropdownValue', 'tag'], ['value', 'value', 'tag']);
