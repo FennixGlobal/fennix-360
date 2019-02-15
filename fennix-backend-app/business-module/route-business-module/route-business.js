@@ -51,11 +51,11 @@ const editCompanyRoutesBusiness = async (req) => {
 const getRouteByCompanyIdBusiness = async (req) => {
     let companyId = parseInt(req.query.companyId), modifiedResponse = {gridData: []}, finalResponse = {};
     let routeResponse = await getCommonRouteByCompanyIdBusiness(companyId);
-    console.log(routeResponse);
+    //console.log(routeResponse);
     if (arrayNotEmptyCheck(routeResponse)) {
         routeResponse.forEach((item) => {
-            console.log(item);
-            console.log(item['route']['startAddress']);
+            console.log('item => ', item);
+            console.log('start address => ',item['route']['startAddress']);
             let obj = {
                 routeId: item['_id'],
                 companyId: item['companyId'],
