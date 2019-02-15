@@ -16,6 +16,9 @@ const getBaseMetadataBusiness = async (req) => {
         let sideNavObj = routeDataModifier(sideNavResponse);
         composedData['header'] = Object.keys(headerObj).map(dataItem => headerObj[dataItem]);
         composedData['sideNav'] = Object.keys(sideNavObj).map(dataItem => sideNavObj[dataItem]).sort((item, prevItem) => (item.sideNavOrder - prevItem.sideNavOrder));
+        composedData['sideNav'] = composedData['sideNav'] ? composedData['sideNav'].forEach((parent) => {
+            parent.childItems.sort((item, prevItem) => (item.childOrderId - prevItem.childOrderId))
+        }) : [];
         responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', composedData);
     } else {
         responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'EN_US', composedData);
@@ -744,7 +747,8 @@ const childRouteCreator = (item) => {
         routeModalId: item['child_route_modal_id'],
         position: item['route_position'],
         routeName: item['child_route_name'],
-        routeUrl: item['child_route_url']
+        routeUrl: item['child_route_url'],
+        childOrderId: item['child_order_id']
     };
     return childItem;
 };

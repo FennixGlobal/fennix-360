@@ -88,7 +88,7 @@ const sideNavMetadataQuery = 'select u.user_id\n' +
     '    ,(select localized_text from localization where language = $2 and locale_key = chr.route_hover_tooltip) as child_route_hover_tooltip\n' +
     '    ,chr.modal_id as child_route_modal_id\n' +
     '    , chr.route_submit_endpoint as child_route_submit_endpoint\n' +
-    '    , chr.route_data_endpoint as child_route_data_endpoint\n' +
+    '    , chr.route_data_endpoint as child_route_data_endpoint, chr.child_order_id\n' +
     '    , a.action_name as parent_action\n' +
     '    , ca.action_name as child_action\n' +
     '    , rs.sidenav_order_id as route_order_id\n' +
