@@ -23,8 +23,12 @@ const insertSearchBusiness = async (req) => {
     await searchAccessors.insertSearchAccessor(req);
 };
 
-const insertUpdateSearchBusiness = async (req) => {
-    await searchAccessors.insertOrUpdateSearchAccessor(req.body);
+const insertUpdateSearchBusiness = async (request) => {
+    let req = request.body;
+    if (objectHasPropertyCheck(req, 'tag') && objectHasPropertyCheck(SEARCH_MAP, req['tag'])) {
+        req['tag'] = SEARCH_MAP['tag'];
+        await searchAccessors.insertOrUpdateSearchAccessor(req);
+    }
 };
 
 module.exports = {
