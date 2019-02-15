@@ -16,15 +16,18 @@ const addCompanyBusiness = async (req) => {
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         request.companyId = response.rows[0]['company_id'];
         if (objectHasPropertyCheck(request, 'companyName') && notNullCheck(request.companyName)) {
-            searchRequest.push(getObject('COMPANY_NAME', request.companyName));    
+            let searchReq = {tag: 'companyName', value: request.companyName};
+            await searchBusiness.insertUpdateSearchBusiness(searchReq);
         }
         routeResponse = await routeBusiness.insertCompanyRouteBusiness(request);
         if (notNullCheck(routeResponse)) {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length};
             await companyAccessors.editCompanyAccessor(noOfRouteRequest);
-            //searchRequest.push(getObject('ORIGIN', request['startAddress']['name']));
-            //searchRequest.push(getObject('DESTINATION', request['endAddress']['name']));
+            let originReq = {tag: 'origin', value: request['startAddress']['name']};
+            let destinationReq = {tag: 'destination', value: request['endAddress']['name']};
+            await searchBusiness.insertUpdateSearchBusiness(originReq);
+            await searchBusiness.insertUpdateSearchBusiness(destinationReq);
             console.log('added company route successfully');
         } else {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
