@@ -10,22 +10,22 @@ const {statusCodeConstants} = require('../../util-module/status-code-constants')
 const axios = require('axios');
 
 const fetchTripDetailsBusiness = async (req) => {
-    let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
-        mongoRequest = req.query.searchValue ? {
+    let userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}}, request = {},
+        mongoRequest = req.body.searchValue ? {
             status: ["IN_PROGRESS"],
             containerId: {$in: []},
-            searchValue: req.query.searchValue
+            searchValue: req.body.searchValue
         } : {status: ["IN_PROGRESS"], containerId: {$in: []}},
         tripResponse;
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
     return fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', tripResponse);
 };
 const fetchCompletedTripDetailsBusiness = async (req) => {
-    let userRequest = {query: {userId: req.query.userId, languageId: req.query.languageId}}, request = {},
-        mongoRequest = req.query.searchValue ? {
+    let userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}}, request = {},
+        mongoRequest = req.body.searchValue ? {
             status: ["COMPLETED"],
             containerId: {$in: []},
-            searchValue: req.query.searchValue
+            searchValue: req.body.searchValue
         } : {status: ["COMPLETED"], containerId: {$in: []}},
         tripResponse;
     tripResponse = await commonFetchTripDetails(userRequest, mongoRequest, request);
