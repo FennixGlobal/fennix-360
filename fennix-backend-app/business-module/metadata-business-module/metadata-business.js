@@ -17,7 +17,9 @@ const getBaseMetadataBusiness = async (req) => {
         composedData['header'] = Object.keys(headerObj).map(dataItem => headerObj[dataItem]);
         composedData['sideNav'] = Object.keys(sideNavObj).map(dataItem => sideNavObj[dataItem]).sort((item, prevItem) => (item.sideNavOrder - prevItem.sideNavOrder));
         composedData['sideNav'] = composedData['sideNav'] ? composedData['sideNav'].forEach((parent) => {
-            parent.childItems.sort((item, prevItem) => (item.childOrderId - prevItem.childOrderId))
+            if (parent.childItems) {
+                parent.childItems.sort((item, prevItem) => (item.childOrderId - prevItem.childOrderId))
+            }
         }) : [];
         responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', composedData);
     } else {
