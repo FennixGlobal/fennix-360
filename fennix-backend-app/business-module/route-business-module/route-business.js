@@ -49,27 +49,21 @@ const editCompanyRoutesBusiness = async (req) => {
 };
 
 const getRouteByCompanyIdBusiness = async (req) => {
+    const companyId = parseInt(req.query.companyId);
+    let routeResponse = await getCommonRouteByCompanyIdBusiness(companyId);
+    console.log(routeResponse);
+    return fennixResponse(200, 'EN_US', routeResponse);
+};
+
+const getRouteByCompanyIdGridDataBusiness = async (req) => {
     let companyId = parseInt(req.query.companyId), modifiedResponse = {gridData: []}, finalResponse = {};
     let routeResponse = await getCommonRouteByCompanyIdBusiness(companyId);
-    //console.log(routeResponse);
     if (arrayNotEmptyCheck(routeResponse)) {
-        routeResponse.forEach((item) => {
-            console.log('item => ', item);
-            console.log('start address => ',item['route']['startAddress']);
-            let obj = {
-                routeId: item['_id'],
-                companyId: item['companyId'],
-                startAddress: item['startAddress']['name'],
-                endAddress: item['endAddress']['name'],
-                totalDistance: item['totalDistance'],
-                routeName: item['routeName']
-            };
-            modifiedResponse.gridData = routeResponse;
-         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US',  modifiedResponse);
-     } else {
-         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROUTE_FOR_ID, 'EN_US', []);
-     }
+        modifiedResponse.gridData = routeResponse;
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROUTE_FOR_ID, 'EN_US', modifiedResponse);
+    }
     return finalResponse;
 };
 
@@ -102,5 +96,6 @@ module.exports = {
     getRouteByCompanyIdBusiness,
     getCommonRouteByCompanyIdBusiness,
     getRouteDetailsByRouteIdBusiness,
-    deleteCompanyRoutesBusiness
+    deleteCompanyRoutesBusiness,
+    getRouteByCompanyIdGridDataBusiness
 };
