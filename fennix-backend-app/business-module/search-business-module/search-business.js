@@ -1,5 +1,6 @@
 const searchAccessors = require('../../repository-module/data-accesors/search-accessor');
 const {arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
+const {SEARCH_MAP} = require('../../util-module/util-constants/fennix-search-constants');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
 const {SEARCH_MAP} = require('../../util-module/util-constants/fennix-search-constants');
