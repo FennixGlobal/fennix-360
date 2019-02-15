@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 const tripBusiness = require('../business-module/trip-business-module/trip-business');
 
-router.get('/listActiveTrip', function (req, res) {
+router.post('/listActiveTrip', function (req, res) {
     let returnObj;
     returnObj = tripBusiness.fetchTripDetailsBusiness(req);
     returnObj.then((response) => {
@@ -55,7 +55,7 @@ router.get('/endTrip', function (req, res) {
         res.send(response);
     })
 });
-router.get('/listCompletedTrip', function (req, res) {
+router.post('/listCompletedTrip', function (req, res) {
     let returnObj;
     returnObj = tripBusiness.fetchCompletedTripDetailsBusiness(req);
     returnObj.then((response) => {
