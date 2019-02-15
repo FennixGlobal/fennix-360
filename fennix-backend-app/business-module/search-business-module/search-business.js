@@ -22,7 +22,13 @@ const searchBusiness = async (req) => {
 const insertSearchBusiness = async (req) => {
     await searchAccessors.insertSearchAccessor(req);
 };
+
+const insertUpdateSearchBusiness = async (req) => {
+    await searchAccessors.insertOrUpdateSearchAccessor(req.body);
+};
+
 module.exports = {
     searchBusiness,
-    insertSearchBusiness
+    insertSearchBusiness,
+    insertUpdateSearchBusiness
 };
