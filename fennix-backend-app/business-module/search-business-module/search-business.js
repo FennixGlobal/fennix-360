@@ -26,7 +26,7 @@ const insertSearchBusiness = async (req) => {
 const insertUpdateSearchBusiness = async (request) => {
     let req = request.body;
     if (objectHasPropertyCheck(req, 'tag') && objectHasPropertyCheck(SEARCH_MAP, req['tag'])) {
-        req['tag'] = SEARCH_MAP['tag'];
+        req['tag'] = SEARCH_MAP[req['tag']];
         await searchAccessors.insertOrUpdateSearchAccessor(req);
     }
 };
