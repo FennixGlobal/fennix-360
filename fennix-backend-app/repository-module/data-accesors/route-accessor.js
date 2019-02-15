@@ -40,7 +40,14 @@ const getRouteByRouteIdAccessor = async (req) => {
     return response;
 };
 
+const updateCompanyRoutePrimaryKeyAccessor = async (req) => {
+    let response;
+    response = await routeQueries.updateCompanyRoutePrimaryKeyQuery(req);
+    return response;
+};
+
 module.exports = {
+    updateCompanyRoutePrimaryKeyAccessor,
     getPrimaryAddressByCompanyIdAccessor,
     getRouteByRouteIdAccessor,
     insertRouteAccessor,
