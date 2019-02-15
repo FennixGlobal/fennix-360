@@ -23,8 +23,8 @@ const addCompanyBusiness = async (req) => {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
             noOfRouteRequest = {companyId: request.companyId, noOfRoutes: request.routes.length};
             await companyAccessors.editCompanyAccessor(noOfRouteRequest);
-            searchRequest.push(getObject('ORIGIN', request['startAddress']['name']));
-            searchRequest.push(getObject('DESTINATION', request['endAddress']['name']));
+            //searchRequest.push(getObject('ORIGIN', request['startAddress']['name']));
+            //searchRequest.push(getObject('DESTINATION', request['endAddress']['name']));
             console.log('added company route successfully');
         } else {
             finalResponse = fennixResponse(statusCodeConstants.STATUS_COMPANY_ADDED_SUCCESS, 'EN_US', []);
