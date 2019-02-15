@@ -17,7 +17,15 @@ const insertSearchQuery = (req) => {
     });
 };
 
+const insertOrUpdateSearchQuery = (req) => {
+    return SearchModel.collection.update({tag: req.tag, value: req.value},
+        {
+            $set: {tag: req.tag, value: req.value}
+        }, {upsert: true})
+};
+
 module.exports = {
     searchQuery,
-    insertSearchQuery
+    insertSearchQuery,
+    insertOrUpdateSearchQuery
 };
