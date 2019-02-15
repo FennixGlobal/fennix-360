@@ -44,10 +44,22 @@ const editCompanyRoutesBusiness = async (req) => {
 };
 
 const getRouteByCompanyIdBusiness = async (req) => {
-    const companyId = parseInt(req.query.companyId);
+    let companyId = parseInt(req.query.companyId), modifiedResponse = {gridData: []}, finalResponse = {};
     let routeResponse = await getCommonRouteByCompanyIdBusiness(companyId);
-    return fennixResponse(200, 'EN_US', routeResponse);
+    console.log(routeResponse);
+    if (arrayNotEmptyCheck(routeResponse)) {
+        routeResponse.forEach((item) => {
+            let obj = responseObjectCreator(item, ['routeId', 'companyId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName'],
+                                                    ['_id', 'companyId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName']);
+            modifiedResponse.gridData.push(obj);
+        });
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US',  modifiedResponse);
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_ROUTE_FOR_ID, 'EN_US', []);
+    }
+    return finalResponse;
 };
+
 const getCommonRouteByCompanyIdBusiness = async (req) => {
     let routeResponse;
     routeResponse = await routeAccessors.getRouteByCompanyIdAccessor(req);
