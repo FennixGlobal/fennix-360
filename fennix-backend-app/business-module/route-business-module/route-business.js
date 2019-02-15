@@ -1,6 +1,7 @@
 const routeAccessors = require('../../repository-module/data-accesors/route-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
+const {statusCodeConstants} = require('../../util-module/status-code-constants');
 
 const insertCompanyRouteBusiness = async (req) => {
     let request = req, routeRequest = {}, response, counterResponse, companyId = 0,
