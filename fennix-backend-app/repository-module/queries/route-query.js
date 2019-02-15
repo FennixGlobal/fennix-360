@@ -72,5 +72,6 @@ module.exports = {
     editCompanyRoutesQuery,
     getRouteByCompanyIdQuery,
     insertCompanyPrimaryAddressQuery,
-    fetchAndUpdateCompanyRoutePrimaryKeyQuery
+    fetchAndUpdateCompanyRoutePrimaryKeyQuery,
+    updateCompanyRoutePrimaryKeyQuery
 };
