@@ -54,8 +54,17 @@ const getRouteByCompanyIdBusiness = async (req) => {
     console.log(routeResponse);
     if (arrayNotEmptyCheck(routeResponse)) {
         routeResponse.forEach((item) => {
-            let obj = responseObjectCreator(item, ['routeId', 'companyId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName'],
-                                                    ['_id', 'companyId', 'startAddress', 'endAddress', 'wayPoints', 'stoppagePoints', 'totalDistance', 'steps', 'routeName']);
+            let obj = {
+                routeId: item['_id'],
+                companyId: item['companyId'],
+                startAddress: item['startAddress'],
+                endAddress: item['endAddress'],
+                wayPoints: item['wayPoints'],
+                stoppagePoints: item['stoppagePoints'],
+                totalDistance: item['totalDistance'],
+                steps: item['steps'],
+                routeName: item['routeName']
+            };
             modifiedResponse.gridData.push(obj);
         });
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US',  modifiedResponse);
