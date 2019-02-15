@@ -10,6 +10,14 @@ router.get('/getCompanyRoutes', (req, res) => {
     })
 });
 
+router.get('/getCompanyRoutesGridData', (req, res) => {
+    let returnObj;
+    returnObj = routeBusiness.getRouteByCompanyIdGridDataBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 router.get('/getRoutesByRouteId', (req, res) => {
     let returnObj;
     returnObj = routeBusiness.getRouteDetailsByRouteIdBusiness(req);
