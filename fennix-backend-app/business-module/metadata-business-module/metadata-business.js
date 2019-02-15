@@ -16,11 +16,11 @@ const getBaseMetadataBusiness = async (req) => {
         let sideNavObj = routeDataModifier(sideNavResponse);
         composedData['header'] = Object.keys(headerObj).map(dataItem => headerObj[dataItem]);
         composedData['sideNav'] = Object.keys(sideNavObj).map(dataItem => sideNavObj[dataItem]).sort((item, prevItem) => (item.sideNavOrder - prevItem.sideNavOrder));
-        composedData['sideNav'] = composedData['sideNav'] ? composedData['sideNav'].forEach((parent) => {
+        composedData['sideNav'].forEach((parent) => {
             if (parent.childItems) {
                 parent.childItems.sort((item, prevItem) => (item.childOrderId - prevItem.childOrderId))
             }
-        }) : [];
+        });
         responseObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', composedData);
     } else {
         responseObj = fennixResponse(statusCodeConstants.STATUS_NO_CARDS_FOR_USER_ID, 'EN_US', composedData);
