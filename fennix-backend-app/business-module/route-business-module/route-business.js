@@ -54,8 +54,8 @@ const getRouteByCompanyIdBusiness = async (req) => {
     console.log(routeResponse);
     if (arrayNotEmptyCheck(routeResponse)) {
         routeResponse.forEach((item) => {
-            console.log(item['startAddress']);
-            console.log(item['routeName']);
+            console.log(item);
+            console.log(item['route']['startAddress']);
             let obj = {
                 routeId: item['_id'],
                 companyId: item['companyId'],
