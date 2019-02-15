@@ -305,7 +305,71 @@ const timeHoursToMillisecondConverter = (time) => {
     return ((splitTime[0] * (60000 * 60)) + (splitTime[1] * 60000));
 };
 
+const fetchTripDetailsFiltersBusiness = async (req) => {
+    let userRequest = {query: {userId: req.body.userId, languageId: req.body.languageId}}, request = {},containerListResponse, containerCompNameMap = {},
+        mongoRequest = {
+            status: ["IN_PROGRESS"],
+            containerId: {$in: []},
+        }, tripResponse, finalResponse = {gridData: []}, response;
+    let userResponse = await userAccessors.getUserIdsForAllRolesAccessor(userRequest, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    console.log(userResponse);
+    request.userIdList = userResponse.userIdsList;
+    request.nativeUserRole = userResponse.nativeUserRole;
+    if (arrayNotEmptyCheck(req.body.pageFilters)) {
+        req.body.pageFilters.forEach((item) => {
+           if (item['key'] === 'companyName') {
+               request.companyName = item['value'];
+           }
+           if (item['key'] === 'origin') {
+               mongoRequest.origin = {'startAddress.name': item['value']};
+           }
+            if (item['key'] === 'destination') {
+                mongoRequest.destination = {'endAddress.name': item['value']};
+            }
+        });
+    }
+    containerListResponse = await containerAccessors.getContainerIdListFilterAccessor(request);
+    if (objectHasPropertyCheck(containerListResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(containerListResponse.rows)) {
+        containerListResponse.rows.forEach((item) => {
+            mongoRequest.containerId.$in.push(item['container_id']);
+            containerCompNameMap[item['container_id']] = {containerName: item['container_name'], companyName: item['company_name']};
+        });
+        console.log(mongoRequest);
+        tripResponse = await tripAccessors.fetchTripDetailsFilterAccessor(mongoRequest);
+        console.log(tripResponse);
+        if (arrayNotEmptyCheck(tripResponse)) {
+            let formattedArray = [];
+            tripResponse.forEach((item) => {
+                const obj = {
+                    tripId: item['tripId'],
+                    tripName: item['tripName'],
+                    tripStartAddress: item['startAddress']['name'],
+                    tripEndAddress: item['endAddress']['name'],
+                    tripStartTime: item['startDate'],
+                    tripEndTime: item['endDate'],
+                    tripStatus: getTripStatusName(item['tripStatus']),
+                    tripDuration: item['tripDuration'] ? item['tripDuration'] : '-',
+                    tripActualStartDateTime: item['actualStartDate'] ? item['actualStartDate'] : '-',
+                    tripActualEndDateTime: item['actualEndDate'] ? item['actualEndDate'] : '-',
+                    tripActualDuration: item['actualDuration'] ? item['actualDuration'] : '-',
+                    containerName: containerCompNameMap[item['containerId']]['containerName'],
+                    companyName: containerCompNameMap[item['containerId']]['companyName']
+                };
+                formattedArray.push(obj);
+            });
+            finalResponse.gridData = formattedArray;
+            //TODO: fix length by writing new trip query to fetch total records count
+            finalResponse.totalNoOfRecords = tripResponse.length;
+            response = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
+        }
+    } else {
+        response = fennixResponse(statusCodeConstants.STATUS_NO_CONTAINER_FOR_ID, 'EN_US', finalResponse);
+    }
+    return response;
+};
+
 module.exports = {
+    fetchTripDetailsFiltersBusiness,
     fetchTripDetailsBusiness,
     startTripBusiness,
     fetchNotStartedTripDetailsBusiness,

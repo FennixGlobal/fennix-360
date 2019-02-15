@@ -35,15 +35,26 @@ const listUnAssignedSimcardsQuery = (query) => {
                 }
             },
             {
-                $unwind: "$carrier"
+                $unwind: {path: "$carrier", preserveNullAndEmptyArrays: true}
+            },
+            {
+                $lookup: {
+                    from: "simcardTypes",
+                    localField: "simCardType",
+                    foreignField: "_id",
+                    as : "simcardTypes"
+                }
+            },
+            {
+                $unwind: {path: "$simcardTypes", preserveNullAndEmptyArrays: true}
             },
             {
                 $project: {
                     "carrier.name": 1,
                     "phoneNo": 1,
-                    "serialNp": 1,
                     "serial": 1,
-                    "active": 1
+                    "active": 1,
+                    "simcardTypes.simcardType": 1
                 }
             }
         ]
@@ -183,7 +194,7 @@ const getElockSimcardDetailsQuery = (req) => {
             }
         },
         {
-            $unwind: "$carrierByCountryDetails"
+            $unwind: {path: "$carrierByCountryDetails", preserveNullAndEmptyArrays:true}
         },
         {
             $lookup: {
@@ -194,7 +205,7 @@ const getElockSimcardDetailsQuery = (req) => {
             }
         },
         {
-            $unwind: "$carrier"
+            $unwind: {path: "$carrier", preserveNullAndEmptyArrays:true}
         }, {
             $lookup: {
                 from: "simcardTypes",
@@ -202,13 +213,13 @@ const getElockSimcardDetailsQuery = (req) => {
                 foreignField: "_id",
                 as: "simCardTypes"
             }
-        }, {$unwind: "$simCardTypes"},
+        }, {$unwind: {path: "$simCardTypes", preserveNullAndEmptyArrays:true}},
         {
             $project: {
                 "simCardTypes.simcardType": 1,
                 "phoneNo": 1,
                 "deviceId": 1,
-                "serialNp": 1,
+                "serial": 1,
                 "carrier.name": 1,
                 "carrierByCountryDetails.apn": 1,
                 "centerId": 1

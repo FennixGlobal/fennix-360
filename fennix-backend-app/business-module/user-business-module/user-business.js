@@ -211,6 +211,33 @@ const listUnassignedClientsBusiness = async () => {
     }
     return finalResponse;
 };
+
+const fetchAllUserDetailsBusiness = async (req) => {
+    let request = [req.query.userId, req.query.languageId], userProfileResponse, returnObj;
+    userProfileResponse = await userAccessors.fetchUserProfileAccessor(request);
+    if (objectHasPropertyCheck(userProfileResponse, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(userProfileResponse.rows)) {
+        let userProfileReturnObj;
+        let item = userProfileResponse.rows[0];
+        userProfileReturnObj = {
+            firstName: item['first_name'],
+            lastName: item['last_name'],
+            country: item['location_id'],
+            phoneNo: item['mobile_no'],
+            emailId: item['emailid'],
+            center: item['center_id'],
+            gender: item['gender'],
+            userId: item['user_id'],
+            image: item['image'],
+            role: item['role'],
+            address: item['address1'],
+        };
+        returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_OK, 'EN_US', userProfileReturnObj);
+    } else {
+        returnObj = fennixResponse(STATUS_CODE_CONSTANTS.statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', []);
+    }
+    return returnObj;
+};
+
 module.exports = {
     addUserBusiness,
     listClientsByCompanyIdBusiness,
@@ -222,5 +249,6 @@ module.exports = {
     listUnassignedClientsBusiness,
     deleteUserBusiness,
     userResetPasswordBusiness,
-    listOperatorsBusiness
+    listOperatorsBusiness,
+    fetchAllUserDetailsBusiness
 };

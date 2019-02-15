@@ -132,6 +132,7 @@ const dbTableColMap = {
         containerHeight: 'container_height',
         containerUnitType: 'container_unit_type',
         containerCapacity: 'container_capacity',
+        containerVolume: 'container_volume',
         userId: 'owner_user_id',
         deviceId: 'device_id',
         createdDate: 'created_date',

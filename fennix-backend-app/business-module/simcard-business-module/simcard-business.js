@@ -16,11 +16,11 @@ const listUnAssignedSimcardsBusiness = async (req) => {
             let obj = {
                 id: item['_id'],
                 phoneNo: item['phoneNo'],
-                serialNo: notNullCheck(item['serial']) ? item['serial'] : notNullCheck(item['serialNp']) ? item['serialNp'] : 'Serial Not Assigned',
+                serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
                 isActive: item['active'],
-                carrier: item['carrier']['name'],
+                carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
                 simcardId:item['_id'],
-                simType:item['simType']
+                simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
             };
             modifiedResponse.push(obj);
         });
@@ -138,17 +138,16 @@ const getElockSimCardListBusiness = async (req) => {
             let simCardObj = {
                 simCardId: item['_id'],
                 deviceId: item['deviceId'],
-                simType: item['simCardTypes']['simcardType'],
+                simType: objectHasPropertyCheck(item['simCardTypes'], 'simcardType') ? item['simCardTypes']['simcardType'] : '-',
                 mobileNo: item['phoneNo'],
-                serialNumber: item['serialNp'],
-                apn: item['carrierByCountryDetails']['apn'],
-                carrierName: item['carrier']['name'],
+                serialNumber: item['serial'],
+                apn: objectHasPropertyCheck(item['carrierByCountryDetails'], 'apn') ? item['carrierByCountryDetails']['apn'] : '-',
+                carrierName: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
                 center: cardIdNameMap[item['centerId']]
             };
             modifiedResponse.gridData.push(simCardObj);
         });
-        // console.log(totalNoOfSimcards);
-        modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
+        modifiedResponse.totalNoOfRecords = totalNoOfSimcards[0]['total'];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
@@ -178,7 +177,7 @@ const getSimCardListBusiness = async (req) => {
                 deviceId: item['deviceId'],
                 simType: item['simCardTypes']['simcardType'],
                 mobileNo: item['phoneNo'],
-                serialNumber: item['serialNp'],
+                serialNumber: item['serial'],
                 apn: item['carrierByCountryDetails']['apn'],
                 carrierName: item['carrier']['name'],
                 center: cardIdNameMap[item['centerId']]
@@ -196,7 +195,7 @@ const getSimCardListBusiness = async (req) => {
 const editSimcardBusiness = async (req) => {
     let simCardId = parseInt(req.body.simCardId), mainReq = req.body, response, finalResponse, mongoReq;
     delete mainReq.simCardId;
-    mongoReq = mongoWhereInCreator(mainReq);
+    mongoReq = mongoUpdateQueryCreator(mainReq);
     response = simCardAccessor.editSimcardAcessor(simCardId, mongoReq);
     if (notNullCheck(response)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated simcard successfully');

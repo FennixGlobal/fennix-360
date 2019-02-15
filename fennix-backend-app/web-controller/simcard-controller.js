@@ -51,4 +51,20 @@ router.get('/listELockSimcards', (req, res) => {
     })
 });
 
+router.post(SIMCARD_CONTROLLER.SIMCARD_EDIT_SIMCARD, function (req, res) {
+    let returnObj;
+    returnObj = simcardBusiness.editSimcardBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
+router.post(SIMCARD_CONTROLLER.SIMCARD_DELETE_SIMCARD, function (req, res) {
+    let returnObj;
+    returnObj = simcardBusiness.deleteSimcardBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;

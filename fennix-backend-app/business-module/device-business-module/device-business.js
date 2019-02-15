@@ -444,6 +444,7 @@ const editDeviceBusiness = async (req) => {
     let deviceId = parseInt(req.body.deviceId), mainReq = req.body, response, finalResponse, mongoReq;
     delete mainReq.deviceId;
     mongoReq = mongoUpdateQueryCreator(mainReq);
+    console.log(mongoReq);
     response = deviceAccessor.editDeviceAccessor(deviceId, mongoReq);
     if (notNullCheck(response)) {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated device successfully');

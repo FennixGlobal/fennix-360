@@ -3,7 +3,7 @@ const USER_CONTROLLER = {
     USER_LIST_OPERATORS: '/listOperators',
     USER_GET_USER_LIST: '/listUsers',
     USER_DELETE_USER: '/deleteUser',
-    USER_UPDATE_USER: '/updateUser',
+    USER_UPDATE_USER: '/editUser',
     USER_GET_USER_DETAILS: '/getUserDetails',
     USER_ADD_USER: '/addUser',
     USER_DOWNLOAD_USER: '/downloadUsers',
@@ -17,8 +17,8 @@ const SIMCARD_CONTROLLER = {
     SIMCARD_LIST_SIMCARDS_FOR_USER: '/listSimCards',
     SIMCARD_ADD_SIMCARD: '/addSimcard',
     SIMCARD_GET_SIMCARD_DETAILS: '/simCardDetails',
-    // SIMCARD_UPDATE_SIMCARD:,
-    // SIMCARD_DELETE_SIMCARD:,
+    SIMCARD_EDIT_SIMCARD: '/editSimcard',
+    SIMCARD_DELETE_SIMCARD: '/deleteSimcard',
     SIMCARD_LIST_SIMCARD_TYPES: '/listSimcardTypes'
 };
 

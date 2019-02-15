@@ -95,4 +95,12 @@ router.get('/tripHistoryCheck', function (req, res) {
     })
 });
 
+router.post('/listActiveTripWithFilters', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchTripDetailsFiltersBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
