@@ -10,7 +10,7 @@ router.get('/search', (req, res) => {
     })
 });
 
-router.get('/insert', (req, res) => {
+router.post('/insert', (req, res) => {
     let returnObj;
     returnObj = searchBusiness.insertUpdateSearchBusiness(req);
     returnObj.then((response) => {
