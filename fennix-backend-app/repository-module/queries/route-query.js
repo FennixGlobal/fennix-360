@@ -16,7 +16,11 @@ const insertCompanyRoutesQuery = (req) => {
 };
 
 const fetchAndUpdateCompanyRoutePrimaryKeyQuery = () => {
-    return CompanyRouteCounterModel.findOneAndUpdate({}, {$inc: {counter: 1}});
+    return CompanyRouteCounterModel.find({});
+};
+
+const updateCompanyRoutePrimaryKeyQuery = (req) => {
+    return CompanyRouteCounterModel.update({}, {$set: {counter: req}});
 };
 
 const editCompanyRoutesQuery = (routeId, req) => {
