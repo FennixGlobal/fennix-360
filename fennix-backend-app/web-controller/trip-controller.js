@@ -103,4 +103,12 @@ router.post('/listActiveTripWithFilters', function (req, res) {
     })
 });
 
+router.post('/listCompletedTripWithFilters', function (req, res) {
+    let returnObj;
+    returnObj = tripBusiness.fetchCompletedTripDetailsFiltersBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
