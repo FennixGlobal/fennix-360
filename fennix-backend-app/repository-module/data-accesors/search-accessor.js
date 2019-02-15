@@ -20,5 +20,6 @@ const insertOrUpdateSearchAccessor = async (req) => {
 
 module.exports = {
     searchAccessor,
-    insertSearchAccessor
+    insertSearchAccessor,
+    insertOrUpdateSearchAccessor
 };
