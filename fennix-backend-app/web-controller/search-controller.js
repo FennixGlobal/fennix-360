@@ -10,4 +10,12 @@ router.get('/search', (req, res) => {
     })
 });
 
+router.get('/insert', (req, res) => {
+    let returnObj;
+    returnObj = searchBusiness.insertUpdateSearchBusiness(req);
+    returnObj.then((response) => {
+        res.send(response);
+    })
+});
+
 module.exports = router;
