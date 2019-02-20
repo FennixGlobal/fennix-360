@@ -648,10 +648,10 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
                 fromDate.setDate(toDate.getDate() - 7);
                 break;
             default:
-                fromDate.setDate(toDate.getDate() - 14);
+                fromDate.setDate(toDate.getDate() - 10);
         }
     } else {
-        fromDate.setDate(toDate.getDate() - 14);
+        fromDate.setDate(toDate.getDate() - 1);
     }
     request = {
         toDate: toDate.toISOString(),

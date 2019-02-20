@@ -3,7 +3,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -19,6 +20,15 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="252">
+              <caret line="181" column="4" lean-forward="true" selection-start-line="181" selection-start-column="4" selection-end-line="181" selection-end-column="4" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js">
           <provider selected="true" editor-type-id="text-editor">
@@ -49,8 +59,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/auth-accesor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="242">
-              <caret line="21" column="60" lean-forward="true" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
+            <state relative-caret-position="483">
+              <caret line="21" column="60" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
             </state>
           </provider>
         </entry>
@@ -64,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="481">
-              <caret line="35" column="117" selection-start-line="35" selection-start-column="117" selection-end-line="35" selection-end-column="117" />
+            <state relative-caret-position="23">
+              <caret line="122" column="53" selection-start-line="122" selection-start-column="53" selection-end-line="122" selection-end-column="53" />
             </state>
           </provider>
         </entry>
@@ -76,8 +86,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="229">
-              <caret line="183" column="74" selection-start-line="183" selection-start-column="74" selection-end-line="183" selection-end-column="74" />
+            <state relative-caret-position="161">
+              <caret line="7" column="34" lean-forward="true" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="129">
+              <caret line="650" column="54" selection-start-line="650" selection-start-column="52" selection-end-line="650" selection-end-column="54" />
             </state>
           </provider>
         </entry>
@@ -93,9 +112,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>lsitContainer</find>
-      <find>266</find>
-      <find>createTrip</find>
       <find>listU</find>
       <find>267</find>
       <find>link</find>
@@ -121,8 +137,11 @@
       <find>getSideNavMetadataAccessor</find>
       <find>childItems</find>
       <find>parent</find>
-      <find>sidenavOrder</find>
       <find>authenticateUserDetails</find>
+      <find>sidenavOrder</find>
+      <find>mapHistory</find>
+      <find>history</find>
+      <find>getComplete</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -189,7 +208,6 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/trip-query.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-document-query.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/beneficiary-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js" />
@@ -211,8 +229,9 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/search-business-module/search-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" />
       </list>
     </option>
   </component>
@@ -396,12 +415,12 @@
       <workItem from="1549789150616" duration="92000" />
       <workItem from="1549790263782" duration="10210000" />
       <workItem from="1549909963493" duration="1907000" />
-      <workItem from="1550211063058" duration="10251000" />
+      <workItem from="1550211063058" duration="13213000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1765232000" />
+    <option name="totallyTimeSpent" value="1768194000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -428,7 +447,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49570957" weight="0.40441176" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49570957" visible="true" weight="0.40441176" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49768978" weight="0.4820144" />
       <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5042904" side_tool="true" weight="0.4057554" />
@@ -893,13 +912,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6555">
-          <caret line="285" column="71" selection-start-line="285" selection-start-column="71" selection-end-line="285" selection-end-column="71" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/beneficiary-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="391">
@@ -1075,13 +1087,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="298">
-          <caret line="236" column="2" selection-start-line="236" selection-start-column="2" selection-end-line="236" selection-end-column="2" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-email-html-conatants.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="159">
@@ -1127,31 +1132,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/metadata-accesor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="16" column="32" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="460">
           <caret line="90" column="65" selection-start-line="90" selection-start-column="65" selection-end-line="90" selection-end-column="65" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/auth-accesor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="242">
-          <caret line="21" column="60" lean-forward="true" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
         </state>
       </provider>
     </entry>
@@ -1162,17 +1146,52 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="229">
-          <caret line="183" column="74" selection-start-line="183" selection-start-column="74" selection-end-line="183" selection-end-column="74" />
+        <state relative-caret-position="23">
+          <caret line="122" column="53" selection-start-line="122" selection-start-column="53" selection-end-line="122" selection-end-column="53" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/auth-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="481">
-          <caret line="35" column="117" selection-start-line="35" selection-start-column="117" selection-end-line="35" selection-end-column="117" />
+        <state relative-caret-position="483">
+          <caret line="21" column="60" selection-start-line="21" selection-start-column="60" selection-end-line="21" selection-end-column="60" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/metadata-business-module/metadata-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="267">
+          <caret line="22" column="10" selection-start-line="22" selection-start-column="10" selection-end-line="22" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/metadata-accesor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="168">
+          <caret line="16" column="32" selection-start-line="16" selection-start-column="6" selection-end-line="16" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="7" column="34" lean-forward="true" selection-start-line="7" selection-start-column="34" selection-end-line="7" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/trip-business-module/trip-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="252">
+          <caret line="181" column="4" lean-forward="true" selection-start-line="181" selection-start-column="4" selection-end-line="181" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="129">
+          <caret line="650" column="54" selection-start-line="650" selection-start-column="52" selection-end-line="650" selection-end-column="54" />
         </state>
       </provider>
     </entry>
