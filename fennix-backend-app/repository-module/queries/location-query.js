@@ -44,7 +44,7 @@ const getBeneficiaryMapHistoryQuery = (req) => {
                 $lte: new Date(`${req.toDate}`)
             },
             beneficiaryId: req.beneficiaryId
-        });
+        }).sort({"deviceDate": -1});
 };
 
 const locationDetailsUpdateQuery = (req) => {
