@@ -1,3 +1,13 @@
+const statusMessageObjectCreator = (devMessage, userMessage = null) => {
+    return {
+        devMsg: devMessage, userMsg: {
+            EN_US: userMessage || devMessage,
+            espMX: userMessage || devMessage,
+            espLA: userMessage || devMessage
+        }
+    }
+};
+
 const statusCodes = {
     262: statusMessageObjectCreator('company added successfully'),
 // {
@@ -380,13 +390,4 @@ const statusCodes = {
     271: statusMessageObjectCreator('Password update failed')
 };
 
-const statusMessageObjectCreator = (devMessage, userMessage = null) => {
-    return {
-        devMsg: devMessage, userMsg: {
-            EN_US: userMessage || devMessage,
-            espMX: userMessage || devMessage,
-            espLA: userMessage || devMessage
-        }
-    }
-};
 module.exports = {statusCodes};
