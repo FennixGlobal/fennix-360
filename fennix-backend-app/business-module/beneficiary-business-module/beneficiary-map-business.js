@@ -163,7 +163,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
                 fromDate.setTime(toDate.getTime() - 12);
                 break;
             case '1day':
-                fromDate.setDate(toDate.getDate() - 1);
+                fromDate.setTime(toDate.getTime() - 24);
                 break;
             case '2day':
                 fromDate.setDate(toDate.getDate() - 2);
