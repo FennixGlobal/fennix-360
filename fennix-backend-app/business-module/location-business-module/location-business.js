@@ -1,8 +1,8 @@
 const {arrayNotEmptyCheck, notNullCheck, objectHasPropertyCheck} = require('../../util-module/data-validators');
-const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
+const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const {deviceValidator} = require('../../util-module/device-validations');
 const cronJob = require('cron').CronJob;
 const {notificationEmailBusiness} = require('../../business-module/common-business-module/common-business');

@@ -1,5 +1,7 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
+const {deviceCommandConstants} = require('../../util-module/device-command-constants');
+const {deviceValidator} = require('../../util-module/device-validations');
 
 const beneficiaryDeviceReceiverBusiness = async (data, socketKey) => {
     let returnValue = {socketKey, data: ''};
