@@ -4,7 +4,7 @@ const {statusCodeConstants} = require('../../util-module/response-status-constan
 const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
-const {mongoWhereInCreator,mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
+const {mongoWhereInCreator, mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
 const {getCenterIdsBasedOnUserIdAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
@@ -19,7 +19,7 @@ const listUnAssignedSimcardsBusiness = async (req) => {
                 serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
                 isActive: item['active'],
                 carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
-                simcardId:item['_id'],
+                simcardId: item['_id'],
                 simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
             };
             modifiedResponse.push(obj);
@@ -172,17 +172,19 @@ const getSimCardListBusiness = async (req) => {
 
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
-            let simCardObj = {
-                simCardId: item['_id'],
-                deviceId: item['deviceId'],
-                simType: item['simCardTypes']['simcardType'],
-                mobileNo: item['phoneNo'],
-                serialNumber: item['serial'],
-                apn: item['carrierByCountryDetails']['apn'],
-                carrierName: item['carrier']['name'],
-                center: cardIdNameMap[item['centerId']]
-            };
-            modifiedResponse.gridData.push(simCardObj);
+            if (item) {
+                let simCardObj = {
+                    simCardId: item['_id'],
+                    deviceId: item['deviceId'],
+                    simType: item && item['simCardTypes'] ? item['simCardTypes']['simcardType'] : '-',
+                    mobileNo: item['phoneNo'],
+                    serialNumber: item['serial'],
+                    apn: item && item['carrierByCountryDetails'] ? item['carrierByCountryDetails']['apn'] : '-',
+                    carrierName: item['carrier']['name'],
+                    center: cardIdNameMap[item['centerId']]
+                };
+                modifiedResponse.gridData.push(simCardObj);
+            }
         });
         modifiedResponse.totalNoOfRecords = totalNoOfSimcards['total'];
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
