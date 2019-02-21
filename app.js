@@ -1,5 +1,6 @@
 const {mongoDev, mongoLocal, mongoSofiaDev, mongoLab} = require('./fennix-backend-app/util-module/connection-constants');
 const locationBusiness = require('./fennix-backend-app/business-module/location-business-module/location-business');
+const {beneficiaryDeviceRecieverBusiness} = require('./fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business');
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -52,7 +53,7 @@ TCPServer.on("connection", (socket) => {
         if (benSocket && socket && socketKey && !benSocket.hasOwnProperty(socketKey)) {
             benSocket[socketKey] = socket;
         }
-        const returnValue = await locationBusiness.locationUpdateBusiness(data, socketKey);
+        const returnValue = await beneficiaryDeviceRecieverBusiness(data, socketKey);
         if (returnValue.data) {
             benSocket[returnValue.socketKey].write(returnValue.data);
         }

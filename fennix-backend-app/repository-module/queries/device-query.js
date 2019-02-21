@@ -98,47 +98,9 @@ const unlinkLocationMasterForBeneficiaryQuery = async (req) => {
 };
 
 const getBeneficiaryIdByImeiQuery = (query) => {
-    return deviceAggregator.find({imei: query, active: true}, {"_id": 1, "beneficiaryId": 1});
+    return deviceAggregator.find({imei: query, active: true}, {_id: 1, beneficiaryId: 1});
 };
 
-// const getContainerIdByImeiQuery = (req) => {
-//     return deviceAggregator.aggregate([
-//         {$match:{
-//                 $and: [
-//                     {
-//                         imei: req
-//                     },
-//                     {
-//                         active: true
-//                     },
-//                     {
-//                         containerId: {
-//                             $exists: true
-//                         }
-//                     },
-//                     {
-//                         $or: [
-//                             {
-//                                 beneficiaryId: null
-//                             },
-//                             {
-//                                 beneficiaryId: {
-//                                     $exists: false
-//                                 }
-//                             }]
-//                     }
-//                 ]
-//             }},
-//         {
-//             $lookup: {
-//                 from: "elockTripData",
-//                 localField: "_id",
-//                 foreignField: "deviceId",
-//                 as: "trips"
-//             }
-//         },
-//         {$unwind: "$trips"},{$match: {"trips.tripStatus":'IN_PROGRESS'}}]);
-// };
 const getContainerIdByImeiQuery = (req) => {
     return deviceAggregator.aggregate([
         {
