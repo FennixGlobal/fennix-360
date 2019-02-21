@@ -169,9 +169,15 @@ const editDeviceAccessor = async (deviceId, req) => {
     returnObj = await deviceQueries.editDeviceQuery(deviceId, req);
     return returnObj;
 };
+const listUnAssignedDevicesForGlobalAdminAccessor = async () => {
+    let returnObj;
+    returnObj = await deviceQueries.listUnAssignedDevicesForGlobalAdminQuery();
+    return returnObj;
+};
 
 module.exports = {
     listElockDevicesAccessor,
+    listUnAssignedDevicesForGlobalAdminAccessor,
     editDeviceAccessor,
     getTotalNoOfElockDevicesAccessor,
     checkIfDeviceIsPresentAccessor,

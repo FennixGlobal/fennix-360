@@ -356,27 +356,27 @@ const unlinkDeviceForBeneficiaryBusiness = async (req) => {
     return fennixResponse(statusCodeConstants.STATUS_DELINK_DEVICE_SUCCESS, 'EN_US', []);
 };
 
-const listUnAssignedDevicesBusiness = async (req) => {
-    let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse;
-    response = await deviceAccessor.listUnAssignedDevicesAccessor(request);
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
-            let modifiedResponse = {
-                id: item['_id'],
-                imei: item['imei'],
-                isActive: item['active'],
-                deviceType: item['deviceTypes']['name'],
-                phoneNo: item['simcards']['phoneNo'],
-                deviceId: item['_id']
-            };
-            unAssignedDevices.push(modifiedResponse);
-        });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', unAssignedDevices);
-    } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
-    }
-    return finalResponse;
-};
+// const listUnAssignedDevicesBusiness = async (req) => {
+//     let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse;
+//     response = await deviceAccessor.listUnAssignedDevicesAccessor(request);
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let modifiedResponse = {
+//                 id: item['_id'],
+//                 imei: item['imei'],
+//                 isActive: item['active'],
+//                 deviceType: item['deviceTypes']['name'],
+//                 phoneNo: item['simcards']['phoneNo'],
+//                 deviceId: item['_id']
+//             };
+//             unAssignedDevices.push(modifiedResponse);
+//         });
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', unAssignedDevices);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 const listUnAssignedDevicesForContainerBusiness = async () => {
     let response, unAssignedDevices = [], finalResponse;
     response = await deviceAccessor.listUnAssignedDevicesForContainerAccessor();
@@ -462,6 +462,34 @@ const deleteDeviceBusiness = async (req) => {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', 'Updated device successfully');
     } else {
         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', 'Error while updating device details');
+    }
+    return finalResponse;
+};
+
+const listUnAssignedDevicesBusiness = async (req) => {
+    let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse, userResponse;
+    userResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
+    //TODO: below is the temp fix. need to fetch centers for logged in user which is in userAccessor later
+    if (objectHasPropertyCheck(userResponse, 'rows') && arrayNotEmptyCheck(userResponse.rows)) {
+        response = userResponse.rows[0]['native_user_role'] === 'ROLE_GLOBAL_ADMIN' ? await deviceAccessor.listUnAssignedDevicesForGlobalAdminAccessor() : await deviceAccessor.listUnAssignedDevicesAccessor(request);
+        if (arrayNotEmptyCheck(response)) {
+            response.forEach((item) => {
+                let modifiedResponse = {
+                    id: item['_id'],
+                    imei: item['imei'],
+                    isActive: item['active'],
+                    deviceType: item['deviceTypes']['name'],
+                    phoneNo: item['simcards']['phoneNo'],
+                    deviceId: item['_id']
+                };
+                unAssignedDevices.push(modifiedResponse);
+            });
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', unAssignedDevices);
+        } else {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
+        }
+    } else {
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
