@@ -145,8 +145,8 @@ const beneficiaryTrackMapBusiness = async (req) => {
 const getBeneficiaryMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
-    if (req.body.pageFilters && notNullCheck(req.body.pageFilters.dateRange)) {
-        switch (req.body.pageFilters.dateRange) {
+    if (req.body.pageFilters && notNullCheck(req.body.pageFilters[0])) {
+        switch (req.body.pageFilters[0]['value']) {
             case '1hr':
                 fromDate.setTime(toDate.getTime() - 1);
                 break;
