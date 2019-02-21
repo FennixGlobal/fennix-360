@@ -5,6 +5,7 @@ const {statusCodeConstants} = require('../../util-module/status-code-constants')
 const {deviceBybeneficiaryQuery} = require('../../repository-module/data-accesors/device-accesor');
 const {getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
+const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const beneficiaryTrackMapBusiness = async (req) => {
     let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
