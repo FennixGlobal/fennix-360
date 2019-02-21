@@ -120,7 +120,7 @@ router.post('/uploadDocumentsForBeneficiary', function (req, res) {
     })
 });
 
-router.get('/getBeneficiaryMapHistory', function (req, res) {
+router.post('/getBeneficiaryMapHistory', function (req, res) {
     let returnObj;
     returnObj = beneficiaryMapBusiness.getBeneficiaryMapHistoryBusiness(req);
     returnObj.then((response) => {

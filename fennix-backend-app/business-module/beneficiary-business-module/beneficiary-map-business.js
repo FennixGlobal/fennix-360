@@ -145,8 +145,8 @@ const beneficiaryTrackMapBusiness = async (req) => {
 const getBeneficiaryMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
-    if (notNullCheck(req.query.dateRange)) {
-        switch (req.query.dateRange) {
+    if (notNullCheck(req.body.pageFilters.dateRange)) {
+        switch (req.body.pageFilters.dateRange) {
             case '1hr':
                 fromDate.setTime(toDate.getTime() - 1);
                 break;
@@ -156,30 +156,35 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
             case '5hr':
                 fromDate.setTime(toDate.getTime() - 5);
                 break;
+            case '7hr':
+                fromDate.setTime(toDate.getTime() - 7);
+                break;
+            case '12hr':
+                fromDate.setTime(toDate.getTime() - 12);
+                break;
             case '1day':
                 fromDate.setDate(toDate.getDate() - 1);
                 break;
             case '2day':
                 fromDate.setDate(toDate.getDate() - 2);
                 break;
-            case '7day':
-                fromDate.setDate(toDate.getDate() - 7);
+            case '5day':
+                fromDate.setDate(toDate.getDate() - 5);
                 break;
             default:
-                fromDate.setDate(toDate.getDate() - 10);
+                fromDate.setDate(toDate.getDate() - 7);
         }
     } else {
-        fromDate.setDate(toDate.getDate() - 1);
+        fromDate.setDate(toDate.getDate() - 7);
     }
     request = {
         toDate: toDate.toISOString(),
         fromDate: fromDate.toISOString(),
-        beneficiaryId: parseInt(req.query.beneficiaryId)
+        beneficiaryId: parseInt(req.body.beneficiaryId)
     };
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
-    geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
+    geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.body.beneficiaryId);
     if (arrayNotEmptyCheck(historyDetails)) {
-        // console.log(historyDetails);
         historyDetails.forEach((item) => {
             let obj = {
                 beneficiaryId: item['beneficiaryId'],
