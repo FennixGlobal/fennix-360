@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary" />
+    <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-code-constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-code-constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-constants.js" afterDir="false" />
+    </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
     <ignored path="$PROJECT_DIR$/tmp/" />
@@ -28,15 +31,19 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-code-constants.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="288">
-              <caret line="30" column="37" lean-forward="true" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
+            <state relative-caret-position="298">
+              <caret line="192" lean-forward="true" selection-start-line="192" selection-end-line="192" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-constants.js">
-          <provider selected="true" editor-type-id="text-editor" />
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="84">
+              <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+            </state>
+          </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
@@ -59,7 +66,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>card</find>
       <find>navigat</find>
       <find>common</find>
       <find>mongoUpdateQueryCreator</find>
@@ -89,6 +95,7 @@
       <find>statusCodes</find>
       <find>: {</find>
       <find>USER</find>
+      <find>_SUCCESS</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -118,6 +125,7 @@
       <replace>notificationEmailBusiness</replace>
       <replace>tripAccessors</replace>
       <replace>deviceByBeneficiaryIdAccessor</replace>
+      <replace>_FAILURE</replace>
     </replaceStrings>
     <dirStrings>
       <dir>C:\Users\AB\Desktop\fennix-backend\fennix-backend-app\util-module\custom-request-reponse-modifiers</dir>
@@ -382,12 +390,12 @@
       <workItem from="1549789150616" duration="92000" />
       <workItem from="1549790263782" duration="10210000" />
       <workItem from="1549909963493" duration="1907000" />
-      <workItem from="1550211063058" duration="23666000" />
+      <workItem from="1550211063058" duration="28385000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1778647000" />
+    <option name="totallyTimeSpent" value="1783366000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -400,6 +408,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.24322538" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1115,12 +1124,16 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-constants.js">
-      <provider selected="true" editor-type-id="text-editor" />
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="84">
+          <caret line="10" column="21" lean-forward="true" selection-start-line="10" selection-start-column="21" selection-end-line="10" selection-end-column="21" />
+        </state>
+      </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-code-constants.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="288">
-          <caret line="30" column="37" lean-forward="true" selection-start-line="30" selection-start-column="37" selection-end-line="30" selection-end-column="37" />
+        <state relative-caret-position="298">
+          <caret line="192" lean-forward="true" selection-start-line="192" selection-end-line="192" />
         </state>
       </provider>
     </entry>
