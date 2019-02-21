@@ -1,9 +1,9 @@
 const containerQueries = require('../queries/container-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = require('../../util-module/request-validators');
+const {insertQueryCreator, requestInModifier, sortWithPaginationQueryCreator} = require('../../util-module/request-transformers');
 const {TABLE_CONTAINER} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
-const {updateQueryCreator, pgDataFilterQueryCreator} = require('../../util-module/request-validators');
+const {updateQueryCreator, pgDataFilterQueryCreator} = require('../../util-module/request-transformers');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getDeviceIMEIByContainerIDQuery} = require('../queries/device-query');
 const addContainerDetailsAccessor = async (req) => {

@@ -1,5 +1,5 @@
 const {fennixResponse, dropdownActionButtonCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {imageDBLocation, imageLocalLocation} = require('../../util-module/connection-constants');
 const {getDropdownAccessor, getDropdownValueByDropdownIdAccessor, getContainerCheckboxMetadataAccessor} = require('../../repository-module/data-accesors/common-accessor');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');

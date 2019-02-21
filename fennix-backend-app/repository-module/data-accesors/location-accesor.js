@@ -1,6 +1,6 @@
 const {getBeneficiaryMapHistoryQuery,getBeneficiaryLocationList, selectAllCountriesForGlobalAdminQuery, locationCounterQuery, locationDetailsUpdateQuery,getCountryCodeByLocationIdQuery, selectCenterIdsForLoggedInUserAndSubUsersQuery, selectCenterIdsForGivenUserIdQuery, selectCountryForSuperAdminQuery, selectAllCountriesForMasterAdminQuery, selectCountryForSupervisorAndAdminQuery} = require('../queries/location-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {requestInModifier} = require('../../util-module/request-validators');
+const {requestInModifier} = require('../../util-module/request-transformers');
 
 const mapMarkerQuery = async (req) => {
     let returnObj;

@@ -1,5 +1,5 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
-const {mongoUpdateQueryCreator} = require('../../util-module/request-validators');
+const {mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
 const {addDeviceIdForSimcardAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
 const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
@@ -8,7 +8,7 @@ const beneficiaryAccessor = require('../../repository-module/data-accesors/benef
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const centerMetadataAccessors = require('../../repository-module/data-accesors/metadata-accesor');
 const containerAccessor = require('../../repository-module/data-accesors/container-accessor');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const tripAccessors = require('../../repository-module/data-accesors/trip-accessor');

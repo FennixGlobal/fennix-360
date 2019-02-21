@@ -1,7 +1,7 @@
 const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {deviceByBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
@@ -26,17 +26,6 @@ const beneficiaryTrackMapBusiness = async (req) => {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
-            //     {
-            //
-            //     beneficiaryId: item['beneficiaryid'],
-            //     firstName: item['firstname'],
-            //     documentId: item['document_id'],
-            //     mobileNo: item['mobileno'],
-            //     image: item['image'],
-            //     emailId: item['emailid'],
-            //     beneficiaryRoleId: item['role_id'],
-            //     gender: item['gender']
-            // };
             init.beneficiaryDetailObj[item.beneficiaryid] =
                 responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender'])
             return init;

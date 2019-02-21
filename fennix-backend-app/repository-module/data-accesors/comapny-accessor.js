@@ -1,5 +1,5 @@
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {insertQueryCreator, updateQueryCreator, requestInModifier} = require('../../util-module/request-validators');
+const {insertQueryCreator, updateQueryCreator, requestInModifier} = require('../../util-module/request-transformers');
 const {TABLE_COMPANY} = require('../../util-module/db-constants');
 const companyQueries = require('../queries/company-query');
 

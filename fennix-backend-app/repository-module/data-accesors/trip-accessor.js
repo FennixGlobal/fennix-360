@@ -1,5 +1,5 @@
 const tripQueries = require('../queries/trip-query');
-const {skipFieldsCreator} = require('../../util-module/request-validators');
+const {skipFieldsCreator} = require('../../util-module/request-transformers');
 
 const fetchTripDetailsAccessor = async (req) => {
     let returnObj;

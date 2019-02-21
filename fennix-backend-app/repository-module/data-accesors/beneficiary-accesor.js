@@ -1,7 +1,7 @@
 const beneficiaryQueries = require('../queries/beneficiary-query');
 const beneficiaryDocumentQuery = require('../queries/beneficiary-document-query');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {sortWithPaginationQueryCreator, requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-validators');
+const {sortWithPaginationQueryCreator, requestInModifier, insertQueryCreator, updateQueryCreator} = require('../../util-module/request-transformers');
 const {TABLE_BENEFICIARIES, TABLE_ACCOUNTING, TABLE_FAMILY_INFO} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const userAccessor = require('../data-accesors/user-accesor');

@@ -1,10 +1,10 @@
 const simCardAccessor = require('../../repository-module/data-accesors/sim-card-accessor');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {arrayNotEmptyCheck, objectHasPropertyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../repository-module/data-accesors/location-accesor');
-const {mongoWhereInCreator,mongoUpdateQueryCreator} = require('../../util-module/request-validators');
+const {mongoWhereInCreator,mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
 const {getCenterIdsBasedOnUserIdAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 

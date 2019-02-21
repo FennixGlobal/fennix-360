@@ -1,6 +1,6 @@
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse, dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const metadataAccessor = require('../../repository-module/data-accesors/metadata-accesor');
 const {getCountryListAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const {getUserNameFromUserIdAccessor} = require('../../repository-module/data-accesors/user-accesor');

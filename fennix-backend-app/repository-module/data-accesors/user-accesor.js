@@ -1,11 +1,11 @@
 const {TABLE_USERS} = require('../../util-module/db-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
-const requestModifiers = require('../../util-module/request-validators');
+const requestModifiers = require('../../util-module/request-transformers');
 
 const userQueries = require('../queries/user-query');
 
 const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-reponse-modifiers/response-creator");
-const {insertQueryCreator, updateQueryCreator} = require("../../util-module/request-validators");
+const {insertQueryCreator, updateQueryCreator} = require("../../util-module/request-transformers");
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 
 const getUserByUserEmailIdAccessor = async(req)=>{

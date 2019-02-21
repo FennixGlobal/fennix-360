@@ -1,5 +1,5 @@
 const {listGroupsQuery} = require('../queries/group-query');
-const {requestInModifier} = require('../../util-module/request-validators');
+const {requestInModifier} = require('../../util-module/request-transformers');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
 const listGroupsAccessor = async (centerIds) => {

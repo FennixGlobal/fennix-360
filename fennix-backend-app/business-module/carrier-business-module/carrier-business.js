@@ -1,7 +1,7 @@
 const {listCarriersAccessor} = require('../../repository-module/data-accesors/carrier-accessor');
 const {arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {fennixResponse,dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 
 const listCarrierBusiness = async () => {
     let response, finalResponse, carrierListResponse = {dropdownList: []};

@@ -1,4 +1,4 @@
-const {DEVICE_BATTERY_MAP} = require('../util-module/device-status-constants');
+const {DEVICE_BATTERY_MAP} = require('./device-constants-validators/device-status-constants');
 
 const notNullCheck = (data) => data !== null && data !== undefined && data !== '' && data !== 'undefined' && data !== 'null';
 const arrayNotEmptyCheck = (arrayData) => notNullCheck(arrayData) && Object.prototype.toString.call(arrayData) === '[object Array]' && arrayData.length > 0;

@@ -1,7 +1,7 @@
 const crypto = require('crypto-js');// this library is used to encrypt and decrypt password and email while transferring over the network
 const bcrypt = require('bcryptjs');// this library is used to generate the hash password
 const jwt = require('jsonwebtoken');// This method is used to implement the auth token to be ping ponged back and forth for the request authentication.
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');

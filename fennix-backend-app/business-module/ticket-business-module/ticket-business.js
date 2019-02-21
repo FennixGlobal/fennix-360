@@ -4,9 +4,9 @@ const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../.
 const {getUserNameFromUserIdAccessor, getUserIdsForAdminAccessor, getUserIdsForMasterAdminAccessor, getUserIdsForSuperAdminAccessor, getUserIdsForSupervisorAccessor} = require('../../repository-module/data-accesors/user-accesor');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-accesors/user-accesor');
-const {statusCodeConstants} = require('../../util-module/status-code-constants');
+const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
-const {excelColCreator, excelRowsCreator} = require('../../util-module/request-validators');
+const {excelColCreator, excelRowsCreator} = require('../../util-module/request-transformers');
 
 const ticketAggregatorBusiness = async (req) => {
     let request = {}, ticketResponse, returnObj, userIdList;

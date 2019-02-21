@@ -1,5 +1,5 @@
 const {objectHasPropertyCheck, arrayNotEmptyCheck} = require("../../util-module/data-validators");
-const {filterQueryCreator} = require('../../util-module/request-validators');
+const {filterQueryCreator} = require('../../util-module/request-transformers');
 const {connectionCheckAndQueryExec} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const metadataQueries = require('../queries/metadata-query');

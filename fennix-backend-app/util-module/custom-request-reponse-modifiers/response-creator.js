@@ -1,5 +1,5 @@
 const {Client, Pool} = require('pg');
-const {statusCodes} = require('../status-message-constants');
+const {statusCodes} = require('../response-status-constants/status-message-constants');
 const {postgresDBDev, postgresDBLocal, postgresSofiaDev} = require('../connection-constants');
 const pool = new Pool(postgresSofiaDev);
 const fennixResponse = (status, language, data) => {

@@ -1,7 +1,7 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const locationAccessor = require('../../repository-module/data-accesors/location-accesor');
-const {deviceCommandConstants} = require('../../util-module/device-command-constants');
-const {deviceValidator} = require('../../util-module/device-validations');
+const {deviceCommandConstants} = require('../../util-module/device-constants-validators/device-command-constants');
+const {deviceValidator} = require('../../util-module/device-constants-validators/device-validations');
 const {arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 let locationObj = {}, deviceObj = {};
 
