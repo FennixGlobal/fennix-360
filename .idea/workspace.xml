@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -21,15 +20,6 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="267">
-              <caret line="627" lean-forward="true" selection-start-line="627" selection-end-line="627" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="104">
@@ -38,29 +28,29 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="127">
-              <caret line="101" column="78" selection-start-line="101" selection-start-column="78" selection-end-line="101" selection-end-column="78" />
+            <state relative-caret-position="58">
+              <caret line="82" column="10" lean-forward="true" selection-start-line="82" selection-start-column="10" selection-end-line="82" selection-end-column="10" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="168">
-              <caret line="39" column="57" lean-forward="true" selection-start-line="39" selection-start-column="57" selection-end-line="39" selection-end-column="57" />
+            <state relative-caret-position="92">
+              <caret line="4" selection-start-line="4" selection-end-line="5" selection-end-column="74" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="96" column="7" lean-forward="true" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="7" />
+            <state relative-caret-position="23">
+              <caret line="1" column="91" selection-start-line="1" selection-start-column="91" selection-end-line="1" selection-end-column="91" />
             </state>
           </provider>
         </entry>
@@ -76,7 +66,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>text-link</find>
       <find>route</find>
       <find>roleHTMLCreator</find>
       <find>resetPasswordBusiness</find>
@@ -106,6 +95,7 @@
       <find>getValue</find>
       <find>locationBusiness</find>
       <find>locationUpdateBusiness</find>
+      <find>deviceValidator</find>
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -147,7 +137,6 @@
       <list>
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/trip-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/trip-model.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/db-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/company-controller.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/route-controller.js" />
@@ -194,8 +183,9 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/location-query.js" />
         <option value="$PROJECT_DIR$/app.js" />
-        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js" />
       </list>
     </option>
   </component>
@@ -392,12 +382,12 @@
       <workItem from="1549789150616" duration="92000" />
       <workItem from="1549790263782" duration="10210000" />
       <workItem from="1549909963493" duration="1907000" />
-      <workItem from="1550211063058" duration="15236000" />
+      <workItem from="1550211063058" duration="15556000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1770217000" />
+    <option name="totallyTimeSpent" value="1770537000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -410,7 +400,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.24322538" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1137,24 +1126,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="267">
-          <caret line="627" lean-forward="true" selection-start-line="627" selection-end-line="627" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="104">
           <caret line="55" column="67" selection-start-line="55" selection-start-column="67" selection-end-line="55" selection-end-column="67" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="127">
-          <caret line="101" column="78" selection-start-line="101" selection-start-column="78" selection-end-line="101" selection-end-column="78" />
         </state>
       </provider>
     </entry>
@@ -1165,10 +1140,24 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="92">
+          <caret line="4" selection-start-line="4" selection-end-line="5" selection-end-column="74" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/device-query.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="96" column="7" lean-forward="true" selection-start-line="96" selection-start-column="7" selection-end-line="96" selection-end-column="7" />
+        <state relative-caret-position="23">
+          <caret line="1" column="91" selection-start-line="1" selection-start-column="91" selection-end-line="1" selection-end-column="91" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="58">
+          <caret line="82" column="10" lean-forward="true" selection-start-line="82" selection-start-column="10" selection-end-line="82" selection-end-column="10" />
         </state>
       </provider>
     </entry>
