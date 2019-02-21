@@ -33,7 +33,7 @@ const getBeneficiaryLocationList = (query) => {
 //     });
 // };
 const locationCounterQuery = () => {
-    return locationCounter.findOneAndUpdate({}, {$inc:{counter:1}});
+    return locationCounter.findOneAndUpdate({}, {$inc: {counter: 1}});
 };
 
 const getBeneficiaryMapHistoryQuery = (req) => {
@@ -44,7 +44,7 @@ const getBeneficiaryMapHistoryQuery = (req) => {
                 $lte: new Date(`${req.toDate}`)
             },
             beneficiaryId: req.beneficiaryId
-        }).sort({"deviceDate": -1});
+        }).sort({deviceDate: -1});
 };
 
 const locationDetailsUpdateQuery = (req) => {

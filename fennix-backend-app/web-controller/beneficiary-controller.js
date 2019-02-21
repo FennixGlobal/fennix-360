@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 const beneficiaryBusiness = require('../business-module/beneficiary-business-module/beneficiary-business');
+const beneficiaryMapBusiness = require('../business-module/beneficiary-business-module/beneficiary-map-business');
 const locationBusiness = require('../business-module/location-business-module/location-business');
 router.get('/listBeneficiariesForAddTicket', function (req, res) {
     let returnObj;
@@ -75,7 +76,7 @@ router.post('/addBeneficiary', function (req, res) {
 
 router.post('/showMapGridData', function (req, res) {
     let returnObj;
-    returnObj = beneficiaryBusiness.beneficiaryMapDataList(req);
+    returnObj = beneficiaryMapBusiness.beneficiaryTrackMapBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
@@ -121,7 +122,7 @@ router.post('/uploadDocumentsForBeneficiary', function (req, res) {
 
 router.get('/getBeneficiaryMapHistory', function (req, res) {
     let returnObj;
-    returnObj = beneficiaryBusiness.getBeneficiaryMapHistoryBusiness(req);
+    returnObj = beneficiaryMapBusiness.getBeneficiaryMapHistoryBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
