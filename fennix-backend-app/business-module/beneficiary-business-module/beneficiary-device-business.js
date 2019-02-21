@@ -3,6 +3,7 @@ const locationAccessor = require('../../repository-module/data-accesors/location
 const {deviceCommandConstants} = require('../../util-module/device-command-constants');
 const {deviceValidator} = require('../../util-module/device-validations');
 const {arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
+let locationObj = {}, deviceObj = {};
 
 const beneficiaryDeviceReceiverBusiness = async (data, socketKey) => {
     let returnValue = {socketKey, data: ''};
@@ -15,7 +16,7 @@ const beneficiaryDeviceReceiverBusiness = async (data, socketKey) => {
 };
 
 const processData = async (loginString) => {
-    let returnString, loginFlag,locationObj,deviceObj;
+    let returnString, loginFlag;
     const checkSum = 3;
     const dataCommand = loginString.substr(0, 3);
     locationObj = {
