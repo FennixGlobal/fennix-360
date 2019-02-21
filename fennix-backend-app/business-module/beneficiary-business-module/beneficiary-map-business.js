@@ -110,7 +110,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
                     value: Math.floor(item.deviceAttributes.speed)
                 });
-                deviceDetails[item.containerId].push({
+                deviceDetails[item.beneficiaryId].push({
                     text: 'EStatus',
                     key: 'online',
                     icon: 'radio_button_checked',
