@@ -143,27 +143,28 @@ const beneficiaryTrackMapBusiness = async (req) => {
 };
 
 const getBeneficiaryMapHistoryBusiness = async (req) => {
+    const milliseconds = 3600000;
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
     if (req.body.pageFilters && notNullCheck(req.body.pageFilters[0])) {
         switch (req.body.pageFilters[0]['value']) {
             case '1hr':
-                fromDate.setTime(toDate.getTime() - 1);
+                fromDate.setTime(toDate.getTime() - (1 * milliseconds));
                 break;
             case '2hr':
-                fromDate.setTime(toDate.getTime() - 2);
+                fromDate.setTime(toDate.getTime() - (2 * milliseconds));
                 break;
             case '5hr':
-                fromDate.setTime(toDate.getTime() - 5);
+                fromDate.setTime(toDate.getTime() - (5 * milliseconds));
                 break;
             case '7hr':
-                fromDate.setTime(toDate.getTime() - 7);
+                fromDate.setTime(toDate.getTime() - (7 * milliseconds));
                 break;
             case '12hr':
-                fromDate.setTime(toDate.getTime() - 12);
+                fromDate.setTime(toDate.getTime() - (12 * milliseconds));
                 break;
             case '1day':
-                fromDate.setTime(toDate.getTime() - 24);
+                fromDate.setDate(toDate.getDate() - 1);
                 break;
             case '2day':
                 fromDate.setDate(toDate.getDate() - 2);
