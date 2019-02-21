@@ -8,8 +8,7 @@ const restrictionAccessor = require('../../repository-module/data-accesors/restr
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 
 const beneficiaryTrackMapBusiness = async (req) => {
-    let request = [req.body.userId, req.body.centerId, req.body.sort, parseInt(req.body.skip), req.body.limit, req.body.languageId],
-        beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
+    let beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj,
         newReq = {
             query: {
@@ -42,6 +41,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 locationObj[item.beneficiaryId]['roleId'] = beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]['roleId'];
                 const deviceDetails = {};
                 let noOfViolations = 0;
+                let differenceTime = Math.floor((new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime()) / 1000 / 60);
                 deviceDetails[item.beneficiaryId] = [];
                 const GPS = {A: 'Valid', V: 'Invalid'};
                 const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
@@ -110,10 +110,17 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
                     value: Math.floor(item.deviceAttributes.speed)
                 });
+                deviceDetails[item.containerId].push({
+                    text: 'EStatus',
+                    key: 'online',
+                    icon: 'radio_button_checked',
+                    status: differenceTime < 3 ? 'safe' : 'violation',
+                    value: differenceTime < 3 ? 'Online' : 'Offline'
+                });
                 beneficiaryDevices = {...deviceDetails};
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-                const modifiedDate = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
-                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = modifiedDate;
+                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
+                ;
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                     text: 'Number of Violations',
