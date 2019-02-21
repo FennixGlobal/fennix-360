@@ -26,7 +26,7 @@ const getDeviceDetailsForListOfBeneficiariesQuery = (query) => {
         });
 };
 
-const deviceDetailsByBeneficiaryId = (query) => {
+const deviceDetailsByBeneficiaryIdQuery = (query) => {
     return LocationDeviceAttributeMasterModel.aggregate([
         {
             $match: {"beneficiaryId": {$in: query}}
@@ -714,7 +714,7 @@ module.exports = {
     unlinkLocationMasterForContainerQuery,
     listUnAssignedDevicesForContainerQuery,
     userIdDeviceAggregatorQuery,
-    deviceDetailsByBeneficiaryId,
+    deviceDetailsByBeneficiaryIdQuery,
     getDeviceDetailsForListOfBeneficiariesQuery,
     listDevicesQuery,
     updateDeviceWithBeneficiaryIdQuery,

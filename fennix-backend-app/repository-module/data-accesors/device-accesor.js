@@ -10,9 +10,9 @@ const listUnAssignedDevicesAccessor = async (req) => {
     returnObj = await deviceQueries.listUnAssignedDevicesQuery(req);
     return returnObj;
 };
-const deviceBybeneficiaryQuery = async (req) => {
+const deviceByBeneficiaryIdAccessor = async (req) => {
     let returnObj;
-    returnObj = await deviceQueries.deviceDetailsByBeneficiaryId(req);
+    returnObj = await deviceQueries.deviceDetailsByBeneficiaryIdQuery(req);
     return returnObj;
 };
 
@@ -185,7 +185,7 @@ module.exports = {
     deviceAggregator,
     getPhoneNoForContainerAccessor,
     listDeviceTypesAccessor,
-    deviceBybeneficiaryQuery,
+    deviceByBeneficiaryIdAccessor,
     getDeviceDetailsForListOfBeneficiariesAccessor,
     listDevicesAccessor,
     insertDeviceAccessor,

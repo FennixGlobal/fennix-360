@@ -2,7 +2,7 @@ const beneficiaryAccessor = require('../../repository-module/data-accesors/benef
 const {objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck, notNullCheck} = require('../../util-module/data-validators');
 const {fennixResponse} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 const {statusCodeConstants} = require('../../util-module/status-code-constants');
-const {deviceBybeneficiaryQuery} = require('../../repository-module/data-accesors/device-accesor');
+const {deviceByBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
@@ -39,7 +39,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
             };
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
-        beneficiaryDeviceArray = await deviceBybeneficiaryQuery(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
+        beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         beneficiaryDeviceArray.forEach((item) => {
             locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
             locationObj[item.beneficiaryId]['location'] = {
