@@ -9,8 +9,16 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const momentTimezone = require('moment-timezone');
 
 const geofenceValidator = (geoFenceArray, location) => {
-    console.log(geoFenceArray);
-    console.log(location);
+    // if (arrayNotEmptyCheck(geoFenceArray)) {
+    const latArray = [], lngArray = [];
+    geoFenceArray.forEach((item) => {
+        latArray.push(item['lat']);
+        lngArray.push(item['lng']);
+    });
+    latArray.sort();
+    lngArray.sort();
+    return ((location.latitude > latArray[0] && location.latitude < latArray[latArray.length - 1]) || (location.longitude > lngArray[0] && location.longitude < lngArray[lngArray.length - 1]));
+    // }
 };
 const beneficiaryTrackMapBusiness = async (req) => {
     let beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
@@ -82,10 +90,10 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
                 });
                 deviceDetails[item.beneficiaryId].push({
-                    text: 'geoFence',
-                    key: 'genoFence',
+                    text: 'GFence',
+                    key: 'geoFence',
                     icon: 'map',
-                    status: item.locationRestriction ? geofenceValidator(item.locationRestriction, item.location) ? 'violation' : 'safe' : 'still',
+                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.locationDetails) ? geofenceValidator(item.locationRestriction.locationDetails, item.location) ? 'violation' : 'safe' : 'still',
                     value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
                 });
                 deviceDetails[item.beneficiaryId].push({
