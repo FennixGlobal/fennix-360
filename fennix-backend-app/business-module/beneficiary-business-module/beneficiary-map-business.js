@@ -120,7 +120,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 });
                 beneficiaryDevices = {...deviceDetails};
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = momentTimezone.tz(completeDate, 'America/Santo_Domingo')
+                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = momentTimezone.tz(completeDate, 'America/Santo_Domingo').format();
                 // `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
                 ;
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
