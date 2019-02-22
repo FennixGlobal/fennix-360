@@ -327,7 +327,6 @@ const getDeviceByDeviceIdBusiness = async (req) => {
 const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     const request = {beneficiaryId: parseInt(req.query.beneficiaryId)};
     const GPS = {A: 'Valid', V: 'Invalid'};
-    deviceAttributes[key]
     let deviceResponse, returnObj, finalResponse = {};
     if (notNullCheck(request.beneficiaryId)) {
         deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
