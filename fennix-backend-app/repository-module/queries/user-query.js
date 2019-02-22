@@ -1,6 +1,6 @@
 const checkUserEmailQuery = 'select  user_id,user_role as role, (select role_name from roles where role_id = u.user_role) as native_user_role, concat(first_name, \' \', last_name) as full_name FROM users u where email_id=$1';
 
-const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no\n' +
+const userProfileQuery = 'select u.first_name, u.last_name, u.mobile_no,u.center_id\n' +
     '    , u.address1\n' +
     '    , u.user_role as role\n' +
     '    , (select localized_text from localization where locale_key = (select role_name from roles where role_id = u.user_role) and language = $2) as role_name\n' +
