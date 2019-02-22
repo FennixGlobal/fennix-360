@@ -1,7 +1,7 @@
 const deviceAccessor = require('../../repository-module/data-accesors/device-accesor');
 const {mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
 const {addDeviceIdForSimcardAccessor} = require('../../repository-module/data-accesors/sim-card-accessor');
-const {notNullCheck, objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+const {notNullCheck, objectHasPropertyCheck, deviceStatusMapper, arrayNotEmptyCheck} = require('../../util-module/data-validators');
 const {getBeneficiaryByUserIdAccessor, getBeneficiaryNameFromBeneficiaryIdAccessor} = require('../../repository-module/data-accesors/beneficiary-accesor');
 const userAccessor = require('../../repository-module/data-accesors/user-accesor');
 const beneficiaryAccessor = require('../../repository-module/data-accesors/beneficiary-accesor');
@@ -326,15 +326,101 @@ const getDeviceByDeviceIdBusiness = async (req) => {
  */
 const getDeviceDetailsByBeneficiaryIdBusiness = async (req) => {
     const request = {beneficiaryId: parseInt(req.query.beneficiaryId)};
+    const GPS = {A: 'Valid', V: 'Invalid'};
+    deviceAttributes[key]
     let deviceResponse, returnObj, finalResponse = {};
     if (notNullCheck(request.beneficiaryId)) {
         deviceResponse = await deviceAccessor.getDeviceByBeneficiaryIdAccessor(request);
     }
     if (notNullCheck(deviceResponse)) {
         finalResponse['beneficiaryId'] = deviceResponse[0]['beneficiaryId'];
-        finalResponse = {...finalResponse, ...deviceResponse[0].device, ...deviceResponse[0].deviceAttributes};
-        // console.log(finalResponse);
-        // console.log(deviceResponse);
+        const deviceAttributes = {...deviceResponse[0].deviceAttributes};
+        let newDeviceAttributes = {};
+        Object.keys(deviceAttributes).forEach((key) => {
+            let obj = {};
+            switch (key) {
+                case 'batteryVoltage':
+                    obj = {
+                        value: `${deviceAttributes[key]} V`,
+                        status: deviceStatusMapper('batteryVoltage', deviceAttributes[key]),
+                        key
+                    };
+                    break;
+                case 'speed':
+                    obj = {
+                        status: parseInt(deviceAttributes[key]) > 0 ? 'moving' : 'still',
+                        value: `${Math.floor(parseInt(deviceAttributes[key]))} km/hr`,
+                        key
+                    };
+                    break;
+                case 'batteryPercentage':
+                    obj = {
+                        value: `${deviceAttributes[key]} %`,
+                        status: deviceStatusMapper('batteryPercentage', deviceAttributes[key]),
+                        key
+                    };
+                    break;
+                case 'beltStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] === 1 ? 'violation' : 'safe',
+                        value: deviceAttributes[key] === 1 ? 'Belt Cut' : 'OK'
+                    };
+                    break;
+                case 'shellStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] === 1 ? 'violation' : 'safe',
+                        value: deviceAttributes[key] === 1 ? 'Shell Break' : 'OK'
+                    };
+                    break;
+                case 'gsmStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] < 2 ? 'violation' : 'safe',
+                        value: deviceAttributes[key] < 2 ? 'Low' : 'OK'
+                    };
+                    break;
+                case 'rfConnectionStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] ? 'violation' : 'safe',
+                        value: deviceAttributes[key] ? 'Outdoor' : 'Home'
+                    };
+                    break;
+                case 'rfPlugStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] === 0 ? 'violation' : 'safe',
+                        value: deviceAttributes[key] === 0 ? 'Out' : 'In'
+                    };
+                    break;
+                case 'gpsStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] === 'V' ? 'violation' : 'safe',
+                        value: GPS[deviceAttributes[key]]
+                    };
+                    break;
+                case 'lowPowerStatus':
+                    obj = {
+                        key,
+                        status: deviceAttributes[key] === 1 ? 'violation' : 'safe',
+                        value: deviceAttributes[key] === 1 ? 'Low Power' : 'Ok'
+                    };
+                    break;
+                default:
+                    obj = {
+                        value: `${deviceAttributes[key]}`,
+                        status: 'still',
+                        key
+                    };
+                    break;
+            }
+            newDeviceAttributes[key] = obj;
+        });
+        finalResponse = {...finalResponse, ...deviceResponse[0].device, ...newDeviceAttributes};
+
         returnObj = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', finalResponse);
     } else {
         returnObj = fennixResponse(statusCodeConstants.STATUS_NO_DEVICES_FOR_ID, 'EN_US', []);
@@ -467,7 +553,8 @@ const deleteDeviceBusiness = async (req) => {
 };
 
 const listUnAssignedDevicesBusiness = async (req) => {
-    let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse, userResponse;
+    let request = {centerId: parseInt(req.query.centerId)}, response, unAssignedDevices = [], finalResponse,
+        userResponse;
     userResponse = await userAccessor.getUserNameFromUserIdAccessor([req.query.languageId, req.query.userId]);
     //TODO: below is the temp fix. need to fetch centers for logged in user which is in userAccessor later
     if (objectHasPropertyCheck(userResponse, 'rows') && arrayNotEmptyCheck(userResponse.rows)) {

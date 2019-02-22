@@ -111,7 +111,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     value: Math.floor(item.deviceAttributes.speed)
                 });
                 deviceDetails[item.beneficiaryId].push({
-                    text: 'EStatus',
+                    text: 'BStatus',
                     key: 'online',
                     icon: 'radio_button_checked',
                     status: differenceTime < 3 ? 'safe' : 'violation',
