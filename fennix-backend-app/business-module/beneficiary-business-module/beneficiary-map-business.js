@@ -6,6 +6,7 @@ const {deviceByBeneficiaryIdAccessor} = require('../../repository-module/data-ac
 const {getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
+const momentTimezone = require('moment-timezone');
 
 const beneficiaryTrackMapBusiness = async (req) => {
     let beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
@@ -119,7 +120,8 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 });
                 beneficiaryDevices = {...deviceDetails};
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
-                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
+                beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = momentTimezone.tz(completeDate, 'America/Santo_Domingo')
+                // `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
                 ;
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
