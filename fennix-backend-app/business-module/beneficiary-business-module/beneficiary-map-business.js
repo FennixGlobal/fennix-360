@@ -179,6 +179,10 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         } else if (req.body.pageFilters[0]['type'].toLowerCase() === 'dateinterval') {
             fromDate = req.body.pageFilters[0]['value']['from'];
             toDate = req.body.pageFilters[0]['value']['to'];
+        } else if (req.body.pageFilters[0]['type'].toLowerCase() === 'dateindex') {
+            const requestDate = req.body.pageFilters[0]['value'];
+            fromDate = new Date(requestDate['year'], requestDate['month'], requestDate['date'], 12, 0, 0, 0);
+            toDate = new Date(requestDate['year'], requestDate['month'], requestDate['date'], 23, 59, 59, 59);
         }
     } else {
         fromDate.setDate(toDate.getDate() - 1);
