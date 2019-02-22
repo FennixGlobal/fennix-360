@@ -39,7 +39,7 @@ const deviceDetailsByBeneficiaryIdQuery = (query) => {
                 as: "deviceAttributes"
             }
         },
-        {$unwind: "$deviceAttributes"},
+        {$unwind: {path: "$deviceAttributes", preserveNullAndEmptyArrays: true}},
         {
             $lookup: {
                 from: "location",
@@ -48,7 +48,7 @@ const deviceDetailsByBeneficiaryIdQuery = (query) => {
                 as: "location"
             }
         },
-        {$unwind: "$location"},
+        {$unwind: {path: "$location", preserveNullAndEmptyArrays: true}},
         {
             $lookup: {
                 from: "devices",
@@ -57,8 +57,49 @@ const deviceDetailsByBeneficiaryIdQuery = (query) => {
                 as: "device"
             }
         },
-        {$unwind: "$device"}
+        {$unwind: {path: "$device", preserveNullAndEmptyArrays: true}},
+        {
+            $lookup: {
+                from: "locationRestriction",
+                localField: "beneficiaryId",
+                foreignField: "beneficiaryId",
+                as: "locationRestriction"
+            }
+        },
+        {$unwind: {path: "$locationRestriction", preserveNullAndEmptyArrays: true}}
     ]);
+    // return LocationDeviceAttributeMasterModel.aggregate([
+    //     {
+    //         $match: {"beneficiaryId": {$in: query}}
+    //     },
+    //     {
+    //         $lookup: {
+    //             from: "deviceAttributes",
+    //             localField: "deviceAttributeId",
+    //             foreignField: "_id",
+    //             as: "deviceAttributes"
+    //         }
+    //     },
+    //     {$unwind: "$deviceAttributes"},
+    //     {
+    //         $lookup: {
+    //             from: "location",
+    //             localField: "locationId",
+    //             foreignField: "_id",
+    //             as: "location"
+    //         }
+    //     },
+    //     {$unwind: "$location"},
+    //     {
+    //         $lookup: {
+    //             from: "devices",
+    //             localField: "deviceId",
+    //             foreignField: "_id",
+    //             as: "device"
+    //         }
+    //     },
+    //     {$unwind: "$device"}
+    // ]);
 };
 
 const updateLocationDeviceAttributeMasterQuery = (req) => {

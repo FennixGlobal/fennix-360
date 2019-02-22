@@ -8,6 +8,10 @@ const restrictionAccessor = require('../../repository-module/data-accesors/restr
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const momentTimezone = require('moment-timezone');
 
+const geofenceValidator = (geoFenceArray, location) => {
+    console.log(geoFenceArray);
+    console.log(location);
+};
 const beneficiaryTrackMapBusiness = async (req) => {
     let beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj,
@@ -77,6 +81,13 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
                 });
                 deviceDetails[item.beneficiaryId].push({
+                    text: 'geoFence',
+                    key: 'genoFence',
+                    icon: 'map',
+                    status: item.locationRestriction ? geofenceValidator(item.locationRestriction, item.location) ? 'violation' : 'safe' : 'still',
+                    value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
+                });
+                deviceDetails[item.beneficiaryId].push({
                     text: 'GSM',
                     key: 'gmsStatus',
                     icon: 'signal_cellular_4_bar',
@@ -122,7 +133,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = momentTimezone.tz(completeDate, 'America/Santo_Domingo').format();
                 // `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
-                ;
+                // ;
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                     text: 'Number of Violations',
