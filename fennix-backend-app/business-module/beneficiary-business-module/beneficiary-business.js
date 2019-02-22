@@ -129,6 +129,7 @@ const updateBeneficiaryBusiness = async (req) => {
         imageUpload = request.image;
         delete request.image;
     }
+    request.isActive = true;
     if (objectHasPropertyCheck(request, 'geoFence') && arrayNotEmptyCheck(request['geoFence'])) {
         request['geoFence'].forEach((item) => {
             let obj = {
