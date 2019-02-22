@@ -147,7 +147,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
     if (req.body.pageFilters && notNullCheck(req.body.pageFilters[0])) {
-        if (req.body.pageFilters[0]['type'].toLowerCase() === 'daterange') {
+        if (req.body.pageFilters[0]['key'].toLowerCase() === 'daterange') {
             switch (req.body.pageFilters[0]['value']) {
                 case '1hr':
                     fromDate.setTime(toDate.getTime() - (1 * milliseconds));
@@ -176,10 +176,10 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
                 default:
                     fromDate.setDate(toDate.getDate() - 1);
             }
-        } else if (req.body.pageFilters[0]['type'].toLowerCase() === 'dateinterval') {
+        } else if (req.body.pageFilters[0]['key'].toLowerCase() === 'dateinterval') {
             fromDate = req.body.pageFilters[0]['value']['from'];
             toDate = req.body.pageFilters[0]['value']['to'];
-        } else if (req.body.pageFilters[0]['type'].toLowerCase() === 'dateindex') {
+        } else if (req.body.pageFilters[0]['key'].toLowerCase() === 'dateindex') {
             const requestDate = req.body.pageFilters[0]['value'];
             fromDate = new Date(requestDate['year'], requestDate['month'], requestDate['date'], 12, 0, 0, 0);
             toDate = new Date(requestDate['year'], requestDate['month'], requestDate['date'], 23, 59, 59, 59);
