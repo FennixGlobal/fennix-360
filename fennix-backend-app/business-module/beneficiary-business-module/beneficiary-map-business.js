@@ -147,33 +147,38 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
     if (req.body.pageFilters && notNullCheck(req.body.pageFilters[0])) {
-        switch (req.body.pageFilters[0]['value']) {
-            case '1hr':
-                fromDate.setTime(toDate.getTime() - (1 * milliseconds));
-                break;
-            case '2hr':
-                fromDate.setTime(toDate.getTime() - (2 * milliseconds));
-                break;
-            case '5hr':
-                fromDate.setTime(toDate.getTime() - (5 * milliseconds));
-                break;
-            case '7hr':
-                fromDate.setTime(toDate.getTime() - (7 * milliseconds));
-                break;
-            case '12hr':
-                fromDate.setTime(toDate.getTime() - (12 * milliseconds));
-                break;
-            case '1day':
-                fromDate.setDate(toDate.getDate() - 1);
-                break;
-            case '2day':
-                fromDate.setDate(toDate.getDate() - 2);
-                break;
-            case '5day':
-                fromDate.setDate(toDate.getDate() - 5);
-                break;
-            default:
-                fromDate.setDate(toDate.getDate() - 1);
+        if (req.body.pageFilters[0]['type'].toLowerCase() === 'daterange') {
+            switch (req.body.pageFilters[0]['value']) {
+                case '1hr':
+                    fromDate.setTime(toDate.getTime() - (1 * milliseconds));
+                    break;
+                case '2hr':
+                    fromDate.setTime(toDate.getTime() - (2 * milliseconds));
+                    break;
+                case '5hr':
+                    fromDate.setTime(toDate.getTime() - (5 * milliseconds));
+                    break;
+                case '7hr':
+                    fromDate.setTime(toDate.getTime() - (7 * milliseconds));
+                    break;
+                case '12hr':
+                    fromDate.setTime(toDate.getTime() - (12 * milliseconds));
+                    break;
+                case '1day':
+                    fromDate.setDate(toDate.getDate() - 1);
+                    break;
+                case '2day':
+                    fromDate.setDate(toDate.getDate() - 2);
+                    break;
+                case '5day':
+                    fromDate.setDate(toDate.getDate() - 5);
+                    break;
+                default:
+                    fromDate.setDate(toDate.getDate() - 1);
+            }
+        } else if (req.body.pageFilters[0]['type'].toLowerCase() === 'dateinterval') {
+            fromDate = req.body.pageFilters[0]['value']['from'];
+            toDate = req.body.pageFilters[0]['value']['to'];
         }
     } else {
         fromDate.setDate(toDate.getDate() - 1);
