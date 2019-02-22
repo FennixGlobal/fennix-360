@@ -33,7 +33,6 @@ const getUserListAccessor = async (req) => {
     extraQuery = ` order by updated_date desc nulls last offset $${userIdList.length + 2} limit $${userIdList.length + 3}`;
     modifiedQuery = requestModifiers.requestInModifier(userIdList, userQueries.getUserListQuery, true);
     finalQuery = `${modifiedQuery} ${extraQuery}`;
-    // console.log(finalQuery);
     returnObj = await connectionCheckAndQueryExec([req.query.languageId, ...userIdList, req.query.skip, req.query.limit], finalQuery);
     return returnObj;
 };
@@ -51,9 +50,6 @@ const updateUserAccessor = async (req) => {
     fields.splice(fields.indexOf('userId'), 1);
     updatedQueryCreatorResponse = updateQueryCreator('users', fields, 'user_id');
     updatedQueryCreatorResponse.presentFields.forEach((f) => request.push(req[f]));
-    request.push(req.userId);
-    console.log(request);
-    console.log(updatedQueryCreatorResponse.query);
     returnObj = await connectionCheckAndQueryExec(request, updatedQueryCreatorResponse.query);
     return returnObj;
 };
