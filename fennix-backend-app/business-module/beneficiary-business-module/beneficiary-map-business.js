@@ -30,6 +30,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender'])
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
+        console.log(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         if (arrayNotEmptyCheck(beneficiaryDeviceArray)) {
             beneficiaryDeviceArray.forEach((item) => {
