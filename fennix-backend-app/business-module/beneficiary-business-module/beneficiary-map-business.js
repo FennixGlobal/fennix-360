@@ -47,6 +47,8 @@ const beneficiaryTrackMapBusiness = async (req) => {
         beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         if (arrayNotEmptyCheck(beneficiaryDeviceArray)) {
             beneficiaryDeviceArray.forEach((item) => {
+                console.log(item.beneficiaryId);
+                console.log(item.locationRestriction);
                 locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
                 locationObj[item.beneficiaryId]['location'] = {
                     longitude: item.location.longitude,
