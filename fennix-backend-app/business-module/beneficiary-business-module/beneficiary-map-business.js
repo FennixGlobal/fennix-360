@@ -225,7 +225,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
             mapResponseArray.push(obj);
         });
         console.log(geoFenceDetails);
-        if (arrayNotEmptyCheck(geoFenceDetails) && objectHasPropertyCheck(geoFenceDetails, 'restrictions')) {
+        if (arrayNotEmptyCheck(geoFenceDetails) && objectHasPropertyCheck(geoFenceDetails[0], 'restrictions')) {
             geoFence = geoFenceDetails[0]['restrictions'];
         }
         modifiedResponse = {
