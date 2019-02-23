@@ -211,7 +211,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         beneficiaryId: parseInt(req.body.beneficiaryId)
     };
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
-    geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(req.body.beneficiaryId);
+    geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(parseInt(req.body.beneficiaryId));
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
             let obj = {
