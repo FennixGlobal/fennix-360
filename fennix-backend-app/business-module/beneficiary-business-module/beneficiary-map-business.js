@@ -9,7 +9,6 @@ const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common
 const momentTimezone = require('moment-timezone');
 
 const geofenceValidator = (geoFenceArray, location) => {
-    // if (arrayNotEmptyCheck(geoFenceArray)) {
     const latArray = [], lngArray = [];
     geoFenceArray.forEach((item) => {
         latArray.push(item['lat']);
@@ -17,9 +16,9 @@ const geofenceValidator = (geoFenceArray, location) => {
     });
     latArray.sort();
     lngArray.sort();
-    return ((location.latitude > latArray[0] && location.latitude < latArray[latArray.length - 1]) || (location.longitude > lngArray[0] && location.longitude < lngArray[lngArray.length - 1]));
-    // }
+    return ((location.latitude > latArray[0] && location.latitude < latArray[latArray.length - 1]) && (location.longitude > lngArray[0] && location.longitude < lngArray[lngArray.length - 1]));
 };
+
 const beneficiaryTrackMapBusiness = async (req) => {
     let beneficiaryReturnObj = {}, gridData = {}, locationObj = {},
         beneficiaryDevices = {}, beneficiaryListResponse, returnObj,
@@ -93,7 +92,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     text: 'GFence',
                     key: 'geoFence',
                     icon: 'map',
-                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.locationDetails) ? geofenceValidator(item.locationRestriction.locationDetails, item.location) ? 'violation' : 'safe' : 'still',
+                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.locationDetails) ? geofenceValidator(item.locationRestriction.locationDetails, item.location) ? 'safe' : 'violation' : 'still',
                     value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
                 });
                 deviceDetails[item.beneficiaryId].push({
@@ -141,8 +140,6 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 beneficiaryDevices = {...deviceDetails};
                 const completeDate = new Date(`${item.deviceAttributes.deviceUpdatedDate}`);
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceUpdatedDate'] = momentTimezone.tz(completeDate, 'America/Santo_Domingo').format();
-                // `${completeDate.toLocaleDateString('es')} ${completeDate.toLocaleTimeString()}`;
-                // ;
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['deviceDetails'] = deviceDetails[item.beneficiaryId];
                 beneficiaryIdListAndDetailObj.beneficiaryDetailObj[item.beneficiaryId]['noOfViolations'] = {
                     text: 'Number of Violations',
