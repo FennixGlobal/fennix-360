@@ -10,7 +10,7 @@ const momentTimezone = require('moment-timezone');
 
 const geofenceValidator = (geoFenceArray, location) => {
     const latArray = [], lngArray = [];
-    geoFenceArray.forEach((item) => {
+    geoFenceArray[0].locationDetails.forEach((item) => {
         latArray.push(item['lat']);
         lngArray.push(item['lng']);
     });
@@ -96,7 +96,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     text: 'GFence',
                     key: 'geoFence',
                     icon: 'map',
-                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.locationDetails) ? geofenceValidator(item.locationRestriction.locationDetails, item.location) ? 'safe' : 'violation' : 'still',
+                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'safe' : 'violation' : 'still',
                     value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
                 });
                 deviceDetails[item.beneficiaryId].push({
