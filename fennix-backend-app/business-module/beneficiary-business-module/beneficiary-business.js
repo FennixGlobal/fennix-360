@@ -106,7 +106,8 @@ const addBeneficiaryBusiness = async (req) => {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 restrictions: restrictionRequestList,
                 latArray: latArray,
-                lngArray: lngArray
+                lngArray: lngArray,
+                isActive: true
             };
             await restrictionAccessor.addLocationRestrictionAccessor(finalRestrictionObj);
         }
@@ -402,20 +403,22 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
     response = await beneficiaryAccessor.getAllBeneficiaryDetailsAccessor(request);
     locationRestrictionResponse = await restrictionAccessor.fetchLocationRestrictionAccessor(req.query.beneficiaryId);
     if (arrayNotEmptyCheck(locationRestrictionResponse)) {
-        let locations = [];
-        locationRestrictionResponse[0]['locationDetails'].forEach((item) => {
-            let obj = {
-                lat: item['lat'],
-                lng: item['lng']
-            };
-            locations.push(obj);
-        });
-        restrictionResponse = {
-            repeatRules: locationRestrictionResponse[0]['repeatRules'],
-            restrictionName: locationRestrictionResponse[0]['restrictionName'],
-            restrictionType: locationRestrictionResponse[0]['restrictionType'],
-            locationDetails: locations
-        }
+//         let locations = [];
+//         locationRestrictionResponse[0]['locationDetails'].forEach((item) => {
+//             let obj = {
+//                 lat: item['lat'],
+//                 lng: item['lng']
+//             };
+//             locations.push(obj);
+//         });
+//         restrictionResponse = {
+//             repeatRules: locationRestrictionResponse[0]['repeatRules'],
+//             restrictionName: locationRestrictionResponse[0]['restrictionName'],
+//             restrictionType: locationRestrictionResponse[0]['restrictionType'],
+//             locationDetails: locations
+//         }
+        
+        restrictionResponse = locationRestrictionResponse[0]['restrictions'];
     }
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
         benResponse = response.rows[0];
