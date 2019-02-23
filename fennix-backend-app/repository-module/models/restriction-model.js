@@ -23,7 +23,8 @@ const locationRestrictionSchema = new Schema({
         }
     ],
     latArray: [SchemaType.Double],
-    lngArray: [SchemaType.Double]
+    lngArray: [SchemaType.Double],
+    isActive: Boolean
 });
 
 const locationRestrictionCounterSchema = new Schema({
