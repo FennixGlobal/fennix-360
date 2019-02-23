@@ -16,9 +16,6 @@ const geofenceValidator = (geoFenceArray, location) => {
     });
     latArray.sort((prev, next) => prev - next);
     lngArray.sort((prev, next) => prev - next);
-    console.log('latArray', latArray);
-    console.log('lngArray', latArray);
-    console.log(location);
     return ((location.latitude > latArray[0] && location.latitude < latArray[latArray.length - 1]) && (location.longitude > lngArray[0] && location.longitude < lngArray[lngArray.length - 1]));
 };
 
@@ -47,8 +44,6 @@ const beneficiaryTrackMapBusiness = async (req) => {
         beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
         if (arrayNotEmptyCheck(beneficiaryDeviceArray)) {
             beneficiaryDeviceArray.forEach((item) => {
-                console.log(item.beneficiaryId);
-                console.log(item.locationRestriction);
                 locationObj[item.beneficiaryId] = {...beneficiaryIdListAndDetailObj['beneficiaryDetailObj'][item.beneficiaryId]};
                 locationObj[item.beneficiaryId]['location'] = {
                     longitude: item.location.longitude,
@@ -229,14 +224,12 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
             };
             mapResponseArray.push(obj);
         });
-        if (arrayNotEmptyCheck(geoFenceDetails) && objectHasPropertyCheck(geoFenceDetails, 'latArray') && objectHasPropertyCheck(geoFenceDetails, 'lngArray')) {
-            geoFence = {
-                lat: geoFenceDetails[0]['latArray'],
-                lng: geoFenceDetails[0]['lngArray']
-            };
+        console.log(geoFenceDetails);
+        if (arrayNotEmptyCheck(geoFenceDetails) && objectHasPropertyCheck(geoFenceDetails, 'restrictions')) {
+            geoFence = geoFenceDetails[0]['restrictions'];
         }
         modifiedResponse = {
-            geoFence: geoFence,
+            geoFence,
             mapHistory: mapResponseArray
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
