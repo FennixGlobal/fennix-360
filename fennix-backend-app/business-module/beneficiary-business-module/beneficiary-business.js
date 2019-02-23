@@ -131,20 +131,22 @@ const updateBeneficiaryBusiness = async (req) => {
         delete request.image;
     }
     request.isActive = true;
-    if (objectHasPropertyCheck(request, 'geoFence') && arrayNotEmptyCheck(request['geoFence'])) {
-        request['geoFence'].forEach((item) => {
-            let obj = {
-                restrictionName: item['mapTitle'],
-                restrictionType: item['mapRestrictionType'],
-                startDate: item['startDate'],
-                finishDate: item['finishDate'],
-                repeatRules: item['restrictionDays'],
-                onAlert: item['onAlert'],
-                isActive: true,
-                locationDetails: item['mapLocation']
-            };
-            restrictionRequestList.push(obj);
-        });
+    if (objectHasPropertyCheck(request, 'geoFence')) {
+        if (arrayNotEmptyCheck(request['geoFence'])) {
+            request['geoFence'].forEach((item) => {
+                let obj = {
+                    restrictionName: item['mapTitle'],
+                    restrictionType: item['mapRestrictionType'],
+                    startDate: item['startDate'],
+                    finishDate: item['finishDate'],
+                    repeatRules: item['restrictionDays'],
+                    onAlert: item['onAlert'],
+                    isActive: true,
+                    locationDetails: item['mapLocation']
+                };
+                restrictionRequestList.push(obj);
+            });
+        }
         finalRestrictionObj = {
             beneficiaryId: request.beneficiaryId,
             restrictions: restrictionRequestList
@@ -417,7 +419,7 @@ const getAllBeneficiaryDetailsBusiness = async (req) => {
 //             restrictionType: locationRestrictionResponse[0]['restrictionType'],
 //             locationDetails: locations
 //         }
-        
+
         restrictionResponse = locationRestrictionResponse[0]['restrictions'];
     }
     if (objectHasPropertyCheck(response, 'rows') && arrayNotEmptyCheck(response.rows)) {
