@@ -106,7 +106,8 @@ const addBeneficiaryBusiness = async (req) => {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 restrictions: restrictionRequestList,
                 latArray: latArray,
-                lngArray: lngArray
+                lngArray: lngArray,
+                isActive: true
             };
             await restrictionAccessor.addLocationRestrictionAccessor(finalRestrictionObj);
         }
