@@ -14,8 +14,11 @@ const geofenceValidator = (geoFenceArray, location) => {
         latArray.push(item['lat']);
         lngArray.push(item['lng']);
     });
-    latArray.sort();
-    lngArray.sort();
+    latArray.sort((prev, next) => prev - next);
+    lngArray.sort((prev, next) => prev - next);
+    console.log('latArray', latArray);
+    console.log('lngArray', latArray);
+    console.log(location);
     return ((location.latitude > latArray[0] && location.latitude < latArray[latArray.length - 1]) && (location.longitude > lngArray[0] && location.longitude < lngArray[lngArray.length - 1]));
 };
 
