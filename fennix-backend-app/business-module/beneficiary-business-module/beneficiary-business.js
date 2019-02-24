@@ -149,7 +149,8 @@ const updateBeneficiaryBusiness = async (req) => {
         }
         finalRestrictionObj = {
             beneficiaryId: request.beneficiaryId,
-            restrictions: restrictionRequestList
+            restrictions: restrictionRequestList,
+            isActive: arrayNotEmptyCheck(restrictionRequestList)
         };
         await restrictionAccessor.updateLocationRestrictionAccessor(finalRestrictionObj);
     }
