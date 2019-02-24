@@ -212,6 +212,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     };
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
     geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(parseInt(req.body.beneficiaryId));
+    let beneficiaryDetails = await beneficiaryAccessor.getBeneficiaryByBeneficiaryIdAccesor(parseInt(req.body.beneficiaryId));
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
             let obj = {
@@ -227,8 +228,13 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         if (arrayNotEmptyCheck(geoFenceDetails)) {
             geoFence = geoFenceDetails[0]['restrictions'];
         }
+        if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
+            beneficiaryDetails = beneficiaryDetails.rows[0];
+            beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo'], ['fullName', 'role_name', 'mobileno']);
+        }
         modifiedResponse = {
             geoFence,
+            beneficiaryDetails,
             mapHistory: mapResponseArray
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
