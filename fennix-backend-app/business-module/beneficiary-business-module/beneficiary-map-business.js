@@ -92,7 +92,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
                     key: 'geoFence',
                     icon: 'map',
                     status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'safe' : 'violation' : 'still',
-                    value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
+                    value: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'in' : 'out' : '-'
                 });
                 deviceDetails[item.beneficiaryId].push({
                     text: 'GSM',
@@ -224,7 +224,6 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
             };
             mapResponseArray.push(obj);
         });
-        console.log(geoFenceDetails);
         if (arrayNotEmptyCheck(geoFenceDetails)) {
             geoFence = geoFenceDetails[0]['restrictions'];
         }
