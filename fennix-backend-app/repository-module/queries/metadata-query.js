@@ -1,6 +1,7 @@
 const cardWidgetMetadataQuery = 'select u.user_id \n' +
     '    , (select card_size from cards c where c.card_id = rc.card_size_id) as card_size\n' +
-    '    , rc.card_order_id,rc.role_card_id\n' +
+    '    , rc.card_order_id,rc.role_card_id, rc.modal_card_type_id\n' +
+    '    , (select modal_card_type_name from modal_card_type where modal_card_type_id = rc.modal_card_type_id)\n' +
     '    , (select localized_text from localization where locale_key = rc.card_header_localization_key and language = $3) as card_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
     '    , rcw.widget_order_id,rcw.role_cards_widgets_id,rcwa.dropdown_id\n' +

@@ -43,6 +43,8 @@ const getCardMetadataForRouteBusiness = async (req) => {
                     cardSize: item['card_size'],
                     cardHeader: item['card_header'],
                     cardOrderId: item['card_order_id'],
+                    modalCardTypeId: item['modal_card_type_id'],
+                    modalCardTypeName: item['modal_card_type_name'],
                     widgets: widgetObj
                 }
             }
