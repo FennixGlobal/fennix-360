@@ -96,17 +96,17 @@ const addBeneficiaryBusiness = async (req) => {
                     isActive: true,
                     locationDetails: item['mapLocation']
                 };
-                item['mapLocation'].forEach((map) => {
-                    latArray.push(map['lat']);
-                    lngArray.push(map['lng']);
-                });
+                // item['mapLocation'].forEach((map) => {
+                //     latArray.push(map['lat']);
+                //     lngArray.push(map['lng']);
+                // });
                 restrictionRequestList.push(obj);
             });
             finalRestrictionObj = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 restrictions: restrictionRequestList,
-                latArray: latArray,
-                lngArray: lngArray,
+                // latArray: latArray,
+                // lngArray: lngArray,
                 isActive: true
             };
             await restrictionAccessor.addLocationRestrictionAccessor(finalRestrictionObj);
