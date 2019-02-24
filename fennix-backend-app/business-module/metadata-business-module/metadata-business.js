@@ -144,6 +144,8 @@ const getModelMetadataBusiness = async (req) => {
                 modalDataReqType: item['modal_data_request_type'],
                 modalDataReqParams: item['modal_data_request_params'],
                 modalWidth: item['modal_width'],
+                modalCardTypeId: item['modal_card_type_id'],
+                modalCardTypeName: item['modal_card_type_name'],
                 widgetSections: widgetSectionCreator(item, responseMap.modalBody.widgetSections)
             }
         });

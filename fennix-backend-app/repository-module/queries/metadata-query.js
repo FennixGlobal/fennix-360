@@ -195,7 +195,7 @@ const forgotPasswordMetadataQuery = 'select rcwa.role_card_widget_attribute_id\n
     'on a.action_id = rcwa.on_change_action';
 
 const modalMetadataQuery = 'select  \n' +
-    'm.modal_width, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
+    'm.modal_width, m.modal_card_type_id, (select modal_card_type_name from modal_card_type where modal_card_type_id = m.modal_card_type_id) as modal_card_type_name, me.endpoint as modal_data_endpoint, me.endpoint_request_type as modal_data_request_type, me.endpoint_mandatory_request_params as modal_data_request_params\n' +
     ',(select localized_text from localization where locale_key = m.modal_header_name and language = $2) as modal_header\n' +
     '    , (select widget_type from widgets where widget_id = rcwa.widget_section_type) as widget_section_type\n' +
     ', rcwa.role_card_widget_attribute_id,rcwa.request_mapping_key, rcwa.default_key__accent_value, rcwa.default_value__hover_value, rcwa.disable_flag, rcwa.is_editable__sort\n' +
