@@ -38,7 +38,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
             init.beneficiaryDetailObj[item.beneficiaryid] =
-                responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender'])
+                responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender', 'beneficiaryRoleName'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender', 'role_name'])
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
         beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
