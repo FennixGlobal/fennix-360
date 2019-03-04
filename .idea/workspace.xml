@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
+      <change afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/dropbox-business.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/email-business.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+<<<<<<< Updated upstream
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js" afterDir="false" />
+=======
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" afterDir="false" />
+>>>>>>> Stashed changes
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -20,24 +27,37 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js">
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
             <state relative-caret-position="170">
               <caret line="183" column="53" selection-start-line="183" selection-start-column="53" selection-end-line="183" selection-end-column="53" />
+=======
+            <state relative-caret-position="319">
+              <caret line="239" lean-forward="true" selection-start-line="239" selection-end-line="239" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/data-validators.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="138">
               <caret line="6" column="6" selection-start-line="6" selection-start-column="6" selection-end-line="6" selection-end-column="6" />
+=======
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/dropbox-business.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="235">
+              <caret line="56" column="36" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="36" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="165">
@@ -69,11 +89,18 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="184">
               <caret line="8" column="29" lean-forward="true" selection-start-line="8" selection-start-column="29" selection-end-line="8" selection-end-column="29" />
+=======
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="161">
+              <caret line="198" column="145" lean-forward="true" selection-start-line="198" selection-start-column="8" selection-end-line="198" selection-end-column="145" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
+<<<<<<< Updated upstream
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/user-controller.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="288">
@@ -87,6 +114,12 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="115">
               <caret line="5" column="32" selection-start-line="5" selection-start-column="24" selection-end-line="5" selection-end-column="32" />
+=======
+        <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/email-business.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret lean-forward="true" />
+>>>>>>> Stashed changes
             </state>
           </provider>
         </entry>
@@ -102,6 +135,7 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
+<<<<<<< Updated upstream
       <find>sideNavMetadataQuery</find>
       <find>getSideNavMetadataAccessor</find>
       <find>childItems</find>
@@ -132,6 +166,38 @@
       <find>listUnAssignedDevicesBusiness</find>
       <find>fetchAllUserDetailsBusiness</find>
       <find>subSectionMandatoryFlag</find>
+=======
+      <find>start</find>
+      <find>assign</find>
+      <find>password</find>
+      <find>endT</find>
+      <find>getTripDuration</find>
+      <find>getContainerMasterPasswordQuery</find>
+      <find>unlock</find>
+      <find>setContainerLockStatusQuery</find>
+      <find>connectionCheckAndQueryExec</find>
+      <find>set_ac</find>
+      <find>containers</find>
+      <find>active_password</find>
+      <find>gett</find>
+      <find>240</find>
+      <find>containerLockStatus</find>
+      <find>toLowerCase</find>
+      <find>masterPasswordResponse</find>
+      <find>emailSendBusiness</find>
+      <find>notificationEmailBusiness</find>
+      <find>getNotificationEmailsForTripIdAccesssor</find>
+      <find>notif</find>
+      <find>unlo</find>
+      <find>sortWith</find>
+      <find>list</find>
+      <find>fetchTrip</find>
+      <find>fetchTripDetailsBusiness</find>
+      <find>updateBen</find>
+      <find>dropbox</find>
+      <find>getDropdownNameFromKeyBusiness</find>
+      <find>imageStorageBusiness</find>
+>>>>>>> Stashed changes
     </findStrings>
     <replaceStrings>
       <replace>'EN_US',</replace>
@@ -173,7 +239,38 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/route-query.js" />
+=======
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/ticket-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/simcard-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/language-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/metadata-accesor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-document-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/beneficiay-document-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/restriction-accesor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/restriction-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/user-business-module/user-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/metadata-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/common-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/common-accessor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/common-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/simcard-business-module/simcard-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/auth-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/device-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/location-accesor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/device-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/custom-request-reponse-modifiers/response-creator.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/location-query.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/restriction-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/models/beneficiary-location-model.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/beneficiary-controller.js" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/util-constants/fennix-controller-constants.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/comapny-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/company-query.js" />
@@ -194,6 +291,7 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/util-module/request-validators.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/user-controller.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/container-query.js" />
+<<<<<<< Updated upstream
         <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/device-controller.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/sim-card-accessor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/simcard-query.js" />
@@ -223,7 +321,21 @@
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/device-business-module/device-business.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js" />
         <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-query.js" />
+=======
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-code-constants.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/util-module/status-message-constants.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/location-business-module/location-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/container-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/container-business-module/container-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/web-controller/metadata-controller.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-query.js" />
+>>>>>>> Stashed changes
         <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/email-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/dropbox-business.js" />
+        <option value="$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js" />
       </list>
     </option>
   </component>
@@ -261,13 +373,27 @@
               <item name="fennix-backend" type="462c0819:PsiDirectoryNode" />
               <item name="fennix-backend-app" type="462c0819:PsiDirectoryNode" />
               <item name="business-module" type="462c0819:PsiDirectoryNode" />
+<<<<<<< Updated upstream
               <item name="beneficiary-business-module" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="auth-business-module" type="462c0819:PsiDirectoryNode" />
+>>>>>>> Stashed changes
             </path>
             <path>
               <item name="fennix-backend" type="b2602c69:ProjectViewProjectNode" />
               <item name="fennix-backend" type="462c0819:PsiDirectoryNode" />
               <item name="fennix-backend-app" type="462c0819:PsiDirectoryNode" />
+<<<<<<< Updated upstream
               <item name="util-module" type="462c0819:PsiDirectoryNode" />
+=======
+              <item name="business-module" type="462c0819:PsiDirectoryNode" />
+              <item name="common-business-module" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="fennix-backend" type="b2602c69:ProjectViewProjectNode" />
+              <item name="fennix-backend" type="462c0819:PsiDirectoryNode" />
+              <item name="routes" type="462c0819:PsiDirectoryNode" />
+>>>>>>> Stashed changes
             </path>
             <path>
               <item name="fennix-backend" type="b2602c69:ProjectViewProjectNode" />
@@ -431,7 +557,11 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
+<<<<<<< Updated upstream
     <option name="totallyTimeSpent" value="1801537000" />
+=======
+    <option name="totallyTimeSpent" value="1493976000" />
+>>>>>>> Stashed changes
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -446,20 +576,33 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
+<<<<<<< Updated upstream
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.24322538" />
+=======
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.21810971" />
+>>>>>>> Stashed changes
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" sideWeight="0.5078534" side_tool="true" weight="0.25842696" />
       <window_info anchor="bottom" id="Message" order="0" />
+<<<<<<< Updated upstream
       <window_info anchor="bottom" id="Find" order="1" weight="0.32794118" />
+=======
+      <window_info anchor="bottom" id="Find" order="1" visible="true" weight="0.32794118" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Run" order="2" sideWeight="0.4990086" weight="0.6136035" />
       <window_info anchor="bottom" id="Debug" order="3" sideWeight="0.9054858" weight="0.45156696" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+<<<<<<< Updated upstream
       <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49570957" visible="true" weight="0.5470588" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49768978" weight="0.4820144" />
+=======
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" weight="0.33529413" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49966952" weight="0.48345324" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5042904" side_tool="true" weight="0.4057554" />
       <window_info anchor="bottom" id="TypeScript" order="12" weight="0.32896653" />
@@ -468,7 +611,11 @@
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
     <layout-to-restore>
+<<<<<<< Updated upstream
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.24322538" />
+=======
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" visible="true" weight="0.21810971" />
+>>>>>>> Stashed changes
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" sideWeight="0.5078534" side_tool="true" weight="0.25842696" />
@@ -480,8 +627,13 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" weight="0.32905984" />
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
+<<<<<<< Updated upstream
       <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" visible="true" weight="0.45294118" />
       <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49966952" weight="0.48235294" />
+=======
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49636483" visible="true" weight="0.33529413" />
+      <window_info anchor="bottom" id="Version Control" order="9" sideWeight="0.49966952" weight="0.48345324" />
+>>>>>>> Stashed changes
       <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.50363517" side_tool="true" weight="0.5065123" />
       <window_info anchor="bottom" id="TypeScript" order="12" weight="0.32896653" />
@@ -602,12 +754,12 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js</url>
-          <line>24</line>
+          <line>25</line>
           <option name="timeStamp" value="397" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js</url>
-          <line>25</line>
+          <line>26</line>
           <option name="timeStamp" value="398" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -791,13 +943,27 @@
           <option name="timeStamp" value="500" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
+<<<<<<< Updated upstream
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js</url>
           <line>101</line>
+=======
+          <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js</url>
+          <line>493</line>
+          <option name="timeStamp" value="501" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js</url>
+          <line>92</line>
+>>>>>>> Stashed changes
           <option name="timeStamp" value="502" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js</url>
+<<<<<<< Updated upstream
           <line>10</line>
+=======
+          <line>7</line>
+>>>>>>> Stashed changes
           <option name="timeStamp" value="503" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
@@ -838,6 +1004,7 @@
     </watches-manager>
   </component>
   <component name="editorHistoryManager">
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/web-controller/device-controller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1955">
@@ -845,6 +1012,8 @@
         </state>
       </provider>
     </entry>
+=======
+>>>>>>> Stashed changes
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/sim-card-accessor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1334">
@@ -1054,6 +1223,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-localization.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="161">
@@ -1062,6 +1232,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/util-module/response-status-constants/status-message-constants.js">
+=======
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/container-accessor.js">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="253">
           <caret line="11" column="2" lean-forward="true" selection-start-line="11" selection-start-column="2" selection-end-line="11" selection-end-column="2" />
@@ -1096,6 +1269,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< Updated upstream
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="214">
@@ -1104,6 +1278,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/device-accesor.js">
+=======
+    <entry file="file://$PROJECT_DIR$/bin/www">
+>>>>>>> Stashed changes
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="237">
           <caret line="173" column="29" selection-start-line="173" selection-start-column="29" selection-end-line="173" selection-end-column="29" />
@@ -1154,8 +1331,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="218">
           <caret line="18" column="71" lean-forward="true" selection-start-line="18" selection-start-column="71" selection-end-line="18" selection-end-column="71" />
+=======
+        <state relative-caret-position="176">
+          <caret line="53" column="86" selection-start-line="53" selection-start-column="86" selection-end-line="53" selection-end-column="86" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>
@@ -1168,8 +1350,44 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< Updated upstream
         <state relative-caret-position="170">
           <caret line="183" column="53" selection-start-line="183" selection-start-column="53" selection-end-line="183" selection-end-column="53" />
+=======
+        <state relative-caret-position="276">
+          <caret line="214" column="146" selection-start-line="214" selection-start-column="146" selection-end-line="214" selection-end-column="146" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-session-business.js">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/email-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret lean-forward="true" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/dropbox-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="56" column="36" selection-start-line="56" selection-start-column="6" selection-end-line="56" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="161">
+          <caret line="198" column="145" lean-forward="true" selection-start-line="198" selection-start-column="8" selection-end-line="198" selection-end-column="145" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/common-business-module/common-business.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="319">
+          <caret line="239" lean-forward="true" selection-start-line="239" selection-end-line="239" />
+>>>>>>> Stashed changes
         </state>
       </provider>
     </entry>

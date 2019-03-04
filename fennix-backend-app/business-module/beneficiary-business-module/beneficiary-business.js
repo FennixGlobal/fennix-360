@@ -7,8 +7,9 @@ const {getUserIdsForAllRolesAccessor} = require('../../repository-module/data-ac
 const {deviceBybeneficiaryQuery, getDeviceDetailsForListOfBeneficiariesAccessor} = require('../../repository-module/data-accesors/device-accesor');
 const {imageStorageBusiness, uploadToDropboxBusiness, shareDropboxLinkBusiness, emailSendBusiness, getDropdownNameFromKeyBusiness, createDropboxFolderBusiness} = require('../common-business-module/common-business');
 const {excelRowsCreator, excelColCreator} = require('../../util-module/request-transformers');
+const dropboxBusiness = require('../common-business-module/dropbox-business');
 const Excel = require('exceljs');
-const {getCountryCodeByLocationIdAccessor, getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data-accesors/location-accesor');
+const {getCountryCodeByLocationIdAccessor} = require('../../repository-module/data-accesors/location-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {dropdownCreator} = require('../../util-module/custom-request-reponse-modifiers/response-creator');
 
@@ -52,8 +53,7 @@ const getTimeZoneDetailsBusiness = async () => {
 };
 
 const addBeneficiaryBusiness = async (req) => {
-    let request = req.body, countryCode, response, imageUpload, restrictionRequestList = [], finalRestrictionObj,
-        latArray = [], lngArray = [];
+    let request = req.body, countryCode, response, imageUpload, restrictionRequestList = [], finalRestrictionObj;
     const date = new Date();
     const fullDate = `${date.getDate()}${(date.getMonth() + 1)}${date.getFullYear()}_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}`;
     request.createdDate = new Date();
@@ -71,18 +71,22 @@ const addBeneficiaryBusiness = async (req) => {
     countryCode = countryCode.indexOf('-') !== -1 ? countryCode.split('-')[1] : countryCode;
     request.documentId = `PAT${countryCode}J-${fullDate}`;
     response = await beneficiaryAccessor.addBeneficiaryAccessor(request);
+    // Adding the other details as these details require the beneficiary Id as a part of the request to actually form
+    // the ID for the respective columns for the
     if (objectHasPropertyCheck(response, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(response.rows)) {
         const folderName = `BENEFICIARY_${response.rows[0]['beneficiaryid']}_${fullDate}`;
         const folderBasePath = `/pat-j/${countryCode}/${folderName}`;
-        // adding image to the dropbox
-        const fileLocations = await imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
+        // adding image to the dropbox and obtaining two items in the process
+        // 1. The location of the image where we have uploaded the photo to
+        // 2. Getting the base folder path for other details to be added for the given beneficiary
+        const fileLocations = await dropboxBusiness.imageStorageBusiness(imageUpload, folderBasePath, folderName, true);
         if (notNullCheck(fileLocations) && notNullCheck(fileLocations.sharePath) && notNullCheck(fileLocations.folderBasePath)) {
-            const newReq = {
+            const imageReq = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 image: fileLocations.sharePath,
                 baseFolderPath: fileLocations.folderBasePath
             };
-            let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(newReq);
+            let imageUpdateForBenIdResponse = await beneficiaryAccessor.updateBeneficiaryAccessor(imageReq);
         }
         if (objectHasPropertyCheck(request, 'geoFence') && arrayNotEmptyCheck(request['geoFence'])) {
             request['geoFence'].forEach((item) => {
@@ -96,17 +100,23 @@ const addBeneficiaryBusiness = async (req) => {
                     isActive: true,
                     locationDetails: item['mapLocation']
                 };
+<<<<<<< Updated upstream
                 item['mapLocation'].forEach((map) => {
                     latArray.push(map['lat']);
                     lngArray.push(map['lng']);
                 });
+=======
+>>>>>>> Stashed changes
                 restrictionRequestList.push(obj);
             });
             finalRestrictionObj = {
                 beneficiaryId: response.rows[0]['beneficiaryid'],
                 restrictions: restrictionRequestList,
+<<<<<<< Updated upstream
                 latArray: latArray,
                 lngArray: lngArray,
+=======
+>>>>>>> Stashed changes
                 isActive: true
             };
             await restrictionAccessor.addLocationRestrictionAccessor(finalRestrictionObj);
