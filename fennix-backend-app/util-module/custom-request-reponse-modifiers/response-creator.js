@@ -23,8 +23,8 @@ const connectionCheckAndQueryExec = async (req, query) => {
     if (query !== null && query !== undefined && query !== '') {
         req = req !== null && req !== undefined && req !== '' ? req : [];
         returnQuery = await pool.query(query, req);
-        const duration = Date.now() - start;
-        console.log(`query  took : ${duration}`);
+        // const duration = Date.now() - start;
+        // console.log(`query  took : ${duration}`);
     }
     // const postgresClient = new Client(postgresSofiaDev);
     // await postgresClient.connect();
@@ -46,7 +46,8 @@ const dropdownActionButtonCreator = (dropdownActionButton) => {
         isDisabledFlag: dropdownActionButton['is_disable'],
         dropdownTransferKey: dropdownActionButton['dropdown_transfer_key'],
         dropdownIconKey: dropdownActionButton['dropdown_action_button_icon_key'],
-        dropdownIconValue: dropdownActionButton['dropdown_action_button_icon_value']
+        dropdownIconValue: dropdownActionButton['dropdown_action_button_icon_value'],
+        isPrimaryAction: dropdownActionButton['is_primary_action']
     };
     if (dropdownActionButton['is_action_button']) {
         dropdownAction = {
