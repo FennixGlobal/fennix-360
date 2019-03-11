@@ -40,8 +40,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="161">
-              <caret line="243" column="39" selection-start-line="243" selection-start-column="39" selection-end-line="243" selection-end-column="39" />
+            <state relative-caret-position="322">
+              <caret line="230" column="48" lean-forward="true" selection-start-line="230" selection-start-column="48" selection-end-line="230" selection-end-column="48" />
             </state>
           </provider>
         </entry>
@@ -77,7 +77,7 @@
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-query.js">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="138">
-              <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
+              <caret line="26" column="167" selection-start-line="26" selection-start-column="151" selection-end-line="26" selection-end-column="167" />
             </state>
           </provider>
         </entry>
@@ -454,12 +454,12 @@
       <workItem from="1549790263782" duration="10210000" />
       <workItem from="1549909963493" duration="1907000" />
       <workItem from="1550211063058" duration="46556000" />
-      <workItem from="1552211499012" duration="5107000" />
+      <workItem from="1552211499012" duration="6767000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1807427000" />
+    <option name="totallyTimeSpent" value="1809087000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -472,6 +472,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4921466" weight="0.21810971" />
       <window_info id="Structure" order="1" sideWeight="0.5069307" side_tool="true" weight="0.21810971" />
@@ -1256,13 +1257,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-query.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="26" column="6" selection-start-line="26" selection-start-column="6" selection-end-line="26" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/restriction-accesor.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="184">
@@ -1277,10 +1271,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/queries/beneficiary-query.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="138">
+          <caret line="26" column="167" selection-start-line="26" selection-start-column="151" selection-end-line="26" selection-end-column="167" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/beneficiary-business-module/beneficiary-map-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="161">
-          <caret line="243" column="39" selection-start-line="243" selection-start-column="39" selection-end-line="243" selection-end-column="39" />
+        <state relative-caret-position="322">
+          <caret line="230" column="48" lean-forward="true" selection-start-line="230" selection-start-column="48" selection-end-line="230" selection-end-column="48" />
         </state>
       </provider>
     </entry>

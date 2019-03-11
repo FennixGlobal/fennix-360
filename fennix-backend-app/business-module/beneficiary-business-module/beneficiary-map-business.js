@@ -217,11 +217,10 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
             let obj = {
-                beneficiaryId: item['beneficiaryId'],
                 latitude: item['latitude'],
+                beneficiaryRoleId: beneficiaryDetails && beneficiaryDetails.rows && beneficiaryDetails.rows[0] ? item[beneficiaryDetails.rows[0]['beneficiary_role']] : null,
                 longitude: item['longitude'],
                 deviceDate: item['deviceDate'],
-                locationId: item['_id'],
                 speed: item['speed']
             };
             mapResponseArray.push(obj);
