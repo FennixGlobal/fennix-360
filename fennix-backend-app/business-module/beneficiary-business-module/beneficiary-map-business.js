@@ -214,11 +214,16 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     historyDetails = await getBeneficiaryMapHistoryAccessor(request);
     geoFenceDetails = await restrictionAccessor.fetchLocationRestrictionAccessor(parseInt(req.body.beneficiaryId));
     let beneficiaryDetails = await beneficiaryAccessor.getBeneficiaryByBeneficiaryIdAccesor([parseInt(req.body.beneficiaryId), req.body.languageId]);
+
+    if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
+        beneficiaryDetails = beneficiaryDetails.rows[0];
+        beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo','beneficiaryRoleId'], ['full_name', 'role_name', 'mobileno','beneficiary_role']);
+    }
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
             let obj = {
                 latitude: item['latitude'],
-                beneficiaryRoleId: beneficiaryDetails && beneficiaryDetails.rows && beneficiaryDetails.rows[0] ? item[beneficiaryDetails.rows[0]['beneficiary_role']] : null,
+                beneficiaryRoleId: beneficiaryDetails && beneficiaryDetails.beneficiaryRoleId ? beneficiaryDetails.beneficiaryRoleId : null,
                 longitude: item['longitude'],
                 deviceDate: item['deviceDate'],
                 speed: item['speed']
@@ -234,10 +239,6 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
             //         newGeofenceArray.push(fenceArray);
             //     });
             // }
-        }
-        if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
-            beneficiaryDetails = beneficiaryDetails.rows[0];
-            beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo','beneficiaryRoleId'], ['full_name', 'role_name', 'mobileno','beneficiary_role']);
         }
         modifiedResponse = {
             geoFence,
