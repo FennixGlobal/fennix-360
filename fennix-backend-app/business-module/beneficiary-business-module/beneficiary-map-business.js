@@ -241,7 +241,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         }
         modifiedResponse = {
             geoFence,
-            beneficiaryDetails,
+            ...beneficiaryDetails,
             mapHistory: mapResponseArray
         };
         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
