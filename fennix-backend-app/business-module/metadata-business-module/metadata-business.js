@@ -630,7 +630,9 @@ const widgetDetailElementCreator = (widgetElementItem) => {
         elementSubType: widgetElementItem['element_subtype'],
         elementTitle: widgetElementItem['element_title'],
         valueMappingKey: widgetElementItem['request_mapping_key'],
-        elementWidth: widgetElementItem['attribute_width']
+        elementWidth: widgetElementItem['attribute_width'],
+        primaryValue: widgetElementItem['element_primary_value__validation'],
+        secondaryValue: widgetElementItem['element_secondary_value__async_validation']
     };
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'tile-link':
