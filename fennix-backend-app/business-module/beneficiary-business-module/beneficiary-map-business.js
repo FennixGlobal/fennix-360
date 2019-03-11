@@ -228,20 +228,20 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         });
         if (arrayNotEmptyCheck(geoFenceDetails)) {
             geoFence = geoFenceDetails[0]['restrictions'];
-            if (arrayNotEmptyCheck(geoFence)) {
-                geoFence.forEach((fence) => {
-                    let fenceArray = [];
-                    fenceArray.concat(fence.locationDetails);
-                    newGeofenceArray.push(fenceArray);
-                });
-            }
+            // if (arrayNotEmptyCheck(geoFence)) {
+            //     geoFence.forEach((fence) => {
+            //         let fenceArray = [];
+            //         fenceArray.concat(fence.locationDetails);
+            //         newGeofenceArray.push(fenceArray);
+            //     });
+            // }
         }
         if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
             beneficiaryDetails = beneficiaryDetails.rows[0];
             beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo'], ['full_name', 'role_name', 'mobileno']);
         }
         modifiedResponse = {
-            geoFence: newGeofenceArray,
+            geoFence,
             beneficiaryDetails,
             mapHistory: mapResponseArray
         };
