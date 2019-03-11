@@ -164,6 +164,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
     const milliseconds = 3600000;
     let toDate = new Date(), fromDate = new Date(), request,
         finalResponse = {}, modifiedResponse = {}, mapResponseArray = [], geoFence, geoFenceDetails, historyDetails;
+    let newGeofenceArray = [];
     if (req.body.pageFilters && notNullCheck(req.body.pageFilters[0])) {
         if (req.body.pageFilters[0]['key'].toLowerCase() === 'daterange') {
             switch (req.body.pageFilters[0]['value']) {
@@ -227,13 +228,20 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
         });
         if (arrayNotEmptyCheck(geoFenceDetails)) {
             geoFence = geoFenceDetails[0]['restrictions'];
+            if (arrayNotEmptyCheck(geoFence)) {
+                geoFence.forEach((fence) => {
+                    let fenceArray = [];
+                    fenceArray.concat(fence.locationDetails);
+                    newGeofenceArray.push(fenceArray);
+                });
+            }
         }
         if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
             beneficiaryDetails = beneficiaryDetails.rows[0];
-            beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo'], ['fullName', 'role_name', 'mobileno']);
+            beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo'], ['full_name', 'role_name', 'mobileno']);
         }
         modifiedResponse = {
-            geoFence,
+            geoFence: newGeofenceArray,
             beneficiaryDetails,
             mapHistory: mapResponseArray
         };
