@@ -217,7 +217,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
 
     if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
         beneficiaryDetails = beneficiaryDetails.rows[0];
-        beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'phoneNo','beneficiaryRoleId'], ['full_name', 'role_name', 'mobileno','beneficiary_role']);
+        beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'emailId','beneficiaryRoleId'], ['full_name', 'role_name', 'emailid','beneficiary_role']);
     }
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
