@@ -509,7 +509,8 @@ const widgetFormElementCreator = (widgetElementItem) => {
                         elementLabel: widgetElementItem['element_label'],
                         defaultValue: widgetElementItem['default_value__hover_value'],
                         elementTitle: widgetElementItem['element_title'],
-                        requestMappingKey: widgetElementItem['request_mapping_key']
+                        requestMappingKey: widgetElementItem['request_mapping_key'],
+                        elementIcon: widgetElementItem['element_icon_value']
                     }
                 };
                 break;
@@ -681,7 +682,8 @@ const widgetMapElementCreator = (widgetElementItem) => {
         elementTitle: widgetElementItem['element_title'],
         elementLabel: widgetElementItem['element_label'],
         valueMappingKey: widgetElementItem['request_mapping_key'],
-        elementWidth: widgetElementItem['attribute_width']
+        elementWidth: widgetElementItem['attribute_width'],
+        elementIcon: widgetElementItem['element_icon_value']
     };
     switch (widgetElementItem['element_subtype'].toLowerCase()) {
         case 'marker':
