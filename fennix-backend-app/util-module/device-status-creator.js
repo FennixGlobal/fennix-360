@@ -3,7 +3,8 @@ const statusMapper = (status, onlineStatusFlag) => {
         violation: 'violation_disable',
         safe: 'safe_disable',
         still: 'still_disable',
-        moving: 'moving_disable'
+        moving: 'moving_disable',
+        warn: 'warn_disable'
     };
     return onlineStatusFlag ? status : statusMap[status]
 };
