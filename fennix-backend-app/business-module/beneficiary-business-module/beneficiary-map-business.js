@@ -7,7 +7,7 @@ const {getBeneficiaryMapHistoryAccessor} = require('../../repository-module/data
 const restrictionAccessor = require('../../repository-module/data-accesors/restriction-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const momentTimezone = require('moment-timezone');
-
+const {deviceStatusCreator} = require('../../util-module/device-status-creator');
 const geofenceValidator = (geoFenceArray, location) => {
     const latArray = [], lngArray = [];
     geoFenceArray[0].locationDetails.forEach((item) => {
@@ -37,8 +37,7 @@ const beneficiaryTrackMapBusiness = async (req) => {
         let beneficiaryIdListAndDetailObj, beneficiaryDeviceArray;
         beneficiaryIdListAndDetailObj = beneficiaryListResponse.rows.reduce((init, item) => {
             init.beneficiaryIdArray.push(parseInt(item.beneficiaryid));
-            init.beneficiaryDetailObj[item.beneficiaryid] =
-                responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender', 'beneficiaryRoleName'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender', 'role_name'])
+            init.beneficiaryDetailObj[item.beneficiaryid] = responseObjectCreator(item, ['beneficiaryId', 'firstName', 'documentId', 'mobileNo', 'image', 'emailId', 'beneficiaryRoleId', 'gender', 'beneficiaryRoleName'], ['beneficiaryid', 'firstname', 'document_id', 'mobileno', 'image', 'emailid', 'role_id', 'gender', 'role_name']);
             return init;
         }, {beneficiaryIdArray: [], beneficiaryDetailObj: {}});
         beneficiaryDeviceArray = await deviceByBeneficiaryIdAccessor(beneficiaryIdListAndDetailObj.beneficiaryIdArray);
@@ -54,60 +53,38 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 const deviceDetails = {};
                 let noOfViolations = 0;
                 let differenceTime = Math.floor((new Date().getTime() - new Date(`${item.deviceAttributes.serverDate}`).getTime()) / 1000 / 60);
+                const onlineStatusFlag = differenceTime < 3;
                 deviceDetails[item.beneficiaryId] = [];
                 const GPS = {A: 'Valid', V: 'Invalid'};
                 const batteryPercentage = deviceStatusMapper('batteryPercentage', item.deviceAttributes.batteryPercentage);
                 if (batteryPercentage['deviceStatus'] === 'violation') {
                     noOfViolations += 1;
                 }
-                if (item.deviceAttributes.beltStatus) {
+                if (item.deviceAttributes.beltStatus === 1) {
                     noOfViolations += 1;
                 }
-                if (item.deviceAttributes.shellStatus) {
+                if (item.deviceAttributes.shellStatus === 1) {
                     noOfViolations += 1;
                 }
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'Battery',
-                    status: batteryPercentage['deviceStatus'],
-                    key: 'batteryPercentage',
-                    icon: 'battery_charging_full',
-                    value: `${item.deviceAttributes.batteryPercentage}%`
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'Belt',
-                    key: 'beltStatus',
-                    icon: 'link',
-                    status: item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe',
-                    value: item.deviceAttributes.beltStatus === 1 ? 'belt' : 'OK'
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'Shell',
-                    key: 'shellStatus',
-                    icon: 'lock',
-                    status: item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe',
-                    value: item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK'
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'GFence',
-                    key: 'geoFence',
-                    icon: 'map',
-                    status: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'safe' : 'violation' : 'still',
-                    value: item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'in' : 'out' : '-'
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'GSM',
-                    key: 'gmsStatus',
-                    icon: 'signal_cellular_4_bar',
-                    status: item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe',
-                    value: item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK'
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'RF Home',
-                    key: 'rfConnectionStatus',
-                    icon: 'home',
-                    status: item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe',
-                    value: item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home'
-                });
+                // TODO refactor further - add the value checking and condition checking in the helper method
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('Battery', 'battery_charging_full', `${item.deviceAttributes.batteryPercentage}%`, batteryPercentage['deviceStatus'], 'batteryPercentage', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('Belt', 'link', item.deviceAttributes.beltStatus === 1 ? 'belt' : 'OK', item.deviceAttributes.beltStatus === 1 ? 'violation' : 'safe', 'beltStatus', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('Shell', 'lock', item.deviceAttributes.shellStatus === 1 ? 'shell' : 'OK', item.deviceAttributes.shellStatus === 1 ? 'violation' : 'safe', 'shellStatus', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('GFence', 'map', item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'in' : 'out' : '-', item.locationRestriction && arrayNotEmptyCheck(item.locationRestriction.restrictions) ? geofenceValidator(item.locationRestriction.restrictions, item.location) ? 'safe' : 'violation' : 'still', 'geoFence', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('GSM', 'signal_cellular_4_bar', item.deviceAttributes.gsmSignal < 2 ? 'Low' : 'OK', item.deviceAttributes.gsmSignal < 2 ? 'violation' : 'safe', 'gmsStatus', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('RF Home', 'home', item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home', item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe', 'rfConnectionStatus', onlineStatusFlag)
+                );
                 deviceDetails[item.beneficiaryId].push({
                     text: 'RFID',
                     key: 'rfPlugStatus',
@@ -217,7 +194,7 @@ const getBeneficiaryMapHistoryBusiness = async (req) => {
 
     if (objectHasPropertyCheck(beneficiaryDetails, COMMON_CONSTANTS.FENNIX_ROWS) && arrayNotEmptyCheck(beneficiaryDetails.rows)) {
         beneficiaryDetails = beneficiaryDetails.rows[0];
-        beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'emailId','beneficiaryRoleId'], ['full_name', 'role_name', 'emailid','beneficiary_role']);
+        beneficiaryDetails = responseObjectCreator(beneficiaryDetails, ['fullName', 'role', 'emailId', 'beneficiaryRoleId'], ['full_name', 'role_name', 'emailid', 'beneficiary_role']);
     }
     if (arrayNotEmptyCheck(historyDetails)) {
         historyDetails.forEach((item) => {
