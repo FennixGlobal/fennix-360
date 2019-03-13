@@ -85,27 +85,15 @@ const beneficiaryTrackMapBusiness = async (req) => {
                 deviceDetails[item.beneficiaryId].push(
                     deviceStatusCreator('RF Home', 'home', item.deviceAttributes.rfConnectionStatus === 0 ? 'Outdoor' : 'Home', item.deviceAttributes.rfConnectionStatus === 0 ? 'violation' : 'safe', 'rfConnectionStatus', onlineStatusFlag)
                 );
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'RFID',
-                    key: 'rfPlugStatus',
-                    icon: 'rss_feed',
-                    status: item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe',
-                    value: item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In'
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'SAT',
-                    key: 'gpsStatus',
-                    icon: 'gps_fixed',
-                    status: item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe',
-                    value: GPS[item.deviceAttributes.gpsStatus]
-                });
-                deviceDetails[item.beneficiaryId].push({
-                    text: 'Speed',
-                    key: 'speed',
-                    icon: 'directions_run',
-                    status: item.deviceAttributes.speed > 0 ? 'moving' : 'still',
-                    value: Math.floor(item.deviceAttributes.speed)
-                });
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('RFID', 'rss_feed', item.deviceAttributes.rfPlugStatus === 0 ? 'Out' : 'In', item.deviceAttributes.rfPlugStatus === 0 ? 'violation' : 'safe', 'rfPlugStatus', onlineStatusFlag)
+                );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('SAT', 'gps_fixed', GPS[item.deviceAttributes.gpsStatus], item.deviceAttributes.gpsStatus === 'V' ? 'violation' : 'safe', 'gpsStatus', onlineStatusFlag)
+                    );
+                deviceDetails[item.beneficiaryId].push(
+                    deviceStatusCreator('Speed', 'directions_run', Math.floor(item.deviceAttributes.speed), item.deviceAttributes.speed > 0 ? 'moving' : 'still', 'speed', onlineStatusFlag)
+                    );
                 deviceDetails[item.beneficiaryId].push({
                     text: 'BStatus',
                     key: 'online',
