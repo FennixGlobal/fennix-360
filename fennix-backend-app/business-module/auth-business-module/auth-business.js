@@ -39,7 +39,7 @@ const fetchLoginProfileBusiness = async (req) => {
  * @return {Promise<{response: null, header: null}>}
  */
 const authenticateUser = async (req) => {
-    let responseObj, businessResponse, authResponse, retireCheckFlag, returnResponse = {response: null, header: null};
+    let businessResponse, authResponse, returnResponse = {response: null, header: null};
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
     const request = [
@@ -50,38 +50,44 @@ const authenticateUser = async (req) => {
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
-            responseObj = authResponseObjectFormation(businessResponse.rows[0]);
-            retireCheckFlag = retireCheck(responseObj);
-            responseObj = responseFormation(responseObj, retireCheckFlag);
-            returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
-            returnResponse.response = responseObj;
+            returnResponse = verifiedLoginReducer(businessResponse.rows[0]);
         } else {
-            responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
-            returnResponse.header = null;
-            returnResponse.response = responseObj;
+            returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
         }
     } else {
         businessResponse = await authenticateBeneficiaryDetails(request);
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
-                responseObj = authResponseObjectFormation(businessResponse.rows[0]);
-                retireCheckFlag = retireCheck(responseObj);
-                responseObj = responseFormation(responseObj, retireCheckFlag);
-                returnResponse.header = retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null;
-                returnResponse.response = responseObj;
+                returnResponse = verifiedLoginReducer(businessResponse.rows[0]);
             } else {
-                responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
-                returnResponse.header = null;
-                returnResponse.response = responseObj;
+                returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
             }
         } else {
-            responseObj = fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []);
-            returnResponse.header = null;
-            returnResponse.response = responseObj;
+            returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
         }
     }
     return returnResponse;
+};
+
+const incorrectPasswordReducer = (response) => {
+    return {
+        header:null,
+        response
+    }
+};
+/**
+ * this is a private method to create the response for a verified logged in user.
+ * @param authResponse
+ * @return {{response: *, header: null}}
+ */
+const verifiedLoginReducer = (authResponse) => {
+    let responseObj = authResponseObjectFormation(authResponse),retireCheckFlag = retireCheck(responseObj);
+    responseObj = responseFormation(responseObj, retireCheckFlag);
+    return {
+    header : retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null,
+    response : responseObj
+    }
 };
 
 /**
@@ -90,6 +96,7 @@ const authenticateUser = async (req) => {
  * @param req
  * @return {Promise<{}|*|{}>}
  */
+
 const forgotPasswordBusiness = async (req) => {
     let responseObj, businessResponse, retireCheckFlag, returnResponse = '';
     const algo = emoji[req.body.avatar]['encoding'];
@@ -119,8 +126,6 @@ const forgotPasswordBusiness = async (req) => {
             returnResponse = responseObj;
         } else {
             returnResponse = fennixResponse(statusCodeConstants.STATUS_NO_USER_FOR_ID, 'EN_US', []);
-            // returnResponse.header = null;
-            // returnResponse.response = responseObj;
         }
 
     }
