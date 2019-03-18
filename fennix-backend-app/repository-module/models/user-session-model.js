@@ -19,17 +19,20 @@ const UserSessionSchema = new Schema({
     }]
 });
 
-const UserSessionModel = mongoose.model(null,UserSessionSchema,'UserSessions');
+const UserSessionModel = mongoose.model(null, UserSessionSchema, 'UserSessions');
 
 UserSessionSchema.statics.findUserByEmail = async function (emailId) {
     let userSession = UserSessionModel.findOne({userEmailId: emailId});
+    console.log(userSession);
     if (!userSession) {
         userSession = new UserSessionModel({
             userEmailId: emailId,
             tokens: []
         });
+        console.log('in user session');
         await userSession.save();
     }
+    console.log(userSession);
     return userSession;
 };
 
@@ -69,4 +72,4 @@ const createTokenObject = (userObj, authType) => {
     }
 };
 
-module.exports = mongoose.model('userSessions',UserSessionSchema);
+module.exports = mongoose.model('userSessions', UserSessionSchema);
