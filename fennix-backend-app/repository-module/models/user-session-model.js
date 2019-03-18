@@ -22,7 +22,7 @@ const UserSessionSchema = new Schema({
 const UserSessionModel = mongoose.model(null, UserSessionSchema, 'UserSessions');
 
 UserSessionSchema.statics.findUserByEmail = async function (emailId) {
-    let userSession = UserSessionModel.findOne({userEmailId: emailId});
+    let userSession = await UserSessionModel.findOne({userEmailId: emailId});
     console.log(userSession);
     if (!userSession) {
         userSession = new UserSessionModel({
