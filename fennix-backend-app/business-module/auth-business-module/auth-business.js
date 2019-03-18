@@ -8,7 +8,7 @@ const {fennixResponse} = require('../../util-module/custom-request-reponse-modif
 const {checkUserEmailId, authenticateBeneficiaryDetails, authenticateUserDetails, checkBenificiaryEmailId} = require('../../repository-module/data-accesors/auth-accesor');
 const {fetchUserDetailsBusiness, userResetPasswordBusiness} = require('../user-business-module/user-business');
 const {forgotPasswordemailBusiness} = require('../common-business-module/common-business');
-
+const authSessionBusiness = require('./auth-session-business');
 const checkEmailId = async (req) => {
     let responseObj, businessResponse;
     businessResponse = await checkUserEmailId([req.query.userMailId]);
@@ -38,7 +38,7 @@ const fetchLoginProfileBusiness = async (req) => {
  * @param req
  * @return {Promise<{response: null, header: null}>}
  */
-const authenticateUser = async (req) => {
+const authenticateUserBusiness = async (req) => {
     let businessResponse, authResponse, returnResponse = {response: null, header: null};
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
@@ -69,10 +69,13 @@ const authenticateUser = async (req) => {
     }
     return returnResponse;
 };
+const verifyUserBusiness = (req) => {
+
+};
 
 const incorrectPasswordReducer = (response) => {
     return {
-        header:null,
+        header: null,
         response
     }
 };
@@ -81,12 +84,17 @@ const incorrectPasswordReducer = (response) => {
  * @param authResponse
  * @return {{response: *, header: null}}
  */
-const verifiedLoginReducer = (authResponse) => {
-    let responseObj = authResponseObjectFormation(authResponse),retireCheckFlag = retireCheck(responseObj);
+const verifiedLoginReducer = async (authResponse) => {
+    let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
+    let header = null;
+    if (retireCheckFlag) {
+        const token = await authSessionBusiness.userLoginBusiness(responseObj);
+        header = token ? token : null;
+    }
     responseObj = responseFormation(responseObj, retireCheckFlag);
     return {
-    header : retireCheckFlag ? jwt.sign(responseObj, 'SOFIA-Fennix Global') : null,
-    response : responseObj
+        header,
+        response: responseObj
     }
 };
 
@@ -223,7 +231,7 @@ const authResponseObjectFormation = (responseObj) => {
 
 module.exports = {
     checkEmailId,
-    authenticateUser,
+    authenticateUserBusiness,
     resetPasswordBusiness,
     forgotPasswordBusiness,
     fetchLoginProfileBusiness

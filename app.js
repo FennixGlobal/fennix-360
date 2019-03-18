@@ -22,7 +22,7 @@ const net = require('net');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
+mongoose.connect(mongoSofiaDev, {useNewUrlParser: true, useCreateIndex: true}).catch((err) => {
     console.log(err);
 });
 
@@ -151,7 +151,7 @@ app.use(function (req, res, next) {
     res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
     res.setHeader("Access-Control-Allow-Credentials", 'true');
-    res.setHeader("Access-Control-Expose-Headers","x-sofia-auth");
+    res.setHeader("Access-Control-Expose-Headers", "x-sofia-auth");
     next();
 });
 
@@ -171,7 +171,7 @@ app.use('/container', containerRouter);
 app.use('/route', routeRouter);
 app.use('/search', searchRouter);
 app.use('/lite', [liteUserRouter, liteTicketRouter, liteDeviceRouter, liteUserTrackingRouter]);
-app.use('/', indexRouter);
+// app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -4,7 +4,14 @@ const authBusiness = require('../business-module/auth-business-module/auth-busin
 
 /* GET home page. */
 router.post('/authenticate', function (req, res) {
-    var returnObj = authBusiness.authenticateUser(req);
+    var returnObj = authBusiness.authenticateUserBusiness(req);
+    returnObj.then((authResponse) => {
+        res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
+    })
+});
+
+router.get('/verifyUser', function (req, res) {
+    var returnObj = authBusiness.authenticateUserBusiness(req);
     returnObj.then((authResponse) => {
         res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
     })
@@ -32,7 +39,7 @@ router.get('/fetchLoginProfile', function (req, res) {
 });
 
 router.get('/updateLoginProfile', function (req, res) {
-    var returnObj = authBusiness.authenticateUser(req);
+    var returnObj = authBusiness.authenticateUserBusiness(req);
     returnObj.then((response) => {
         res.send(response);
     })
