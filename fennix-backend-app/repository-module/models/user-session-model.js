@@ -56,9 +56,6 @@ const createTokenObject = (userObj, authType) => {
         tokenExpiryDate: newDate
     }
 };
-UserSessionSchema.statics.generateAuthToken = () => {
-
-};
 
 module.exports = {
   UserSessionModel
