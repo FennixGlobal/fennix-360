@@ -220,6 +220,10 @@ const responseFormation = (responseObj, retireCheck) => {
     return retireCheck ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj)
 };
 
+const verifyUserSessionBusiness = (req) => {
+
+}
+
 /**
  * @description Tis method creates the authentication object.
  * @param responseObj
@@ -234,5 +238,6 @@ module.exports = {
     authenticateUserBusiness,
     resetPasswordBusiness,
     forgotPasswordBusiness,
+    verifyUserSessionBusiness,
     fetchLoginProfileBusiness
 };

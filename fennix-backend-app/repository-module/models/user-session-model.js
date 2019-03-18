@@ -19,7 +19,7 @@ const UserSessionSchema = new Schema({
     }]
 });
 
-const UserSessionModel = mongoose.model('userSession', UserSessionSchema, 'UserSession');
+const UserSessionModel = mongoose.model('userSession', UserSessionSchema, 'UserSessions');
 
 UserSessionSchema.methods.generateAuthToken = async function (userObj, authType) {
     const user = this;
