@@ -23,16 +23,14 @@ const UserSessionModel = mongoose.model(null, UserSessionSchema, 'UserSessions')
 
 UserSessionSchema.statics.findUserByEmail = async function (emailId) {
     let userSession = await UserSessionModel.findOne({userEmailId: emailId});
-    console.log(userSession);
     if (!userSession) {
         userSession = new UserSessionModel({
             userEmailId: emailId,
             tokens: []
         });
-        console.log('in user session');
         await userSession.save();
     }
-    console.log(userSession);
+    userSession = await UserSessionModel.findOne({userEmailId: emailId});
     return userSession;
 };
 
