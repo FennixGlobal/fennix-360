@@ -19,7 +19,19 @@ const UserSessionSchema = new Schema({
     }]
 });
 
-const UserSessionModel = mongoose.model('userSession', UserSessionSchema, 'UserSessions');
+const UserSessionModel = mongoose.model(UserSessionSchema, 'UserSessions');
+
+UserSessionSchema.statics.findUserByEmail = async function (emailId) {
+    let userSession = new UserSessionModel.findOne({userEmailId: emailId});
+    if (!userSession) {
+        userSession = new UserSessionModel({
+            userEmailId: emailId,
+            tokens: []
+        });
+        await userSession.save();
+    }
+    return userSession;
+};
 
 UserSessionSchema.methods.generateAuthToken = async function (userObj, authType) {
     const user = this;
@@ -58,5 +70,5 @@ const createTokenObject = (userObj, authType) => {
 };
 
 module.exports = {
-  UserSessionModel
+    UserSessionModel
 };
