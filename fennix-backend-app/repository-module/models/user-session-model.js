@@ -30,7 +30,7 @@ UserSessionSchema.statics.findUserByEmail = async function (emailId) {
         });
         await userSession.save();
     }
-    userSession = await UserSessionModel.findOne({userEmailId: emailId});
+    // userSession = await UserSessionModel.findOne({userEmailId: emailId});
     return userSession;
 };
 
