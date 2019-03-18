@@ -69,4 +69,4 @@ const createTokenObject = (userObj, authType) => {
     }
 };
 
-module.exports = UserSessionModel;
+module.exports = mongoose.model('userSessions',UserSessionSchema);
