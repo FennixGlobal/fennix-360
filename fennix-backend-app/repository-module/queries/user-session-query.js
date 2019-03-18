@@ -1,4 +1,4 @@
-const {UserSessionModel} = require('../models/user-session-model');
+const UserSessionModel = require('../models/user-session-model');
 
 const generateAuthTokenQuery = async (userObj, authType) => {
     const userSessionModel = await UserSessionModel.findUserByEmail(userObj.email_id);

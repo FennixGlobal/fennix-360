@@ -69,6 +69,4 @@ const createTokenObject = (userObj, authType) => {
     }
 };
 
-module.exports = {
-    UserSessionModel
-};
+module.exports = UserSessionModel;
