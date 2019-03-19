@@ -37,7 +37,7 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
     const date = new Date();
     const tokenObj = createTokenObject(userObj, authType);
     console.log(user);
-    console.log(userObj);
+    // console.log(userObj);
     // const currentUser = await user.findOne({userEmailId: userObj.email_id});
     if (user) {
         user.tokens = user.tokens.forEach((item) => {
@@ -46,6 +46,8 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
                 item.tokenExpiredDate = date.getTime();
             }
         });
+        console.log('tokens object');
+        console.log(user.tokens);
         user.tokens = user.tokens.concat([tokenObj]);
         user.save();
     } else {
