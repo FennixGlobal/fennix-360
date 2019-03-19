@@ -38,7 +38,7 @@ const fetchLoginProfileBusiness = async (req) => {
  * @param req
  * @return {Promise<{response: null, header: null}>}
  */
-const authenticateUserBusiness = async (req) => {
+const authenticateUserBusiness = async (req, ip) => {
     let businessResponse, authResponse, returnResponse = {response: null, header: null};
     const algo = emoji[req.body.avatar]['encoding'];
     const passKey = emoji[req.body.avatar]['secretPass'];
@@ -50,7 +50,7 @@ const authenticateUserBusiness = async (req) => {
     if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
-            returnResponse = verifiedLoginReducer(businessResponse.rows[0]);
+            returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
         } else {
             returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
         }
@@ -59,7 +59,7 @@ const authenticateUserBusiness = async (req) => {
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
-                returnResponse = verifiedLoginReducer(businessResponse.rows[0]);
+                returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
             } else {
                 returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
             }
@@ -84,16 +84,21 @@ const incorrectPasswordReducer = (response) => {
  * @param authResponse
  * @return {{response: *, header: null}}
  */
-const verifiedLoginReducer = async (authResponse) => {
+const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
-    let header = null;
+    let header = null, cookie = null;
     if (retireCheckFlag) {
-        const token = await authSessionBusiness.userLoginBusiness(responseObj);
-        header = token ? token : null;
+        if (rememberFlag) {
+            const cookieToken = await authSessionBusiness.userLoginBusiness(responseObj, 'cookie', ip);
+            cookie = cookieToken || null;
+        }
+        const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
+        header = token || null;
     }
     responseObj = responseFormation(responseObj, retireCheckFlag);
     return {
         header,
+        cookie,
         response: responseObj
     }
 };

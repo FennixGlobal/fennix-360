@@ -32,13 +32,10 @@ UserSessionSchema.statics.findUserByEmail = async function (emailId) {
     return userSession;
 };
 
-UserSessionSchema.methods.generateAuthToken = async function (userObj, authType) {
+UserSessionSchema.methods.generateAuthToken = async function (userObj, authType, ip) {
     const user = this;
     const date = new Date();
-    const tokenObj = createTokenObject(userObj, authType);
-    console.log(tokenObj);
-    // console.log(userObj);
-    // const currentUser = await user.findOne({userEmailId: userObj.email_id});
+    const tokenObj = createTokenObject(userObj, authType, ip);
     if (user) {
         user.tokens.forEach((item) => {
             if (item.tokenType === authType && !item.isExpiryFlag) {
@@ -46,8 +43,6 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
                 item.tokenExpiredDate = date.getTime();
             }
         });
-        console.log('tokens object');
-        console.log(user.tokens);
         user.tokens = user.tokens.concat([tokenObj]);
         user.save();
     } else {
@@ -60,13 +55,13 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
     return tokenObj.token;
 };
 
-const createTokenObject = (userObj, authType) => {
+const createTokenObject = (userObj, authType, ip) => {
     const date = new Date();
     const newDate = date.setDate(authAgeTypeMap[authType] ? date.getDate() + authAgeTypeMap[authType] : date.getDate());
-    console.log(newDate);
     const token = jwt.sign(userObj, JWTSecretPass);
     return {
         token,
+        ipAddress: ip,
         tokenType: authType,
         isExpiryFlag: false,
         tokenExpiryDate: newDate

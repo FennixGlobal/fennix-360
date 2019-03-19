@@ -4,9 +4,7 @@ const authBusiness = require('../business-module/auth-business-module/auth-busin
 
 /* GET home page. */
 router.post('/authenticate', function (req, res) {
-    console.log('ip address of the request for auth');
-    console.log(req.ip);
-    const returnObj = authBusiness.authenticateUserBusiness(req);
+    const returnObj = authBusiness.authenticateUserBusiness(req,req.ip);
     returnObj.then((authResponse) => {
         res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
     })
