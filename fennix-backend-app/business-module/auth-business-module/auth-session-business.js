@@ -6,6 +6,13 @@ const userLoginBusiness = async (req,authType,ip) =>{
     return userSession;
 };
 
+const userCookieTokenBusiness = async (req,authType,ip) =>{
+    const userSession = await authDataAccessors.generateCookieTokenAccessor(req,authType,ip);
+    console.log(userSession);
+    return userSession;
+};
+
 module.exports = {
-    userLoginBusiness
+    userLoginBusiness,
+    userCookieTokenBusiness
 };

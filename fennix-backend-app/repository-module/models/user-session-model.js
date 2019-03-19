@@ -9,7 +9,7 @@ const UserSessionSchema = new Schema({
     userEmailId: {type: String, required: true, unique: true},
     tokens: [{
         token: String,
-        tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login','cookie']},
+        tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login', 'cookie']},
         _id: SchemaType.ObjectId,
         ipAddress: String,
         tokenCreationDate: {type: Number, default: new Date().getTime()},
@@ -47,6 +47,27 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
         user.save();
     }
     return tokenObj.token;
+};
+
+UserSessionSchema.methods.generateCookieToken = async function (userObj, authType, ip) {
+    const user = this;
+    const date = new Date();
+    let tokenObj = null;
+    if (user) {
+        const cookieToken = user.tokens.filter((item) => item.tokenType === authType && !item.isExpiredFlag && item.tokenExpiryDate > date.getTime());
+        if (cookieToken) {
+            tokenObj = createTokenObject(userObj, authType, ip);
+            user.tokens.forEach((item) => {
+                if (item.tokenType === authType && !item.isExpiredFlag) {
+                    item.isExpiredFlag = true;
+                    item.tokenExpiredDate = date.getTime();
+                }
+            });
+            user.tokens = user.tokens.concat([tokenObj]);
+            user.save();
+        }
+    }
+    return tokenObj ? tokenObj.token : null;
 };
 
 const createTokenObject = (userObj, authType, ip) => {
