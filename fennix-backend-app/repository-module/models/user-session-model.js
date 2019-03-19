@@ -36,16 +36,18 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
     const user = this;
     const date = new Date();
     const tokenObj = createTokenObject(userObj, authType);
-    const currentUser = await user.findOne({userEmailId: userObj.email_id});
-    if (currentUser) {
-        currentUser.tokens = currentUser.tokens.forEach((item) => {
+    console.log(user);
+    console.log(userObj);
+    // const currentUser = await user.findOne({userEmailId: userObj.email_id});
+    if (user) {
+        user.tokens = user.tokens.forEach((item) => {
             if (item.tokenType === authType && !item.isExpiryFlag) {
                 item.isExpiryFlag = true;
                 item.tokenExpiredDate = date.getTime();
             }
         });
-        currentUser.tokens = currentUser.tokens.concat([tokenObj]);
-        currentUser.save();
+        user.tokens = user.tokens.concat([tokenObj]);
+        user.save();
     } else {
         const newUser = new UserSessionModel({
             userEmailId: userObj.email_id,
