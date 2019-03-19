@@ -13,7 +13,7 @@ const UserSessionSchema = new Schema({
         _id: SchemaType.ObjectId,
         ipAddress: String,
         tokenCreationDate: {type: Number, default: new Date().getTime()},
-        isExpiryFlag: {type: Boolean, default: true},
+        isExpiredFlag: {type: Boolean, default: true},
         tokenExpiredDate: Number,
         tokenExpiryDate: Number
     }]
@@ -38,8 +38,8 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
     const tokenObj = createTokenObject(userObj, authType, ip);
     if (user) {
         user.tokens.forEach((item) => {
-            if (item.tokenType === authType && !item.isExpiryFlag) {
-                item.isExpiryFlag = true;
+            if (item.tokenType === authType && !item.isExpiredFlag) {
+                item.isExpiredFlag = true;
                 item.tokenExpiredDate = date.getTime();
             }
         });
