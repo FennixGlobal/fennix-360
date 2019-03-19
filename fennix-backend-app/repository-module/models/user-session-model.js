@@ -45,12 +45,6 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
         });
         const tokens = user.tokens.concat([tokenObj]);
         user.update({tokens});
-    } else {
-        const newUser = new UserSessionModel({
-            userEmailId: userObj.email_id,
-            tokens: [tokenObj]
-        });
-        await newUser.save();
     }
     return tokenObj.token;
 };
