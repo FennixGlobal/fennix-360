@@ -36,7 +36,7 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
     const user = this;
     const date = new Date();
     const tokenObj = createTokenObject(userObj, authType);
-    console.log(user);
+    console.log(tokenObj);
     // console.log(userObj);
     // const currentUser = await user.findOne({userEmailId: userObj.email_id});
     if (user) {
