@@ -19,7 +19,6 @@ const UserSessionSchema = new Schema({
     }]
 });
 
-const UserSessionModel = mongoose.model(null, UserSessionSchema, 'UserSessions');
 
 UserSessionSchema.statics.findUserByEmail = async function (emailId) {
     let userSession = await UserSessionModel.findOne({userEmailId: emailId});
@@ -30,7 +29,6 @@ UserSessionSchema.statics.findUserByEmail = async function (emailId) {
         });
         await userSession.save();
     }
-    // userSession = await UserSessionModel.findOne({userEmailId: emailId});
     return userSession;
 };
 
@@ -70,4 +68,5 @@ const createTokenObject = (userObj, authType) => {
     }
 };
 
-module.exports = mongoose.model('userSessions', UserSessionSchema);
+const UserSessionModel = mongoose.model(null, UserSessionSchema, 'UserSessions');
+module.exports = {UserSessionModel};
