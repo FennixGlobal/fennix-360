@@ -91,6 +91,8 @@ const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
         if (rememberFlag) {
             authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip).then(async (cookieToken) => {
                 cookie = cookieToken || null;
+                console.log('checking if the email field is present');
+                console.log(responseObj);
                 const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
                 header = token || null;
             });
