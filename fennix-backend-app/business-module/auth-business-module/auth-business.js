@@ -90,11 +90,9 @@ const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     const newResponseObj = JSON.stringify(JSON.parse(responseObj));
     if (retireCheckFlag) {
         if (rememberFlag) {
-            await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip).then(async (cookieToken) => {
-                cookie = cookieToken || null;
-                const token = await authSessionBusiness.userLoginBusiness(newResponseObj, 'login', ip);
-                header = token || null;
-            });
+            cookie = await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip);
+            const token = await authSessionBusiness.userLoginBusiness(newResponseObj, 'login', ip);
+            header = token || null;
         } else {
             const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
             header = token || null;
