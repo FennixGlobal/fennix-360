@@ -63,12 +63,13 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
 const createTokenObject = (userObj, authType) => {
     const date = new Date();
     const newDate = date.setDate(authAgeTypeMap[authType] ? date.getDate() + authAgeTypeMap[authType] : date.getDate());
+    console.log(newDate);
     const token = jwt.sign(userObj, JWTSecretPass);
     return {
         token,
         tokenType: authType,
         isExpiryFlag: false,
-        tokenExpiryDate: newDate.getTime()
+        tokenExpiryDate: newDate
     }
 };
 
