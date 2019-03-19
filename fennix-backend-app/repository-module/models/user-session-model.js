@@ -9,7 +9,7 @@ const UserSessionSchema = new Schema({
     userEmailId: {type: String, required: true, unique: true},
     tokens: [{
         token: String,
-        tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login']},
+        tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login','cookie']},
         _id: SchemaType.ObjectId,
         ipAddress: String,
         tokenCreationDate: {type: Number, default: new Date().getTime()},
