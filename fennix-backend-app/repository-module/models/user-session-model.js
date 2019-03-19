@@ -40,7 +40,7 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType)
     // console.log(userObj);
     // const currentUser = await user.findOne({userEmailId: userObj.email_id});
     if (user) {
-        user.tokens = user.tokens.forEach((item) => {
+        user.tokens.forEach((item) => {
             if (item.tokenType === authType && !item.isExpiryFlag) {
                 item.isExpiryFlag = true;
                 item.tokenExpiredDate = date.getTime();
