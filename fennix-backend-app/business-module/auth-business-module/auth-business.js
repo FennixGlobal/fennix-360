@@ -87,11 +87,12 @@ const incorrectPasswordReducer = (response) => {
 const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
     let header = null, cookie = null;
+    const newResponseObj = JSON.stringify(JSON.parse(responseObj));
     if (retireCheckFlag) {
         if (rememberFlag) {
-            await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip).then(async (cookieToken,responseObj) => {
+            await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip).then(async (cookieToken) => {
                 cookie = cookieToken || null;
-                const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
+                const token = await authSessionBusiness.userLoginBusiness(newResponseObj, 'login', ip);
                 header = token || null;
             });
         } else {
