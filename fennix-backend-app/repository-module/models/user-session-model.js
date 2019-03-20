@@ -37,12 +37,12 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
     const date = new Date();
     const tokenObj = createTokenObject(userObj, authType, ip);
     if (user) {
-        user.tokens.forEach((item) => {
-            if (item.tokenType === authType && !item.isExpiredFlag) {
-                item.isExpiredFlag = true;
-                item.tokenExpiredDate = date.getTime();
-            }
-        });
+        // user.tokens.forEach((item) => {
+        //     if (item.tokenType === authType && !item.isExpiredFlag) {
+        //         item.isExpiredFlag = true;
+        //         item.tokenExpiredDate = date.getTime();
+        //     }
+        // });
         user.tokens = user.tokens.concat([tokenObj]);
         user.save();
     }
@@ -68,6 +68,9 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
         }
     }
     return tokenObj ? tokenObj.token : null;
+};
+
+UserSessionSchema.methods.findToken = async function (userObj, authType, ip) {
 };
 
 const createTokenObject = (userObj, authType, ip) => {
