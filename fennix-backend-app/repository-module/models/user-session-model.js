@@ -4,19 +4,19 @@ require('mongoose-double')(mongoose);
 let SchemaType = mongoose.Schema.Types;
 const jwt = require('jsonwebtoken');// This method is used to implement the auth token to be ping ponged back and forth for the request authentication.
 const {authAgeTypeMap, JWTSecretPass} = require('../../util-module/util-constants/auth-constants');
-
+const TokenSchema = new Schema({
+    token: String,
+    tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login', 'cookie']},
+    _id: SchemaType.ObjectId,
+    ipAddress: String,
+    tokenCreationDate: {type: Number, default: new Date().getTime()},
+    isExpiredFlag: {type: Boolean, default: true},
+    tokenExpiredDate: Number,
+    tokenExpiryDate: Number
+});
 const UserSessionSchema = new Schema({
     userEmailId: {type: String, required: true, unique: true},
-    tokens: [{
-        token: String,
-        tokenType: {type: String, enum: ['change_password', 'forgot_password', 'login', 'cookie']},
-        _id: SchemaType.ObjectId,
-        ipAddress: String,
-        tokenCreationDate: {type: Number, default: new Date().getTime()},
-        isExpiredFlag: {type: Boolean, default: true},
-        tokenExpiredDate: Number,
-        tokenExpiryDate: Number
-    }]
+    tokens: [TokenSchema]
 });
 
 
@@ -34,7 +34,7 @@ UserSessionSchema.statics.findUserByEmail = async function (emailId) {
 
 UserSessionSchema.methods.generateAuthToken = async function (userObj, authType, ip) {
     const user = this;
-    const date = new Date();
+    // const date = new Date();
     const tokenObj = createTokenObject(userObj, authType, ip);
     if (user) {
         // user.tokens.forEach((item) => {
