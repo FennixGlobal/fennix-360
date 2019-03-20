@@ -8,7 +8,6 @@ const userLoginBusiness = async (req, authType, ip) => {
 
 const userCookieTokenBusiness = async (req, authType, ip) => {
     const userSession = await authDataAccessors.generateCookieTokenAccessor(req, authType, ip);
-    console.log(userSession);
     return userSession;
 };
 

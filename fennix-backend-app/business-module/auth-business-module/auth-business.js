@@ -51,6 +51,7 @@ const authenticateUserBusiness = async (req, ip) => {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
             returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
+            console.log(returnResponse);
         } else {
             returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
         }
@@ -60,6 +61,7 @@ const authenticateUserBusiness = async (req, ip) => {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
                 returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
+                console.log(returnResponse);
             } else {
                 returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
             }
@@ -86,13 +88,12 @@ const incorrectPasswordReducer = (response) => {
  */
 const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
-    let header = null, cookie = null;
-    // const newResponseObj = JSON.stringify(JSON.parse(responseObj));
+    let header = null, baseToken = null, cookie = null;
     if (retireCheckFlag) {
         if (rememberFlag) {
-            cookie = await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip);
-            const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
-            header = token || null;
+            baseToken = await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip);
+            header = baseToken ? baseToken.token : null;
+            cookie = baseToken ? baseToken.cookie : null;
         } else {
             const token = await authSessionBusiness.userLoginBusiness(responseObj, 'login', ip);
             header = token || null;
