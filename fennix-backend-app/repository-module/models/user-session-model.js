@@ -46,7 +46,7 @@ UserSessionSchema.statics.generateCookieToken = async function (userObj, authTyp
     let tokenObj = null;
     if (user) {
         tokenObj = createTokenObject(userObj, authType, ip);
-        UserSessionModel.update({userEmailId: userObj.email_id},{$push: {tokens: tokenObj}});
+        await UserSessionModel.update({userEmailId: userObj.email_id},{$push: {tokens: tokenObj}});
     }
     return tokenObj ? tokenObj.token : null;
 };
