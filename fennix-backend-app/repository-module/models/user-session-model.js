@@ -64,7 +64,7 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
                 }
             });
             // user.tokens = user.tokens.concat([tokenObj]);
-            user.updateOne({$push: {tokens: tokenObj}});
+            user.update({$push: {tokens: tokenObj}});
         }
     }
     return tokenObj ? tokenObj.token : null;
