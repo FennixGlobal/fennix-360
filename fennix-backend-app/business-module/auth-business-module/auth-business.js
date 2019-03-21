@@ -51,8 +51,6 @@ const authenticateUserBusiness = async (req, ip) => {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
             returnResponse = await verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
-            console.log('return response');
-            console.log(returnResponse);
         } else {
             returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
         }
@@ -62,8 +60,6 @@ const authenticateUserBusiness = async (req, ip) => {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
                 returnResponse = await verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
-                console.log('return response');
-                console.log(returnResponse);
             } else {
                 returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
             }
