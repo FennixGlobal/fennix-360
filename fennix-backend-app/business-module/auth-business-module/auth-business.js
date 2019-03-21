@@ -51,6 +51,7 @@ const authenticateUserBusiness = async (req, ip) => {
         authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
         if (authResponse) {
             returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
+            console.log('return response');
             console.log(returnResponse);
         } else {
             returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
@@ -60,7 +61,8 @@ const authenticateUserBusiness = async (req, ip) => {
         if (objectHasPropertyCheck(businessResponse, 'rows') && arrayNotEmptyCheck(businessResponse.rows)) {
             authResponse = await bcrypt.compare(decrypt(algo, passKey, req.body.password), businessResponse.rows[0].password);
             if (authResponse) {
-                returnResponse = verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
+                returnResponse = await verifiedLoginReducer(businessResponse.rows[0], ip, req.body.remember);
+                console.log('return response');
                 console.log(returnResponse);
             } else {
                 returnResponse = incorrectPasswordReducer(fennixResponse(statusCodeConstants.STATUS_PASSWORD_INCORRECT, 'EN_US', []));
@@ -88,7 +90,7 @@ const incorrectPasswordReducer = (response) => {
  */
 const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
-    let header = null, baseToken = null, cookie = null;
+    let header = null, cookie = null;
     if (retireCheckFlag) {
         if (rememberFlag) {
             const cookieToken = await authSessionBusiness.userCookieTokenBusiness(responseObj, 'cookie', ip);
