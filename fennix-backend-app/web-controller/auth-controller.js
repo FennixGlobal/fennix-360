@@ -6,7 +6,8 @@ const authBusiness = require('../business-module/auth-business-module/auth-busin
 router.post('/authenticate', function (req, res) {
     const returnObj = authBusiness.authenticateUserBusiness(req, req.ip);
     returnObj.then((authResponse) => {
-        res.cookie('sofia-auth', authResponse.cookie).header('x-sofia-auth', authResponse.header).send(authResponse.response);
+        res.cookie('sofia-auth', authResponse.cookie);
+        res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
     })
 });
 
