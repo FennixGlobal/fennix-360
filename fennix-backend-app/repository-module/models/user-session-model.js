@@ -34,15 +34,8 @@ UserSessionSchema.statics.findUserByEmail = async function (emailId) {
 
 UserSessionSchema.methods.generateAuthToken = async function (userObj, authType, ip) {
     const user = this;
-    // const date = new Date();
     const tokenObj = createTokenObject(userObj, authType, ip);
     if (user) {
-        // user.tokens.forEach((item) => {
-        //     if (item.tokenType === authType && !item.isExpiredFlag) {
-        //         item.isExpiredFlag = true;
-        //         item.tokenExpiredDate = date.getTime();
-        //     }
-        // });
         user.tokens = user.tokens.concat([tokenObj]);
         user.save();
     }
@@ -55,14 +48,8 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
     let tokenObj = null;
     if (user) {
         const cookieToken = user.tokens.filter((item) => item.tokenType === authType && !item.isExpiredFlag && item.tokenExpiryDate > date.getTime());
-        if (cookieToken) {
+        if (cookieToken && cookieToken.length > 0) {
             tokenObj = createTokenObject(userObj, authType, ip);
-            user.tokens.forEach((item) => {
-                if (item.tokenType === authType && !item.isExpiredFlag) {
-                    item.isExpiredFlag = true;
-                    item.tokenExpiredDate = date.getTime();
-                }
-            });
             user.update({$push: {tokens: tokenObj}});
         }
     }
