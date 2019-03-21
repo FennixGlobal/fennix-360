@@ -47,11 +47,11 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
     const date = new Date();
     let tokenObj = null;
     if (user) {
-        const cookieToken = user.tokens.filter((item) => item.tokenType === authType && !item.isExpiredFlag && item.tokenExpiryDate > date.getTime());
-        if (cookieToken && cookieToken.length > 0) {
-            tokenObj = createTokenObject(userObj, authType, ip);
-            user.update({$push: {tokens: tokenObj}});
-        }
+        // const cookieToken = user.tokens.filter((item) => item.tokenType === authType && !item.isExpiredFlag && item.tokenExpiryDate > date.getTime());
+        // if (cookieToken && cookieToken.length > 0) {
+        tokenObj = createTokenObject(userObj, authType, ip);
+        user.update({$push: {tokens: tokenObj}});
+        // }
     }
     return tokenObj ? tokenObj.token : null;
 };
@@ -67,7 +67,7 @@ const createTokenObject = (userObj, authType, ip) => {
         token,
         ipAddress: ip,
         tokenType: authType,
-        isExpiryFlag: false,
+        isExpiredFlag: false,
         tokenExpiryDate: newDate
     }
 };
