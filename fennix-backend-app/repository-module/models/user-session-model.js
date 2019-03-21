@@ -63,7 +63,6 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
                     item.tokenExpiredDate = date.getTime();
                 }
             });
-            // user.tokens = user.tokens.concat([tokenObj]);
             user.update({$push: {tokens: tokenObj}});
         }
     }
