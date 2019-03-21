@@ -42,11 +42,12 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
     return tokenObj.token;
 };
 
-UserSessionSchema.statics.generateCookieToken = async function (userObj, authType, ip) {
+UserSessionSchema.methods.generateCookieToken = async function (userObj, authType, ip) {
+    const user = this;
     let tokenObj = null;
     if (user) {
         tokenObj = createTokenObject(userObj, authType, ip);
-        await UserSessionModel.update({userEmailId: userObj.email_id},{$push: {tokens: tokenObj}});
+        user.update({_id:user._id},{$push: {tokens: tokenObj}});
     }
     return tokenObj ? tokenObj.token : null;
 };
