@@ -42,16 +42,11 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
     return tokenObj.token;
 };
 
-UserSessionSchema.methods.generateCookieToken = async function (userObj, authType, ip) {
-    const user = this;
-    const date = new Date();
+UserSessionSchema.statics.generateCookieToken = async function (userObj, authType, ip) {
     let tokenObj = null;
     if (user) {
-        // const cookieToken = user.tokens.filter((item) => item.tokenType === authType && !item.isExpiredFlag && item.tokenExpiryDate > date.getTime());
-        // if (cookieToken && cookieToken.length > 0) {
         tokenObj = createTokenObject(userObj, authType, ip);
-        user.update({$push: {tokens: tokenObj}});
-        // }
+        UserSessionModel.update({userEmailId: userObj.email_id},{$push: {tokens: tokenObj}});
     }
     return tokenObj ? tokenObj.token : null;
 };
