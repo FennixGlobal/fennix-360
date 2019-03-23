@@ -1,20 +1,23 @@
 const authDataAccessors = require('../../repository-module/data-accesors/user-session-accessor');
 
 const userLoginBusiness = async (req, authType, ip) => {
-    const userSession = await authDataAccessors.generateUserTokenAccessor(req, authType, ip);
-    console.log('user token session');
-    console.log(userSession);
-    return userSession;
+    return await authDataAccessors.generateUserTokenAccessor(req, authType, ip);
 };
 
 const userCookieTokenBusiness = async (req, authType, ip) => {
-    const userSession = await authDataAccessors.generateCookieTokenAccessor(req, authType, ip);
-    console.log('user cooke session');
-    console.log(userSession);
-    return userSession;
+    return await authDataAccessors.generateCookieTokenAccessor(req, authType, ip);
 };
 
+const verifyUserSessionBusiness = async (req) => {
+    return await authDataAccessors.verifyUserSessionAccessor(req.emailId, req.authToken);
+};
+
+const expireUserSessionBusiness = async (req) => {
+    return await authDataAccessors.expireUserSessionAccessor(req.emailId, req.authToken);
+};
 module.exports = {
     userLoginBusiness,
-    userCookieTokenBusiness
+    userCookieTokenBusiness,
+    verifyUserSessionBusiness,
+    expireUserSessionBusiness
 };

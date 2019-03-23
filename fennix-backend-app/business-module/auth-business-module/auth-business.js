@@ -228,10 +228,18 @@ const responseFormation = (responseObj, retireCheck) => {
     return retireCheck ? fennixResponse(statusCodeConstants.STATUS_USER_AUTHENTICATED, 'EN_US', responseObj) : fennixResponse(statusCodeConstants.STATUS_USER_RETIRED, 'EN_US', responseObj)
 };
 
-const verifyUserSessionBusiness = (req) => {
+const verifyUserSessionBusiness = async (req) => {
+    const request = {emailId: req.header.get('authEmailId'), authToken: req.header.get('Authorization')};
+    request.authToken = request.authToken.replace('Bearer ', '');
+    return await authSessionBusiness.verifyUserSessionBusiness(request);
+};
 
-}
 
+const expireUserSessionBusiness = async (req) => {
+    const request = {emailId: req.header.get('authEmailId'), authToken: req.header.get('Authorization')};
+    request.authToken = request.authToken.replace('Bearer ', '');
+    return await authSessionBusiness.expireUserSessionBusiness(request);
+};
 /**
  * @description Tis method creates the authentication object.
  * @param responseObj
@@ -246,6 +254,7 @@ module.exports = {
     authenticateUserBusiness,
     resetPasswordBusiness,
     forgotPasswordBusiness,
+    expireUserSessionBusiness,
     verifyUserSessionBusiness,
     fetchLoginProfileBusiness
 };

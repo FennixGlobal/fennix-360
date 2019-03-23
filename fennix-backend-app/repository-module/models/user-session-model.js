@@ -42,17 +42,28 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
     return tokenObj.token;
 };
 
+UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) {
+    const user = await UserSessionModel.findOne({userEmailId: emailId, 'tokens.token': authToken}),
+        isVerifiedFlag = false;
+    if (user) {
+        console.log(user);
+        // user.tokens = user.tokens.concat([tokenObj]);
+        // user.save();
+    }
+    return isVerifiedFlag;
+};
+
 UserSessionSchema.methods.generateCookieToken = async function (userObj, authType, ip) {
     const user = this;
     let tokenObj = null;
     if (user) {
         tokenObj = createTokenObject(userObj, authType, ip);
-        await UserSessionModel.update({_id:user._id},{$push: {tokens: tokenObj}});
+        await UserSessionModel.update({_id: user._id}, {$push: {tokens: tokenObj}});
     }
     return tokenObj ? tokenObj.token : null;
 };
 
-UserSessionSchema.methods.findToken = async function (userObj, authType, ip) {
+UserSessionSchema.methods.expireAuthToken = async function (userObj, authType, ip) {
 };
 
 const createTokenObject = (userObj, authType, ip) => {

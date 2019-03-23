@@ -8,7 +8,17 @@ const generateCookieTokenAccessor = async (userObj,authType,ip)=>{
     return await userSessionQueries.generateCookieTokenQuery(userObj,authType,ip)
 };
 
+const verifyUserSessionAccessor = async(emailId,authToken)=>{
+    return await userSessionQueries.verifyUserSessionQuery(emailId,authToken);
+};
+
+const expireUserSessionAccessor = async(emailId,authToken)=>{
+    return await userSessionQueries.expireUserSessionQuery(emailId,authToken);
+};
+
 module.exports = {
     generateUserTokenAccessor,
-    generateCookieTokenAccessor
+    verifyUserSessionAccessor,
+    generateCookieTokenAccessor,
+    expireUserSessionAccessor
 };
