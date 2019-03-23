@@ -58,8 +58,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/user-session-model.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="299">
-              <caret line="56" column="13" lean-forward="true" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
+            <state relative-caret-position="184">
+              <caret line="51" column="18" selection-start-line="51" selection-start-column="18" selection-end-line="51" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -466,12 +466,12 @@
       <workItem from="1550211063058" duration="46556000" />
       <workItem from="1552211499012" duration="14928000" />
       <workItem from="1552485132810" duration="27802000" />
-      <workItem from="1552893711681" duration="36049000" />
+      <workItem from="1552893711681" duration="37378000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1881099000" />
+    <option name="totallyTimeSpent" value="1882428000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1272,8 +1272,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/repository-module/models/user-session-model.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="299">
-          <caret line="56" column="13" lean-forward="true" selection-start-line="56" selection-start-column="13" selection-end-line="56" selection-end-column="13" />
+        <state relative-caret-position="184">
+          <caret line="51" column="18" selection-start-line="51" selection-start-column="18" selection-end-line="51" selection-end-column="18" />
         </state>
       </provider>
     </entry>
