@@ -14,7 +14,14 @@ router.post('/authenticate', function (req, res) {
 router.get('/verifyUser', function (req, res) {
     const returnObj = authBusiness.verifyUserSessionBusiness(req);
     returnObj.then((authResponse) => {
-        res.header('x-sofia-auth', authResponse.header).send(authResponse);
+        res.send(authResponse);
+    })
+});
+
+router.get('/logoutUser', function (req, res) {
+    const returnObj = authBusiness.expireUserSessionBusiness(req);
+    returnObj.then((authResponse) => {
+        res.send(authResponse);
     })
 });
 

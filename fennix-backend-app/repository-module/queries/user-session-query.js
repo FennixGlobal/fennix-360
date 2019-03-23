@@ -15,7 +15,7 @@ const verifyUserSessionQuery = async (emailId, authToken) => {
 
 
 const expireUserSessionQuery  = async (emailId, authToken) => {
-    await UserSessionModel.findOne({userEmailId: emailId, 'tokens.token': authToken})
+    await UserSessionModel.expireAuthToken(emailId,  authToken);
 };
 
 module.exports = {

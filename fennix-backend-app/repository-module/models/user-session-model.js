@@ -70,7 +70,19 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
     return tokenObj ? tokenObj.token : null;
 };
 
-UserSessionSchema.methods.expireAuthToken = async function (userObj, authType, ip) {
+UserSessionSchema.methods.expireAuthToken = async function (emailId, authToken) {
+    const user = await UserSessionModel.findOne({userEmailId: emailId}), date = new Date();
+    let isExpiredFlag = false;
+    if (user && user.tokens) {
+        isExpiredFlag = true;
+        await UserSessionModel.updateOne({userEmailId: emailId, 'tokens.token': authToken}, {
+            $set: {
+                isExpiredFlag: true,
+                tokenExpiredDate: date.getTime()
+            }
+        });
+    }
+    return isExpiredFlag;
 };
 
 const createTokenObject = (userObj, authType, ip) => {
