@@ -43,9 +43,26 @@ UserSessionSchema.methods.generateAuthToken = async function (userObj, authType,
 };
 
 UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) {
-    const user = await UserSessionModel.findOne({userEmailId: emailId, 'tokens.token': authToken}),
-        isVerifiedFlag = false;
-    if (user) {
+    const user = await UserSessionModel.findOne({userEmailId: emailId}), date = new Date();
+    let isVerifiedFlag = false;
+    if (user && user.tokens) {
+        const token = user.tokens.filter((item) => item.token === authToken);
+        isVerifiedFlag = token && token.length > 0 && !token[0]['isExpiredFlag'] && date.getTime() > token[0]['tokenExpiryDate'];
+        if (!isVerifiedFlag) {
+            user.updateOne({userEmailId: emailId, 'tokens.token': authToken}, {
+                $set: {
+                    isExpiredFlag: true,
+                    tokenExpiredDate: date.getTime()
+                }
+            })
+            // user.tokens.forEach((item)=>{
+            //     if(item.token === authToken) {
+            //         item.isExpiredFlag = true;
+            //         item.tokenExpiredDate = date.getTime();
+            //     }
+            // });
+        }
+        console.log(token);
         console.log(user);
     }
     return isVerifiedFlag;
