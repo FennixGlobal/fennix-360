@@ -229,14 +229,14 @@ const responseFormation = (responseObj, retireCheck) => {
 };
 
 const verifyUserSessionBusiness = async (req) => {
-    const request = {emailId: req.header.get('authEmailId'), authToken: req.header.get('Authorization')};
+    const request = {emailId: req.get('authEmailId'), authToken: req.get('Authorization')};
     request.authToken = request.authToken.replace('Bearer ', '');
     return await authSessionBusiness.verifyUserSessionBusiness(request);
 };
 
 
 const expireUserSessionBusiness = async (req) => {
-    const request = {emailId: req.header.get('authEmailId'), authToken: req.header.get('Authorization')};
+    const request = {emailId: req.get('authEmailId'), authToken: req.get('Authorization')};
     request.authToken = request.authToken.replace('Bearer ', '');
     return await authSessionBusiness.expireUserSessionBusiness(request);
 };

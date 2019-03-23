@@ -2,12 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9aba4bc3-f167-40bd-bf33-f7a15ca245ed" name="Default" comment="country code for add beneficiary">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-session-business.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-session-business.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-session-accessor.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/data-accesors/user-session-accessor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/user-session-model.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/models/user-session-model.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-session-query.js" beforeDir="false" afterPath="$PROJECT_DIR$/fennix-backend-app/repository-module/queries/user-session-query.js" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.tmp/" />
     <ignored path="$PROJECT_DIR$/temp/" />
@@ -98,8 +93,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="314">
-              <caret line="245" column="14" selection-start-line="245" selection-start-column="14" selection-end-line="245" selection-end-column="14" />
+            <state relative-caret-position="23">
+              <caret line="185" column="69" lean-forward="true" selection-start-line="185" selection-start-column="69" selection-end-line="185" selection-end-column="69" />
             </state>
           </provider>
         </entry>
@@ -470,12 +465,12 @@
       <workItem from="1550211063058" duration="46556000" />
       <workItem from="1552211499012" duration="14928000" />
       <workItem from="1552485132810" duration="27802000" />
-      <workItem from="1552893711681" duration="32863000" />
+      <workItem from="1552893711681" duration="33413000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1877913000" />
+    <option name="totallyTimeSpent" value="1878463000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -1276,8 +1271,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/fennix-backend-app/business-module/auth-business-module/auth-business.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="314">
-          <caret line="245" column="14" selection-start-line="245" selection-start-column="14" selection-end-line="245" selection-end-column="14" />
+        <state relative-caret-position="23">
+          <caret line="185" column="69" lean-forward="true" selection-start-line="185" selection-start-column="69" selection-end-line="185" selection-end-column="69" />
         </state>
       </provider>
     </entry>
