@@ -47,8 +47,6 @@ UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) 
         isVerifiedFlag = false;
     if (user) {
         console.log(user);
-        // user.tokens = user.tokens.concat([tokenObj]);
-        // user.save();
     }
     return isVerifiedFlag;
 };

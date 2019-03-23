@@ -10,7 +10,7 @@ const generateCookieTokenQuery = async (userObj, authType, ip) => {
 };
 
 const verifyUserSessionQuery = async (emailId, authToken) => {
-    return
+    return await UserSessionModel.verifyAuthToken(emailId, authToken);
 };
 
 
