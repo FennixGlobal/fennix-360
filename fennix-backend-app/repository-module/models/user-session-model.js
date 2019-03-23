@@ -54,16 +54,8 @@ UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) 
                     isExpiredFlag: true,
                     tokenExpiredDate: date.getTime()
                 }
-            })
-            // user.tokens.forEach((item)=>{
-            //     if(item.token === authToken) {
-            //         item.isExpiredFlag = true;
-            //         item.tokenExpiredDate = date.getTime();
-            //     }
-            // });
+            });
         }
-        console.log(token);
-        console.log(user);
     }
     return isVerifiedFlag;
 };

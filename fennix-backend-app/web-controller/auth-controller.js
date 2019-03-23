@@ -14,7 +14,7 @@ router.post('/authenticate', function (req, res) {
 router.get('/verifyUser', function (req, res) {
     const returnObj = authBusiness.verifyUserSessionBusiness(req);
     returnObj.then((authResponse) => {
-        res.header('x-sofia-auth', authResponse.header).send(authResponse.response);
+        res.header('x-sofia-auth', authResponse.header).send(authResponse);
     })
 });
 
