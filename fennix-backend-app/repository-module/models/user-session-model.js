@@ -70,7 +70,7 @@ UserSessionSchema.methods.generateCookieToken = async function (userObj, authTyp
     return tokenObj ? tokenObj.token : null;
 };
 
-UserSessionSchema.methods.expireAuthToken = async function (emailId, authToken) {
+UserSessionSchema.statics.expireAuthToken = async function (emailId, authToken) {
     const user = await UserSessionModel.findOne({userEmailId: emailId}), date = new Date();
     let isExpiredFlag = false;
     if (user && user.tokens) {
