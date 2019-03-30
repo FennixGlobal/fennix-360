@@ -33,24 +33,32 @@ const {getUserIdsForAllRolesService, getCenterIdsForLoggedInUserAndSubUsersServi
 const listUnAssignedSimcardsBusiness = async (req) => {
     let response, request = {centerId: parseInt(req.query.centerId)}, finalResponse, modifiedResponse = [];
     let userIdsResponse = getUserIdsForAllRolesService({}, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
-    let centerIds = getCenterIdsForLoggedInUserAndSubUsersService(userIdsResponse.userIdsList);
-    response = await simCardAccessor.listUnAssignedSimcardsAccessor({centerId: centerIds});
-    if (arrayNotEmptyCheck(response)) {
-        response.forEach((item) => {
-            let obj = {
-                id: item['_id'],
-                phoneNo: item['phoneNo'],
-                serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
-                isActive: item['active'],
-                carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
-                simcardId: item['_id'],
-                simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
-            };
-            modifiedResponse.push(obj);
+    let centerIdsResponse = getCenterIdsForLoggedInUserAndSubUsersService(userIdsResponse.userIdsList);
+    if (objectHasPropertyCheck(centerIdsResponse, 'rows') && arrayNotEmptyCheck(centerIdsResponse.rows)) {
+        let centerIds = [];
+        centerIdsResponse.forEach(item => {
+            centerIds.push(item['center_id']);
         });
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+        response = await simCardAccessor.listUnAssignedSimcardsAccessor({centerId: centerIds});
+        if (arrayNotEmptyCheck(response)) {
+            response.forEach((item) => {
+                let obj = {
+                    id: item['_id'],
+                    phoneNo: item['phoneNo'],
+                    serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
+                    isActive: item['active'],
+                    carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
+                    simcardId: item['_id'],
+                    simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
+                };
+                modifiedResponse.push(obj);
+            });
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+        } else {
+            finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+        }
     } else {
-        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+        finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_CENTERS_FOR_ID, 'EN_US', []);
     }
     return finalResponse;
 };
