@@ -7,10 +7,34 @@ const {getCenterIdsForLoggedInUserAndSubUsersAccessor} = require('../../reposito
 const {mongoWhereInCreator, mongoUpdateQueryCreator} = require('../../util-module/request-transformers');
 const {getCenterIdsBasedOnUserIdAccessor} = require('../../repository-module/data-accesors/metadata-accesor');
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
-
+const {getUserIdsForAllRolesService, getCenterIdsForLoggedInUserAndSubUsersService} = require('../role-business-module/role-business');
+// const listUnAssignedSimcardsBusiness = async (req) => {
+//     let response, request = {centerId: parseInt(req.query.centerId)}, finalResponse, modifiedResponse = [];
+//     response = await simCardAccessor.listUnAssignedSimcardsAccessor(request);
+//     if (arrayNotEmptyCheck(response)) {
+//         response.forEach((item) => {
+//             let obj = {
+//                 id: item['_id'],
+//                 phoneNo: item['phoneNo'],
+//                 serialNo: notNullCheck(item['serial']) ? item['serial'] : 'Serial Not Assigned',
+//                 isActive: item['active'],
+//                 carrier: objectHasPropertyCheck(item['carrier'], 'name') ? item['carrier']['name'] : '-',
+//                 simcardId: item['_id'],
+//                 simcardType: objectHasPropertyCheck(item['simcardTypes'], 'simcardType') ? item['simcardTypes']['simcardType'] : '-'
+//             };
+//             modifiedResponse.push(obj);
+//         });
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_OK, 'EN_US', modifiedResponse);
+//     } else {
+//         finalResponse = fennixResponse(statusCodeConstants.STATUS_NO_SIMCARDS_FOR_ID, 'EN_US', []);
+//     }
+//     return finalResponse;
+// };
 const listUnAssignedSimcardsBusiness = async (req) => {
     let response, request = {centerId: parseInt(req.query.centerId)}, finalResponse, modifiedResponse = [];
-    response = await simCardAccessor.listUnAssignedSimcardsAccessor(request);
+    let userIdsResponse = getUserIdsForAllRolesService({}, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
+    let centerIds = getCenterIdsForLoggedInUserAndSubUsersService(userIdsResponse.userIdsList);
+    response = await simCardAccessor.listUnAssignedSimcardsAccessor({centerId: centerIds});
     if (arrayNotEmptyCheck(response)) {
         response.forEach((item) => {
             let obj = {
