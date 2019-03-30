@@ -35,9 +35,10 @@ const listUnAssignedSimcardsBusiness = async (req) => {
     let userIdsResponse = getUserIdsForAllRolesService({}, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     let centerIdsResponse = getCenterIdsForLoggedInUserAndSubUsersService(userIdsResponse.userIdsList);
     if (objectHasPropertyCheck(centerIdsResponse, 'rows') && arrayNotEmptyCheck(centerIdsResponse.rows)) {
+        console.log(centerIdsResponse);
         let centerIds = [];
         centerIdsResponse.forEach(item => {
-            centerIds.push(item['center_id']);
+            centerIds.push(item['location_id']);
         });
         response = await simCardAccessor.listUnAssignedSimcardsAccessor({centerId: centerIds});
         if (arrayNotEmptyCheck(response)) {
