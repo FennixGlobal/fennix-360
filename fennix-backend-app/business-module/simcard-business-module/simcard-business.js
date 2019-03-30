@@ -34,6 +34,7 @@ const listUnAssignedSimcardsBusiness = async (req) => {
     let response, request = {centerId: parseInt(req.query.centerId)}, finalResponse, modifiedResponse = [];
     let userIdsResponse = getUserIdsForAllRolesService({}, COMMON_CONSTANTS.FENNIX_USER_DATA_MODIFIER_USER_USERID_NATIVE_ROLE);
     let centerIdsResponse = getCenterIdsForLoggedInUserAndSubUsersService(userIdsResponse.userIdsList);
+    console.log(userIdsResponse);
     if (objectHasPropertyCheck(centerIdsResponse, 'rows') && arrayNotEmptyCheck(centerIdsResponse.rows)) {
         console.log(centerIdsResponse);
         let centerIds = [];
