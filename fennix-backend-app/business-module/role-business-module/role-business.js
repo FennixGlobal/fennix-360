@@ -3,6 +3,8 @@ const {connectionCheckAndQueryExec} = require("../../util-module/custom-request-
 const COMMON_CONSTANTS = require('../../util-module/util-constants/fennix-common-constants');
 const {selectCenterIdsForLoggedInUserAndSubUsersQuery} = require('../../repository-module/queries/location-query');
 const {requestInModifier} = require('../../util-module/request-transformers');
+const {objectHasPropertyCheck, arrayNotEmptyCheck} = require('../../util-module/data-validators');
+
 
 const getUserIdsForSupervisorService = async (req) => {
     let returnObj;
