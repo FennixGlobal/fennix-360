@@ -1,5 +1,6 @@
 const authDataAccessors = require('../../repository-module/data-accesors/user-session-accessor');
-
+const jwt = require('jsonwebtoken');
+const {JWTSecretPass} = require('../../util-module/util-constants/auth-constants');
 const userLoginBusiness = async (req, authType, ip) => {
     return await authDataAccessors.generateUserTokenAccessor(req, authType, ip);
 };
@@ -18,10 +19,11 @@ const expireUserSessionBusiness = async (req) => {
 
 const verifyAPISessionBusiness = async (req, res, next) => {
     let flag, returnFlag;
-    const request = {emailId: req.header('authEmailId'), authToken: req.header('Authorization')};
+    const request = {emailId: '', authToken: req.header('Authorization')};
     request.authToken = request.authToken.replace('Bearer ', '');
-    console.log('verification business');
-    console.log(request);
+    const decoded = jwt.verify(request.authToken, JWTSecretPass);
+    console.log('decoded string');
+    console.log(decoded);
 
     returnFlag = await verifyUserSessionBusiness(request);
     if (returnFlag) {
