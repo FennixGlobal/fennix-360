@@ -1,4 +1,5 @@
 const userBusiness = require('../business-module/user-business-module/user-business');
+const {verifyAPISessionBusiness} = require('../business-module/auth-business-module/auth-session-business');
 const express = require('express');
 const {USER_CONTROLLER} = require('../util-module/util-constants/fennix-controller-constants');
 const router = express.Router();
@@ -18,7 +19,7 @@ router.post(USER_CONTROLLER.USER_UPDATE_USER_PROFILE, async (req, res) => {
     })
 });
 
-router.get(USER_CONTROLLER.USER_GET_USER_LIST, async (req, res) => {
+router.get(USER_CONTROLLER.USER_GET_USER_LIST, verifyAPISessionBusiness, async (req, res) => {
     let returnObj;
     returnObj = userBusiness.getUserListBusiness(req);
     returnObj.then((response) => {
@@ -34,7 +35,7 @@ router.get(USER_CONTROLLER.USER_DOWNLOAD_USER, async (req, res) => {
     })
 });
 
-router.get(USER_CONTROLLER.USER_LIST_OPERATORS,async (req, res) => {
+router.get(USER_CONTROLLER.USER_LIST_OPERATORS, async (req, res) => {
     let returnObj;
     returnObj = userBusiness.listOperatorsBusiness(req);
     returnObj.then((response) => {
