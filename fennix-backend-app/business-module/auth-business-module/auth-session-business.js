@@ -17,11 +17,13 @@ const expireUserSessionBusiness = async (req) => {
 };
 
 const verifyAPISessionBusiness = async (req, res, next) => {
-    let flag,returnFlag;
+    let flag, returnFlag;
     const request = {emailId: req.header('authEmailId'), authToken: req.header('Authorization')};
     request.authToken = request.authToken.replace('Bearer ', '');
+    console.log('verification business');
+    console.log(request);
+
     returnFlag = await verifyUserSessionBusiness(request);
-    console.log(returnFlag);
     if (returnFlag) {
         next();
     } else {

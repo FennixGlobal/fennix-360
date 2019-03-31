@@ -46,8 +46,6 @@ UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) 
     const user = await UserSessionModel.findOne({userEmailId: emailId}), date = new Date();
     let isVerifiedFlag = false;
     if (user && user.tokens) {
-        console.log('auth token for the request');
-        console.log(authToken);
         const token = user.tokens.filter((item) => item.token === authToken);
         isVerifiedFlag = token && token.length > 0 && !token[0]['isExpiredFlag'] && date.getTime() < token[0]['tokenExpiryDate'];
         if (!isVerifiedFlag) {
