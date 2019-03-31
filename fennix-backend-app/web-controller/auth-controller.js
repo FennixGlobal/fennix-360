@@ -1,4 +1,5 @@
 const express = require('express');
+const createError = require('http-errors');
 const router = express.Router();
 const authBusiness = require('../business-module/auth-business-module/auth-business');
 
@@ -14,7 +15,7 @@ router.post('/authenticate', function (req, res) {
 router.get('/verifyUser', function (req, res) {
     const returnObj = authBusiness.verifyUserSessionBusiness(req);
     returnObj.then((authResponse) => {
-        res.send(authResponse);
+        authResponse ? res.send(authResponse) : res.send(createError('401', 'Unauthorized'));
     })
 });
 

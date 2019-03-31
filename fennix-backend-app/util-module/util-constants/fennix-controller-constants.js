@@ -1,15 +1,15 @@
 const USER_CONTROLLER = {
-    USER_UPDATE_USER_PROFILE: '/updateProfile',
-    USER_LIST_OPERATORS: '/listOperators',
-    USER_GET_USER_LIST: '/listUsers',
-    USER_DELETE_USER: '/deleteUser',
-    USER_UPDATE_USER: '/editUser',
-    USER_GET_USER_DETAILS: '/getUserDetails',
-    USER_ADD_USER: '/addUser',
-    USER_DOWNLOAD_USER: '/downloadUsers',
-    USER_FETCH_USER_PROFILE: '/fetchProfile',
-    USER_LIST_CLIENTS_BY_COMPANY_ID: '/listClientsByCompanyId',
-    USER_LIST_UNASSIGNED_CLIENTS: '/listUnassignedClients'
+    USER_UPDATE_USER_PROFILE: '/updateProfile',//
+    USER_LIST_OPERATORS: '/listOperators',//--GET/operators
+    USER_GET_USER_LIST: '/listUsers',//list
+    USER_DELETE_USER: '/deleteUser',//--DELETE
+    USER_UPDATE_USER: '/editUser',//--PUT
+    USER_GET_USER_DETAILS: '/getUserDetails',//--GET-PATH
+    USER_ADD_USER: '/addUser',//--POST
+    USER_DOWNLOAD_USER: '/downloadUsers',//
+    USER_FETCH_USER_PROFILE: '/fetchProfile',// GET-PATH/profile
+    USER_LIST_CLIENTS_BY_COMPANY_ID: '/listClientsByCompanyId',// clients/companyId
+    USER_LIST_UNASSIGNED_CLIENTS: '/listUnassignedClients'// clients
 };
 
 const SIMCARD_CONTROLLER = {

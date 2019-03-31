@@ -1,12 +1,11 @@
 const {mongoDev, mongoLocal, mongoSofiaDev, mongoLab} = require('./fennix-backend-app/util-module/connection-constants');
 const locationBusiness = require('./fennix-backend-app/business-module/location-business-module/location-business');
 const {beneficiaryDeviceRecieverBusiness} = require('./fennix-backend-app/business-module/beneficiary-business-module/beneficiary-device-business');
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
+const express = require('express');
+const path = require('path');
 const cors = require('cors');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const socket = require('socket.io');
 const httpExpress = require('express');
 const http = require('http');
@@ -22,10 +21,9 @@ const net = require('net');
 
 const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-mongoose.connect(mongoSofiaDev, {useNewUrlParser: true, useCreateIndex: true}).catch((err) => {
+mongoose.connect(mongoSofiaDev, {useNewUrlParser: true}).catch((err) => {
     console.log(err);
 });
-
 const TCPServer = net.createServer();
 socketIO.on('connection', (sock) => {
     let responseData;
@@ -102,10 +100,9 @@ const authRouter = require('./fennix-backend-app/web-controller/auth-controller'
 const deviceRouter = require('./fennix-backend-app/web-controller/device-controller');
 const ticketRouter = require('./fennix-backend-app/web-controller/ticket-controller');
 
-const indexRouter = require('./routes/index');
 const searchRouter = require('./fennix-backend-app/web-controller/search-controller');
 
-var app = express();
+const app = express();
 app.use(bodyParser.json());
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

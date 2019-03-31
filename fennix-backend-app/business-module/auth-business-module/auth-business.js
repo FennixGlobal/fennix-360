@@ -1,6 +1,5 @@
 const crypto = require('crypto-js');// this library is used to encrypt and decrypt password and email while transferring over the network
 const bcrypt = require('bcryptjs');// this library is used to generate the hash password
-const jwt = require('jsonwebtoken');// This method is used to implement the auth token to be ping ponged back and forth for the request authentication.
 const {statusCodeConstants} = require('../../util-module/response-status-constants/status-code-constants');
 const {emoji} = require('../../util-module/custom-request-reponse-modifiers/encoder-decoder-constants');
 const {objectHasPropertyCheck, arrayNotEmptyCheck, responseObjectCreator} = require('../../util-module/data-validators');
@@ -69,9 +68,6 @@ const authenticateUserBusiness = async (req, ip) => {
     }
     return returnResponse;
 };
-const verifyUserBusiness = (req) => {
-
-};
 
 const incorrectPasswordReducer = (response) => {
     return {
@@ -80,9 +76,11 @@ const incorrectPasswordReducer = (response) => {
     }
 };
 /**
- * this is a private method to create the response for a verified logged in user.
+ *
  * @param authResponse
- * @return {{response: *, header: null}}
+ * @param ip
+ * @param rememberFlag
+ * @return {Promise<{cookie: *, response: *, header: *}>}
  */
 const verifiedLoginReducer = async (authResponse, ip, rememberFlag) => {
     let responseObj = authResponseObjectFormation(authResponse), retireCheckFlag = retireCheck(responseObj);
@@ -150,7 +148,7 @@ const forgotPasswordBusiness = async (req) => {
 
 /**
  * @description This method is called when a user clicks on the forgot password link and the user enters the password and the reset password.
- * We recieve the passwords and do a comparision if the passwords do match or not.If they dont we dont allow the user to change the password.
+ * We receive the passwords and do a comparision if the passwords do match or not.If they dont we dont allow the user to change the password.
  * To check if the passwords match or not we decrypt the password and check if both are same.
  * @if Passwords match then we go ahead and hash the password +++++++15 rounds++++++++ using -------bcrypt.genSalt and bcrypt.hash-------
  * After this process we send the success or failure error message to the UI.
