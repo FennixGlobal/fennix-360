@@ -24,7 +24,7 @@ const verifyAPISessionBusiness = async (req, res, next) => {
     const decoded = jwt.verify(request.authToken, JWTSecretPass);
     console.log('decoded string');
     console.log(decoded);
-
+    request.emailId = decoded && decoded.email_id ? decoded.email_id : '';
     returnFlag = await verifyUserSessionBusiness(request);
     if (returnFlag) {
         next();
