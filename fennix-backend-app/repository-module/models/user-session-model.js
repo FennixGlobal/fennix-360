@@ -48,9 +48,6 @@ UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) 
     if (user && user.tokens) {
         const token = user.tokens.filter((item) => item.token === authToken);
         isVerifiedFlag = token && token.length > 0 && !token[0]['isExpiredFlag'] && date.getTime() < token[0]['tokenExpiryDate'];
-        console.log('the requested token');
-        console.log(token);
-        console.log('verified flag', isVerifiedFlag);
         if (!isVerifiedFlag) {
             await UserSessionModel.updateOne({userEmailId: emailId, 'tokens.token': authToken}, {
                 $set: {
@@ -60,6 +57,7 @@ UserSessionSchema.statics.verifyAuthToken = async function (emailId, authToken) 
             });
         }
     }
+    console.log('the verified flag',isVerifiedFlag);
     return isVerifiedFlag;
 };
 
