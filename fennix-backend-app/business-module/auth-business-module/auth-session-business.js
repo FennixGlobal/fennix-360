@@ -17,11 +17,12 @@ const expireUserSessionBusiness = async (req) => {
 };
 
 const verifyAPISessionBusiness = async (req, res, next) => {
-    let flag = false;
+    let flag,returnFlag;
     const request = {emailId: req.header('authEmailId'), authToken: req.header('Authorization')};
     request.authToken = request.authToken.replace('Bearer ', '');
-    flag = await verifyUserSessionBusiness(request);
-    if (flag) {
+    returnFlag = await verifyUserSessionBusiness(request);
+    console.log(returnFlag);
+    if (returnFlag) {
         next();
     } else {
         res.status(401).send({error: 'authenticatioon failed'});
