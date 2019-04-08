@@ -20,7 +20,7 @@ const listUnAssignedSimcardsQuery = (query) => {
                             "active": true
                         },
                         {
-                            "centerId": query.centerId
+                            "centerId": {$in: query.centerId}
                         }
                     ]
                 }
