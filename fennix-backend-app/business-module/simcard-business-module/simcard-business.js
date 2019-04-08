@@ -39,7 +39,9 @@ const listUnAssignedSimcardsBusiness = async (req) => {
         console.log(centerIdsResponse);
         let centerIds = [];
         centerIdsResponse.rows.forEach(item => {
-            centerIds.push(item['center_id']);
+            if (null != item['center_id']) {
+                centerIds.push(parseInt(item['center_id']));
+            }
         });
         response = await simCardAccessor.listUnAssignedSimcardsAccessor({centerId: centerIds});
         if (arrayNotEmptyCheck(response)) {
